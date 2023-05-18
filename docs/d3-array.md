@@ -27,16 +27,19 @@ And finally **iteration methods** that apply functions to elements in the array:
 * [*array*.filter](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) - Create a new array with only the elements for which a predicate is true.
 * [*array*.forEach](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach) - Call a function for each element in the array.
 * [*array*.every](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/every) - See if every element in the array satisfies a predicate.
-* [*array*.map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/map) - Create a new array with the result of calling a function on every element in the array.
+* [*array*.map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/map) - Create a new array by applying a function to every element in the array.
 * [*array*.some](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/some) - See if at least one element in the array satisfies a predicate.
-* [*array*.reduce](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) - Apply a function to reduce the array to a single value (from left-to-right).
-* [*array*.reduceRight](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight) - Apply a function to reduce the array to a single value (from right-to-left).
+* [*array*.reduce](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) - Iteratively reduce the array to a single value (from left-to-right).
+* [*array*.reduceRight](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight) - Iteratively reduce the array to a single value (from right-to-left).
 
 ## Statistics
 
-Methods for computing basic summary statistics.
+These methods compute basic summary statistics.
 
 ### min(iterable, accessor) {#min}
+
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/min.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
 
 Returns the minimum value in the given *iterable* using natural order.
 
@@ -80,92 +83,199 @@ d3.min([]) // undefined
 d3.min(alphabet, (d) => d.doesnotexist) // undefined
 ```
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/min.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-extent "Examples") -->
-
 See also [extent](#extent) and [least](#least).
 
 ### minIndex(iterable, accessor) {#minIndex}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/minIndex.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-extent "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/minIndex.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
 
-Returns the index of the minimum value in the given *iterable* using natural order. If the iterable contains no comparable values, returns -1. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the minimum value.
+Like [min](#min), but returns the index of the minimum value rather than the value itself.
 
-Unlike the built-in [Math.min](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Math/min), this method ignores undefined, null and NaN values; this is useful for ignoring missing data. In addition, elements are compared using natural order rather than numeric order. For example, the minimum of the strings [“20”, “3”] is “20”, while the minimum of the numbers [20, 3] is 3.
+```js
+d3.minIndex([3, 2, 1, 1, 6, 2, 4]) // 2
+```
+```js
+d3.minIndex(alphabet, (d) => d.frequency) // 25
+```
+
+This method can find the least element according to the given accessor, similar to [least](#least):
+
+```js
+alphabet[d3.minIndex(alphabet, (d) => d.frequency)] // {letter: "Z", frequency: 0.00074}
+```
+
+See also [leastIndex](#leastIndex).
 
 ### max(iterable, accessor) {#max}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/max.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-extent "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/max.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
 
-Returns the maximum value in the given *iterable* using natural order. If the iterable contains no comparable values, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the maximum value.
+Returns the maximum value in the given *iterable* using natural order.
 
-Unlike the built-in [Math.max](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Math/max), this method ignores undefined values; this is useful for ignoring missing data. In addition, elements are compared using natural order rather than numeric order. For example, the maximum of the strings [“20”, “3”] is “3”, while the maximum of the numbers [20, 3] is 20.
+```js
+d3.max([3, 2, 1, 1, 6, 2, 4]) // 6
+```
 
-See also [extent](#extent).
+Unlike [Math.max](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Math/max), d3.max does not coerce the inputs to numbers; for example, the maximum of the strings `["20", "3"]` is `"3"`, while the maximum of the numbers `[20, 3]` is `20`.
+
+```js
+d3.max(["bob", "alice", "carol"]) // "carol"
+```
+```js
+d3.max([new Date("2018-01-01"), new Date("2011-03-09")]) // 2018-01-01
+```
+
+Also unlike Math.max, this method ignores undefined, null and NaN values, which is useful for ignoring missing data.
+
+```js
+d3.max([3, 2, 1, NaN, 4]) // 4
+```
+
+An optional *accessor* function may be specified, which is similar to calling [Array.from](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from) before computing the maximum value. The accessor function is repeatedly passed an element from the given iterable (often *d*) and the zero-based index (*i*).
+
+```js
+d3.max(alphabet, (d) => d.frequency) // 0.12702
+```
+
+Because undefined values are ignored, you can use the accessor function to ignore values. For example, to get the frequency of the most-common letter than is not E:
+
+```js
+d3.max(alphabet, (d) => d.letter === "E" ? NaN : d.frequency) // 0.09056
+```
+
+If the iterable contains no comparable values, returns undefined.
+
+```js
+d3.max([]) // undefined
+```
+```js
+d3.max(alphabet, (d) => d.doesnotexist) // undefined
+```
+
+See also [extent](#extent) and [greatest](#greatest).
 
 ### maxIndex(iterable, accessor) {#maxIndex}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/maxIndex.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-extent "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/maxIndex.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
 
-Returns the index of the maximum value in the given *iterable* using natural order. If the iterable contains no comparable values, returns -1. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the maximum value.
+Like [max](#max), but returns the index of the maximum value rather than the value itself.
 
-Unlike the built-in [Math.max](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Math/max), this method ignores undefined values; this is useful for ignoring missing data. In addition, elements are compared using natural order rather than numeric order. For example, the maximum of the strings [“20”, “3”] is “3”, while the maximum of the numbers [20, 3] is 20.
+```js
+d3.maxIndex([3, 2, 1, 1, 6, 2, 4]) // 2
+```
+```js
+d3.maxIndex(alphabet, (d) => d.frequency) // 0
+```
+
+This method can find the greatest element according to the given accessor, similar to [greatest](#greatest):
+
+```js
+alphabet[d3.maxIndex(alphabet, (d) => d.frequency)] // {letter: "E", frequency: 0.12702}
+```
+
+See also [greatestIndex](#greatestIndex).
 
 ### extent(iterable, accessor) {#extent}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/extent.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-extent "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/extent.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
 
-Returns the [minimum](#min) and [maximum](#max) value in the given *iterable* using natural order. If the iterable contains no comparable values, returns [undefined, undefined]. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the extent.
+Returns the [minimum](#min) and [maximum](#max) value in the given *iterable* using natural order.
+
+```js
+d3.extent([3, 2, 1, 1, 6, 2, 4]) // [1, 6]
+```
+
+An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the extent.
+
+```js
+d3.extent(alphabet, (d) => d.frequency) // [0.00074, 0.12702]
+```
+
+If the iterable contains no comparable values, returns [undefined, undefined].
+
+```js
+d3.extent(alphabet, (d) => d.doesnotexist) // [undefined, undefined]
+```
 
 ### mode(iterable, accessor) {#mode}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/mode.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-mode "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/mode.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-mode) -->
 
-Returns the mode of the given *iterable*, *i.e.* the value which appears the most often. In case of equality, returns the first of the relevant values. If the iterable contains no comparable values, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the mode. This method ignores undefined, null and NaN values; this is useful for ignoring missing data.
+Returns the mode of the given *iterable*, *i.e.* the value which appears the most often.
+
+```js
+d3.mode([1, 2, 2, 2, 3, 3]) // 2
+```
+
+An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the mode.
+
+```js
+d3.mode(penguins, (d) => d.island) // "Biscoe"
+```
+
+In case of equality, returns the first of the relevant values.
+
+```js
+d3.mode([1, 2, 2, 2, 3, 3, 3]) // 2
+```
+
+If the iterable contains no comparable values, returns undefined.
+
+```js
+d3.mode([NaN, null]) // undefined
+```
+
+This method ignores undefined, null and NaN values; this is useful for ignoring missing data.
+
+```js
+d3.mode([1, 2, 2, 2, NaN, 3, null]) // 2
+```
 
 ### sum(iterable, accessor) {#sum}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/sum.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-sum "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/sum.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-sum) -->
 
 Returns the sum of the given *iterable* of numbers. If the iterable contains no numbers, returns 0. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the sum. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
+See also [fsum](#fsum).
+
 ### mean(iterable, accessor) {#mean}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/mean.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-mean-d3-median-and-friends "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/mean.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) -->
 
 Returns the mean of the given *iterable* of numbers. If the iterable contains no numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the mean. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ### median(iterable, accessor) {#median}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/median.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-mean-d3-median-and-friends "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/median.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) -->
 
 Returns the median of the given *iterable* of numbers using the [R-7 method](https://en.wikipedia.org/wiki/Quantile#Estimating_quantiles_from_a_sample). If the iterable contains no numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the median. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ### medianIndex(array, accessor) {#medianIndex}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/median.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/median.js) -->
 
 Similar to *median*, but returns the index of the element to the left of the median.
 
 ### cumsum(iterable, accessor) {#cumsum}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/cumsum.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-cumsum "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/cumsum.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-cumsum) -->
 
 Returns the cumulative sum of the given *iterable* of numbers, as a Float64Array of the same length. If the iterable contains no numbers, returns zeros. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the cumulative sum. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ### quantile(iterable, p, accessor) {#quantile}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/quantile.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-mean-d3-median-and-friends "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) -->
 
 Returns the *p*-quantile of the given *iterable* of numbers, where *p* is a number in the range [0, 1]. For example, the median can be computed using *p* = 0.5, the first quartile at *p* = 0.25, and the third quartile at *p* = 0.75. This particular implementation uses the [R-7 method](http://en.wikipedia.org/wiki/Quantile#Quantiles_of_a_population), which is the default for the R programming language and Excel. For example:
 
@@ -183,21 +293,21 @@ An optional *accessor* function may be specified, which is equivalent to calling
 
 ### quantileIndex(array, p, accessor) {#quantileIndex}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/quantile.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) -->
 
 Similar to *quantile*, but returns the index to the left of *p*.
 
 ### quantileSorted(array, p, accessor) {#quantileSorted}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/quantile.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-mean-d3-median-and-friends "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) -->
 
 Similar to *quantile*, but expects the input to be a **sorted** *array* of values. In contrast with *quantile*, the accessor is only called on the elements needed to compute the quantile.
 
 ### rank(iterable, comparator) {#rank}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/rank.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/rank "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/rank.js) -->
+<!-- [Examples](https://observablehq.com/@d3/rank) -->
 
 Returns an array with the rank of each value in the *iterable*, *i.e.* the zero-based index of the value when the iterable is sorted. Nullish values are sorted to the end and ranked NaN. An optional *comparator* or *accessor* function may be specified; the latter is equivalent to calling *array*.map(*accessor*) before computing the ranks. If *comparator* is not specified, it defaults to [ascending](#ascending). Ties (equivalent values) all get the same rank, defined as the first time the value is found.
 
@@ -209,22 +319,22 @@ d3.rank([1, 2, 3], d3.descending); // [2, 1, 0]
 
 ### variance(iterable, accessor) {#variance}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/variance.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-mean-d3-median-and-friends "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/variance.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) -->
 
 Returns an [unbiased estimator of the population variance](http://mathworld.wolfram.com/SampleVariance.html) of the given *iterable* of numbers using [Welford’s algorithm](https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm). If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the variance. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ### deviation(iterable, accessor) {#deviation}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/deviation.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-mean-d3-median-and-friends "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/deviation.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) -->
 
 Returns the standard deviation, defined as the square root of the [bias-corrected variance](#variance), of the given *iterable* of numbers. If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the standard deviation. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ### fsum(values, accessor) {#fsum}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/fsum.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-fsum "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/fsum.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-fsum) -->
 
 Returns a full precision summation of the given *values*.
 
@@ -237,8 +347,8 @@ Although slower, d3.fsum can replace d3.sum wherever greater precision is needed
 
 ### fcumsum(values, accessor) {#fcumsum}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/fsum.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-fcumsum "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/fsum.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-fcumsum) -->
 
 Returns a full precision cumulative sum of the given *values*.
 
@@ -269,8 +379,8 @@ Methods for searching arrays for a specific element.
 
 ### least(iterable, comparator) {#least}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/least.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-least "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/least.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-least) -->
 
 Returns the least element of the specified *iterable* according to the specified *comparator* or *accessor*. If the given *iterable* contains no comparable elements (*i.e.*, the comparator returns NaN when comparing each element to itself), returns undefined. If *comparator* is not specified, it defaults to [ascending](#ascending). For example:
 
@@ -285,8 +395,8 @@ This function is similar to [min](#min), except it allows the use of a comparato
 
 ### leastIndex(iterable, comparator) {#leastIndex}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/leastIndex.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-least "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/leastIndex.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-least) -->
 
 Returns the index of the least element of the specified *iterable* according to the specified *comparator* or *accessor*. If the given *iterable* contains no comparable elements (*i.e.*, the comparator returns NaN when comparing each element to itself), returns -1. If *comparator* is not specified, it defaults to [ascending](#ascending). For example:
 
@@ -301,8 +411,8 @@ This function is similar to [minIndex](#minIndex), except it allows the use of a
 
 ### greatest(iterable, comparator) {#greatest}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/greatest.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-least "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/greatest.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-least) -->
 
 Returns the greatest element of the specified *iterable* according to the specified *comparator* or *accessor*. If the given *iterable* contains no comparable elements (*i.e.*, the comparator returns NaN when comparing each element to itself), returns undefined. If *comparator* is not specified, it defaults to [ascending](#ascending). For example:
 
@@ -317,8 +427,8 @@ This function is similar to [max](#max), except it allows the use of a comparato
 
 ### greatestIndex(iterable, comparator) {#greatestIndex}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/greatestIndex.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-least "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/greatestIndex.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-least) -->
 
 Returns the index of the greatest element of the specified *iterable* according to the specified *comparator* or *accessor*. If the given *iterable* contains no comparable elements (*i.e.*, the comparator returns NaN when comparing each element to itself), returns -1. If *comparator* is not specified, it defaults to [ascending](#ascending). For example:
 
@@ -335,14 +445,14 @@ This function is similar to [maxIndex](#maxIndex), except it allows the use of a
 
 ### bisectLeft(array, x, lo, hi) {#bisectLeft}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bisect.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisect.js) -->
 
 Returns the insertion point for *x* in *array* to maintain sorted order. The arguments *lo* and *hi* may be used to specify a subset of the array which should be considered; by default the entire array is used. If *x* is already present in *array*, the insertion point will be before (to the left of) any existing entries. The return value is suitable for use as the first argument to [splice](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/splice) assuming that *array* is already sorted. The returned insertion point *i* partitions the *array* into two halves so that all *v* < *x* for *v* in *array*.slice(*lo*, *i*) for the left side and all *v* >= *x* for *v* in *array*.slice(*i*, *hi*) for the right side.
 
 ### bisect(array, x, lo, hi) {#bisect}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bisect.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bisect "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisect.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bisect) -->
 
 Alias for [bisectRight](#bisectRight).
 
@@ -352,8 +462,8 @@ Similar to [bisectLeft](#bisectLeft), but returns an insertion point which comes
 
 ### bisectCenter(array, x, lo, hi) {#bisectCenter}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bisect.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/multi-line-chart "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisect.js) -->
+<!-- [Examples](https://observablehq.com/@d3/multi-line-chart) -->
 
 Returns the index of the value closest to *x* in the given *array* of numbers. The arguments *lo* (inclusive) and *hi* (exclusive) may be used to specify a subset of the array which should be considered; by default the entire array is used.
 
@@ -361,7 +471,7 @@ See [*bisector*.center](#bisector_center).
 
 ### bisector(accessor) {#bisector}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bisector.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) -->
 
 Returns a new bisector using the specified *accessor* or *comparator* function. This method can be used to bisect arrays of objects instead of being limited to simple arrays of primitives. For example, given the following array of objects:
 
@@ -390,19 +500,19 @@ And then applied as *bisectDate*(*array*, *date*), returning an index. Note that
 
 ### *bisector*.left(array, x, lo, hi) {#bisector_left}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bisector.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) -->
 
 Equivalent to [bisectLeft](#bisectLeft), but uses this bisector’s associated comparator.
 
 ### *bisector*.right(array, x, lo, hi) {#bisector_right}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bisector.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) -->
 
 Equivalent to [bisectRight](#bisectRight), but uses this bisector’s associated comparator.
 
 ### *bisector*.center(array, x, lo, hi) {#bisector_center}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bisector.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) -->
 
 Returns the index of the closest value to *x* in the given sorted *array*. This expects that the bisector’s associated accessor returns a quantitative value, or that the bisector’s associated comparator returns a signed distance; otherwise, this method is equivalent to *bisector*.left.
 
@@ -410,15 +520,15 @@ Returns the index of the closest value to *x* in the given sorted *array*. This 
 
 ### quickselect(array, k, left = 0, right = array.length - 1, compare = ascending) {#quickselect}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/quickselect.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-quickselect "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/quickselect.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-quickselect) -->
 
 See [mourner/quickselect](https://github.com/mourner/quickselect/blob/master/README.md).
 
 ### ascending(a, b) {#ascending}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/ascending.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-ascending "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/ascending.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-ascending) -->
 
 Returns -1 if *a* is less than *b*, or 1 if *a* is greater than *b*, or 0. This is the comparator function for natural order, and can be used in conjunction with the built-in [*array*.sort](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) method to arrange elements in ascending order. It is implemented as:
 
@@ -432,8 +542,8 @@ Note that if no comparator function is specified to the built-in sort method, th
 
 ### descending(a, b) {#descending}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/descending.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-ascending "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/descending.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-ascending) -->
 
 Returns -1 if *a* is greater than *b*, or 1 if *a* is less than *b*, or 0. This is the comparator function for reverse natural order, and can be used in conjunction with the built-in array sort method to arrange elements in descending order. It is implemented as:
 
@@ -451,8 +561,8 @@ Methods for transforming arrays and for generating new arrays.
 
 ### group(iterable, ...keys) {#group}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/group.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-group-d3-rollup "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-group-d3-rollup) -->
 
 Groups the specified *iterable* of values into an [InternMap](#InternMap) from *key* to array of value. For example, given some data:
 
@@ -539,22 +649,22 @@ This produces:
 
 ### groups(iterable, ...keys) {#groups}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/group.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-group-d3-rollup "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-group-d3-rollup) -->
 
 Equivalent to [group](#group), but returns nested arrays instead of nested maps.
 
 ### flatGroup(iterable, ...keys) {#flatGroup}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/group.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-flatgroup "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-flatgroup) -->
 
 Equivalent to [group](#group), but returns a flat array of [*key0*, *key1*, …, *values*] instead of nested maps.
 
 ### index(iterable, ...keys) {#index}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/group.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-group "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-group) -->
 
 Equivalent to [group](#group) but returns a unique value per compound key instead of an array, throwing if the key is not unique.
 
@@ -585,15 +695,15 @@ throws an error because two objects share the same name.
 
 ### indexes(iterable, ...keys) {#indexes}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/group.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-group "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-group) -->
 
 Equivalent to [index](#index), but returns nested arrays instead of nested maps.
 
 ### rollup(iterable, reduce, ...keys) {#rollup}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/group.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-group-d3-rollup "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-group-d3-rollup) -->
 
 [Groups](#group) and reduces the specified *iterable* of values into an InternMap from *key* to value. For example, given some data:
 
@@ -648,22 +758,22 @@ To convert a Map to an Array, use [Array.from](https://developer.mozilla.org/en-
 
 ### rollups(iterable, reduce, ...keys) {#rollups}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/group.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-group-d3-rollup "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-group-d3-rollup) -->
 
 Equivalent to [rollup](#rollup), but returns nested arrays instead of nested maps.
 
 ### flatRollup(iterable, reduce, ...keys) {#flatRollup}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/group.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-flatgroup "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-flatgroup) -->
 
 Equivalent to [rollup](#rollup), but returns a flat array of [*key0*, *key1*, …, *value*] instead of nested maps.
 
 ### groupSort(iterable, comparator, key) {#groupSort}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/groupSort.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-groupsort "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/groupSort.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-groupsort) -->
 
 Groups the specified *iterable* of elements according to the specified *key* function, sorts the groups according to the specified *comparator*, and then returns an array of keys in sorted order. For example, if you had a table of barley yields for different varieties, sites, and years, to sort the barley varieties by ascending median yield:
 
@@ -681,8 +791,8 @@ If a *comparator* is passed instead of an *accessor* (i.e., if the second argume
 
 ### count(iterable, accessor) {#count}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/count.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-count "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/count.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-count) -->
 
 Returns the number of valid number values (*i.e.*, not null, NaN, or undefined) in the specified *iterable*; accepts an accessor.
 
@@ -693,8 +803,8 @@ d3.count([{n: "Alice", age: NaN}, {n: "Bob", age: 18}, {n: "Other"}], d => d.age
 ```
 ### cross(...iterables, reducer) {#cross}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/cross.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-cross "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/cross.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-cross) -->
 
 Returns the [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) of the specified *iterables*. For example, if two iterables *a* and *b* are specified, for each element *i* in the iterable *a* and each element *j* in the iterable *b*, in order, invokes the specified *reducer* function passing the element *i* and element *j*. If a *reducer* is not specified, it defaults to a function which creates a two-element array for each pair:
 
@@ -713,8 +823,8 @@ d3.cross([1, 2], ["x", "y"], (a, b) => a + b); // returns ["1x", "1y", "2x", "2y
 
 ### merge(iterables) {#merge}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/merge.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-merge "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/merge.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-merge) -->
 
 Merges the specified iterable of *iterables* into a single array. This method is similar to the built-in array concat method; the only difference is that it is more convenient when you have an array of arrays.
 
@@ -724,8 +834,8 @@ d3.merge([[1], [2, 3]]); // returns [1, 2, 3]
 
 ### pairs(iterable, reducer) {#pairs}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/pairs.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-pairs "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/pairs.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-pairs) -->
 
 For each adjacent pair of elements in the specified *iterable*, in order, invokes the specified *reducer* function passing the element *i* and element *i* - 1. If a *reducer* is not specified, it defaults to a function which creates a two-element array for each pair:
 
@@ -746,8 +856,8 @@ If the specified iterable has fewer than two elements, returns the empty array.
 
 ### permute(source, keys) {#permute}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/permute.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-permute "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/permute.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-permute) -->
 
 Returns a permutation of the specified *source* object (or array) using the specified iterable of *keys*. The returned array contains the corresponding property of the source object for each key in *keys*, in order. For example:
 
@@ -768,14 +878,14 @@ d3.permute(object, fields); // returns ["University Farm", "Manchuria", 27]
 
 ### shuffle(array, start, stop) {#shuffle}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/shuffle.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-shuffle "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/shuffle.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-shuffle) -->
 
 Randomizes the order of the specified *array* in-place using the [Fisher–Yates shuffle](https://bost.ocks.org/mike/shuffle/) and returns the *array*. If *start* is specified, it is the starting index (inclusive) of the *array* to shuffle; if *start* is not specified, it defaults to zero. If *stop* is specified, it is the ending index (exclusive) of the *array* to shuffle; if *stop* is not specified, it defaults to *array*.length. For example, to shuffle the first ten elements of the *array*: shuffle(*array*, 0, 10).
 
 ### shuffler(random) {#shuffler}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/shuffle.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/shuffle.js) -->
 
 Returns a [shuffle function](#shuffle) given the specified random source. For example, using [d3.randomLcg](https://github.com/d3/d3-random/blob/main/README.md#randomLcg):
 
@@ -788,8 +898,8 @@ shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]); // returns [7, 4, 5, 3, 9, 0, 6, 1, 2, 
 
 ### ticks(start, stop, count) {#ticks}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/ticks.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-ticks "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/ticks.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-ticks) -->
 
 Returns an array of approximately *count* + 1 uniformly-spaced, nicely-rounded values between *start* and *stop* (inclusive). Each value is a power of ten multiplied by 1, 2 or 5. See also [d3.tickIncrement](#tickIncrement), [d3.tickStep](#tickStep) and [*linear*.ticks](https://github.com/d3/d3-scale/blob/main/README.md#linear_ticks).
 
@@ -797,28 +907,28 @@ Ticks are inclusive in the sense that they may include the specified *start* and
 
 ### tickIncrement(start, stop, count) {#tickIncrement}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/ticks.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-ticks "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/ticks.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-ticks) -->
 
 Like [d3.tickStep](#tickStep), except requires that *start* is always less than or equal to *stop*, and if the tick step for the given *start*, *stop* and *count* would be less than one, returns the negative inverse tick step instead. This method is always guaranteed to return an integer, and is used by [d3.ticks](#ticks) to guarantee that the returned tick values are represented as precisely as possible in IEEE 754 floating point.
 
 ### tickStep(start, stop, count) {#tickStep}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/ticks.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-ticks "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/ticks.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-ticks) -->
 
 Returns the difference between adjacent tick values if the same arguments were passed to [d3.ticks](#ticks): a nicely-rounded value that is a power of ten multiplied by 1, 2 or 5. Note that due to the limited precision of IEEE 754 floating point, the returned value may not be exact decimals; use [d3-format](https://github.com/d3/d3-format) to format numbers for human consumption.
 
 ### nice(start, stop, count) {#nice}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/nice.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/nice.js) -->
 
 Returns a new interval [*niceStart*, *niceStop*] covering the given interval [*start*, *stop*] and where *niceStart* and *niceStop* are guaranteed to align with the corresponding [tick step](#tickStep). Like [d3.tickIncrement](#tickIncrement), this requires that *start* is less than or equal to *stop*.
 
 ### range(start, stop, step) {#range}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/range.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-range "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/range.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-range) -->
 
 Returns an array containing an arithmetic progression, similar to the Python built-in [range](http://docs.python.org/library/functions.html#range). This method is often used to iterate over a sequence of uniformly-spaced numeric values, such as the indexes of an array or the ticks of a linear scale. (See also [d3.ticks](#ticks) for nicely-rounded values.)
 
@@ -841,15 +951,15 @@ d3.range(49).map(function(d) { return d / 49; }); // GOOD: returns 49 elements.
 
 ### transpose(matrix) {#transpose}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/transpose.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-transpose "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/transpose.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-transpose) -->
 
 Uses the [zip](#zip) operator as a two-dimensional [matrix transpose](http://en.wikipedia.org/wiki/Transpose).
 
 ### zip(arrays…) {#zip}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/zip.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-transpose "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/zip.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-transpose) -->
 
 Returns an array of arrays, where the *i*th array contains the *i*th element from each of the argument *arrays*. The returned array is truncated in length to the shortest array in *arrays*. If *arrays* contains only a single array, the returned array contains one-element arrays. With no arguments, the returned array is empty.
 
@@ -861,8 +971,8 @@ d3.zip([1, 2], [3, 4]); // returns [[1, 3], [2, 4]]
 
 ### blur(data, radius) {#blur}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/blur.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-blur "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/blur.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-blur) -->
 
 Blurs an array of *data* in-place by applying three iterations of a moving average transform, for a fast approximation of a gaussian kernel of the given *radius*, a non-negative number, and returns the array.
 
@@ -878,8 +988,8 @@ const smoothed = blur(randomWalk.slice(), 5);
 
 ### blur2({data, width, height}, rx, ry) {#blur2}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/blur.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-blur "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/blur.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-blur) -->
 
 Blurs a matrix of the given *width* and *height* in-place, by applying an horizontal blur of radius *rx* and a vertical blur or radius *ry* (which defaults to *rx*). The matrix *data* is stored in a flat array, used to determine the *height* if it is not specified. Returns the blurred {data, width, height}.
 
@@ -894,8 +1004,8 @@ blur2({data, width: 3}, 1);
 
 ### blurImage(imageData, rx, ry) {#blurImage}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/blur.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-blurimage "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/blur.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-blurimage) -->
 
 Blurs an [ImageData](https://developer.mozilla.org/en-US/docs/Web/API/ImageData) structure in-place, blurring each of the RGBA layers independently by applying an horizontal blur of radius *rx* and a vertical blur or radius *ry* (which defaults to *rx*). Returns the blurred ImageData.
 
@@ -910,7 +1020,7 @@ These are equivalent to built-in array methods, but work with any iterable inclu
 
 ### every(iterable, test) {#every}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/every.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/every.js) -->
 
 Returns true if the given *test* function returns true for every value in the given *iterable*. This method returns as soon as *test* returns a non-truthy value or all values are iterated over. Equivalent to [*array*.every](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every):
 
@@ -920,7 +1030,7 @@ d3.every(new Set([1, 3, 5, 7]), x => x & 1) // true
 
 ### some(iterable, test) {#some}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/some.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/some.js) -->
 
 Returns true if the given *test* function returns true for any value in the given *iterable*. This method returns as soon as *test* returns a truthy value or all values are iterated over. Equivalent to [*array*.some](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some):
 
@@ -930,7 +1040,7 @@ d3.some(new Set([0, 2, 3, 4]), x => x & 1) // true
 
 ### filter(iterable, test) {#filter}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/filter.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/filter.js) -->
 
 Returns a new array containing the values from *iterable*, in order, for which the given *test* function returns true. Equivalent to [*array*.filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter):
 
@@ -940,7 +1050,7 @@ d3.filter(new Set([0, 2, 3, 4]), x => x & 1) // [3]
 
 ### map(iterable, mapper) {#map}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/map.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/map.js) -->
 
 Returns a new array containing the mapped values from *iterable*, in order, as defined by given *mapper* function. Equivalent to [*array*.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) and [Array.from](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from):
 
@@ -950,7 +1060,7 @@ d3.map(new Set([0, 2, 3, 4]), x => x & 1) // [0, 0, 1, 0]
 
 ### reduce(iterable, reducer, initialValue) {#reduce}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/reduce.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/reduce.js) -->
 
 Returns the reduced value defined by given *reducer* function, which is repeatedly invoked for each value in *iterable*, being passed the current reduced value and the next value. Equivalent to [*array*.reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce):
 
@@ -960,7 +1070,7 @@ d3.reduce(new Set([0, 2, 3, 4]), (p, v) => p + v, 0) // 9
 
 ### reverse(iterable) {#reverse}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/reverse.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/reverse.js) -->
 
 Returns an array containing the values in the given *iterable* in reverse order. Equivalent to [*array*.reverse](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse), except that it does not mutate the given *iterable*:
 
@@ -970,7 +1080,7 @@ d3.reverse(new Set([0, 2, 3, 1])) // [1, 3, 2, 0]
 
 ### sort(iterable, comparator) {#sort}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/sort.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/sort.js) -->
 
 Returns an array containing the values in the given *iterable* in the sorted order defined by the given *comparator* or *accessor* function. If *comparator* is not specified, it defaults to [d3.ascending](#ascending). Equivalent to [*array*.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort), except that it does not mutate the given *iterable*, and the comparator defaults to natural order instead of lexicographic order:
 
@@ -1010,7 +1120,7 @@ This methods implement basic set operations for any iterable.
 
 ### difference(iterable, ...others) {#difference}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/difference.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/difference.js) -->
 
 Returns a new InternSet containing every value in *iterable* that is not in any of the *others* iterables.
 
@@ -1020,7 +1130,7 @@ d3.difference([0, 1, 2, 0], [1]) // Set {0, 2}
 
 ### union(...iterables) {#union}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/union.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/union.js) -->
 
 Returns a new InternSet containing every (distinct) value that appears in any of the given *iterables*. The order of values in the returned set is based on their first occurrence in the given *iterables*.
 
@@ -1030,7 +1140,7 @@ d3.union([0, 2, 1, 0], [1, 3]) // Set {0, 2, 1, 3}
 
 ### intersection(...iterables) {#intersection}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/intersection.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/intersection.js) -->
 
 Returns a new InternSet containing every (distinct) value that appears in all of the given *iterables*. The order of values in the returned set is based on their first occurrence in the given *iterables*.
 
@@ -1040,7 +1150,7 @@ d3.intersection([0, 2, 1, 0], [1, 3]) // Set {1}
 
 ### superset(a, b) {#superset}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/superset.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/superset.js) -->
 
 Returns true if *a* is a superset of *b*: if every value in the given iterable *b* is also in the given iterable *a*.
 
@@ -1050,7 +1160,7 @@ d3.superset([0, 2, 1, 3, 0], [1, 3]) // true
 
 ### subset(a, b) {#subset}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/subset.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/subset.js) -->
 
 Returns true if *a* is a subset of *b*: if every value in the given iterable *a* is also in the given iterable *b*.
 
@@ -1060,7 +1170,7 @@ d3.subset([1, 3], [0, 2, 1, 3, 0]) // true
 
 ### disjoint(a, b) {#disjoint}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/disjoint.js "Source") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/disjoint.js) -->
 
 Returns true if *a* and *b* are disjoint: if *a* and *b* contain no shared value.
 
@@ -1076,15 +1186,15 @@ Binning groups discrete samples into a smaller number of consecutive, non-overla
 
 ### bin() {#bin}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bin.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bin "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bin.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bin) -->
 
 Constructs a new bin generator with the default settings.
 
 ### *bin*(data) {#bin_}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bin.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bin "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bin.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bin) -->
 
 Bins the given iterable of *data* samples. Returns an array of bins, where each bin is an array containing the associated elements from the input *data*. Thus, the `length` of the bin is the number of elements in that bin. Each bin has two additional attributes:
 
@@ -1095,8 +1205,8 @@ Any null or non-comparable values in the given *data*, or those outside the [dom
 
 ### *bin*.value(value) {#bin_value}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bin.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bin "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bin.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bin) -->
 
 If *value* is specified, sets the value accessor to the specified function or constant and returns this bin generator. If *value* is not specified, returns the current value accessor, which defaults to the identity function.
 
@@ -1106,8 +1216,8 @@ This is similar to mapping your data to values before invoking the bin generator
 
 ### *bin*.domain(domain) {#bin_domain}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bin.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bin "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bin.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bin) -->
 
 If *domain* is specified, sets the domain accessor to the specified function or array and returns this bin generator. If *domain* is not specified, returns the current domain accessor, which defaults to [extent](#extent). The bin domain is defined as an array [*min*, *max*], where *min* is the minimum observable value and *max* is the maximum observable value; both values are inclusive. Any value outside of this domain will be ignored when the bins are [generated](#_bin).
 
@@ -1131,8 +1241,8 @@ Note that the domain accessor is invoked on the materialized array of [values](#
 
 ### *bin*.thresholds(count) {#bin_thresholds}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/bin.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bin "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bin.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bin) -->
 
 If *thresholds* is specified, sets the [threshold generator](#bin-thresholds) to the specified function or array and returns this bin generator. If *thresholds* is not specified, returns the current threshold generator, which by default implements [Sturges’ formula](#thresholdSturges). (Thus by default, the values to be binned must be numbers!) Thresholds are defined as an array of values [*x0*, *x1*, …]. Any value less than *x0* will be placed in the first bin; any value greater than or equal to *x0* but less than *x1* will be placed in the second bin; and so on. Thus, the [generated bins](#_bin) will have *thresholds*.length + 1 bins. See [bin thresholds](#bin-thresholds) for more information.
 
@@ -1146,22 +1256,22 @@ These functions are typically not used directly; instead, pass them to [*bin*.th
 
 ### thresholdFreedmanDiaconis(values, min, max) {#thresholdFreedmanDiaconis}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/threshold/freedmanDiaconis.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bin "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/threshold/freedmanDiaconis.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bin) -->
 
 Returns the number of bins according to the [Freedman–Diaconis rule](https://en.wikipedia.org/wiki/Histogram#Mathematical_definition); the input *values* must be numbers.
 
 ### thresholdScott(values, min, max) {#thresholdScott}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/threshold/scott.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bin "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/threshold/scott.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bin) -->
 
 Returns the number of bins according to [Scott’s normal reference rule](https://en.wikipedia.org/wiki/Histogram#Mathematical_definition); the input *values* must be numbers.
 
 ### thresholdSturges(values) {#thresholdSturges}
 
-<!-- [⧁](https://github.com/d3/d3-array/blob/main/src/threshold/sturges.js "Source") -->
-<!-- [⊛](https://observablehq.com/@d3/d3-bin "Examples") -->
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/threshold/sturges.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-bin) -->
 
 Returns the number of bins according to [Sturges’ formula](https://en.wikipedia.org/wiki/Histogram#Mathematical_definition); the input *values* must be numbers.
 
@@ -1173,7 +1283,7 @@ For instance, when binning date values, you might want to use the ticks from a t
 
 ### new d3.InternMap(iterable, key) {#InternMap}
 
-<!-- [⧁](https://github.com/mbostock/internmap/blob/main/src/index.js "Source") -->
-<!-- [⊛](https://observablehq.com/d/d4c5f6ad343866b9 "Examples") -->
+<!-- [Source](https://github.com/mbostock/internmap/blob/main/src/index.js) -->
+<!-- [Examples](https://observablehq.com/d/d4c5f6ad343866b9) -->
 
 The [InternMap and InternSet](https://github.com/mbostock/internmap) classes extend the native JavaScript Map and Set classes, respectively, allowing Dates and other non-primitive keys by bypassing the [SameValueZero algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness) when determining key equality. d3.group, d3.rollup and d3.index use an InternMap rather than a native Map. These two classes are exported for convenience.
