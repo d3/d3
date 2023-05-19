@@ -2,6 +2,7 @@ import path from "path";
 import {defineConfig} from "vitepress";
 
 // https://vitepress.dev/reference/site-config
+// prettier-ignore
 export default defineConfig({
   title: "D3 by Observable",
   description: "The JavaScript library for bespoke data visualization",
@@ -9,7 +10,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        "d3": path.resolve("./src/index.js")
+        d3: path.resolve("./src/index.js")
       }
     }
   },
@@ -35,7 +36,23 @@ export default defineConfig({
       {
         text: "Modules",
         items: [
-          {text: "d3-array", link: "/d3-array"},
+          {
+            text: "d3-array",
+            items: [
+              {text: "Adders", link: "/d3-array/adders"},
+              {text: "Binning", link: "/d3-array/binning"},
+              {text: "Bisecting", link: "/d3-array/bisecting"},
+              {text: "Blurring", link: "/d3-array/blurring"},
+              {text: "Interning", link: "/d3-array/interning"},
+              {text: "Iterating", link: "/d3-array/iterating"},
+              {text: "Grouping", link: "/d3-array/grouping"},
+              {text: "Searching", link: "/d3-array/searching"},
+              {text: "Sets", link: "/d3-array/sets"},
+              {text: "Sorting", link: "/d3-array/sorting"},
+              {text: "Summarizing", link: "/d3-array/summarizing"},
+              {text: "Transforming", link: "/d3-array/transforming"}
+            ]
+          },
           {text: "d3-axis", link: "/d3-axis"},
           {text: "d3-brush", link: "/d3-brush"},
           {text: "d3-chord", link: "/d3-chord"},
