@@ -12,12 +12,12 @@ Like [min](#min), but returns the index of the minimum value rather than the val
 ```js
 d3.minIndex([3, 2, 1, 1, 6, 2, 4]) // 2
 ```
-```js
-d3.minIndex(alphabet, (d) => d.frequency) // 25
-```
 
 This method can find the least element according to the given accessor, similar to [least](#least):
 
+```js
+d3.minIndex(alphabet, (d) => d.frequency) // 25
+```
 ```js
 alphabet[d3.minIndex(alphabet, (d) => d.frequency)] // {letter: "Z", frequency: 0.00074}
 ```
@@ -34,12 +34,12 @@ Like [max](#max), but returns the index of the maximum value rather than the val
 ```js
 d3.maxIndex([3, 2, 1, 1, 6, 2, 4]) // 2
 ```
-```js
-d3.maxIndex(alphabet, (d) => d.frequency) // 0
-```
 
 This method can find the greatest element according to the given accessor, similar to [greatest](#greatest):
 
+```js
+d3.maxIndex(alphabet, (d) => d.frequency) // 0
+```
 ```js
 alphabet[d3.maxIndex(alphabet, (d) => d.frequency)] // {letter: "E", frequency: 0.12702}
 ```
@@ -51,13 +51,34 @@ See also [greatestIndex](#greatestIndex).
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/least.js) -->
 <!-- [Examples](https://observablehq.com/@d3/d3-least) -->
 
-Returns the least element of the specified *iterable* according to the specified *comparator* or *accessor*. If the given *iterable* contains no comparable elements (*i.e.*, the comparator returns NaN when comparing each element to itself), returns undefined. If *comparator* is not specified, it defaults to [ascending](#ascending). For example:
+Returns the least element of the specified *iterable* according to the specified *comparator*.
 
 ```js
-const array = [{foo: 42}, {foo: 91}];
-d3.least(array, (a, b) => a.foo - b.foo); // {foo: 42}
-d3.least(array, (a, b) => b.foo - a.foo); // {foo: 91}
-d3.least(array, a => a.foo); // {foo: 42}
+d3.least(alphabet, (a, b) => a.frequency - b.frequency) // {letter: "Z", frequency: 0.00074}
+```
+```js
+d3.least(alphabet, (a, b) => b.frequency - a.frequency) // {letter: "E", frequency: 0.12702}
+```
+
+If the *comparator* takes a single argument, is interpreted as an accessor and the returned elements are compared using natural order.
+
+```js
+d3.least(alphabet, (d) => d.frequency) // {letter: "Z", frequency: 0.00074}
+```
+```js
+d3.least(alphabet, (d) => -d.frequency) // {letter: "E", frequency: 0.12702}
+```
+
+If *comparator* is not specified, it defaults to [ascending](#ascending).
+
+```js
+d3.least(alphabet.map((d) => d.frequency)) // 0.00074
+```
+
+If the given *iterable* contains no comparable elements (*i.e.*, the comparator returns NaN when comparing each element to itself), returns undefined.
+
+```js
+d3.least([]) // undefined
 ```
 
 This function is similar to [min](#min), except it allows the use of a comparator rather than an accessor.
