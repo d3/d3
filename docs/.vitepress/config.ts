@@ -38,6 +38,7 @@ export default defineConfig({
         items: [
           {
             text: "d3-array",
+            collapsed: true,
             items: [
               {text: "Adders", link: "/d3-array/adders"},
               {text: "Binning", link: "/d3-array/binning"},
