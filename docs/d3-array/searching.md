@@ -2,7 +2,7 @@
 
 Methods for searching arrays for a specific element.
 
-## minIndex(iterable, accessor) {#minIndex}
+## minIndex(*iterable*, *accessor*) {#minIndex}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/minIndex.js) -->
 <!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
@@ -24,7 +24,7 @@ alphabet[d3.minIndex(alphabet, (d) => d.frequency)] // {letter: "Z", frequency: 
 
 See also [leastIndex](#leastIndex).
 
-## maxIndex(iterable, accessor) {#maxIndex}
+## maxIndex(*iterable*, *accessor*) {#maxIndex}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/maxIndex.js) -->
 <!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
@@ -46,7 +46,7 @@ alphabet[d3.maxIndex(alphabet, (d) => d.frequency)] // {letter: "E", frequency: 
 
 See also [greatestIndex](#greatestIndex).
 
-## least(iterable, comparator) {#least}
+## least(*iterable*, *comparator*) {#least}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/least.js) -->
 <!-- [Examples](https://observablehq.com/@d3/d3-least) -->
@@ -62,7 +62,7 @@ d3.least(array, a => a.foo); // {foo: 42}
 
 This function is similar to [min](#min), except it allows the use of a comparator rather than an accessor.
 
-## leastIndex(iterable, comparator) {#leastIndex}
+## leastIndex(*iterable*, *comparator*) {#leastIndex}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/leastIndex.js) -->
 <!-- [Examples](https://observablehq.com/@d3/d3-least) -->
@@ -78,7 +78,7 @@ d3.leastIndex(array, a => a.foo); // 0
 
 This function is similar to [minIndex](#minIndex), except it allows the use of a comparator rather than an accessor.
 
-## greatest(iterable, comparator) {#greatest}
+## greatest(*iterable*, *comparator*) {#greatest}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/greatest.js) -->
 <!-- [Examples](https://observablehq.com/@d3/d3-least) -->
@@ -94,7 +94,7 @@ d3.greatest(array, a => a.foo); // {foo: 91}
 
 This function is similar to [max](#max), except it allows the use of a comparator rather than an accessor.
 
-## greatestIndex(iterable, comparator) {#greatestIndex}
+## greatestIndex(*iterable*, *comparator*) {#greatestIndex}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/greatestIndex.js) -->
 <!-- [Examples](https://observablehq.com/@d3/d3-least) -->
