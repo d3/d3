@@ -44,12 +44,12 @@ export default defineConfig({
               {text: "Bisecting", link: "/d3-array/bisecting"},
               {text: "Blurring", link: "/d3-array/blurring"},
               {text: "Interning", link: "/d3-array/interning"},
-              {text: "Iterating", link: "/d3-array/iterating"},
               {text: "Grouping", link: "/d3-array/grouping"},
               {text: "Searching", link: "/d3-array/searching"},
               {text: "Sets", link: "/d3-array/sets"},
               {text: "Sorting", link: "/d3-array/sorting"},
               {text: "Summarizing", link: "/d3-array/summarizing"},
+              {text: "Ticks", link: "/d3-array/ticks"},
               {text: "Transforming", link: "/d3-array/transforming"}
             ]
           },

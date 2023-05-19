@@ -70,9 +70,7 @@ Any threshold values outside the [domain](#bin_domain) are ignored. The first *b
 
 If a *count* is specified instead of an array of *thresholds*, then the [domain](#bin_domain) will be uniformly divided into approximately *count* bins; see [ticks](#ticks).
 
-# Bin thresholds
-
-These functions are typically not used directly; instead, pass them to [*bin*.thresholds](#bin_thresholds).
+<!-- These functions are typically not used directly; instead, pass them to [*bin*.thresholds](#bin_thresholds). -->
 
 ## thresholdFreedmanDiaconis(values, min, max) {#thresholdFreedmanDiaconis}
 

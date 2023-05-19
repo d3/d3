@@ -2,6 +2,50 @@
 
 Methods for searching arrays for a specific element.
 
+## minIndex(iterable, accessor) {#minIndex}
+
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/minIndex.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
+
+Like [min](#min), but returns the index of the minimum value rather than the value itself.
+
+```js
+d3.minIndex([3, 2, 1, 1, 6, 2, 4]) // 2
+```
+```js
+d3.minIndex(alphabet, (d) => d.frequency) // 25
+```
+
+This method can find the least element according to the given accessor, similar to [least](#least):
+
+```js
+alphabet[d3.minIndex(alphabet, (d) => d.frequency)] // {letter: "Z", frequency: 0.00074}
+```
+
+See also [leastIndex](#leastIndex).
+
+## maxIndex(iterable, accessor) {#maxIndex}
+
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/maxIndex.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
+
+Like [max](#max), but returns the index of the maximum value rather than the value itself.
+
+```js
+d3.maxIndex([3, 2, 1, 1, 6, 2, 4]) // 2
+```
+```js
+d3.maxIndex(alphabet, (d) => d.frequency) // 0
+```
+
+This method can find the greatest element according to the given accessor, similar to [greatest](#greatest):
+
+```js
+alphabet[d3.maxIndex(alphabet, (d) => d.frequency)] // {letter: "E", frequency: 0.12702}
+```
+
+See also [greatestIndex](#greatestIndex).
+
 ## least(iterable, comparator) {#least}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/least.js) -->

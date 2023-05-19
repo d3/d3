@@ -2,6 +2,19 @@
 
 These methods compute basic summary statistics.
 
+## count(iterable, accessor) {#count}
+
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/count.js) -->
+<!-- [Examples](https://observablehq.com/@d3/d3-count) -->
+
+Returns the number of valid number values (*i.e.*, not null, NaN, or undefined) in the specified *iterable*; accepts an accessor.
+
+For example:
+
+```js
+d3.count([{n: "Alice", age: NaN}, {n: "Bob", age: 18}, {n: "Other"}], d => d.age) // 1
+```
+
 ## min(iterable, accessor) {#min}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/min.js) -->
@@ -51,28 +64,6 @@ d3.min(alphabet, (d) => d.doesnotexist) // undefined
 
 See also [extent](#extent) and [least](#least).
 
-## minIndex(iterable, accessor) {#minIndex}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/minIndex.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
-
-Like [min](#min), but returns the index of the minimum value rather than the value itself.
-
-```js
-d3.minIndex([3, 2, 1, 1, 6, 2, 4]) // 2
-```
-```js
-d3.minIndex(alphabet, (d) => d.frequency) // 25
-```
-
-This method can find the least element according to the given accessor, similar to [least](#least):
-
-```js
-alphabet[d3.minIndex(alphabet, (d) => d.frequency)] // {letter: "Z", frequency: 0.00074}
-```
-
-See also [leastIndex](#leastIndex).
-
 ## max(iterable, accessor) {#max}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/max.js) -->
@@ -121,28 +112,6 @@ d3.max(alphabet, (d) => d.doesnotexist) // undefined
 ```
 
 See also [extent](#extent) and [greatest](#greatest).
-
-## maxIndex(iterable, accessor) {#maxIndex}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/maxIndex.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-extent) -->
-
-Like [max](#max), but returns the index of the maximum value rather than the value itself.
-
-```js
-d3.maxIndex([3, 2, 1, 1, 6, 2, 4]) // 2
-```
-```js
-d3.maxIndex(alphabet, (d) => d.frequency) // 0
-```
-
-This method can find the greatest element according to the given accessor, similar to [greatest](#greatest):
-
-```js
-alphabet[d3.maxIndex(alphabet, (d) => d.frequency)] // {letter: "E", frequency: 0.12702}
-```
-
-See also [greatestIndex](#greatestIndex).
 
 ## extent(iterable, accessor) {#extent}
 
