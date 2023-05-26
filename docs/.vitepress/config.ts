@@ -38,9 +38,10 @@ export default defineConfig({
         items: [
           {
             text: "d3-array",
+            link: "/d3-array",
             collapsed: true,
             items: [
-              {text: "Adders", link: "/d3-array/adders"},
+              {text: "Adding", link: "/d3-array/adding"},
               {text: "Binning", link: "/d3-array/binning"},
               {text: "Bisecting", link: "/d3-array/bisecting"},
               {text: "Blurring", link: "/d3-array/blurring"},

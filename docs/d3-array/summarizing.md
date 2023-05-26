@@ -265,31 +265,3 @@ Returns an [unbiased estimator of the population variance](http://mathworld.wolf
 <!-- [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) -->
 
 Returns the standard deviation, defined as the square root of the [bias-corrected variance](#variance), of the given *iterable* of numbers. If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the standard deviation. This method ignores undefined and NaN values; this is useful for ignoring missing data.
-
-## fsum(values, accessor) {#fsum}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/fsum.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-fsum) -->
-
-Returns a full precision summation of the given *values*.
-
-```js
-d3.fsum([.1, .1, .1, .1, .1, .1, .1, .1, .1, .1]); // 1
-d3.sum([.1, .1, .1, .1, .1, .1, .1, .1, .1, .1]); // 0.9999999999999999
-```
-
-Although slower, d3.fsum can replace d3.sum wherever greater precision is needed. Uses <a href="#adder">d3.Adder</a>.
-
-## fcumsum(values, accessor) {#fcumsum}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/fsum.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-fcumsum) -->
-
-Returns a full precision cumulative sum of the given *values*.
-
-```js
-d3.fcumsum([1, 1e-14, -1]); // [1, 1.00000000000001, 1e-14]
-d3.cumsum([1, 1e-14, -1]); // [1, 1.00000000000001, 9.992e-15]
-```
-
-Although slower, d3.fcumsum can replace d3.cumsum when greater precision is needed. Uses <a href="#adder">d3.Adder</a>.
