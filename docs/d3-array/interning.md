@@ -1,12 +1,35 @@
 # d3-array: Interning {#top}
 
-## new d3.InternMap(iterable, key) {#InternMap}
+[Examples](https://observablehq.com/d/d4c5f6ad343866b9) · [Source](https://github.com/mbostock/internmap/blob/main/src/index.js) · The [InternMap](#InternMap) and [InternSet](#InternSet) classes extend the native JavaScript Map and Set classes, respectively, allowing Dates and other non-primitive keys by bypassing the [SameValueZero algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness) when determining key equality. [d3.group](./grouping.md#group), [d3.rollup](./grouping.md#rollup) and [d3.index](./grouping.md#index) use an InternMap rather than a native Map.
 
-<!-- [Source](https://github.com/mbostock/internmap/blob/main/src/index.js) -->
-<!-- [Examples](https://observablehq.com/d/d4c5f6ad343866b9) -->
+## new InternMap(*iterable*, *key*) {#InternMap}
 
-The [InternMap and InternSet](https://github.com/mbostock/internmap) classes extend the native JavaScript Map and Set classes, respectively, allowing Dates and other non-primitive keys by bypassing the [SameValueZero algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness) when determining key equality. d3.group, d3.rollup and d3.index use an InternMap rather than a native Map. These two classes are exported for convenience.
+```js
+const valueByDate = new d3.InternMap([
+  [new Date("2021-01-01"), 42],
+  [new Date("2022-01-01"), 12],
+  [new Date("2023-01-01"), 45]
+]);
+```
 
-## new d3.InternSet(iterable, key) {#InternSet}
+Constructs a new Map given the specified *iterable* of [*key*, *value*] entries. The keys are interned using the specified *key* function which defaults to [*object*.valueOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf) for non-primitive values. For example, to retrieve a value keyed by a given date:
 
-TODO
+```js
+valueByDate.get(new Date("2022-01-01")) // 12
+```
+
+## new InternSet(*iterable*, *key*) {#InternSet}
+
+```js
+const dates = new d3.InternSet([
+  new Date("2021-01-01"),
+  new Date("2022-01-01"),
+  new Date("2023-01-01")
+]);
+```
+
+Constructs a new Set given the specified *iterable* of values. The values are interned using the specified *key* function which defaults to [*object*.valueOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf) for non-primitive values. For example, to query for a given date:
+
+```js
+dates.has(new Date("2022-01-01")) // true
+```

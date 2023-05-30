@@ -29,14 +29,19 @@ Bin discrete samples into continuous, non-overlapping intervals.
 
 Quickly find a value in a sorted array.
 
-* [d3.bisector](https://github.com/d3/d3-array/blob/v3.2.3/README.md#bisector) - bisect using an accessor or comparator.
-* [*bisector*.right](https://github.com/d3/d3-array/blob/v3.2.3/README.md#bisector_right) - bisectRight, with the given comparator.
-* [*bisector*.left](https://github.com/d3/d3-array/blob/v3.2.3/README.md#bisector_left) - bisectLeft, with the given comparator.
-* [*bisector*.center](https://github.com/d3/d3-array/blob/v3.2.3/README.md#bisector_center) - binary search for a value in a sorted array.
-* [d3.bisect](https://github.com/d3/d3-array/blob/v3.2.3/README.md#bisect) - binary search for a value in a sorted array.
-* [d3.bisectRight](https://github.com/d3/d3-array/blob/v3.2.3/README.md#bisectRight) - binary search for a value in a sorted array.
-* [d3.bisectLeft](https://github.com/d3/d3-array/blob/v3.2.3/README.md#bisectLeft) - binary search for a value in a sorted array.
-* [d3.bisectCenter](https://github.com/d3/d3-array/blob/v3.2.3/README.md#bisectCenter) - binary search for a value in a sorted array.
+* [bisector](./d3-array/bisecting.md#bisector) - bisect using an accessor or comparator.
+* [*bisector*.right](./d3-array/bisecting.md#bisector_right) - bisectRight, with the given comparator.
+* [*bisector*.left](./d3-array/bisecting.md#bisector_left) - bisectLeft, with the given comparator.
+* [*bisector*.center](./d3-array/bisecting.md#bisector_center) - binary search for a value in a sorted array.
+* [bisect](./d3-array/bisecting.md#bisect) - binary search for a value in a sorted array.
+* [bisectRight](./d3-array/bisecting.md#bisectRight) - binary search for a value in a sorted array.
+* [bisectLeft](./d3-array/bisecting.md#bisectLeft) - binary search for a value in a sorted array.
+* [bisectCenter](./d3-array/bisecting.md#bisectCenter) - binary search for a value in a sorted array.
+
+## [Interning](./d3-array/interning.md)
+
+* [new InternMap](./d3-array/interning.md#InternMap) - a key-interning Map.
+* [new InternSet](./d3-array/interning.md#InternSet) - a value-interning Set.
 
 ---
 
@@ -123,8 +128,3 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.superset](https://github.com/d3/d3-array/blob/v3.2.3/README.md#superset) - test whether a set is a superset of another.
 * [d3.subset](https://github.com/d3/d3-array/blob/v3.2.3/README.md#subset) - test whether a set is a subset of another.
 * [d3.union](https://github.com/d3/d3-array/blob/v3.2.3/README.md#union) - compute a set union.
-
-## [Interning](https://github.com/d3/d3-array/blob/v3.2.3/README.md#interning)
-
-* [d3.InternMap](https://github.com/d3/d3-array/blob/v3.2.3/README.md#InternMap) - a key-interning Map.
-* [d3.InternSet](https://github.com/d3/d3-array/blob/v3.2.3/README.md#InternSet) - a value-interning Set.
