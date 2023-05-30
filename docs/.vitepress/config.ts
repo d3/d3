@@ -47,7 +47,6 @@ export default defineConfig({
               {text: "Blur", link: "/d3-array/blur"},
               {text: "Group", link: "/d3-array/group"},
               {text: "Intern", link: "/d3-array/intern"},
-              {text: "Search", link: "/d3-array/search"},
               {text: "Sets", link: "/d3-array/sets"},
               {text: "Sort", link: "/d3-array/sort"},
               {text: "Summarize", link: "/d3-array/summarize"},

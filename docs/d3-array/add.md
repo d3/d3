@@ -1,4 +1,4 @@
-# d3-array: Adding {#top}
+# d3-array: Add {#top}
 
 Full-precision [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) floating point addition.
 

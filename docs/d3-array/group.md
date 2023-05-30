@@ -1,4 +1,4 @@
-# d3-array: Grouping {#top}
+# d3-array: Group {#top}
 
 Group discrete values.
 

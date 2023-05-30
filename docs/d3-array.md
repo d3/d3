@@ -67,17 +67,6 @@ Create maps and sets with non-primitive values such as dates.
 * [new InternMap](./d3-array/intern.md#InternMap) - a key-interning Map.
 * [new InternSet](./d3-array/intern.md#InternSet) - a value-interning Set.
 
-## [Search](./d3-array/search.md)
-
-Search (unsorted) arrays for a specific element.
-
-* [d3.minIndex](./d3-array/search.md#minIndex) - compute the index of the minimum value in an iterable.
-* [d3.maxIndex](./d3-array/search.md#maxIndex) - compute the index of the maximum value in an iterable.
-* [d3.least](./d3-array/search.md#least) - returns the least element of an iterable.
-* [d3.leastIndex](./d3-array/search.md#leastIndex) - returns the index of the least element of an iterable.
-* [d3.greatest](./d3-array/search.md#greatest) - returns the greatest element of an iterable.
-* [d3.greatestIndex](./d3-array/search.md#greatestIndex) - returns the index of the greatest element of an iterable.
-
 ## [Sets](./d3-array/sets.md)
 
 Logical operations on sets.
@@ -108,7 +97,13 @@ Compute summary statistics.
 
 * [d3.count](./d3-array/group.md#count) - count valid number values in an iterable.
 * [d3.min](./d3-array/group.md#min) - compute the minimum value in an iterable.
+* [d3.minIndex](./d3-array/search.md#minIndex) - compute the index of the minimum value in an iterable.
 * [d3.max](./d3-array/group.md#max) - compute the maximum value in an iterable.
+* [d3.maxIndex](./d3-array/search.md#maxIndex) - compute the index of the maximum value in an iterable.
+* [d3.least](./d3-array/search.md#least) - returns the least element of an iterable.
+* [d3.leastIndex](./d3-array/search.md#leastIndex) - returns the index of the least element of an iterable.
+* [d3.greatest](./d3-array/search.md#greatest) - returns the greatest element of an iterable.
+* [d3.greatestIndex](./d3-array/search.md#greatestIndex) - returns the index of the greatest element of an iterable.
 * [d3.extent](./d3-array/group.md#extent) - compute the minimum and maximum value in an iterable.
 * [d3.mode](./d3-array/group.md#mode) - compute the mode (the most common value) of an iterable of numbers.
 * [d3.sum](./d3-array/group.md#sum) - compute the sum of an iterable of numbers.

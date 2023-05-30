@@ -1,4 +1,4 @@
-# d3-array: Sorting {#top}
+# d3-array: Sort {#top}
 
 ## quickselect(array, k, left = 0, right = array.length - 1, compare = ascending) {#quickselect}
 
