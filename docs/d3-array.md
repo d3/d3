@@ -82,14 +82,14 @@ Logical operations on sets.
 
 Sort and reorder arrays of values.
 
-* [d3.quickselect](./d3-array/sort.md#quickselect) - reorder an array of numbers.
 * [d3.ascending](./d3-array/sort.md#ascending) - compute the natural order of two values.
 * [d3.descending](./d3-array/sort.md#descending) - compute the natural order of two values.
-* [d3.reverse](./d3-array/sort.md#reverse) - reverse the order of values.
-* [d3.sort](./d3-array/sort.md#sort) - sort values.
 * [d3.permute](./d3-array/sort.md#permute) - reorder an iterable of elements according to an iterable of indexes.
+* [d3.quickselect](./d3-array/sort.md#quickselect) - reorder an array of numbers.
+* [d3.reverse](./d3-array/sort.md#reverse) - reverse the order of values.
 * [d3.shuffle](./d3-array/sort.md#shuffle) - randomize the order of an iterable.
 * [d3.shuffler](./d3-array/sort.md#shuffler) - randomize the order of an iterable.
+* [d3.sort](./d3-array/sort.md#sort) - sort values.
 
 ## [Summarize](./d3-array/summarize.md)
 
