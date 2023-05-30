@@ -53,7 +53,7 @@ If *domain* is specified, sets the domain accessor to the specified function or 
 bin.domain() // [0, 1]
 ```
 
-If *domain* is not specified, returns the current domain accessor, which defaults to [extent](./summarizing.md#extent). The bin domain is defined as an array [*min*, *max*], where *min* is the minimum observable value and *max* is the maximum observable value; both values are inclusive. Any value outside of this domain will be ignored when the bins are [generated](#_bin).
+If *domain* is not specified, returns the current domain accessor, which defaults to [extent](./summarize.md#extent). The bin domain is defined as an array [*min*, *max*], where *min* is the minimum observable value and *max* is the maximum observable value; both values are inclusive. Any value outside of this domain will be ignored when the bins are [generated](#_bin).
 
 For example, to use a bin generator with a [linear scale](../d3-scale.md#linear-scales) `x`, you might say:
 
@@ -67,7 +67,7 @@ You can then compute the bins from an array of numbers like so:
 const bins = bin(numbers);
 ```
 
-If the default [extent](./summarizing.md#extent) domain is used and the [thresholds](#bin_thresholds) are specified as a count (rather than explicit values), then the computed domain will be [niced](./ticks.md#nice) such that all bins are uniform width.
+If the default [extent](./summarize.md#extent) domain is used and the [thresholds](#bin_thresholds) are specified as a count (rather than explicit values), then the computed domain will be [niced](./ticks.md#nice) such that all bins are uniform width.
 
 Note that the domain accessor is invoked on the materialized array of [values](#bin_value), not on the input data array.
 

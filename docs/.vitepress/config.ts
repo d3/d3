@@ -41,18 +41,18 @@ export default defineConfig({
             link: "/d3-array",
             collapsed: true,
             items: [
-              {text: "Adding", link: "/d3-array/adding"},
-              {text: "Binning", link: "/d3-array/binning"},
-              {text: "Bisecting", link: "/d3-array/bisecting"},
-              {text: "Blurring", link: "/d3-array/blurring"},
-              {text: "Grouping", link: "/d3-array/grouping"},
-              {text: "Interning", link: "/d3-array/interning"},
-              {text: "Searching", link: "/d3-array/searching"},
+              {text: "Add", link: "/d3-array/add"},
+              {text: "Bin", link: "/d3-array/bin"},
+              {text: "Bisect", link: "/d3-array/bisect"},
+              {text: "Blur", link: "/d3-array/blur"},
+              {text: "Group", link: "/d3-array/group"},
+              {text: "Intern", link: "/d3-array/intern"},
+              {text: "Search", link: "/d3-array/search"},
               {text: "Sets", link: "/d3-array/sets"},
-              {text: "Sorting", link: "/d3-array/sorting"},
-              {text: "Summarizing", link: "/d3-array/summarizing"},
+              {text: "Sort", link: "/d3-array/sort"},
+              {text: "Summarize", link: "/d3-array/summarize"},
               {text: "Ticks", link: "/d3-array/ticks"},
-              {text: "Transforming", link: "/d3-array/transforming"}
+              {text: "Transform", link: "/d3-array/transform"}
             ]
           },
           {text: "d3-axis", link: "/d3-axis"},

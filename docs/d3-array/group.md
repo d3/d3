@@ -4,7 +4,7 @@ Group discrete values.
 
 ## group(*iterable*, ...*keys*) {#group}
 
-[Examples](https://observablehq.com/@d3/d3-group-d3-rollup) · [Source](https://github.com/d3/d3-array/blob/main/src/group.js) · Groups the specified *iterable* of values into an [InternMap](./interning.md#InternMap) from *key* to array of value. For example, to group the [*penguins* sample dataset](https://observablehq.com/@observablehq/sample-datasets#penguins) by *species* field:
+[Examples](https://observablehq.com/@d3/d3-group-d3-rollup) · [Source](https://github.com/d3/d3-array/blob/main/src/group.js) · Groups the specified *iterable* of values into an [InternMap](./intern.md#InternMap) from *key* to array of value. For example, to group the [*penguins* sample dataset](https://observablehq.com/@observablehq/sample-datasets#penguins) by *species* field:
 
 ```js
 const species = d3.group(penguins, (d) => d.species);
@@ -40,7 +40,7 @@ Equivalent to [group](#group), but returns an array of [*key*, *value*] entries 
 
 ## rollup(*iterable*, *reduce*, ...*keys*) {#rollup}
 
-[Examples](https://observablehq.com/@d3/d3-group-d3-rollup) · [Source](https://github.com/d3/d3-array/blob/main/src/group.js) · Groups and reduces the specified *iterable* of values into an [InternMap](./interning.md#InternMap) from *key* to reduced value. For example, to group and count the [*penguins* sample dataset](https://observablehq.com/@observablehq/sample-datasets#penguins) by *species* field:
+[Examples](https://observablehq.com/@d3/d3-group-d3-rollup) · [Source](https://github.com/d3/d3-array/blob/main/src/group.js) · Groups and reduces the specified *iterable* of values into an [InternMap](./intern.md#InternMap) from *key* to reduced value. For example, to group and count the [*penguins* sample dataset](https://observablehq.com/@observablehq/sample-datasets#penguins) by *species* field:
 
 ```js
 const speciesCount = d3.rollup(penguins, (D) => D.length, (d) => d.species);
