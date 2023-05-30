@@ -1,231 +1,119 @@
 # d3-array: Grouping {#top}
 
-## group(iterable, ...keys) {#group}
+Group discrete values.
 
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-group-d3-rollup) -->
+## group(*iterable*, ...*keys*) {#group}
 
-Groups the specified *iterable* of values into an [InternMap](#InternMap) from *key* to array of value. For example, given some data:
+[Examples](https://observablehq.com/@d3/d3-group-d3-rollup) · [Source](https://github.com/d3/d3-array/blob/main/src/group.js) · Groups the specified *iterable* of values into an [InternMap](./interning.md#InternMap) from *key* to array of value. For example, to group the [*penguins* sample dataset](https://observablehq.com/@observablehq/sample-datasets#penguins) by *species* field:
 
 ```js
-data = [
-  {name: "jim",   amount: "34.0",   date: "11/12/2015"},
-  {name: "carl",  amount: "120.11", date: "11/12/2015"},
-  {name: "stacy", amount: "12.01",  date: "01/04/2016"},
-  {name: "stacy", amount: "34.05",  date: "01/04/2016"}
-]
+const species = d3.group(penguins, (d) => d.species);
 ```
 
-To group the data by name:
+To get the elements whose *species* field is *Adelie*:
 
 ```js
-d3.group(data, d => d.name)
-```
-
-This produces:
-
-```js
-Map(3) {
-  "jim" => Array(1)
-  "carl" => Array(1)
-  "stacy" => Array(2)
-}
+species.get("Adelie") // Array(152)
 ```
 
 If more than one *key* is specified, a nested InternMap is returned. For example:
 
 ```js
-d3.group(data, d => d.name, d => d.date)
+const speciesSex = d3.group(penguins, (d) => d.species, (d) => d.sex)
 ```
 
-This produces:
+To get the penguins whose species is *Adelie* and whose sex is *FEMALE*:
 
 ```js
-Map(3) {
-  "jim" => Map(1) {
-    "11/12/2015" => Array(1)
-  }
-  "carl" => Map(1) {
-    "11/12/2015" => Array(1)
-  }
-  "stacy" => Map(1) {
-    "01/04/2016" => Array(2)
-  }
-}
+speciesSex.get("Adelie").get("FEMALE") // Array(73)
 ```
 
-To convert a Map to an Array, use [Array.from](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from). For example:
+Elements are returned in the order of the first instance of each *key*.
+
+## groups(*iterable*, ...*keys*) {#groups}
 
 ```js
-Array.from(d3.group(data, d => d.name))
+const species = d3.groups(penguins, (d) => d.species); // [["Adelie", Array(152)], …]
 ```
 
-This produces:
+Equivalent to [group](#group), but returns an array of [*key*, *value*] entries instead of a map. If more than one *key* is specified, each *value* will be a nested array of [*key*, *value*] entries. Elements are returned in the order of the first instance of each *key*.
+
+## rollup(*iterable*, *reduce*, ...*keys*) {#rollup}
+
+[Examples](https://observablehq.com/@d3/d3-group-d3-rollup) · [Source](https://github.com/d3/d3-array/blob/main/src/group.js) · Groups and reduces the specified *iterable* of values into an [InternMap](./interning.md#InternMap) from *key* to reduced value. For example, to group and count the [*penguins* sample dataset](https://observablehq.com/@observablehq/sample-datasets#penguins) by *species* field:
 
 ```js
-[
-  ["jim", Array(1)],
-  ["carl", Array(1)],
-  ["stacy", Array(2)]
-]
+const speciesCount = d3.rollup(penguins, (D) => D.length, (d) => d.species);
 ```
 
-You can also simultaneously convert the [*key*, *value*] to some other representation by passing a map function to Array.from:
+To get the count of penguins whose species is *Adelie*:
 
 ```js
-Array.from(d3.group(data, d => d.name), ([key, value]) => ({key, value}))
+speciesCount.get("Adelie") // 152
 ```
 
-This produces:
+If more than one *key* is specified, a nested InternMap is returned. For example:
 
 ```js
-[
-  {key: "jim", value: Array(1)},
-  {key: "carl", value: Array(1)},
-  {key: "stacy", value: Array(2)}
-]
+const speciesSexCount = d3.rollup(penguins, (D) => D.length, (d) => d.species, (d) => d.sex);
 ```
 
-[*selection*.data](https://github.com/d3/d3-selection/blob/main/README.md#selection_data) accepts iterables directly, meaning that you can use a Map (or Set or other iterable) to perform a data join without first needing to convert to an array.
-
-## groups(iterable, ...keys) {#groups}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-group-d3-rollup) -->
-
-Equivalent to [group](#group), but returns nested arrays instead of nested maps.
-
-## flatGroup(iterable, ...keys) {#flatGroup}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-flatgroup) -->
-
-Equivalent to [group](#group), but returns a flat array of [*key0*, *key1*, …, *values*] instead of nested maps.
-
-## index(iterable, ...keys) {#index}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-group) -->
-
-Equivalent to [group](#group) but returns a unique value per compound key instead of an array, throwing if the key is not unique.
-
-For example, given the data defined above,
+To get the count of penguins whose species is *Adelie* and whose sex is *FEMALE*:
 
 ```js
-d3.index(data, d => d.amount)
+speciesSexCount.get("Adelie").get("FEMALE") // 73
 ```
 
-returns
+Elements are returned in the order of the first instance of each *key*.
+
+## rollups(*iterable*, *reduce*, ...*keys*) {#rollups}
 
 ```js
-Map(4) {
-  "34.0" => Object {name: "jim", amount: "34.0", date: "11/12/2015"}
-  "120.11" => Object {name: "carl", amount: "120.11", date: "11/12/2015"}
-  "12.01" => Object {name: "stacy", amount: "12.01", date: "01/04/2016"}
-  "34.05" => Object {name: "stacy", amount: "34.05", date: "01/04/2016"}
-}
+const speciesCounts = d3.rollups(penguins, (D) => D.length, (d) => d.species); // [["Adelie", 152], …]
 ```
 
-On the other hand,
+Equivalent to [rollup](#rollup), but returns an array of [*key*, *value*] entries instead of a map. If more than one *key* is specified, each *value* will be a nested array of [*key*, *value*] entries. Elements are returned in the order of the first instance of each *key*.
+
+## index(*iterable*, ...*keys*) {#index}
+
+Uses [rollup](#rollup) with a reducer that extracts the first element from each group, and throws an error if the group has more than one element. For example, to index the [*aapl* same dataset](https://observablehq.com/@observablehq/sample-datasets#aapl) by date:
 
 ```js
-d3.index(data, d => d.name)
+const aaplDate = d3.index(aapl, (d) => d.Date);
 ```
 
-throws an error because two objects share the same name.
-
-## indexes(iterable, ...keys) {#indexes}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-group) -->
-
-Equivalent to [index](#index), but returns nested arrays instead of nested maps.
-
-## rollup(iterable, reduce, ...keys) {#rollup}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-group-d3-rollup) -->
-
-[Groups](#group) and reduces the specified *iterable* of values into an InternMap from *key* to value. For example, given some data:
+You can then quickly retrieve a value by date:
 
 ```js
-data = [
-  {name: "jim",   amount: "34.0",   date: "11/12/2015"},
-  {name: "carl",  amount: "120.11", date: "11/12/2015"},
-  {name: "stacy", amount: "12.01",  date: "01/04/2016"},
-  {name: "stacy", amount: "34.05",  date: "01/04/2016"}
-]
+aaplDate.get(new Date("2013-12-31")).Close // 80.145714
 ```
 
-To count the number of elements by name:
+Elements are returned in input order.
+
+## indexes(*iterable*, ...*keys*) {#indexes}
+
+Like [index](#index), but returns an array of [*key*, *value*] entries instead of a map. This probably isn’t useful for anything, but is included for symmetry with [groups](#groups) and [rollups](#rollups).
+
+## flatGroup(*iterable*, ...*keys*) {#flatGroup}
+
+[Examples](https://observablehq.com/@d3/d3-flatgroup) · [Source](https://github.com/d3/d3-array/blob/main/src/group.js) · Equivalent to [group](#group), but returns a flat array of [*key0*, *key1*, …, *values*] instead of nested maps; useful for iterating over all groups.
+
+## flatRollup(*iterable*, *reduce*, ...*keys*) {#flatRollup}
+
+[Examples](https://observablehq.com/@d3/d3-flatgroup) · [Source](https://github.com/d3/d3-array/blob/main/src/group.js) · Equivalent to [rollup](#rollup), but returns a flat array of [*key0*, *key1*, …, *value*] instead of nested maps; useful for iterating over all groups.
+
+## groupSort(*iterable*, *comparator*, *key*) {#groupSort}
+
+[Examples](https://observablehq.com/@d3/d3-groupsort) · [Source](https://github.com/d3/d3-array/blob/main/src/groupSort.js) · Groups the specified *iterable* of elements according to the specified *key* function, sorts the groups according to the specified *comparator*, and then returns an array of keys in sorted order. For example, to order the species of the [*penguins* sample dataset](https://observablehq.com/@observablehq/sample-datasets#penguins) by ascending median body mass:
 
 ```js
-d3.rollup(data, v => v.length, d => d.name)
-```
-
-This produces:
-
-```js
-Map(3) {
-  "jim" => 1
-  "carl" => 1
-  "stacy" => 2
-}
-```
-
-If more than one *key* is specified, a nested Map is returned. For example:
-
-```js
-d3.rollup(data, v => v.length, d => d.name, d => d.date)
-```
-
-This produces:
-
-```js
-Map(3) {
-  "jim" => Map(1) {
-    "11/12/2015" => 1
-  }
-  "carl" => Map(1) {
-    "11/12/2015" => 1
-  }
-  "stacy" => Map(1) {
-    "01/04/2016" => 2
-  }
-}
-```
-
-To convert a Map to an Array, use [Array.from](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from). See [d3.group](#group) for examples.
-
-## rollups(iterable, reduce, ...keys) {#rollups}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-group-d3-rollup) -->
-
-Equivalent to [rollup](#rollup), but returns nested arrays instead of nested maps.
-
-## flatRollup(iterable, reduce, ...keys) {#flatRollup}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/group.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-flatgroup) -->
-
-Equivalent to [rollup](#rollup), but returns a flat array of [*key0*, *key1*, …, *value*] instead of nested maps.
-
-## groupSort(iterable, comparator, key) {#groupSort}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/groupSort.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-groupsort) -->
-
-Groups the specified *iterable* of elements according to the specified *key* function, sorts the groups according to the specified *comparator*, and then returns an array of keys in sorted order. For example, if you had a table of barley yields for different varieties, sites, and years, to sort the barley varieties by ascending median yield:
-
-```js
-d3.groupSort(barley, g => d3.median(g, d => d.yield), d => d.variety)
+d3.groupSort(penguins, (D) => d3.median(D, (d) => d.body_mass_g), (d) => d.species) // ["Adelie", "Chinstrap", "Gentoo"]
 ```
 
 For descending order, negate the group value:
 
 ```js
-d3.groupSort(barley, g => -d3.median(g, d => d.yield), d => d.variety)
+d3.groupSort(penguins, (D) => -d3.median(D, (d) => d.body_mass_g), (d) => d.species) // ["Gentoo", "Adelie", "Chinstrap"]
 ```
 
-If a *comparator* is passed instead of an *accessor* (i.e., if the second argument is a function that takes exactly two arguments), it will be asked to compare two groups *a* and *b* and should return a negative value if *a* should be before *b*, a positive value if *a* should be after *b*, or zero for a partial ordering.
+If a *comparator* is passed instead of an *accessor* (*i.e.*, if the second argument is a function that takes exactly two arguments), it will be asked to compare two groups *a* and *b* and should return a negative value if *a* should be before *b*, a positive value if *a* should be after *b*, or zero for a partial ordering.

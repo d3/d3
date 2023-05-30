@@ -38,6 +38,20 @@ Quickly find a value in a sorted array.
 * [bisectLeft](./d3-array/bisecting.md#bisectLeft) - binary search for a value in a sorted array.
 * [bisectCenter](./d3-array/bisecting.md#bisectCenter) - binary search for a value in a sorted array.
 
+## [Grouping](./d3-array/grouping.md)
+
+Group discrete values.
+
+* [d3.group](./d3-array/grouping.md#group) - group an iterable into a nested Map.
+* [d3.groups](./d3-array/grouping.md#groups) - group an iterable into a nested array.
+* [d3.rollup](./d3-array/grouping.md#rollup) - reduce an iterable into a nested Map.
+* [d3.rollups](./d3-array/grouping.md#rollups) - reduce an iterable into a nested array.
+* [d3.index](./d3-array/grouping.md#index) - index an iterable into a nested Map.
+* [d3.indexes](./d3-array/grouping.md#indexes) - index an iterable into a nested array.
+* [d3.flatGroup](./d3-array/grouping.md#flatGroup) - group an iterable into a flat array.
+* [d3.flatRollup](./d3-array/grouping.md#flatRollup) - reduce an iterable into a flat array.
+* [d3.groupSort](./d3-array/grouping.md#groupSort) - sort keys according to grouped values.
+
 ## [Interning](./d3-array/interning.md)
 
 * [new InternMap](./d3-array/interning.md#InternMap) - a key-interning Map.
@@ -82,34 +96,6 @@ Methods for searching arrays for a specific element.
 * [d3.ascending](https://github.com/d3/d3-array/blob/v3.2.3/README.md#ascending) - compute the natural order of two values.
 * [d3.descending](https://github.com/d3/d3-array/blob/v3.2.3/README.md#descending) - compute the natural order of two values.
 
-## [Transformations](https://github.com/d3/d3-array/blob/v3.2.3/README.md#transformations)
-
-Methods for transforming arrays and for generating new arrays.
-
-* [d3.flatGroup](https://github.com/d3/d3-array/blob/v3.2.3/README.md#flatGroup) - group an iterable into a flat array.
-* [d3.flatRollup](https://github.com/d3/d3-array/blob/v3.2.3/README.md#flatRollup) - reduce an iterable into a flat array.
-* [d3.group](https://github.com/d3/d3-array/blob/v3.2.3/README.md#group) - group an iterable into a nested Map.
-* [d3.groups](https://github.com/d3/d3-array/blob/v3.2.3/README.md#groups) - group an iterable into a nested array.
-* [d3.groupSort](https://github.com/d3/d3-array/blob/v3.2.3/README.md#groupSort) - sort keys according to grouped values.
-* [d3.index](https://github.com/d3/d3-array/blob/v3.2.3/README.md#index) - index an iterable into a nested Map.
-* [d3.indexes](https://github.com/d3/d3-array/blob/v3.2.3/README.md#indexes) - index an iterable into a nested array.
-* [d3.rollup](https://github.com/d3/d3-array/blob/v3.2.3/README.md#rollup) - reduce an iterable into a nested Map.
-* [d3.rollups](https://github.com/d3/d3-array/blob/v3.2.3/README.md#rollups) - reduce an iterable into a nested array.
-* [d3.count](https://github.com/d3/d3-array/blob/v3.2.3/README.md#count) - count valid number values in an iterable.
-* [d3.cross](https://github.com/d3/d3-array/blob/v3.2.3/README.md#cross) - compute the Cartesian product of two iterables.
-* [d3.merge](https://github.com/d3/d3-array/blob/v3.2.3/README.md#merge) - merge multiple iterables into one array.
-* [d3.pairs](https://github.com/d3/d3-array/blob/v3.2.3/README.md#pairs) - create an array of adjacent pairs of elements.
-* [d3.permute](https://github.com/d3/d3-array/blob/v3.2.3/README.md#permute) - reorder an iterable of elements according to an iterable of indexes.
-* [d3.shuffle](https://github.com/d3/d3-array/blob/v3.2.3/README.md#shuffle) - randomize the order of an iterable.
-* [d3.shuffler](https://github.com/d3/d3-array/blob/v3.2.3/README.md#shuffler) - randomize the order of an iterable.
-* [d3.ticks](https://github.com/d3/d3-array/blob/v3.2.3/README.md#ticks) - generate representative values from a numeric interval.
-* [d3.tickIncrement](https://github.com/d3/d3-array/blob/v3.2.3/README.md#tickIncrement) - generate representative values from a numeric interval.
-* [d3.tickStep](https://github.com/d3/d3-array/blob/v3.2.3/README.md#tickStep) - generate representative values from a numeric interval.
-* [d3.nice](https://github.com/d3/d3-array/blob/v3.2.3/README.md#nice) - extend an interval to align with ticks.
-* [d3.range](https://github.com/d3/d3-array/blob/v3.2.3/README.md#range) - generate a range of numeric values.
-* [d3.transpose](https://github.com/d3/d3-array/blob/v3.2.3/README.md#transpose) - transpose an array of arrays.
-* [d3.zip](https://github.com/d3/d3-array/blob/v3.2.3/README.md#zip) - transpose a variable number of arrays.
-
 ## [Iterables](https://github.com/d3/d3-array/blob/v3.2.3/README.md#iterables)
 
 * [d3.every](https://github.com/d3/d3-array/blob/v3.2.3/README.md#every) - test if all values satisfy a condition.
@@ -128,3 +114,20 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.superset](https://github.com/d3/d3-array/blob/v3.2.3/README.md#superset) - test whether a set is a superset of another.
 * [d3.subset](https://github.com/d3/d3-array/blob/v3.2.3/README.md#subset) - test whether a set is a subset of another.
 * [d3.union](https://github.com/d3/d3-array/blob/v3.2.3/README.md#union) - compute a set union.
+
+## Other
+
+* [d3.count](./d3-array/grouping.md#count) - count valid number values in an iterable.
+* [d3.cross](./d3-array/grouping.md#cross) - compute the Cartesian product of two iterables.
+* [d3.merge](./d3-array/grouping.md#merge) - merge multiple iterables into one array.
+* [d3.pairs](./d3-array/grouping.md#pairs) - create an array of adjacent pairs of elements.
+* [d3.permute](./d3-array/grouping.md#permute) - reorder an iterable of elements according to an iterable of indexes.
+* [d3.shuffle](./d3-array/grouping.md#shuffle) - randomize the order of an iterable.
+* [d3.shuffler](./d3-array/grouping.md#shuffler) - randomize the order of an iterable.
+* [d3.ticks](./d3-array/grouping.md#ticks) - generate representative values from a numeric interval.
+* [d3.tickIncrement](./d3-array/grouping.md#tickIncrement) - generate representative values from a numeric interval.
+* [d3.tickStep](./d3-array/grouping.md#tickStep) - generate representative values from a numeric interval.
+* [d3.nice](./d3-array/grouping.md#nice) - extend an interval to align with ticks.
+* [d3.range](./d3-array/grouping.md#range) - generate a range of numeric values.
+* [d3.transpose](./d3-array/grouping.md#transpose) - transpose an array of arrays.
+* [d3.zip](./d3-array/grouping.md#zip) - transpose a variable number of arrays.
