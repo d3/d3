@@ -1,19 +1,19 @@
 # d3-array: Binning {#top}
 
-Binning groups discrete values into consecutive, non-overlapping intervals. Binning is often used to visualize the distribution of numerical data as histograms.
+Binning groups discrete values into consecutive, non-overlapping intervals. Binning is often used to visualize the distribution of numerical data as histograms. (See also Observable Plot’s [bin transform](https://observablehq.com/plot/transforms/bin).)
 
 ## bin() {#bin}
 
 ```js
-bin = d3.bin().value((d) => d.culmen_length_mm)
+const bin = d3.bin().value((d) => d.culmen_length_mm);
 ```
 
-[Examples](https://observablehq.com/@d3/d3-bin) · [Source](https://github.com/d3/d3-array/blob/main/src/bin.js) · Constructs a new bin generator with the default settings.
+[Examples](https://observablehq.com/@d3/d3-bin) · [Source](https://github.com/d3/d3-array/blob/main/src/bin.js) · Constructs a new bin generator with the default settings. The returned bin generator supports method chaining, so this constructor is typically chained with [*bin*.value](#bin_value) to assign a value accessor. The returned generator is also a function; [pass it data](#_bin) to bin.
 
 ## *bin*(*data*) {#_bin}
 
 ```js
-bins = d3.bin().value((d) => d.culmen_length_mm)(penguins)
+const bins = d3.bin().value((d) => d.culmen_length_mm)(penguins);
 ```
 
 Bins the given iterable of *data* samples. Returns an array of bins, where each bin is an array containing the associated elements from the input *data*. Thus, the `length` of the bin is the number of elements in that bin. Each bin has two additional attributes:
@@ -26,7 +26,7 @@ Any null or non-comparable values in the given *data*, or those outside the [dom
 ## *bin*.value(*value*) {#bin_value}
 
 ```js
-bin = d3.bin().value((d) => d.culmen_length_mm)
+const bin = d3.bin().value((d) => d.culmen_length_mm);
 ```
 
 If *value* is specified, sets the value accessor to the specified function or constant and returns this bin generator.
@@ -44,7 +44,7 @@ This is similar to mapping your data to values before invoking the bin generator
 ## *bin*.domain(*domain*) {#bin_domain}
 
 ```js
-bin = d3.bin().domain([0, 1])
+const bin = d3.bin().domain([0, 1]);
 ```
 
 If *domain* is specified, sets the domain accessor to the specified function or array and returns this bin generator.
@@ -58,13 +58,13 @@ If *domain* is not specified, returns the current domain accessor, which default
 For example, to use a bin generator with a [linear scale](../d3-scale.md#linear-scales) `x`, you might say:
 
 ```js
-bin = d3.bin().domain(x.domain()).thresholds(x.ticks(20))
+const bin = d3.bin().domain(x.domain()).thresholds(x.ticks(20));
 ```
 
 You can then compute the bins from an array of numbers like so:
 
 ```js
-bins = bin(numbers)
+const bins = bin(numbers);
 ```
 
 If the default [extent](./summarizing.md#extent) domain is used and the [thresholds](#bin_thresholds) are specified as a count (rather than explicit values), then the computed domain will be [niced](./ticks.md#nice) such that all bins are uniform width.
@@ -74,7 +74,7 @@ Note that the domain accessor is invoked on the materialized array of [values](#
 ## *bin*.thresholds(*count*) {#bin_thresholds}
 
 ```js
-bin = d3.bin().thresholds([0, 0.5, 1])
+const bin = d3.bin().thresholds([0, 0.5, 1]);
 ```
 
 If *thresholds* is specified, sets the [threshold generator](#bin-thresholds) to the specified function or array and returns this bin generator.
@@ -88,13 +88,13 @@ If *thresholds* is not specified, returns the current threshold generator, which
 Any threshold values outside the [domain](#bin_domain) are ignored. The first *bin*.x0 is always equal to the minimum domain value, and the last *bin*.x1 is always equal to the maximum domain value.
 
 ```js
-bin = d3.bin().thresholds(20)
+const bin = d3.bin().thresholds(20);
 ```
 
 If a *count* is specified instead of an array of *thresholds*, then the [domain](#bin_domain) will be uniformly divided into approximately *count* bins; see [ticks](#ticks).
 
 ```js
-bin = d3.bin().thresholds((values) => [d3.median(values)])
+const bin = d3.bin().thresholds((values) => [d3.median(values)]);
 ```
 
 You may also implement your own threshold generator taking three arguments: the array of input [*values*](#bin_value) derived from the data, and the [domain](#bin_domain) represented as *min* and *max*. The generator may then return either the array of numeric thresholds or the *count* of bins; in the latter case the domain is divided uniformly into approximately *count* bins; see [ticks](./ticks.md#ticks). For instance, you might want to use time ticks when binning time-series data; see [example](https://observablehq.com/@d3/d3-bin-time-thresholds).
@@ -102,7 +102,7 @@ You may also implement your own threshold generator taking three arguments: the 
 ## thresholdFreedmanDiaconis(*values*, *min*, *max*) {#thresholdFreedmanDiaconis}
 
 ```js
-bin = d3.bin().thresholds(d3.thresholdFreedmanDiaconis)
+const bin = d3.bin().thresholds(d3.thresholdFreedmanDiaconis);
 ```
 
 [Source](https://github.com/d3/d3-array/blob/main/src/threshold/freedmanDiaconis.js) · Returns the number of bins according to the [Freedman–Diaconis rule](https://en.wikipedia.org/wiki/Histogram#Mathematical_definition); the input *values* must be numbers.
@@ -110,7 +110,7 @@ bin = d3.bin().thresholds(d3.thresholdFreedmanDiaconis)
 ## thresholdScott(*values*, *min*, *max*) {#thresholdScott}
 
 ```js
-bin = d3.bin().thresholds(d3.thresholdScott)
+const bin = d3.bin().thresholds(d3.thresholdScott);
 ```
 
 [Source](https://github.com/d3/d3-array/blob/main/src/threshold/scott.js) · Returns the number of bins according to [Scott’s normal reference rule](https://en.wikipedia.org/wiki/Histogram#Mathematical_definition); the input *values* must be numbers.
@@ -118,7 +118,7 @@ bin = d3.bin().thresholds(d3.thresholdScott)
 ## thresholdSturges(*values*, *min*, *max*) {#thresholdSturges}
 
 ```js
-bin = d3.bin().thresholds(d3.thresholdSturges)
+const bin = d3.bin().thresholds(d3.thresholdSturges);
 ```
 
 [Source](https://github.com/d3/d3-array/blob/main/src/threshold/sturges.js) · Returns the number of bins according to [Sturges’ formula](https://en.wikipedia.org/wiki/Histogram#Mathematical_definition); the input *values* must be numbers.

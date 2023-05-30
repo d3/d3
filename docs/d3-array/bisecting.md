@@ -1,76 +1,75 @@
 # d3-array: Bisecting {#top}
 
-Bisection, or binary search, quickly finds a given value in a sorted array.
+Bisection, or binary search, quickly finds a given value in a sorted array. It is often used to find the position at which to insert a new value into an array while maintaining sorted order.
 
-## bisector(accessor) {#bisector}
+## bisector(*accessor*) {#bisector}
 
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) -->
-
-Returns a new bisector using the specified *accessor* or *comparator* function. This method can be used to bisect arrays of objects instead of being limited to simple arrays of primitives. For example, given the following array of objects:
+[Examples](https://observablehq.com/@d3/d3-bisect) · [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) · Returns a new bisector using the specified *accessor* function.
 
 ```js
-var data = [
-  {date: new Date(2011, 1, 1), value: 0.5},
-  {date: new Date(2011, 2, 1), value: 0.6},
-  {date: new Date(2011, 3, 1), value: 0.7},
-  {date: new Date(2011, 4, 1), value: 0.8}
-];
+const bisector = d3.bisector((d) => d.Date);
 ```
 
-A suitable bisect function could be constructed as:
+If the given *accessor* takes two arguments, it is interpreted as a comparator function for comparing an element *d* in the data with a search value *x*. Use a comparator rather than an accessor if you want values to be sorted in an order different than natural order, such as in descending rather than ascending order. The above is equivalent to:
 
 ```js
-var bisectDate = d3.bisector(function(d) { return d.date; }).right;
+const bisector = d3.bisector((d, x) => d.Date - x);
 ```
 
-This is equivalent to specifying a comparator:
+The bisector can be used to bisect sorted arrays of objects (in contrast to [bisect](#bisect), which is for bisecting primitives).
+
+## *bisector*.right(*array*, *x*, *lo*, *hi*) {#bisector_right}
 
 ```js
-var bisectDate = d3.bisector(function(d, x) { return d.date - x; }).right;
+d3.bisector((d) => d.Date).right(aapl, new Date("2014-01-02")) // 163
 ```
 
-And then applied as *bisectDate*(*array*, *date*), returning an index. Note that the comparator is always passed the search value *x* as the second argument. Use a comparator rather than an accessor if you want values to be sorted in an order different than natural order, such as in descending rather than ascending order.
+Like [bisectRight](#bisectRight), but using this bisector’s accessor. The code above finds the index of the row immediately following Jan. 2, 2014 in the [*aapl* sample dataset](https://observablehq.com/@observablehq/sample-datasets#aapl).
 
-## *bisector*.right(array, x, lo, hi) {#bisector_right}
+## *bisector*.left(*array*, *x*, *lo*, *hi*) {#bisector_left}
 
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) -->
+```js
+d3.bisector((d) => d.Date).left(aapl, new Date("2014-01-02")) // 162
+```
 
-Equivalent to [bisectRight](#bisectRight), but uses this bisector’s associated comparator.
+Like [bisectLeft](#bisectLeft), but using this bisector’s accessor. The code above finds the index of the row for Jan. 2, 2014 in the [*aapl* sample dataset](https://observablehq.com/@observablehq/sample-datasets#aapl).
 
-## *bisector*.left(array, x, lo, hi) {#bisector_left}
+## *bisector*.center(*array*, *x*, *lo*, *hi*) {#bisector_center}
 
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) -->
+```js
+d3.bisector((d) => d.Date).center(aapl, new Date("2013-12-31")) // 161
+```
 
-Equivalent to [bisectLeft](#bisectLeft), but uses this bisector’s associated comparator.
+Returns the index of the closest value to *x* in the given sorted *array*. This expects that the bisector’s accessor returns a quantitative value, or that the bisector’s comparator returns a signed distance; otherwise, this method is equivalent to [*bisector*.left](#bisector_left). The arguments *lo* (inclusive) and *hi* (exclusive) may be used to specify a subset of the array which should be considered; by default the entire array is used.
 
-## *bisector*.center(array, x, lo, hi) {#bisector_center}
+## bisect(*array*, *x*, *lo*, *hi*) {#bisect}
 
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisector.js) -->
-
-Returns the index of the closest value to *x* in the given sorted *array*. This expects that the bisector’s associated accessor returns a quantitative value, or that the bisector’s associated comparator returns a signed distance; otherwise, this method is equivalent to *bisector*.left.
-
-## bisect(array, x, lo, hi) {#bisect}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisect.js) -->
-<!-- [Examples](https://observablehq.com/@d3/d3-bisect) -->
+```js
+d3.bisect(aapl.map((d) => d.Date), new Date("2014-01-02")) // 163
+```
 
 Alias for [bisectRight](#bisectRight).
 
-## bisectRight(array, x, lo, hi) {#bisectRight}
+## bisectRight(*array*, *x*, *lo*, *hi*) {#bisectRight}
 
-Similar to [bisectLeft](#bisectLeft), but returns an insertion point which comes after (to the right of) any existing entries of *x* in *array*. The returned insertion point *i* partitions the *array* into two halves so that all *v* <= *x* for *v* in *array*.slice(*lo*, *i*) for the left side and all *v* > *x* for *v* in *array*.slice(*i*, *hi*) for the right side.
+```js
+d3.bisectRight(aapl.map((d) => d.Date), new Date("2014-01-02")) // 163
+```
 
-## bisectLeft(array, x, lo, hi) {#bisectLeft}
+Like [bisectLeft](#bisectLeft), but returns an insertion point which comes after (to the right of) any existing entries equivalent to *x* in *array*. The returned insertion point *i* partitions the *array* into two halves so that all *v* <= *x* for *v* in *array*.slice(*lo*, *i*) for the left side and all *v* > *x* for *v* in *array*.slice(*i*, *hi*) for the right side. See also [*bisector*.right](#bisector_right).
 
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisect.js) -->
+## bisectLeft(*array*, *x*, *lo*, *hi*) {#bisectLeft}
 
-Returns the insertion point for *x* in *array* to maintain sorted order. The arguments *lo* and *hi* may be used to specify a subset of the array which should be considered; by default the entire array is used. If *x* is already present in *array*, the insertion point will be before (to the left of) any existing entries. The return value is suitable for use as the first argument to [splice](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/splice) assuming that *array* is already sorted. The returned insertion point *i* partitions the *array* into two halves so that all *v* < *x* for *v* in *array*.slice(*lo*, *i*) for the left side and all *v* >= *x* for *v* in *array*.slice(*i*, *hi*) for the right side.
+```js
+d3.bisectLeft(aapl.map((d) => d.Date), new Date("2014-01-02")) // 162
+```
 
-## bisectCenter(array, x, lo, hi) {#bisectCenter}
+Returns the insertion point for *x* in *array* to maintain sorted order. The arguments *lo* and *hi* may be used to specify a subset of the array which should be considered; by default the entire array is used. If *x* is already present in *array*, the insertion point will be before (to the left of) any existing entries. The return value is suitable for use as the first argument to [*array*.splice](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/splice) assuming that *array* is already sorted. The returned insertion point *i* partitions the *array* into two halves so that all *v* < *x* for *v* in *array*.slice(*lo*, *i*) for the left side and all *v* >= *x* for *v* in *array*.slice(*i*, *hi*) for the right side. See also [*bisector*.left](#bisector_left).
 
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/bisect.js) -->
-<!-- [Examples](https://observablehq.com/@d3/multi-line-chart) -->
+## bisectCenter(*array*, *x*, *lo*, *hi*) {#bisectCenter}
 
-Returns the index of the value closest to *x* in the given *array* of numbers. The arguments *lo* (inclusive) and *hi* (exclusive) may be used to specify a subset of the array which should be considered; by default the entire array is used.
+```js
+d3.bisectCenter(aapl.map((d) => d.Date), new Date("2013-12-31")) // 161
+```
 
-See [*bisector*.center](#bisector_center).
+Returns the index of the value closest to *x* in the given *array* of numbers. The arguments *lo* (inclusive) and *hi* (exclusive) may be used to specify a subset of the array which should be considered; by default the entire array is used. See also [*bisector*.center](#bisector_center).

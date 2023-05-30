@@ -13,7 +13,7 @@ const adder = new d3.Adder();
 ## *adder*.add(*number*) {#adder_add}
 
 ```js
-adder.add(42);
+adder.add(42)
 ```
 
 Adds the specified *number* to the adder’s current value and returns the adder.
