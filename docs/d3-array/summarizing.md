@@ -265,3 +265,23 @@ Returns an [unbiased estimator of the population variance](http://mathworld.wolf
 <!-- [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) -->
 
 Returns the standard deviation, defined as the square root of the [bias-corrected variance](#variance), of the given *iterable* of numbers. If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the standard deviation. This method ignores undefined and NaN values; this is useful for ignoring missing data.
+
+## every(iterable, test) {#every}
+
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/every.js) -->
+
+Returns true if the given *test* function returns true for every value in the given *iterable*. This method returns as soon as *test* returns a non-truthy value or all values are iterated over. Equivalent to [*array*.every](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every):
+
+```js
+d3.every(new Set([1, 3, 5, 7]), x => x & 1) // true
+```
+
+## some(iterable, test) {#some}
+
+<!-- [Source](https://github.com/d3/d3-array/blob/main/src/some.js) -->
+
+Returns true if the given *test* function returns true for any value in the given *iterable*. This method returns as soon as *test* returns a truthy value or all values are iterated over. Equivalent to [*array*.some](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some):
+
+```js
+d3.some(new Set([0, 2, 3, 4]), x => x & 1) // true
+```

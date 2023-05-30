@@ -73,26 +73,6 @@ Returns an array of arrays, where the *i*th array contains the *i*th element fro
 d3.zip([1, 2], [3, 4]); // returns [[1, 3], [2, 4]]
 ```
 
-## every(iterable, test) {#every}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/every.js) -->
-
-Returns true if the given *test* function returns true for every value in the given *iterable*. This method returns as soon as *test* returns a non-truthy value or all values are iterated over. Equivalent to [*array*.every](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every):
-
-```js
-d3.every(new Set([1, 3, 5, 7]), x => x & 1) // true
-```
-
-## some(iterable, test) {#some}
-
-<!-- [Source](https://github.com/d3/d3-array/blob/main/src/some.js) -->
-
-Returns true if the given *test* function returns true for any value in the given *iterable*. This method returns as soon as *test* returns a truthy value or all values are iterated over. Equivalent to [*array*.some](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some):
-
-```js
-d3.some(new Set([0, 2, 3, 4]), x => x & 1) // true
-```
-
 ## filter(iterable, test) {#filter}
 
 <!-- [Source](https://github.com/d3/d3-array/blob/main/src/filter.js) -->
