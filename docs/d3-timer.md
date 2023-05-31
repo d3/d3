@@ -31,13 +31,13 @@ const timer = d3.timer(callback);
 
 #### d3.now()
 
-[Source](https://github.com/d3/d3-timer/blob/master/src/timer.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
 
 Returns the current time as defined by [performance.now](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now) if available, and [Date.now](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/now) if not. The current time is updated at the start of a frame; it is thus consistent during the frame, and any timers scheduled during the same frame will be synchronized. If this method is called outside of a frame, such as in response to a user event, the current time is calculated and then fixed until the next frame, again ensuring consistent timing during event handling.
 
 #### d3.timer(callback, delay, time)
 
-[Source](https://github.com/d3/d3-timer/blob/master/src/timer.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
 
 Schedules a new timer, invoking the specified *callback* repeatedly until the timer is [stopped](#timer_stop). An optional numeric *delay* in milliseconds may be specified to invoke the given *callback* after a delay; if *delay* is not specified, it defaults to zero. The delay is relative to the specified *time* in milliseconds; if *time* is not specified, it defaults to [now](#now).
 
@@ -72,30 +72,30 @@ If [timer](#timer) is called within the callback of another timer, the new timer
 
 #### timer.restart(callback, delay, time)
 
-[Source](https://github.com/d3/d3-timer/blob/master/src/timer.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
 
 Restart a timer with the specified *callback* and optional *delay* and *time*. This is equivalent to stopping this timer and creating a new timer with the specified arguments, although this timer retains the original invocation priority.
 
 #### timer.stop()
 
-[Source](https://github.com/d3/d3-timer/blob/master/src/timer.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
 
 Stops this timer, preventing subsequent callbacks. This method has no effect if the timer has already stopped.
 
 #### d3.timerFlush()
 
-[Source](https://github.com/d3/d3-timer/blob/master/src/timer.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
 
 Immediately invoke any eligible timer callbacks. Note that zero-delay timers are normally first executed after one frame (~17ms). This can cause a brief flicker because the browser renders the page twice: once at the end of the first event loop, then again immediately on the first timer callback. By flushing the timer queue at the end of the first event loop, you can run any zero-delay timers immediately and avoid the flicker.
 
 #### d3.timeout(callback, delay, time)
 
-[Source](https://github.com/d3/d3-timer/blob/master/src/timeout.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/timeout.js "Source")
 
 Like [timer](#timer), except the timer automatically [stops](#timer_stop) on its first callback. A suitable replacement for [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout) that is guaranteed to not run in the background. The *callback* is passed the elapsed time.
 
 #### d3.interval(callback, delay, time)
 
-[Source](https://github.com/d3/d3-timer/blob/master/src/interval.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/interval.js "Source")
 
 Like [timer](#timer), except the *callback* is invoked only every *delay* milliseconds; if *delay* is not specified, this is equivalent to [timer](#timer). A suitable replacement for [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval) that is guaranteed to not run in the background. The *callback* is passed the elapsed time.

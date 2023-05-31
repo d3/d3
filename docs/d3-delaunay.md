@@ -3,7 +3,7 @@
 <p align="center"><img src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/voronator.jpg" width="300"></p>
 <p align="center">Georgy “The Voronator” Voronoy</p>
 
-This is a fast library for computing the [Voronoi diagram](https://en.wikipedia.org/wiki/Voronoi_diagram) of a set of two-dimensional points. It is based on [Delaunator](https://github.com/mapbox/delaunator), a fast library for computing the [Delaunay triangulation](https://en.wikipedia.org/wiki/Delaunay_triangulation) using [sweep algorithms](https://github.com/mapbox/delaunator/blob/master/README.md#papers). The Voronoi diagram is constructed by connecting the circumcenters of adjacent triangles in the Delaunay triangulation.
+This is a fast library for computing the [Voronoi diagram](https://en.wikipedia.org/wiki/Voronoi_diagram) of a set of two-dimensional points. It is based on [Delaunator](https://github.com/mapbox/delaunator), a fast library for computing the [Delaunay triangulation](https://en.wikipedia.org/wiki/Delaunay_triangulation) using [sweep algorithms](https://github.com/mapbox/delaunator/blob/main/README.md#papers). The Voronoi diagram is constructed by connecting the circumcenters of adjacent triangles in the Delaunay triangulation.
 
 For an interactive explanation of how this library works, see [The Delaunay’s Dual](https://observablehq.com/@mbostock/the-delaunays-dual).
 
@@ -11,7 +11,7 @@ For an interactive explanation of how this library works, see [The Delaunay’s 
 
 ### new Delaunay(points)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Returns the Delaunay triangulation for the given flat array [*x0*, *y0*, *x1*, *y1*, …] of *points*.
 
@@ -21,7 +21,7 @@ const delaunay = new Delaunay(Float64Array.of(0, 0, 0, 1, 1, 0, 1, 1));
 
 ### Delaunay.from(points, fx, fy, that)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Returns the Delaunay triangulation for the given array or iterable of *points*. If *fx* and *fy* are not specified, then *points* is assumed to be an array of two-element arrays of numbers: [[*x0*, *y0*], [*x1*, *y1*], …]. Otherwise, *fx* and *fy* are functions that are invoked for each element in the *points* array in order, and must return the respective *x*- and *y*-coordinate for each point. If *that* is specified, the functions *fx* and *fy* are invoked with *that* as *this*. (See [Array.from](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/from) for reference.)
 
@@ -80,19 +80,19 @@ The incoming halfedge indexes as a Int32Array [*e0*, *e1*, *e2*, …]. For each 
 
 ### delaunay.find(x, y, i)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Returns the index of the input point that is closest to the specified point ⟨*x*, *y*⟩. The search is started at the specified point *i*. If *i* is not specified, it defaults to zero.
 
 ### delaunay.neighbors(i)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Returns an iterable over the indexes of the neighboring points to the specified point *i*. The iterable is empty if *i* is a coincident point.
 
 ### delaunay.render(context)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 <img alt="delaunay.render" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/delaunay-mesh.png">
 
@@ -100,7 +100,7 @@ Renders the edges of the Delaunay triangulation to the specified *context*. The 
 
 ### delaunay.renderHull(context)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 <img alt="delaunay.renderHull" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/delaunay-hull.png">
 
@@ -108,7 +108,7 @@ Renders the convex hull of the Delaunay triangulation to the specified *context*
 
 ### delaunay.renderTriangle(i, context)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 <img alt="delaunay.renderTriangle" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/delaunay-triangle.png">
 
@@ -116,37 +116,37 @@ Renders triangle *i* of the Delaunay triangulation to the specified *context*. T
 
 ### delaunay.renderPoints(\context\\, radius\)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Renders the input points of the Delaunay triangulation to the specified *context* as circles with the specified *radius*. If *radius* is not specified, it defaults to 2. The specified *context* must implement the *context*.moveTo and *context*.arc methods from the [CanvasPathMethods API](https://www.w3.org/TR/2dcontext/#canvaspathmethods). If a *context* is not specified, an SVG path string is returned instead.
 
 ### delaunay.hullPolygon()
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Returns the closed polygon [[*x0*, *y0*], [*x1*, *y1*], …, [*x0*, *y0*]] representing the convex hull.
 
 ### delaunay.trianglePolygons()
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Returns an iterable over the [polygons for each triangle](#delaunay_trianglePolygon), in order.
 
 ### delaunay.trianglePolygon(i)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Returns the closed polygon [[*x0*, *y0*], [*x1*, *y1*], [*x2*, *y2*], [*x0*, *y0*]] representing the triangle *i*.
 
 ### delaunay.update()
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Updates the triangulation after the points have been modified in-place.
 
 ### delaunay.voronoi(bounds)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/delaunay.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js "Source")
 
 Returns the [Voronoi diagram](#voronoi) for the associated [points](#delaunay_points). When rendering, the diagram will be clipped to the specified *bounds* = [*xmin*, *ymin*, *xmax*, *ymax*]. If *bounds* is not specified, it defaults to [0, 0, 960, 500]. See [To Infinity and Back Again](https://observablehq.com/@mbostock/to-infinity-and-back-again) for an interactive explanation of Voronoi cell clipping.
 
@@ -175,19 +175,19 @@ The bounds of the viewport [*xmin*, *ymin*, *xmax*, *ymax*] for rendering the Vo
 
 ### voronoi.contains(i, x, y)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/cell.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/cell.js "Source")
 
 Returns true if the cell with the specified index *i* contains the specified point ⟨*x*, *y*⟩. (This method is not affected by the associated Voronoi diagram’s viewport [bounds](#voronoi_xmin).)
 
 ### voronoi.neighbors(i)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/voronoi.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
 
 Returns an iterable over the indexes of the cells that share a common edge with the specified cell *i*. Voronoi neighbors are always neighbors on the Delaunay graph, but the converse is false when the common edge has been clipped out by the Voronoi diagram’s viewport.
 
 ### voronoi.render(context)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/voronoi.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
 
 <img alt="voronoi.render" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/voronoi-mesh.png">
 
@@ -195,7 +195,7 @@ Renders the mesh of Voronoi cells to the specified *context*. The specified *con
 
 ### voronoi.renderBounds(context)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/voronoi.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
 
 <img alt="voronoi.renderBounds" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/voronoi-bounds.png">
 
@@ -203,7 +203,7 @@ Renders the viewport extent to the specified *context*. The specified *context* 
 
 ### voronoi.renderCell(i, context)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/voronoi.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
 
 <img alt="cell.render" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/spectral.png">
 
@@ -211,18 +211,18 @@ Renders the cell with the specified index *i* to the specified *context*. The sp
 
 ### voronoi.cellPolygons()
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/voronoi.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
 
 Returns an iterable over the non-empty [polygons for each cell](#voronoi_cellPolygon), with the cell index as property.
 
 ### voronoi.cellPolygon(i)
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/voronoi.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
 
 Returns the convex, closed polygon [[*x0*, *y0*], [*x1*, *y1*], …, [*x0*, *y0*]] representing the cell for the specified point *i*.
 
 ### voronoi.update()
 
-[Source](https://github.com/d3/d3-delaunay/blob/master/src/voronoi.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
 
 Updates the Voronoi diagram and underlying triangulation after the points have been modified in-place — useful for Lloyd’s relaxation.

@@ -11,7 +11,10 @@ function render(canvas, color, n) {
 }
 
 export default {
-  props: ["color", "n"],
+  props: {
+    color: {type: Function},
+    n: {type: Number, default: 256}
+  },
   mounted() {
     render(this.$el, this.color, this.n);
   },

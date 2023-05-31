@@ -856,7 +856,7 @@ The **link** shape generates a smooth cubic Bézier curve from a source point to
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
-Returns a new [link generator](#_link) using the specified <i>curve</i>. For example, to visualize [links](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_links) in a [tree diagram](https://github.com/d3/d3-hierarchy/blob/master/README.md#tree) rooted on the top edge of the display, you might say:
+Returns a new [link generator](#_link) using the specified <i>curve</i>. For example, to visualize [links](https://github.com/d3/d3-hierarchy/blob/main/README.md#node_links) in a [tree diagram](https://github.com/d3/d3-hierarchy/blob/main/README.md#tree) rooted on the top edge of the display, you might say:
 
 ```js
 const link = d3.link(d3.curveBumpY)
@@ -868,7 +868,7 @@ const link = d3.link(d3.curveBumpY)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
-Shorthand for [d3.link](#link) with [d3.curveBumpY](#curveBumpY); suitable for visualizing [links](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_links) in a [tree diagram](https://github.com/d3/d3-hierarchy/blob/master/README.md#tree) rooted on the top edge of the display. Equivalent to:
+Shorthand for [d3.link](#link) with [d3.curveBumpY](#curveBumpY); suitable for visualizing [links](https://github.com/d3/d3-hierarchy/blob/main/README.md#node_links) in a [tree diagram](https://github.com/d3/d3-hierarchy/blob/main/README.md#tree) rooted on the top edge of the display. Equivalent to:
 
 ```js
 const link = d3.link(d3.curveBumpY);
@@ -878,7 +878,7 @@ const link = d3.link(d3.curveBumpY);
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
-Shorthand for [d3.link](#link) with [d3.curveBumpX](#curveBumpX); suitable for visualizing [links](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_links) in a [tree diagram](https://github.com/d3/d3-hierarchy/blob/master/README.md#tree) rooted on the left edge of the display. Equivalent to:
+Shorthand for [d3.link](#link) with [d3.curveBumpX](#curveBumpX); suitable for visualizing [links](https://github.com/d3/d3-hierarchy/blob/main/README.md#node_links) in a [tree diagram](https://github.com/d3/d3-hierarchy/blob/main/README.md#tree) rooted on the left edge of the display. Equivalent to:
 
 ```js
 const link = d3.link(d3.curveBumpX);
@@ -1088,7 +1088,7 @@ Returns a new [radial line generator](#lineRadial) that has this radial area gen
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
-Returns a new [link generator](#_link) with radial tangents. For example, to visualize [links](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_links) in a [tree diagram](https://github.com/d3/d3-hierarchy/blob/master/README.md#tree) rooted in the center of the display, you might say:
+Returns a new [link generator](#_link) with radial tangents. For example, to visualize [links](https://github.com/d3/d3-hierarchy/blob/main/README.md#node_links) in a [tree diagram](https://github.com/d3/d3-hierarchy/blob/main/README.md#tree) rooted in the center of the display, you might say:
 
 ```js
 const link = d3.linkRadial()
@@ -1136,7 +1136,7 @@ Generates a symbol for the given *arguments*. The *arguments* are arbitrary; the
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
-If *type* is specified, sets the symbol type to the specified function or symbol type and returns this symbol generator. If *type* is a function, the symbol generator’s arguments and *this* are passed through. (See [*selection*.attr](https://github.com/d3/d3-selection/blob/master/README.md#selection_attr) if you are using d3-selection.) If *type* is not specified, returns the current symbol type accessor, which defaults to:
+If *type* is specified, sets the symbol type to the specified function or symbol type and returns this symbol generator. If *type* is a function, the symbol generator’s arguments and *this* are passed through. (See [*selection*.attr](https://github.com/d3/d3-selection/blob/main/README.md#selection_attr) if you are using d3-selection.) If *type* is not specified, returns the current symbol type accessor, which defaults to:
 
 ```js
 function type() {
@@ -1150,7 +1150,7 @@ See [symbolsFill](#symbolsFill) and [symbolsStroke](#symbolsStroke) for built-in
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
-If *size* is specified, sets the size to the specified function or number and returns this symbol generator. If *size* is a function, the symbol generator’s arguments and *this* are passed through. (See [*selection*.attr](https://github.com/d3/d3-selection/blob/master/README.md#selection_attr) if you are using d3-selection.) If *size* is not specified, returns the current size accessor, which defaults to:
+If *size* is specified, sets the size to the specified function or number and returns this symbol generator. If *size* is a function, the symbol generator’s arguments and *this* are passed through. (See [*selection*.attr](https://github.com/d3/d3-selection/blob/main/README.md#selection_attr) if you are using d3-selection.) If *size* is not specified, returns the current size accessor, which defaults to:
 
 ```js
 function size() {

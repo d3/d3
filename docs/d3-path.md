@@ -23,7 +23,7 @@ Now code you write once can be used with both Canvas (for performance) and SVG (
 
 ### d3.path()
 
-[Source](https://github.com/d3/d3-path/blob/master/src/path.js), [Examples](https://observablehq.com/@d3/d3-path)
+[Source](https://github.com/d3/d3-path/blob/main/src/path.js), [Examples](https://observablehq.com/@d3/d3-path)
 
 Constructs a new path serializer that implements [CanvasPathMethods](http://www.w3.org/TR/2dcontext/#canvaspathmethods).
 
@@ -65,6 +65,6 @@ Returns the string representation of this *path* according to SVG’s [path data
 
 ### d3.pathRound(digits = 3)
 
-[Source](https://github.com/d3/d3-path/blob/master/src/path.js), [Examples](https://observablehq.com/@d3/d3-path)
+[Source](https://github.com/d3/d3-path/blob/main/src/path.js), [Examples](https://observablehq.com/@d3/d3-path)
 
 Like [d3.path](#path), except limits the digits after the decimal to the specified number of *digits*.

@@ -6,19 +6,19 @@ This module provides a few basic geometric operations for two-dimensional polygo
 
 ### d3.polygonArea(polygon)
 
-[Source](https://github.com/d3/d3-polygon/blob/master/src/area.js "Source Code")
+[Source](https://github.com/d3/d3-polygon/blob/main/src/area.js "Source Code")
 
 Returns the signed area of the specified *polygon*. If the vertices of the polygon are in counterclockwise order (assuming a coordinate system where the origin ⟨0,0⟩ is in the top-left corner), the returned area is positive; otherwise it is negative, or zero.
 
 ### d3.polygonCentroid(polygon)
 
-[Source](https://github.com/d3/d3-polygon/blob/master/src/centroid.js "Source Code")
+[Source](https://github.com/d3/d3-polygon/blob/main/src/centroid.js "Source Code")
 
 Returns the [centroid](https://en.wikipedia.org/wiki/Centroid) of the specified *polygon*.
 
 ### d3.polygonHull(points)
 
-[Source](https://github.com/d3/d3-polygon/blob/master/src/hull.js#L23 "Source Code")
+[Source](https://github.com/d3/d3-polygon/blob/main/src/hull.js#L23 "Source Code")
 
 <a href="http://bl.ocks.org/mbostock/6f14f7b7f267a85f7cdc"><img src="https://raw.githubusercontent.com/d3/d3-polygon/master/img/hull.png" width="250" height="250"></a>
 
@@ -26,12 +26,12 @@ Returns the [convex hull](https://en.wikipedia.org/wiki/Convex_hull) of the spec
 
 ### d3.polygonContains(polygon, point)
 
-[Source](https://github.com/d3/d3-polygon/blob/master/src/contains.js "Source Code")
+[Source](https://github.com/d3/d3-polygon/blob/main/src/contains.js "Source Code")
 
 Returns true if and only if the specified *point* is inside the specified *polygon*.
 
 ### d3.polygonLength(polygon)
 
-[Source](https://github.com/d3/d3-polygon/blob/master/src/length.js "Source Code")
+[Source](https://github.com/d3/d3-polygon/blob/main/src/length.js "Source Code")
 
 Returns the length of the perimeter of the specified *polygon*.

@@ -45,13 +45,13 @@ The propagation of all consumed events is [immediately stopped](https://dom.spec
 
 ### d3.drag()
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/drag.js), [Examples](https://observablehq.com/collection/@d3/d3-drag)
+[Source](https://github.com/d3/d3-drag/blob/main/src/drag.js), [Examples](https://observablehq.com/collection/@d3/d3-drag)
 
 Creates a new drag behavior. The returned behavior, [*drag*](#_drag), is both an object and a function, and is typically applied to selected elements via [*selection*.call](https://github.com/d3/d3-selection#selection_call).
 
 ### drag(selection)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/drag.js), [Examples](https://observablehq.com/collection/@d3/d3-drag)
+[Source](https://github.com/d3/d3-drag/blob/main/src/drag.js), [Examples](https://observablehq.com/collection/@d3/d3-drag)
 
 Applies this drag behavior to the specified [*selection*](https://github.com/d3/d3-selection). This function is typically not invoked directly, and is instead invoked via [*selection*.call](https://github.com/d3/d3-selection#selection_call). For example, to instantiate a drag behavior and apply it to a selection:
 
@@ -69,7 +69,7 @@ Applying the drag behavior also sets the [-webkit-tap-highlight-color](https://d
 
 ### drag.container(container)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/drag.js), [Examples](https://observablehq.com/collection/@d3/d3-drag)
+[Source](https://github.com/d3/d3-drag/blob/main/src/drag.js), [Examples](https://observablehq.com/collection/@d3/d3-drag)
 
 If *container* is specified, sets the container accessor to the specified object or function and returns the drag behavior. If *container* is not specified, returns the current container accessor, which defaults to:
 
@@ -94,7 +94,7 @@ Alternatively, the container may be specified as the element directly, such as `
 
 ### drag.filter(filter)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/drag.js), [Examples](https://observablehq.com/d/c55a5839a5bb7c73)
+[Source](https://github.com/d3/d3-drag/blob/main/src/drag.js), [Examples](https://observablehq.com/d/c55a5839a5bb7c73)
 
 If *filter* is specified, sets the event filter to the specified function and returns the drag behavior. If *filter* is not specified, returns the current filter, which defaults to:
 
@@ -108,7 +108,7 @@ If the filter returns falsey, the initiating event is ignored and no drag gestur
 
 ### drag.touchable(touchable)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/drag.js), [Examples](https://observablehq.com/d/c55a5839a5bb7c73)
+[Source](https://github.com/d3/d3-drag/blob/main/src/drag.js), [Examples](https://observablehq.com/d/c55a5839a5bb7c73)
 
 If *touchable* is specified, sets the touch support detector to the specified function and returns the drag behavior. If *touchable* is not specified, returns the current touch support detector, which defaults to:
 
@@ -122,7 +122,7 @@ Touch event listeners are only registered if the detector returns truthy for the
 
 ### drag.subject(subject)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/drag.js), [Examples](https://observablehq.com/collection/@d3/d3-drag)
+[Source](https://github.com/d3/d3-drag/blob/main/src/drag.js), [Examples](https://observablehq.com/collection/@d3/d3-drag)
 
 If *subject* is specified, sets the subject accessor to the specified object or function and returns the drag behavior. If *subject* is not specified, returns the current subject accessor, which defaults to:
 
@@ -159,7 +159,7 @@ function subject(event) {
 }
 ```
 
-(If necessary, the above can be accelerated using [*quadtree*.find](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_find),  [*simulation*.find](https://github.com/d3/d3-force/blob/master/README.md#simulation_find) or [*delaunay*.find](https://github.com/d3/d3-delaunay/blob/master/README.md#delaunay_find).)
+(If necessary, the above can be accelerated using [*quadtree*.find](https://github.com/d3/d3-quadtree/blob/main/README.md#quadtree_find),  [*simulation*.find](https://github.com/d3/d3-force/blob/main/README.md#simulation_find) or [*delaunay*.find](https://github.com/d3/d3-delaunay/blob/main/README.md#delaunay_find).)
 
 The returned subject should be an object that exposes `x` and `y` properties, so that the relative position of the subject and the pointer can be preserved during the drag gesture. If the subject is null or undefined, no drag gesture is started for this pointer; however, other starting touches may yet start drag gestures. See also [*drag*.filter](#drag_filter).
 
@@ -167,13 +167,13 @@ The subject of a drag gesture may not be changed after the gesture starts. The s
 
 ### drag.clickDistance(distance)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/drag.js)
+[Source](https://github.com/d3/d3-drag/blob/main/src/drag.js)
 
 If *distance* is specified, sets the maximum distance that the mouse can move between mousedown and mouseup that will trigger a subsequent click event. If at any point between mousedown and mouseup the mouse is greater than or equal to *distance* from its position on mousedown, the click event following mouseup will be suppressed. If *distance* is not specified, returns the current distance threshold, which defaults to zero. The distance threshold is measured in client coordinates ([*event*.clientX](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/clientX) and [*event*.clientY](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/clientY)).
 
 ### drag.on(typenames, listener)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/drag.js)
+[Source](https://github.com/d3/d3-drag/blob/main/src/drag.js)
 
 If *listener* is specified, sets the event *listener* for the specified *typenames* and returns the drag behavior. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the same context and arguments as [*selection*.on](https://github.com/d3/d3-selection#selection_on) listeners: the current event (`event`) and datum `d`, with the `this` context as the current DOM element.
 
@@ -189,13 +189,13 @@ Changes to registered listeners via *drag*.on during a drag gesture *do not affe
 
 ### d3.dragDisable(window)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/nodrag.js)
+[Source](https://github.com/d3/d3-drag/blob/main/src/nodrag.js)
 
 Prevents native drag-and-drop and text selection on the specified *window*. As an alternative to preventing the default action of mousedown events (see [#9](https://github.com/d3/d3-drag/issues/9)), this method prevents undesirable default actions following mousedown. In supported browsers, this means capturing dragstart and selectstart events, preventing the associated default actions, and immediately stopping their propagation. In browsers that do not support selection events, the user-select CSS property is set to none on the document element. This method is intended to be called on mousedown, followed by [d3.dragEnable](#dragEnable) on mouseup.
 
 ### d3.dragEnable(window, noclick)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/nodrag.js)
+[Source](https://github.com/d3/d3-drag/blob/main/src/nodrag.js)
 
 Allows native drag-and-drop and text selection on the specified *window*; undoes the effect of [d3.dragDisable](#dragDisable). This method is intended to be called on mouseup, preceded by [d3.dragDisable](#dragDisable) on mousedown. If *noclick* is true, this method also temporarily suppresses click events. The suppression of click events expires after a zero-millisecond timeout, such that it only suppress the click event that would immediately follow the current mouseup event, if any.
 
@@ -220,7 +220,7 @@ The *event* object also exposes the [*event*.on](#event_on) method.
 
 ### event.on(typenames, listener)
 
-[Source](https://github.com/d3/d3-drag/blob/master/src/event.js)
+[Source](https://github.com/d3/d3-drag/blob/main/src/event.js)
 
 Equivalent to [*drag*.on](#drag_on), but only applies to the current drag gesture. Before the drag gesture starts, a [copy](https://github.com/d3/d3-dispatch#dispatch_copy) of the current drag [event listeners](#drag_on) is made. This copy is bound to the current drag gesture and modified by *event*.on. This is useful for temporary listeners that only receive events for the current drag gesture. For example, this start event listener registers temporary drag and end event listeners as closures:
 

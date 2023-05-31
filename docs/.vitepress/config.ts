@@ -39,6 +39,7 @@ export default defineConfig({
         items: [
           {
             text: "d3-array",
+            link: "/d3-array",
             collapsed: true,
             items: [
               {text: "Add", link: "/d3-array/add"},
@@ -70,7 +71,17 @@ export default defineConfig({
           {text: "d3-color", link: "/d3-color"},
           {text: "d3-interpolate", link: "/d3-interpolate"},
           {text: "d3-scale", link: "/d3-scale"},
-          {text: "d3-scale-chromatic", link: "/d3-scale-chromatic"},
+          {
+            text: "d3-scale-chromatic",
+            link: "/d3-scale-chromatic",
+            collapsed: true,
+            items: [
+              {text: "Categorical", link: "/d3-scale-chromatic/categorical"},
+              {text: "Cyclical", link: "/d3-scale-chromatic/cyclical"},
+              {text: "Diverging", link: "/d3-scale-chromatic/diverging"},
+              {text: "Sequential", link: "/d3-scale-chromatic/sequential"},
+            ]
+          },
           {text: "d3-selection", link: "/d3-selection"},
         ]
       },

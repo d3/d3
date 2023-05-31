@@ -61,7 +61,7 @@ Transitions are derived from [selections](https://github.com/d3/d3-selection) vi
 
 #### selection.transition(name)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/selection/transition.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/selection/transition.js)
 
 Returns a new transition on the given *selection* with the specified *name*. If a *name* is not specified, null is used. The new transition is only exclusive with other transitions of the same name.
 
@@ -83,7 +83,7 @@ If the specified *transition* is not found on a selected node or its ancestors (
 
 #### selection.interrupt(name)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/selection/interrupt.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/selection/interrupt.js)
 
 Interrupts the active transition of the specified *name* on the selected elements, and cancels any pending transitions with the specified *name*, if any. If a name is not specified, null is used.
 
@@ -101,13 +101,13 @@ selection.interrupt().selectAll("*").interrupt();
 
 #### d3.interrupt(node, name)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/interrupt.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/interrupt.js)
 
 Interrupts the active transition of the specified *name* on the specified *node*, and cancels any pending transitions with the specified *name*, if any. If a name is not specified, null is used. See also [*selection*.interrupt](#selection_interrupt).
 
 #### d3.transition(name)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/index.js#L29)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/index.js#L29)
 
 Returns a new transition on the root element, `document.documentElement`, with the specified *name*. If a *name* is not specified, null is used. The new transition is only exclusive with other transitions of the same name. The *name* may also be a [transition](#transition) instance; see [*selection*.transition](#selection_transition). This method is equivalent to:
 
@@ -120,7 +120,7 @@ This function can also be used to test for transitions (`instanceof d3.transitio
 
 #### transition.select(selector)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/select.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/select.js)
 
 For each selected element, selects the first descendant element that matches the specified *selector* string, if any, and returns a transition on the resulting selection. The *selector* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
@@ -135,7 +135,7 @@ transition
 
 #### transition.selectAll(selector)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/selectAll.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/selectAll.js)
 
 For each selected element, selects all descendant elements that match the specified *selector* string, if any, and returns a transition on the resulting selection. The *selector* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
@@ -150,7 +150,7 @@ transition
 
 #### transition.selectChild(selector)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/select.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/select.js)
 
 For each selected element, selects the first child element that matches the specified *selector* string, if any, and returns a transition on the resulting selection. The *selector* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
@@ -165,7 +165,7 @@ transition
 
 #### transition.selectChildren(selector)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/selectAll.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/selectAll.js)
 
 For each selected element, selects all children that match the specified *selector* string, if any, and returns a transition on the resulting selection. The *selector* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
@@ -180,7 +180,7 @@ transition
 
 #### transition.filter(filter)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/filter.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/filter.js)
 
 For each selected element, selects only the elements that match the specified *filter*, and returns a transition on the resulting selection. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
@@ -195,7 +195,7 @@ transition
 
 #### transition.merge(other)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/merge.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/merge.js)
 
 Returns a new transition merging this transition with the specified *other* transition, which must have the same id as this transition. The returned transition has the same number of groups, the same parents, the same name and the same id as this transition. Any missing (null) elements in this transition are filled with the corresponding element, if present (not null), from the *other* transition.
 
@@ -210,7 +210,7 @@ transition
 
 #### transition.transition()
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/transition.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/transition.js)
 
 Returns a new transition on the same selected elements as this transition, scheduled to start when this transition ends. The new transition inherits a reference time equal to this transition’s time plus its [delay](#transition_delay) and [duration](#transition_duration). The new transition also inherits this transition’s name, duration, and [easing](#transition_ease). This method can be used to schedule a sequence of chained transitions. For example:
 
@@ -230,13 +230,13 @@ The delay for each transition is relative to its previous transition. Thus, in t
 
 #### transition.selection()
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/selection.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/selection.js)
 
 Returns the [selection](https://github.com/d3/d3-selection#selection) corresponding to this transition.
 
 #### d3.active(node, name)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/active.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/active.js)
 
 Returns the active transition on the specified *node* with the specified *name*, if any. If no *name* is specified, null is used. Returns null if there is no such active transition on the specified node. This method is useful for creating chained transitions. For example, to initiate disco mode:
 
@@ -263,7 +263,7 @@ After selecting elements and creating a transition with [*selection*.transition]
 
 #### transition.attr(name, value)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/attr.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/attr.js)
 
 For each selected element, assigns the [attribute tween](#transition_attrTween) for the attribute with the specified *name* to the specified target *value*. The starting value of the tween is the attribute’s value when the transition starts. The target *value* may be specified either as a constant or a function. If a function, it is immediately evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element.
 
@@ -277,7 +277,7 @@ To apply a different interpolator, use [*transition*.attrTween](#transition_attr
 
 #### transition.attrTween(name, factory)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/attrTween.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/attrTween.js)
 
 If *factory* is specified and not null, assigns the attribute [tween](#transition_tween) for the attribute with the specified *name* to the specified interpolator *factory*. An interpolator factory is a function that returns an [interpolator](https://github.com/d3/d3-interpolate); when the transition starts, the *factory* is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The returned interpolator will then be invoked for each frame of the transition, in order, being passed the [eased](#transition_ease) time *t*, typically in the range [0, 1]. Lastly, the return value of the interpolator will be used to set the attribute value. The interpolator must return a string. (To remove an attribute at the start of a transition, use [*transition*.attr](#transition_attr); to remove an attribute at the end of a transition, use [*transition*.on](#transition_on) to listen for the *end* event.)
 
@@ -313,7 +313,7 @@ This method is useful to specify a custom interpolator, such as one that underst
 
 #### transition.style(name, value, priority)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/style.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/style.js)
 
 For each selected element, assigns the [style tween](#transition_styleTween) for the style with the specified *name* to the specified target *value* with the specified *priority*. The starting value of the tween is the style’s inline value if present, and otherwise its computed value, when the transition starts. The target *value* may be specified either as a constant or a function. If a function, it is immediately evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element.
 
@@ -327,7 +327,7 @@ To apply a different interpolator, use [*transition*.styleTween](#transition_sty
 
 #### transition.styleTween(name, factory, priority)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/styleTween.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/styleTween.js)
 
 If *factory* is specified and not null, assigns the style [tween](#transition_tween) for the style with the specified *name* to the specified interpolator *factory*. An interpolator factory is a function that returns an [interpolator](https://github.com/d3/d3-interpolate); when the transition starts, the *factory* is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The returned interpolator will then be invoked for each frame of the transition, in order, being passed the [eased](#transition_ease) time *t*, typically in the range [0, 1]. Lastly, the return value of the interpolator will be used to set the style value with the specified *priority*. The interpolator must return a string. (To remove an style at the start of a transition, use [*transition*.style](#transition_style); to remove an style at the end of a transition, use [*transition*.on](#transition_on) to listen for the *end* event.)
 
@@ -363,7 +363,7 @@ This method is useful to specify a custom interpolator, such as with *data inter
 
 #### transition.text(value)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/text.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/text.js)
 
 For each selected element, sets the [text content](http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-textContent) to the specified target *value* when the transition starts. The *value* may be specified either as a constant or a function. If a function, it is immediately evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The function’s return value is then used to set each element’s text content. A null value will clear the content.
 
@@ -371,7 +371,7 @@ To interpolate text rather than to set it on start, use [*transition*.textTween]
 
 #### transition.textTween(factory)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/textTween.js), [Examples](https://observablehq.com/@d3/transition-texttween)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/textTween.js), [Examples](https://observablehq.com/@d3/transition-texttween)
 
 If *factory* is specified and not null, assigns the text [tween](#transition_tween) to the specified interpolator *factory*. An interpolator factory is a function that returns an [interpolator](https://github.com/d3/d3-interpolate); when the transition starts, the *factory* is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. The returned interpolator will then be invoked for each frame of the transition, in order, being passed the [eased](#transition_ease) time *t*, typically in the range [0, 1]. Lastly, the return value of the interpolator will be used to set the text. The interpolator must return a string.
 
@@ -387,13 +387,13 @@ If the specified *factory* is null, removes the previously-assigned text tween, 
 
 #### transition.remove()
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/remove.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/remove.js)
 
 For each selected element, [removes](https://github.com/d3/d3-selection#selection_remove) the element when the transition ends, as long as the element has no other active or pending transitions. If the element has other active or pending transitions, does nothing.
 
 #### transition.tween(name, value)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/tween.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/tween.js)
 
 For each selected element, assigns the tween with the specified *name* with the specified *value* function. The *value* must be specified as a function that returns a function. When the transition starts, the *value* function is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The returned function is then invoked for each frame of the transition, in order, being passed the [eased](#transition_ease) time *t*, typically in the range [0, 1]. If the specified *value* is null, removes the previously-assigned tween of the specified *name*, if any.
 
@@ -416,7 +416,7 @@ The [easing](#transition_ease), [delay](#transition_delay) and [duration](#trans
 
 #### transition.delay(value)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/delay.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/delay.js)
 
 For each selected element, sets the transition delay to the specified *value* in milliseconds. The *value* may be specified either as a constant or a function. If a function, it is immediately evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The function’s return value is then used to set each element’s transition delay. If a delay is not specified, it defaults to zero.
 
@@ -432,7 +432,7 @@ Of course, you can also compute the delay as a function of the data, or [sort th
 
 #### transition.duration(value)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/duration.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/duration.js)
 
 For each selected element, sets the transition duration to the specified *value* in milliseconds. The *value* may be specified either as a constant or a function. If a function, it is immediately evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The function’s return value is then used to set each element’s transition duration. If a duration is not specified, it defaults to 250ms.
 
@@ -440,7 +440,7 @@ If a *value* is not specified, returns the current value of the duration for the
 
 #### transition.ease(value)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/ease.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/ease.js)
 
 Specifies the transition [easing function](https://github.com/d3/d3-ease) for all selected elements. The *value* must be specified as a function. The easing function is invoked for each frame of the animation, being passed the normalized time *t* in the range [0, 1]; it must then return the eased time *tʹ* which is typically also in the range [0, 1]. A good easing function should return 0 if *t* = 0 and 1 if *t* = 1. If an easing function is not specified, it defaults to [d3.easeCubic](https://github.com/d3/d3-ease#easeCubic).
 
@@ -448,7 +448,7 @@ If a *value* is not specified, returns the current easing function for the first
 
 #### transition.easeVarying(factory)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/easeVarying.js "Source")
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/easeVarying.js "Source")
 
 Specifies a factory for the transition [easing function](https://github.com/d3/d3-ease). The *factory* must be a function. It is invoked for each node of the selection, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. It must return an easing function.
 
@@ -458,13 +458,13 @@ For advanced usage, transitions provide methods for custom control flow.
 
 #### transition.end()
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/end.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/end.js)
 
 Returns a promise that resolves when every selected element finishes transitioning. If any element’s transition is cancelled or interrupted, the promise rejects.
 
 #### transition.on(typenames, listener)
 
-[Source](https://github.com/d3/d3-transition/blob/master/src/transition/on.js)
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/on.js)
 
 Adds or removes a *listener* to each selected element for the specified event *typenames*. The *typenames* is one of the following string event types:
 
@@ -485,13 +485,13 @@ If a *listener* is not specified, returns the currently-assigned listener for th
 
 #### transition.each(function)
 
-[Source](https://github.com/d3/d3-selection/blob/master/src/selection/each.js)
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/each.js)
 
 Invokes the specified *function* for each selected element, passing in the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. This method can be used to invoke arbitrary code for each selected element, and is useful for creating a context to access parent and child data simultaneously. Equivalent to [*selection*.each](https://github.com/d3/d3-selection#selection_each).
 
 #### transition.call(function, arguments…)
 
-[Source](https://github.com/d3/d3-selection/blob/master/src/selection/call.js)
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/call.js)
 
 Invokes the specified *function* exactly once, passing in this transition along with any optional *arguments*. Returns this transition. This is equivalent to invoking the function by hand but facilitates method chaining. For example, to set several attributes in a reusable function:
 
@@ -519,25 +519,25 @@ Equivalent to [*selection*.call](https://github.com/d3/d3-selection#selection_ca
 
 #### transition.empty()
 
-[Source](https://github.com/d3/d3-selection/blob/master/src/selection/empty.js)
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/empty.js)
 
 Returns true if this transition contains no (non-null) elements. Equivalent to [*selection*.empty](https://github.com/d3/d3-selection#selection_empty).
 
 #### transition.nodes()
 
-[Source](https://github.com/d3/d3-selection/blob/master/src/selection/nodes.js)
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/nodes.js)
 
 Returns an array of all (non-null) elements in this transition. Equivalent to [*selection*.nodes](https://github.com/d3/d3-selection#selection_nodes).
 
 #### transition.node()
 
-[Source](https://github.com/d3/d3-selection/blob/master/src/selection/node.js)
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/node.js)
 
 Returns the first (non-null) element in this transition. If the transition is empty, returns null. Equivalent to [*selection*.node](https://github.com/d3/d3-selection#selection_node).
 
 #### transition.size()
 
-[Source](https://github.com/d3/d3-selection/blob/master/src/selection/size.js)
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/size.js)
 
 Returns the total number of elements in this transition. Equivalent to [*selection*.size](https://github.com/d3/d3-selection#selection_size).
 

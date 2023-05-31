@@ -9,7 +9,7 @@ A [quadtree](https://en.wikipedia.org/wiki/Quadtree) recursively partitions two-
 
 ### d3.quadtree(data, x, y)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/quadtree.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/quadtree.js "Source")
 
 Creates a new, empty quadtree with an empty [extent](#quadtree_extent) and the default [*x*-](#quadtree_x) and [*y*-](#quadtree_y)accessors. If *data* is specified, [adds](#quadtree_addAll) the specified iterable of data to the quadtree. This is equivalent to:
 
@@ -29,7 +29,7 @@ const tree = d3.quadtree()
 
 ### quadtree.x(x)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/x.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/x.js "Source")
 
 If *x* is specified, sets the current *x*-coordinate accessor and returns the quadtree. If *x* is not specified, returns the current *x*-accessor, which defaults to:
 
@@ -43,7 +43,7 @@ The *x*-acccessor is used to derive the *x*-coordinate of data when [adding](#qu
 
 ### quadtree.y(y)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/y.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/y.js "Source")
 
 If *y* is specified, sets the current *y*-coordinate accessor and returns the quadtree. If *y* is not specified, returns the current *y*-accessor, which defaults to:
 
@@ -57,25 +57,25 @@ The *y*-acccessor is used to derive the *y*-coordinate of data when [adding](#qu
 
 ### quadtree.extent(extent)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/extent.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/extent.js "Source")
 
 If *extent* is specified, expands the quadtree to [cover](#quadtree_cover) the specified points [[*x0*, *y0*], [*x1*, *y1*]] and returns the quadtree. If *extent* is not specified, returns the quadtree’s current extent [[*x0*, *y0*], [*x1*, *y1*]], where *x0* and *y0* are the inclusive lower bounds and *x1* and *y1* are the inclusive upper bounds, or undefined if the quadtree has no extent. The extent may also be expanded by calling [*quadtree*.cover](#quadtree_cover) or [*quadtree*.add](#quadtree_add).
 
 ### quadtree.cover(x, y)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/cover.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/cover.js "Source")
 
 Expands the quadtree to cover the specified point ⟨*x*,*y*⟩, and returns the quadtree. If the quadtree’s extent already covers the specified point, this method does nothing. If the quadtree has an extent, the extent is repeatedly doubled to cover the specified point, wrapping the [root](#quadtree_root) [node](#nodes) as necessary; if the quadtree is empty, the extent is initialized to the extent [[⌊*x*⌋, ⌊*y*⌋], [⌈*x*⌉, ⌈*y*⌉]]. (Rounding is necessary such that if the extent is later doubled, the boundaries of existing quadrants do not change due to floating point error.)
 
 ### quadtree.add(datum)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/add.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/add.js "Source")
 
 Adds the specified *datum* to the quadtree, deriving its coordinates ⟨*x*,*y*⟩ using the current [*x*-](#quadtree_x) and [*y*-](#quadtree_y)accessors, and returns the quadtree. If the new point is outside the current [extent](#quadtree_extent) of the quadtree, the quadtree is automatically expanded to [cover](#quadtree_cover) the new point.
 
 ### quadtree.addAll(data)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/add.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/add.js "Source")
 
 Adds the specified iterable of *data* to the quadtree, deriving each element’s coordinates ⟨*x*,*y*⟩ using the current [*x*-](#quadtree_x) and [*y*-](#quadtree_y)accessors, and return this quadtree. This is approximately equivalent to calling [*quadtree*.add](#quadtree_add) repeatedly:
 
@@ -89,13 +89,13 @@ However, this method results in a more compact quadtree because the extent of th
 
 ### quadtree.remove(datum)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/remove.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/remove.js "Source")
 
 Removes the specified *datum* from the quadtree, deriving its coordinates ⟨*x*,*y*⟩ using the current [*x*-](#quadtree_x) and [*y*-](#quadtree_y)accessors, and returns the quadtree. If the specified *datum* does not exist in this quadtree, this method does nothing.
 
 ### quadtree.removeAll(data)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/remove.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/remove.js "Source")
 
 Removes the specified *data* from the quadtree, deriving their coordinates ⟨*x*,*y*⟩ using the current [*x*-](#quadtree_x) and [*y*-](#quadtree_y)accessors, and returns the quadtree. If a specified datum does not exist in this quadtree, it is ignored.
 
@@ -105,31 +105,31 @@ Returns a copy of the quadtree. All [nodes](#nodes) in the returned quadtree are
 
 ### quadtree.root()
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/root.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/root.js "Source")
 
 Returns the root [node](#nodes) of the quadtree.
 
 ### quadtree.data()
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/data.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/data.js "Source")
 
 Returns an array of all data in the quadtree.
 
 ### quadtree.size()
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/size.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/size.js "Source")
 
 Returns the total number of data in the quadtree.
 
 ### quadtree.find(x, y, radius)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/find.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/find.js "Source")
 
 Returns the datum closest to the position ⟨*x*,*y*⟩ with the given search *radius*. If *radius* is not specified, it defaults to infinity. If there is no datum within the search area, returns undefined.
 
 ### quadtree.visit(callback)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/visit.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/visit.js "Source")
 
 Visits each [node](#nodes) in the quadtree in pre-order traversal, invoking the specified *callback* with arguments *node*, *x0*, *y0*, *x1*, *y1* for each node, where *node* is the node being visited, ⟨*x0*, *y0*⟩ are the lower bounds of the node, and ⟨*x1*, *y1*⟩ are the upper bounds, and returns the quadtree. (Assuming that positive *x* is right and positive *y* is down, as is typically the case in Canvas and SVG, ⟨*x0*, *y0*⟩ is the top-left corner and ⟨*x1*, *y1*⟩ is the lower-right corner; however, the coordinate system is arbitrary, so more formally *x0* <= *x1* and *y0* <= *y1*.)
 
@@ -157,7 +157,7 @@ function search(quadtree, xmin, ymin, xmax, ymax) {
 
 ### quadtree.visitAfter(callback)
 
-[Source](https://github.com/d3/d3-quadtree/blob/master/src/visitAfter.js "Source")
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/visitAfter.js "Source")
 
 Visits each [node](#nodes) in the quadtree in post-order traversal, invoking the specified *callback* with arguments *node*, *x0*, *y0*, *x1*, *y1* for each node, where *node* is the node being visited, ⟨*x0*, *y0*⟩ are the lower bounds of the node, and ⟨*x1*, *y1*⟩ are the upper bounds, and returns the quadtree. (Assuming that positive *x* is right and positive *y* is down, as is typically the case in Canvas and SVG, ⟨*x0*, *y0*⟩ is the top-left corner and ⟨*x1*, *y1*⟩ is the lower-right corner; however, the coordinate system is arbitrary, so more formally *x0* <= *x1* and *y0* <= *y1*.) Returns *root*.
 

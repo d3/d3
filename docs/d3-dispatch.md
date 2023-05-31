@@ -34,13 +34,13 @@ Want a more involved example? See how to use [d3-dispatch for coordinated views]
 
 ### d3.dispatch(types…)
 
-[Source](https://github.com/d3/d3-dispatch/blob/master/src/dispatch.js)
+[Source](https://github.com/d3/d3-dispatch/blob/main/src/dispatch.js)
 
 Creates a new dispatch for the specified event *types*. Each *type* is a string, such as `"start"` or `"end"`.
 
 ### dispatch.on(typenames, callback)
 
-[Source](https://github.com/d3/d3-dispatch/blob/master/src/dispatch.js)
+[Source](https://github.com/d3/d3-dispatch/blob/main/src/dispatch.js)
 
 Adds, removes or gets the *callback* for the specified *typenames*. If a *callback* function is specified, it is registered for the specified (fully-qualified) *typenames*. If a callback was already registered for the given *typenames*, the existing callback is removed before the new callback is added.
 
@@ -52,19 +52,19 @@ If *callback* is not specified, returns the current callback for the specified *
 
 ### dispatch.copy()
 
-[Source](https://github.com/d3/d3-dispatch/blob/master/src/dispatch.js)
+[Source](https://github.com/d3/d3-dispatch/blob/main/src/dispatch.js)
 
 Returns a copy of this dispatch object. Changes to this dispatch do not affect the returned copy and <i>vice versa</i>.
 
 ### dispatch.call(type, that, arguments…)
 
-[Source](https://github.com/d3/d3-dispatch/blob/master/src/dispatch.js)
+[Source](https://github.com/d3/d3-dispatch/blob/main/src/dispatch.js)
 
 Like [*function*.call](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call), invokes each registered callback for the specified *type*, passing the callback the specified *arguments*, with *that* as the `this` context. See [*dispatch*.apply](#dispatch_apply) for more information.
 
 ### dispatch.apply(type, that, arguments)
 
-[Source](https://github.com/d3/d3-dispatch/blob/master/src/dispatch.js)
+[Source](https://github.com/d3/d3-dispatch/blob/main/src/dispatch.js)
 
 Like [*function*.apply](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call), invokes each registered callback for the specified *type*, passing the callback the specified *arguments*, with *that* as the `this` context. For example, if you wanted to dispatch your *custom* callbacks after handling a native *click* event, while preserving the current `this` context and arguments, you could say:
 

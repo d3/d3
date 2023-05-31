@@ -194,7 +194,7 @@ Caution: this method will not work with interpolators that do not return defensi
 
 ## interpolateRgb(*a*, *b*) {#interpolateRgb}
 
-<ColorRamp n="256" :color="d3.interpolateRgb('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateRgb('purple', 'orange')" />
 
 ```js
 d3.interpolateRgb("purple", "orange")
@@ -204,7 +204,7 @@ d3.interpolateRgb("purple", "orange")
 
 ## interpolateRgbBasis(*colors*) {#interpolateRgbBasis}
 
-<ColorRamp n="256" :color="d3.interpolateRgbBasis(['purple', 'green', 'orange'])" />
+<ColorRamp :color="d3.interpolateRgbBasis(['purple', 'green', 'orange'])" />
 
 ```js
 d3.interpolateRgbBasis(["purple", "green", "orange"])
@@ -214,7 +214,7 @@ d3.interpolateRgbBasis(["purple", "green", "orange"])
 
 ## interpolateRgbBasisClosed(*colors*) {#interpolateRgbBasisClosed}
 
-<ColorRamp n="256" :color="d3.interpolateRgbBasisClosed(['purple', 'green', 'orange'])" />
+<ColorRamp :color="d3.interpolateRgbBasisClosed(['purple', 'green', 'orange'])" />
 
 ```js
 d3.interpolateRgbBasisClosed(["purple", "green", "orange"])
@@ -224,7 +224,7 @@ d3.interpolateRgbBasisClosed(["purple", "green", "orange"])
 
 ## interpolateHsl(*a*, *b*) {#interpolateHsl}
 
-<ColorRamp n="256" :color="d3.interpolateHsl('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateHsl('purple', 'orange')" />
 
 ```js
 d3.interpolateHsl("purple", "orange")
@@ -234,7 +234,7 @@ d3.interpolateHsl("purple", "orange")
 
 ## interpolateHslLong(*a*, *b*) {#interpolateHslLong}
 
-<ColorRamp n="256" :color="d3.interpolateHslLong('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateHslLong('purple', 'orange')" />
 
 ```js
 d3.interpolateHslLong("purple", "orange")
@@ -244,7 +244,7 @@ d3.interpolateHslLong("purple", "orange")
 
 ## interpolateLab(*a*, *b*) {#interpolateLab}
 
-<ColorRamp n="256" :color="d3.interpolateLab('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateLab('purple', 'orange')" />
 
 ```js
 d3.interpolateLab("purple", "orange")
@@ -254,7 +254,7 @@ d3.interpolateLab("purple", "orange")
 
 ## interpolateHcl(*a*, *b*) {#interpolateHcl}
 
-<ColorRamp n="256" :color="d3.interpolateHcl('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateHcl('purple', 'orange')" />
 
 ```js
 d3.interpolateHcl("purple", "orange")
@@ -264,7 +264,7 @@ d3.interpolateHcl("purple", "orange")
 
 ## interpolateHclLong(*a*, *b*) {#interpolateHclLong}
 
-<ColorRamp n="256" :color="d3.interpolateHclLong('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateHclLong('purple', 'orange')" />
 
 ```js
 d3.interpolateHclLong("purple", "orange")
@@ -274,13 +274,13 @@ d3.interpolateHclLong("purple", "orange")
 
 ## interpolateCubehelix(*a*, *b*) {#interpolateCubehelix}
 
-<ColorRamp n="256" :color="d3.interpolateCubehelix('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateCubehelix('purple', 'orange')" />
 
 ```js
 d3.interpolateCubehelix("purple", "orange")
 ```
 
-<ColorRamp n="256" :color="d3.interpolateCubehelix.gamma(3)('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateCubehelix.gamma(3)('purple', 'orange')" />
 
 ```js
 d3.interpolateCubehelix.gamma(3)("purple", "orange")
@@ -290,13 +290,13 @@ d3.interpolateCubehelix.gamma(3)("purple", "orange")
 
 ## interpolateCubehelixLong(*a*, *b*) {#interpolateCubehelixLong}
 
-<ColorRamp n="256" :color="d3.interpolateCubehelixLong('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateCubehelixLong('purple', 'orange')" />
 
 ```js
 d3.interpolateCubehelixLong("purple", "orange")
 ```
 
-<ColorRamp n="256" :color="d3.interpolateCubehelixLong.gamma(3)('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateCubehelixLong.gamma(3)('purple', 'orange')" />
 
 ```js
 d3.interpolateCubehelixLong.gamma(3)("purple", "orange")
@@ -306,7 +306,7 @@ d3.interpolateCubehelixLong.gamma(3)("purple", "orange")
 
 ## *interpolateColor*.gamma(*gamma*) {#interpolateColor_gamma}
 
-<ColorRamp n="256" :color="d3.interpolateRgb.gamma(2.2)('purple', 'orange')" />
+<ColorRamp :color="d3.interpolateRgb.gamma(2.2)('purple', 'orange')" />
 
 ```js
 d3.interpolateRgb.gamma(2.2)("purple", "orange")
@@ -342,7 +342,7 @@ d3.interpolateBasisClosed([0, 0.1, 0.4, 1])(0.5) // 0.45
 
 ## piecewise(*interpolate*, *values*) {#piecewise}
 
-<ColorRamp n="256" :color="d3.piecewise(d3.interpolateRgb.gamma(2.2), ['red', 'green', 'blue'])" />
+<ColorRamp :color="d3.piecewise(d3.interpolateRgb.gamma(2.2), ['red', 'green', 'blue'])" />
 
 ```js
 d3.piecewise(d3.interpolateRgb.gamma(2.2), ["red", "green", "blue"])
