@@ -4,10 +4,57 @@ D3 supports a variety of environments.
 
 ## Try D3 online
 
-The fastest way to get started (and get help) with D3 is on [Observable](https://observablehq.com)! D3 is available by default in notebooks as part of Observable’s standard library. To create something with D3, return the generated DOM element from a cell like so:
+The fastest way to get started (and get help) with D3 is on [Observable](https://observablehq.com)! D3 is available by default in notebooks as part of Observable’s standard library. To create something with D3, return the generated DOM element from a cell. Here is an example bar chart:
 
 ```js
-d3.create("div").text("Hello, world!").node()
+{
+  // Declare the chart dimensions and margins.
+  const width = 640;
+  const height = 400;
+  const marginTop = 30;
+  const marginRight = 0;
+  const marginBottom = 30;
+  const marginLeft = 40;
+
+  // Declare the x (horizontal position) scale.
+  const x = d3.scaleBand()
+      .domain(alphabet.map((d) => d.letter))
+      .range([marginLeft, width - marginRight])
+      .padding(0.1);
+
+  // Declare the y (vertical position) scale.
+  const y = d3.scaleLinear()
+      .domain([0, d3.max(alphabet, (d) => d.frequency)])
+      .range([height - marginBottom, marginTop]);
+
+  // Create the SVG container.
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+  // Add a rect for each bar.
+  svg.append("g")
+    .selectAll()
+    .data(alphabet)
+    .join("rect")
+      .attr("x", (d) => x(d.letter))
+      .attr("y", (d) => y(d.frequency))
+      .attr("height", (d) => y(0) - y(d.frequency))
+      .attr("width", x.bandwidth());
+
+  // Add the x-axis.
+  svg.append("g")
+      .attr("transform", `translate(0,${height - marginBottom})`)
+      .call(d3.axisBottom(x).tickSizeOuter(0));
+
+  // Add the y-axis.
+  svg.append("g")
+      .attr("transform", `translate(${marginLeft},0)`)
+      .call(d3.axisLeft(y));
+
+  // Return the SVG element.
+  return svg.node();
+}
 ```
 
 As a more complete example, try one of these starter templates:
@@ -26,34 +73,178 @@ In vanilla HTML, you can load D3 from a CDN such as jsDelivr or you can download
 :::code-group
 ```html [ESM + CDN]
 <!DOCTYPE html>
-<div id="hello"></div>
+<div id="container"></div>
 <script type="module">
 
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-d3.select("#hello").text("Hello, world!");
+// Declare the chart dimensions and margins.
+const width = 640;
+const height = 400;
+const marginTop = 30;
+const marginRight = 0;
+const marginBottom = 30;
+const marginLeft = 40;
+
+// Load the data.
+const alphabet = await d3.csv("alphabet.csv");
+
+// Declare the x (horizontal position) scale.
+const x = d3.scaleBand()
+    .domain(alphabet.map((d) => d.letter))
+    .range([marginLeft, width - marginRight])
+    .padding(0.1);
+
+// Declare the y (vertical position) scale.
+const y = d3.scaleLinear()
+    .domain([0, d3.max(alphabet, (d) => d.frequency)])
+    .range([height - marginBottom, marginTop]);
+
+// Create the SVG container.
+const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+// Add a rect for each bar.
+svg.append("g")
+  .selectAll()
+  .data(alphabet)
+  .join("rect")
+    .attr("x", (d) => x(d.letter))
+    .attr("y", (d) => y(d.frequency))
+    .attr("height", (d) => y(0) - y(d.frequency))
+    .attr("width", x.bandwidth());
+
+// Add the x-axis.
+svg.append("g")
+    .attr("transform", `translate(0,${height - marginBottom})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0));
+
+// Add the y-axis.
+svg.append("g")
+    .attr("transform", `translate(${marginLeft},0)`)
+    .call(d3.axisLeft(y));
+
+// Append the SVG element.
+container.append(svg.node());
 
 </script>
 ```
 
 ```html [UMD + CDN]
 <!DOCTYPE html>
-<div id="hello"></div>
+<div id="container"></div>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script type="module">
 
-d3.select("#hello").text("Hello, world!");
+// Declare the chart dimensions and margins.
+const width = 640;
+const height = 400;
+const marginTop = 30;
+const marginRight = 0;
+const marginBottom = 30;
+const marginLeft = 40;
+
+// Load the data.
+const alphabet = await d3.csv("alphabet.csv");
+
+// Declare the x (horizontal position) scale.
+const x = d3.scaleBand()
+    .domain(alphabet.map((d) => d.letter))
+    .range([marginLeft, width - marginRight])
+    .padding(0.1);
+
+// Declare the y (vertical position) scale.
+const y = d3.scaleLinear()
+    .domain([0, d3.max(alphabet, (d) => d.frequency)])
+    .range([height - marginBottom, marginTop]);
+
+// Create the SVG container.
+const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+// Add a rect for each bar.
+svg.append("g")
+  .selectAll()
+  .data(alphabet)
+  .join("rect")
+    .attr("x", (d) => x(d.letter))
+    .attr("y", (d) => y(d.frequency))
+    .attr("height", (d) => y(0) - y(d.frequency))
+    .attr("width", x.bandwidth());
+
+// Add the x-axis.
+svg.append("g")
+    .attr("transform", `translate(0,${height - marginBottom})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0));
+
+// Add the y-axis.
+svg.append("g")
+    .attr("transform", `translate(${marginLeft},0)`)
+    .call(d3.axisLeft(y));
+
+// Append the SVG element.
+container.append(svg.node());
 
 </script>
 ```
 
 ```html [UMD + local]
 <!DOCTYPE html>
-<div id="hello"></div>
+<div id="container"></div>
 <script src="d3.js"></script>
 <script type="module">
 
-d3.select("#hello").text("Hello, world!");
+// Declare the chart dimensions and margins.
+const width = 640;
+const height = 400;
+const marginTop = 30;
+const marginRight = 0;
+const marginBottom = 30;
+const marginLeft = 40;
+
+// Load the data.
+const alphabet = await d3.csv("alphabet.csv");
+
+// Declare the x (horizontal position) scale.
+const x = d3.scaleBand()
+    .domain(alphabet.map((d) => d.letter))
+    .range([marginLeft, width - marginRight])
+    .padding(0.1);
+
+// Declare the y (vertical position) scale.
+const y = d3.scaleLinear()
+    .domain([0, d3.max(alphabet, (d) => d.frequency)])
+    .range([height - marginBottom, marginTop]);
+
+// Create the SVG container.
+const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+// Add a rect for each bar.
+svg.append("g")
+  .selectAll()
+  .data(alphabet)
+  .join("rect")
+    .attr("x", (d) => x(d.letter))
+    .attr("y", (d) => y(d.frequency))
+    .attr("height", (d) => y(0) - y(d.frequency))
+    .attr("width", x.bandwidth());
+
+// Add the x-axis.
+svg.append("g")
+    .attr("transform", `translate(0,${height - marginBottom})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0));
+
+// Add the y-axis.
+svg.append("g")
+    .attr("transform", `translate(${marginLeft},0)`)
+    .call(d3.axisLeft(y));
+
+// Append the SVG element.
+container.append(svg.node());
 
 </script>
 ```
