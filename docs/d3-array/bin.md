@@ -1,6 +1,6 @@
 # d3-array: Bin {#top}
 
-Binning groups discrete values into consecutive, non-overlapping intervals. Binning is often used to visualize the distribution of numerical data as histograms. (See also Observable Plot’s [bin transform](https://observablehq.com/plot/transforms/bin).)
+Bin quantitative values into consecutive, non-overlapping intervals, as in histograms. (See also Observable Plot’s [bin transform](https://observablehq.com/plot/transforms/bin).)
 
 ## bin() {#bin}
 

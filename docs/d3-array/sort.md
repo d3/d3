@@ -1,6 +1,6 @@
 # d3-array: Sort {#top}
 
-Methods for sorting arrays; see also [bisect](./bisect.md).
+Sort values; see also [bisect](./bisect.md).
 
 ## ascending(*a*, *b*) {#ascending}
 

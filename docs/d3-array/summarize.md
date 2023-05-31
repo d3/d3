@@ -1,6 +1,6 @@
 # d3-array: Summarize {#top}
 
-These methods compute basic summary statistics.
+Compute summary statistics.
 
 ## count(*iterable*, *accessor*) {#count}
 
@@ -8,11 +8,11 @@ These methods compute basic summary statistics.
 d3.count(penguins, (d) => d.body_mass_g) // 342
 ```
 
-[Source](https://github.com/d3/d3-array/blob/main/src/count.js) · [Examples](https://observablehq.com/@d3/d3-count) · Returns the number of valid number values (*i.e.*, not null, NaN, or undefined) in the specified *iterable*; accepts an accessor.
+[Examples](https://observablehq.com/@d3/d3-count) · [Source](https://github.com/d3/d3-array/blob/main/src/count.js) · Returns the number of valid number values (*i.e.*, not null, NaN, or undefined) in the specified *iterable*; accepts an accessor.
 
 ## min(*iterable*, *accessor*) {#min}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/min.js) · [Examples](https://observablehq.com/@d3/d3-extent) · Returns the minimum value in the given *iterable* using natural order.
+[Examples](https://observablehq.com/@d3/d3-extent) · [Source](https://github.com/d3/d3-array/blob/main/src/min.js) · Returns the minimum value in the given *iterable* using natural order.
 
 ```js
 d3.min([3, 2, 1, 1, 6, 2, 4]) // 1
@@ -77,7 +77,7 @@ See also [leastIndex](#leastIndex).
 
 ## max(*iterable*, *accessor*) {#max}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/max.js) · [Examples](https://observablehq.com/@d3/d3-extent) · Returns the maximum value in the given *iterable* using natural order.
+[Examples](https://observablehq.com/@d3/d3-extent) · [Source](https://github.com/d3/d3-array/blob/main/src/max.js) · Returns the maximum value in the given *iterable* using natural order.
 
 ```js
 d3.max([3, 2, 1, 1, 6, 2, 4]) // 6
@@ -215,7 +215,7 @@ This function is similar to [maxIndex](#maxIndex), except it allows the use of a
 
 ## extent(*iterable*, *accessor*) {#extent}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/extent.js) · [Examples](https://observablehq.com/@d3/d3-extent) · Returns the [minimum](#min) and [maximum](#max) value in the given *iterable* using natural order.
+[Examples](https://observablehq.com/@d3/d3-extent) · [Source](https://github.com/d3/d3-array/blob/main/src/extent.js) · Returns the [minimum](#min) and [maximum](#max) value in the given *iterable* using natural order.
 
 ```js
 d3.extent([3, 2, 1, 1, 6, 2, 4]) // [1, 6]
@@ -235,7 +235,7 @@ d3.extent(alphabet, (d) => d.doesnotexist) // [undefined, undefined]
 
 ## mode(*iterable*, *accessor*) {#mode}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/mode.js) · [Examples](https://observablehq.com/@d3/d3-mode) · Returns the mode of the given *iterable*, *i.e.* the value which appears the most often. Ignores undefined, null and NaN values.
+[Examples](https://observablehq.com/@d3/d3-mode) · [Source](https://github.com/d3/d3-array/blob/main/src/mode.js) · Returns the mode of the given *iterable*, *i.e.* the value which appears the most often. Ignores undefined, null and NaN values.
 
 ```js
 d3.mode([1, 2, 2, 2, 3, 3]) // 2
@@ -251,7 +251,7 @@ In case of equality, returns the first of the relevant values. If the iterable c
 
 ## sum(*iterable*, *accessor*) {#sum}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/sum.js) · [Examples](https://observablehq.com/@d3/d3-sum) · Returns the sum of the given *iterable* of numbers. Ignores undefined, null and NaN values.
+[Examples](https://observablehq.com/@d3/d3-sum) · [Source](https://github.com/d3/d3-array/blob/main/src/sum.js) · Returns the sum of the given *iterable* of numbers. Ignores undefined, null and NaN values.
 
 ```js
 d3.sum([1, 2, 2, 2, NaN, 3, null]) // 10
@@ -267,7 +267,7 @@ If the iterable contains no numbers, returns 0. See also [fsum](./add.md#fsum).
 
 ## mean(*iterable*, *accessor*) {#mean}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/mean.js) · [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · Returns the mean of the given *iterable* of numbers. Ignores undefined, null and NaN values.
+[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/mean.js) · Returns the mean of the given *iterable* of numbers. Ignores undefined, null and NaN values.
 
 ```js
 d3.mean([1, 2, 2, 2, NaN, 3, null]) // 2
@@ -283,7 +283,7 @@ If the iterable contains no numbers, returns undefined.
 
 ## median(*iterable*, *accessor*) {#median}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/median.js) · [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · Returns the median of the given *iterable* of numbers using the [R-7 method](https://en.wikipedia.org/wiki/Quantile#Estimating_quantiles_from_a_sample). Ignores undefined, null and NaN values.
+[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/median.js) · Returns the median of the given *iterable* of numbers using the [R-7 method](https://en.wikipedia.org/wiki/Quantile#Estimating_quantiles_from_a_sample). Ignores undefined, null and NaN values.
 
 ```js
 d3.median([1, 2, 2, 2, NaN, 3, null]) // 2
@@ -307,7 +307,7 @@ d3.medianIndex([1, 2, 2, 2, NaN, 3, null]) // 2
 
 ## cumsum(*iterable*, *accessor*) {#cumsum}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/cumsum.js) · [Examples](https://observablehq.com/@d3/d3-cumsum) · Returns the cumulative sum of the given *iterable* of numbers, as a Float64Array of the same length.
+[Examples](https://observablehq.com/@d3/d3-cumsum) · [Source](https://github.com/d3/d3-array/blob/main/src/cumsum.js) · Returns the cumulative sum of the given *iterable* of numbers, as a Float64Array of the same length.
 
 ```js
 d3.cumsum([1, 1, 2, 3, 5]) // [1, 2, 4, 7, 12]
@@ -323,7 +323,7 @@ This method ignores undefined and NaN values; this is useful for ignoring missin
 
 ## quantile(*iterable*, *p*, *accessor*) {#quantile}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) · [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · Returns the *p*-quantile of the given *iterable* of numbers, where *p* is a number in the range [0, 1]. For example, the median can be computed using *p* = 0.5, the first quartile at *p* = 0.25, and the third quartile at *p* = 0.75. This particular implementation uses the [R-7 method](http://en.wikipedia.org/wiki/Quantile#Quantiles_of_a_population), which is the default for the R programming language and Excel.
+[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) · Returns the *p*-quantile of the given *iterable* of numbers, where *p* is a number in the range [0, 1]. For example, the median can be computed using *p* = 0.5, the first quartile at *p* = 0.25, and the third quartile at *p* = 0.75. This particular implementation uses the [R-7 method](http://en.wikipedia.org/wiki/Quantile#Quantiles_of_a_population), which is the default for the R programming language and Excel.
 
 ```js
 const numbers = [0, 10, 30];
@@ -343,11 +343,11 @@ An optional *accessor* function may be specified, which is equivalent to calling
 
 ## quantileSorted(*array*, *p*, *accessor*) {#quantileSorted}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) · [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · Similar to *quantile*, but expects the input to be a **sorted** *array* of values. In contrast with *quantile*, the accessor is only called on the elements needed to compute the quantile.
+[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) · Similar to *quantile*, but expects the input to be a **sorted** *array* of values. In contrast with *quantile*, the accessor is only called on the elements needed to compute the quantile.
 
 ## rank(*iterable*, *comparator*) {#rank}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/rank.js) · [Examples](https://observablehq.com/@d3/rank) · Returns an array with the rank of each value in the *iterable*, *i.e.* the zero-based index of the value when the iterable is sorted. Nullish values are sorted to the end and ranked NaN. An optional *comparator* or *accessor* function may be specified; the latter is equivalent to calling [*array*.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) before computing the ranks. If *comparator* is not specified, it defaults to [ascending](./sort.md#ascending). Ties (equivalent values) all get the same rank, defined as the first time the value is found.
+[Examples](https://observablehq.com/@d3/rank) · [Source](https://github.com/d3/d3-array/blob/main/src/rank.js) · Returns an array with the rank of each value in the *iterable*, *i.e.* the zero-based index of the value when the iterable is sorted. Nullish values are sorted to the end and ranked NaN. An optional *comparator* or *accessor* function may be specified; the latter is equivalent to calling [*array*.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) before computing the ranks. If *comparator* is not specified, it defaults to [ascending](./sort.md#ascending). Ties (equivalent values) all get the same rank, defined as the first time the value is found.
 
 ```js
 d3.rank([{x: 1}, {}, {x: 2}, {x: 0}], d => d.x); // [1, NaN, 2, 0]
@@ -357,11 +357,11 @@ d3.rank([1, 2, 3], d3.descending); // [2, 1, 0]
 
 ## variance(*iterable*, *accessor*) {#variance}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/variance.js) · [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · Returns an [unbiased estimator of the population variance](http://mathworld.wolfram.com/SampleVariance.html) of the given *iterable* of numbers using [Welford’s algorithm](https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm). If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the variance. This method ignores undefined and NaN values; this is useful for ignoring missing data.
+[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/variance.js) · Returns an [unbiased estimator of the population variance](http://mathworld.wolfram.com/SampleVariance.html) of the given *iterable* of numbers using [Welford’s algorithm](https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm). If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the variance. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ## deviation(*iterable*, *accessor*) {#deviation}
 
-[Source](https://github.com/d3/d3-array/blob/main/src/deviation.js) · [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · Returns the standard deviation, defined as the square root of the [bias-corrected variance](#variance), of the given *iterable* of numbers. If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the standard deviation. This method ignores undefined and NaN values; this is useful for ignoring missing data.
+[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/deviation.js) · Returns the standard deviation, defined as the square root of the [bias-corrected variance](#variance), of the given *iterable* of numbers. If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the standard deviation. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ## every(*iterable*, *test*) {#every}
 

@@ -1,6 +1,6 @@
 # d3-array: Add {#top}
 
-Full-precision [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) floating point addition.
+Add floating point numbers with full precision.
 
 ## new Adder() {#Adder}
 
@@ -8,7 +8,7 @@ Full-precision [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) floating point
 const adder = new d3.Adder();
 ```
 
-[Source](https://github.com/d3/d3-array/blob/main/src/fsum.js) · Creates a new adder with an initial value of 0.
+[Examples](https://observablehq.com/@d3/d3-fsum) · [Source](https://github.com/d3/d3-array/blob/main/src/fsum.js) · Creates a new adder with an initial value of 0.
 
 ## *adder*.add(*number*) {#adder_add}
 

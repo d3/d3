@@ -1,5 +1,7 @@
 # d3-array: Ticks {#top}
 
+Generate representative values from a continuous interval.
+
 ## ticks(*start*, *stop*, *count*) {#ticks}
 
 [Examples](https://observablehq.com/@d3/d3-ticks) · [Source](https://github.com/d3/d3-array/blob/main/src/ticks.js) · Returns an array of approximately *count* + 1 uniformly-spaced, nicely-rounded values between *start* and *stop* (inclusive). Each value is a power of ten multiplied by 1, 2 or 5.
