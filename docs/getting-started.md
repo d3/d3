@@ -1,3 +1,9 @@
+<script setup>
+
+import ExampleBarChart from "./components/ExampleBarChart.vue";
+
+</script>
+
 # Getting started
 
 D3 supports a variety of environments.
@@ -5,6 +11,8 @@ D3 supports a variety of environments.
 ## Try D3 online
 
 The fastest way to get started (and get help) with D3 is on [Observable](https://observablehq.com)! D3 is available by default in notebooks as part of Observable’s standard library. To create something with D3, return the generated DOM element from a cell. Here is an example bar chart:
+
+<ExampleBarChart />
 
 ```js
 {
