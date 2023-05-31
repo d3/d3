@@ -1,6 +1,6 @@
 # d3-color
 
-Even though your browser understands a lot about colors, it doesn’t offer much help in manipulating colors through JavaScript. The d3-color module therefore provides representations for various color spaces, allowing specification, conversion and manipulation. (Also see [d3-interpolate](https://github.com/d3/d3-interpolate) for color interpolation.)
+Even though your browser understands a lot about colors, it doesn’t offer much help in manipulating colors through JavaScript. The d3-color module therefore provides representations for various color spaces, allowing specification, conversion and manipulation. (Also see [d3-interpolate](./d3-interpolate.md) for color interpolation.)
 
 For example, take the color named “steelblue”:
 
@@ -49,13 +49,13 @@ To measure color differences, see:
 
 * [d3-color-difference](https://github.com/Evercoder/d3-color-difference)
 
-## Colors
+## color(*specifier*) {#color}
 
-### d3.color(specifier)
+```js
+d3.color("steelblue") // {r: 70, g: 130, b: 180, opacity: 1}
+```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
-
-Parses the specified [CSS Color Module Level 3](http://www.w3.org/TR/css3-color/#colorunits) *specifier* string, returning an [RGB](#rgb) or [HSL](#hsl) color, along with [CSS Color Module Level 4 hex](https://www.w3.org/TR/css-color-4/#hex-notation) *specifier* strings. If the specifier was not valid, null is returned. Some examples:
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Parses the specified [CSS Color Module Level 3](http://www.w3.org/TR/css3-color/#colorunits) *specifier* string, returning an [RGB](#rgb) or [HSL](#hsl) color, along with [CSS Color Module Level 4 hex](https://www.w3.org/TR/css-color-4/#hex-notation) *specifier* strings. If the specifier was not valid, null is returned. Some examples:
 
 * `rgb(255, 255, 255)`
 * `rgb(10%, 20%, 30%)`
@@ -73,162 +73,172 @@ The list of supported [named colors](http://www.w3.org/TR/SVG/types.html#ColorKe
 
 Note: this function may also be used with `instanceof` to test if an object is a color instance. The same is true of color subclasses, allowing you to test whether a color is in a particular color space.
 
-### color.opacity
+## *color*.opacity {#color_opacity}
+
+```js
+d3.color("steelblue").opacity // 1
+```
 
 This color’s opacity, typically in the range [0, 1].
 
-### color.rgb()
-
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
-
-Returns the [RGB equivalent](#rgb) of this color. For RGB colors, that’s `this`.
-
-### color.copy(values)
-
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
-
-Returns a copy of this color. If *values* is specified, any enumerable own properties of *values* are assigned to the new returned color. For example, to derive a copy of a *color* with opacity 0.5, say
+## *color*.rgb() {#color_rgb}
 
 ```js
-color.copy({opacity: 0.5})
+d3.color("hsl(120, 50%, 20%)").rgb() // {r: 25.5, g: 76.5, b: 25.5, opacity: 1}
 ```
 
-### color.brighter(k)
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns the [RGB equivalent](#rgb) of this color. For RGB colors, that’s `this`.
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+## *color*.copy(*values*) {#color_copy}
 
-Returns a brighter copy of this color. If *k* is specified, it controls how much brighter the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
+```js
+d3.color("steelblue").copy({opacity: 0.5}) // {r: 70, g: 130, b: 180, opacity: 0.5}
+```
 
-### color.darker(k)
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a copy of this color. If *values* is specified, any enumerable own properties of *values* are assigned to the new returned color.
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+## *color*.brighter(*k*) {#color_brighter}
 
-Returns a darker copy of this color. If *k* is specified, it controls how much darker the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
+```js
+d3.color("steelblue").brighter(1) // {r: 100, g: 185.71428571428572, b: 257.14285714285717, opacity: 1}
+```
 
-### color.displayable()
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a brighter copy of this color. If *k* is specified, it controls how much brighter the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+## *color*.darker(*k*) {#color_darker}
 
-Returns true if and only if the color is displayable on standard hardware. For example, this returns false for an RGB color if any channel value is less than zero or greater than 255 when rounded, or if the opacity is not in the range [0, 1].
+```js
+d3.color("steelblue").darker(1) // {r: 49, g: 91, b: 126, opacity: 1}
+```
 
-### color.formatHex()
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a darker copy of this color. If *k* is specified, it controls how much darker the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+## *color*.displayable() {#color_displayable}
 
-Returns a hexadecimal string representing this color in RGB space, such as `#f7eaba`. If this color is not displayable, a suitable displayable color is returned instead. For example, RGB channel values greater than 255 are clamped to 255.
+```js
+d3.color("steelblue").displayable(1) // true
+```
 
-### color.formatHex8()
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns true if and only if the color is displayable on standard hardware. For example, this returns false for an RGB color if any channel value is less than zero or greater than 255 when rounded, or if the opacity is not in the range [0, 1].
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+## *color*.formatHex() {#color_formatHex}
 
-Returns a hexadecimal string representing this color in RGBA space, such as `#f7eaba90`. If this color is not displayable, a suitable displayable color is returned instead. For example, RGB channel values greater than 255 are clamped to 255.
+```js
+d3.color("steelblue").formatHex() // "#4682b4"
+```
 
-### color.formatHsl()
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a hexadecimal string representing this color in RGB space, such as `#f7eaba`. If this color is not displayable, a suitable displayable color is returned instead. For example, RGB channel values greater than 255 are clamped to 255.
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+## *color*.formatHex8() {#color_formatHex8}
 
-Returns a string representing this color according to the [CSS Color Module Level 3 specification](https://www.w3.org/TR/css-color-3/#hsl-color), such as `hsl(257, 50%, 80%)` or `hsla(257, 50%, 80%, 0.2)`. If this color is not displayable, a suitable displayable color is returned instead by clamping S and L channel values to the interval [0, 100].
+```js
+d3.color("steelblue").formatHex8() // "#4682b4ff"
+```
 
-### color.formatRgb()
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a hexadecimal string representing this color in RGBA space, such as `#f7eaba90`. If this color is not displayable, a suitable displayable color is returned instead. For example, RGB channel values greater than 255 are clamped to 255.
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+## *color*.formatHsl() {#color_formatHsl}
 
-Returns a string representing this color according to the [CSS Object Model specification](https://drafts.csswg.org/cssom/#serialize-a-css-component-value), such as `rgb(247, 234, 186)` or `rgba(247, 234, 186, 0.2)`. If this color is not displayable, a suitable displayable color is returned instead by clamping RGB channel values to the interval [0, 255].
+```js
+d3.color("yellow").formatHsl() // "hsl(60, 100%, 50%)"
+```
 
-### color.toString()
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a string representing this color according to the [CSS Color Module Level 3 specification](https://www.w3.org/TR/css-color-3/#hsl-color), such as `hsl(257, 50%, 80%)` or `hsla(257, 50%, 80%, 0.2)`. If this color is not displayable, a suitable displayable color is returned instead by clamping S and L channel values to the interval [0, 100].
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+## *color*.formatRgb() {#color_formatRgb}
 
-An alias for [*color*.formatRgb](#color_formatRgb).
+```js
+d3.color("yellow").formatRgb() // "rgb(255, 255, 0)"
+```
 
-## RGB
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a string representing this color according to the [CSS Object Model specification](https://drafts.csswg.org/cssom/#serialize-a-css-component-value), such as `rgb(247, 234, 186)` or `rgba(247, 234, 186, 0.2)`. If this color is not displayable, a suitable displayable color is returned instead by clamping RGB channel values to the interval [0, 255].
 
-### d3.rgb(r, g, b, opacity)
+## *color*.toString() {#color_toString}
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+```js
+d3.color("yellow").toString() // "rgb(255, 255, 0)"
+```
 
-### d3.rgb(specifier)
-### d3.rgb(color)
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · An alias for [*color*.formatRgb](#color_formatRgb).
 
-Constructs a new [RGB](https://en.wikipedia.org/wiki/RGB_color_model) color. The channel values are exposed as `r`, `g` and `b` properties on the returned instance. Use the [RGB color picker](http://bl.ocks.org/mbostock/78d64ca7ef013b4dcf8f) to explore this color space.
+## rgb(*color*) {#rgb}
+
+```js
+d3.rgb("hsl(60, 100%, 50%)") // {r: 255, g: 255, b: 0, opacity: 1}
+```
+
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Constructs a new [RGB](https://en.wikipedia.org/wiki/RGB_color_model) color. The channel values are exposed as `r`, `g` and `b` properties on the returned instance. Use the [RGB color picker](http://bl.ocks.org/mbostock/78d64ca7ef013b4dcf8f) to explore this color space.
 
 If *r*, *g* and *b* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to the RGB color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb). Note that unlike [*color*.rgb](#color_rgb) this method *always* returns a new instance, even if *color* is already an RGB color.
 
-### rgb.clamp()
+## *rgb*.clamp() {#rgb_clamp}
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+```js
+d3.rgb(300, 200, 100).clamp() // {r: 255, g: 200, b: 100, opacity: 1}
+```
 
-Returns a new RGB color where the `r`, `g`, and `b` channels are clamped to the range [0, 255] and rounded to the nearest integer value, and the `opacity` is clamped to the range [0, 1].
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a new RGB color where the `r`, `g`, and `b` channels are clamped to the range [0, 255] and rounded to the nearest integer value, and the `opacity` is clamped to the range [0, 1].
 
-## HSL
+## hsl(*color*) {#hsl}
 
-### d3.hsl(h, s, l, opacity)
+```js
+d3.hsl("yellow") // {h: 60, s: 1, l: 0.5, opacity: 1}
+```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
-
-### d3.hsl(specifier)
-### d3.hsl(color)
-
-Constructs a new [HSL](https://en.wikipedia.org/wiki/HSL_and_HSV) color. The channel values are exposed as `h`, `s` and `l` properties on the returned instance. Use the [HSL color picker](http://bl.ocks.org/mbostock/debaad4fcce9bcee14cf) to explore this color space.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Constructs a new [HSL](https://en.wikipedia.org/wiki/HSL_and_HSV) color. The channel values are exposed as `h`, `s` and `l` properties on the returned instance. Use the [HSL color picker](http://bl.ocks.org/mbostock/debaad4fcce9bcee14cf) to explore this color space.
 
 If *h*, *s* and *l* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to the HSL color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb) and then converted to HSL. (Colors already in the HSL color space skip the conversion to RGB.)
 
-### hsl.clamp()
+## *hsl*.clamp() {#hsl_clamp}
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js "Source")
+```js
+d3.hsl(400, 2, 0.5).clamp() // {h: 40, s: 1, l: 0.5, opacity: 1}
+```
 
-Returns a new HSL color where the `h` channel is clamped to the range [0, 360), and the `s`, `l`, and `opacity` channels are clamped to the range [0, 1].
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a new HSL color where the `h` channel is clamped to the range [0, 360), and the `s`, `l`, and `opacity` channels are clamped to the range [0, 1].
 
-## Lab
+## lab(*color*) {#lab}
 
-### d3.lab(l, a, b, opacity)
+```js
+d3.lab("red") // {l: 54.29173376861782, a: 80.8124553179771, b: 69.88504032350531, opacity: 1}
+```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/lab.js "Source")
-
-### d3.lab(specifier)
-### d3.lab(color)
-
-Constructs a new [CIELAB](https://en.wikipedia.org/wiki/Lab_color_space#CIELAB) color. The channel values are exposed as `l`, `a` and `b` properties on the returned instance. Use the [CIELAB color picker](http://bl.ocks.org/mbostock/9f37cc207c0cb166921b) to explore this color space. The value of *l* is typically in the range [0, 100], while *a* and *b* are typically in [-160, +160].
+[Source](https://github.com/d3/d3-color/blob/main/src/lab.js) · Constructs a new [CIELAB](https://en.wikipedia.org/wiki/Lab_color_space#CIELAB) color. The channel values are exposed as `l`, `a` and `b` properties on the returned instance. Use the [CIELAB color picker](http://bl.ocks.org/mbostock/9f37cc207c0cb166921b) to explore this color space. The value of *l* is typically in the range [0, 100], while *a* and *b* are typically in [-160, +160].
 
 If *l*, *a* and *b* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to the CIELAB color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb) and then converted to CIELAB. (Colors already in the CIELAB color space skip the conversion to RGB, and colors in the HCL color space are converted directly to CIELAB.)
 
-### d3.gray(l, opacity)
+## gray(*l*, *opacity*) {#gray}
 
-[Source](https://github.com/d3/d3-color/blob/main/src/lab.js "Source")
+```js
+d3.gray(50) // {l: 50, a: 0, b: 0, opacity: 1}
+```
 
-Constructs a new [CIELAB](#lab) color with the specified *l* value and *a* = *b* = 0.
+[Source](https://github.com/d3/d3-color/blob/main/src/lab.js) · Constructs a new [CIELAB](#lab) color with the specified *l* value and *a* = *b* = 0.
 
-## LCh
+## hcl(*color*) {#hcl}
 
-### d3.hcl(h, c, l, opacity)
+```js
+d3.hcl("yellow") // {h: 99.57458688693687, c: 94.70776566727464, l: 97.60712516622824, opacity: 1}
+```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/lab.js "Source")
+[Source](https://github.com/d3/d3-color/blob/main/src/lab.js) · Equivalent to [d3.lch](#lch), but with reversed argument order.
 
-### d3.hcl(specifier)
-### d3.hcl(color)
+## lch(*color*) {#lch}
 
-Equivalent to [d3.lch](#lch), but with reversed argument order.
+```js
+d3.lch("yellow") // {h: 99.57458688693687, c: 94.70776566727464, l: 97.60712516622824, opacity: 1}
+```
 
-### d3.lch(l, c, h, opacity)
-
-[Source](https://github.com/d3/d3-color/blob/main/src/lab.js "Source")
-
-### d3.lch(specifier)
-### d3.lch(color)
-
-Constructs a new [CIELCh<sub>ab</sub>](https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC) color. The channel values are exposed as `l`, `c` and `h` properties on the returned instance. Use the [CIELCh<sub>ab</sub> color picker](http://bl.ocks.org/mbostock/3e115519a1b495e0bd95) to explore this color space. The value of *l* is typically in the range [0, 100], *c* is typically in [0, 230], and *h* is typically in [0, 360).
+[Source](https://github.com/d3/d3-color/blob/main/src/lab.js) · Constructs a new [CIELCh<sub>ab</sub>](https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC) color. The channel values are exposed as `l`, `c` and `h` properties on the returned instance. Use the [CIELCh<sub>ab</sub> color picker](http://bl.ocks.org/mbostock/3e115519a1b495e0bd95) to explore this color space. The value of *l* is typically in the range [0, 100], *c* is typically in [0, 230], and *h* is typically in [0, 360).
 
 If *l*, *c*, and *h* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to CIELCh<sub>ab</sub> color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb) and then converted to CIELCh<sub>ab</sub>. (Colors already in CIELCh<sub>ab</sub> color space skip the conversion to RGB, and colors in CIELAB color space are converted directly to CIELCh<sub>ab</sub>.)
 
-## Cubehelix
+## cubehelix(*color*) {#cubehelix}
 
-### d3.cubehelix(h, s, l, opacity)
+```js
+d3.cubehelix("yellow") // {h: 56.942171677321085, s: 4.614386868039714, l: 0.8900004504279901, opacity: 1}
+```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/cubehelix.js "Source")
-
-### d3.cubehelix(specifier)
-### d3.cubehelix(color)
-
-Constructs a new [Cubehelix](http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/) color. The channel values are exposed as `h`, `s` and `l` properties on the returned instance. Use the [Cubehelix color picker](http://bl.ocks.org/mbostock/ba8d75e45794c27168b5) to explore this color space.
+[Source](https://github.com/d3/d3-color/blob/main/src/cubehelix.js) · Constructs a new [Cubehelix](http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/) color. The channel values are exposed as `h`, `s` and `l` properties on the returned instance.
 
 If *h*, *s* and *l* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to the Cubehelix color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb) and then converted to Cubehelix. (Colors already in the Cubehelix color space skip the conversion to RGB.)
