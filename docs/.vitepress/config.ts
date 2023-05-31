@@ -35,10 +35,10 @@ export default defineConfig({
       },
       {
         text: "Modules",
+        link: "/modules",
         items: [
           {
             text: "d3-array",
-            link: "/d3-array",
             collapsed: true,
             items: [
               {text: "Add", link: "/d3-array/add"},

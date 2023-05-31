@@ -1,8 +1,16 @@
-# d3-array
+---
+outline: 2
+---
+
+# Modules
+
+D3 is a collection of modules that are designed to work together; you can use the modules independently, or you can use them together as part of the default build.
+
+## d3-array
 
 The **d3-array** module provides a variety of methods for working with data.
 
-## [Add](./d3-array/add.md)
+### [Add](./d3-array/add.md)
 
 Add floating point values with full precision.
 
@@ -12,7 +20,7 @@ Add floating point values with full precision.
 * [fcumsum](./d3-array/add.md#fcumsum) - compute a full precision cumulative summation of numbers.
 * [fsum](./d3-array/add.md#fsum) - compute a full precision summation of an iterable of numbers.
 
-## [Bin](./d3-array/bin.md)
+### [Bin](./d3-array/bin.md)
 
 Bin discrete samples into continuous, non-overlapping intervals.
 
@@ -25,7 +33,7 @@ Bin discrete samples into continuous, non-overlapping intervals.
 * [thresholdScott](./d3-array/bin.md#thresholdScott) - Scott’s normal reference binning rule.
 * [thresholdSturges](./d3-array/bin.md#thresholdSturges) - Sturges’ binning formula.
 
-## [Bisect](./d3-array/bisect.md)
+### [Bisect](./d3-array/bisect.md)
 
 Quickly find a value in a sorted array.
 
@@ -38,7 +46,7 @@ Quickly find a value in a sorted array.
 * [bisectLeft](./d3-array/bisect.md#bisectLeft) - binary search for a value in a sorted array.
 * [bisectCenter](./d3-array/bisect.md#bisectCenter) - binary search for a value in a sorted array.
 
-## [Blur](./d3-array.md/blur.md)
+### [Blur](./d3-array.md/blur.md)
 
 Blur quantitative values in one or two dimensions.
 
@@ -46,7 +54,7 @@ Blur quantitative values in one or two dimensions.
 * [d3.blur2](./d3-array/blur.md#blur2) - blur a two-dimensional array of numbers in place.
 * [d3.blurImage](./d3-array/blur.md#blurImage) - blur an RGBA ImageData in place.
 
-## [Group](./d3-array/group.md)
+### [Group](./d3-array/group.md)
 
 Group discrete values.
 
@@ -60,14 +68,14 @@ Group discrete values.
 * [d3.flatRollup](./d3-array/group.md#flatRollup) - reduce an iterable into a flat array.
 * [d3.groupSort](./d3-array/group.md#groupSort) - sort keys according to grouped values.
 
-## [Intern](./d3-array/intern.md)
+### [Intern](./d3-array/intern.md)
 
 Create maps and sets with non-primitive values such as dates.
 
 * [new InternMap](./d3-array/intern.md#InternMap) - a key-interning Map.
 * [new InternSet](./d3-array/intern.md#InternSet) - a value-interning Set.
 
-## [Sets](./d3-array/sets.md)
+### [Sets](./d3-array/sets.md)
 
 Logical operations on sets.
 
@@ -78,7 +86,7 @@ Logical operations on sets.
 * [d3.subset](./d3-array/sets.md#subset) - test whether a set is a subset of another.
 * [d3.union](./d3-array/sets.md#union) - compute a set union.
 
-## [Sort](./d3-array/sort.md)
+### [Sort](./d3-array/sort.md)
 
 Sort and reorder arrays of values.
 
@@ -91,7 +99,7 @@ Sort and reorder arrays of values.
 * [d3.shuffler](./d3-array/sort.md#shuffler) - randomize the order of an iterable.
 * [d3.sort](./d3-array/sort.md#sort) - sort values.
 
-## [Summarize](./d3-array/summarize.md)
+### [Summarize](./d3-array/summarize.md)
 
 Compute summary statistics.
 
@@ -120,7 +128,7 @@ Compute summary statistics.
 * [d3.every](./d3-array/group.md#every) - test if all values satisfy a condition.
 * [d3.some](./d3-array/group.md#some) - test if any value satisfies a condition.
 
-## [Ticks](./d3-array/ticks.md)
+### [Ticks](./d3-array/ticks.md)
 
 Generate representative values from a continuous interval.
 
@@ -130,7 +138,7 @@ Generate representative values from a continuous interval.
 * [d3.nice](./d3-array/ticks.md#nice) - extend an interval to align with ticks.
 * [d3.range](./d3-array/ticks.md#range) - generate a range of numeric values.
 
-## [Transform](./d3-array/transform.md)
+### [Transform](./d3-array/transform.md)
 
 Derive new arrays.
 
