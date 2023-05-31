@@ -10,7 +10,7 @@ for (let i = 0; i < 10; ++i) {
 
 And you got this:
 
-```js
+```
 0
 0.1
 0.2
@@ -38,7 +38,7 @@ for (let i = 0; i < 10; ++i) {
 
 Now you get this:
 
-```js
+```
 0.0
 0.1
 0.2
@@ -54,36 +54,87 @@ Now you get this:
 But d3-format is much more than an alias for [number.toFixed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed)! A few more examples:
 
 ```js
-d3.format(".0%")(0.123);  // rounded percentage, "12%"
-d3.format("($.2f")(-3.5); // localized fixed-point currency, "(£3.50)"
-d3.format("+20")(42);     // space-filled and signed, "                 +42"
-d3.format(".^20")(42);    // dot-filled and centered, ".........42........."
-d3.format(".2s")(42e6);   // SI-prefix with two significant digits, "42M"
-d3.format("#x")(48879);   // prefixed lowercase hexadecimal, "0xbeef"
-d3.format(",.2r")(4223);  // grouped thousands with two significant digits, "4,200"
+d3.format(".0%")(0.123) // rounded percentage, "12%"
+```
+```js
+d3.format("($.2f")(-3.5) // localized fixed-point currency, "(£3.50)"
+```
+```js
+d3.format("+20")(42) // space-filled and signed, "                 +42"
+```
+```js
+d3.format(".^20")(42) // dot-filled and centered, ".........42........."
+```
+```js
+d3.format(".2s")(42e6) // SI-prefix with two significant digits, "42M"
+```
+```js
+d3.format("#x")(48879) // prefixed lowercase hexadecimal, "0xbeef"
+```
+```js
+d3.format(",.2r")(4223) // grouped thousands with two significant digits, "4,200"
 ```
 
 See [*locale*.format](#locale_format) for a detailed specification, and try running [d3.formatSpecifier](#formatSpecifier) on the above formats to decode their meaning.
 
-## Formats
+## format(*specifier*) {#format}
 
-### d3.format(specifier)
+```js
+const f = d3.format(".2f");
+```
 
-[Source](https://github.com/d3/d3-format/blob/main/src/defaultLocale.js#L4 "Source")
+[Source](https://github.com/d3/d3-format/blob/main/src/defaultLocale.js) · An alias for [*locale*.format](#locale_format) on the [default locale](#formatDefaultLocale).
 
-An alias for [*locale*.format](#locale_format) on the [default locale](#formatDefaultLocale).
+## formatPrefix(*specifier*, *value*) {#formatPrefix}
 
-### d3.formatPrefix(specifier, value)
+```js
+const f = d3.formatPrefix(",.0", 1e-6);
+```
 
-[Source](https://github.com/d3/d3-format/blob/main/src/defaultLocale.js#L5 "Source")
+[Source](https://github.com/d3/d3-format/blob/main/src/defaultLocale.js) · An alias for [*locale*.formatPrefix](#locale_formatPrefix) on the [default locale](#formatDefaultLocale).
 
-An alias for [*locale*.formatPrefix](#locale_formatPrefix) on the [default locale](#formatDefaultLocale).
+## formatLocale(*definition*) {#formatLocale}
 
-### locale.format(specifier)
+```js
+const enUs = d3.formatLocale({
+  thousands: ",",
+  grouping: [3],
+  currency: ["$", ""]
+});
+```
 
-[Source](https://github.com/d3/d3-format/blob/main/src/locale.js#L18 "Source")
+[Source](https://github.com/d3/d3-format/blob/main/src/locale.js) · Returns a *locale* object for the specified *definition* with [*locale*.format](#locale_format) and [*locale*.formatPrefix](#locale_formatPrefix) methods. The *definition* must include the following properties:
 
-Returns a new format function for the given string *specifier*. The returned function takes a number as the only argument, and returns a string representing the formatted number. The general form of a specifier is:
+* `decimal` - the decimal point (e.g., `"."`).
+* `thousands` - the group separator (e.g., `","`).
+* `grouping` - the array of group sizes (e.g., `[3]`), cycled as needed.
+* `currency` - the currency prefix and suffix (e.g., `["$", ""]`).
+* `numerals` - optional; an array of ten strings to replace the numerals 0-9.
+* `percent` - optional; the percent sign (defaults to `"%"`).
+* `minus` - optional; the minus sign (defaults to `"−"`).
+* `nan` - optional; the not-a-number value (defaults `"NaN"`).
+
+Note that the *thousands* property is a misnomer, as the grouping definition allows groups other than thousands.
+
+## formatDefaultLocale(*definition*) {#formatDefaultLocale}
+
+```js
+const enUs = d3.formatDefaultLocale({
+  thousands: ",",
+  grouping: [3],
+  currency: ["$", ""]
+});
+```
+
+[Source](https://github.com/d3/d3-format/blob/main/src/defaultLocale.js) · Equivalent to [d3.formatLocale](#formatLocale), except it also redefines [d3.format](#format) and [d3.formatPrefix](#formatPrefix) to the new locale’s [*locale*.format](#locale_format) and [*locale*.formatPrefix](#locale_formatPrefix). If you do not set a default locale, it defaults to [U.S. English](https://github.com/d3/d3-format/blob/main/locale/en-US.json).
+
+## *locale*.format(*specifier*) {#locale_format}
+
+```js
+const f = d3.format(".2f");
+```
+
+[Source](https://github.com/d3/d3-format/blob/main/src/locale.js) · Returns a new format function for the given string *specifier*. The returned function takes a number as the only argument, and returns a string representing the formatted number. The general form of a specifier is:
 
 ```
 [​[fill]align][sign][symbol][0][width][,][.precision][~][type]
@@ -115,8 +166,10 @@ Depending on the *type*, the *precision* either indicates the number of digits t
 The `~` option trims insignificant trailing zeros across all format types. This is most commonly used in conjunction with types `r`, `e`, `s` and `%`. For example:
 
 ```js
-d3.format("s")(1500);  // "1.50000k"
-d3.format("~s")(1500); // "1.5k"
+d3.format("s")(1500) // "1.50000k"
+```
+```js
+d3.format("~s")(1500) // "1.5k"
 ```
 
 The available *type* values are:
@@ -138,17 +191,25 @@ The available *type* values are:
 The type `​` (none) is also supported as shorthand for `~g` (with a default precision of 12 instead of 6), and the type `n` is shorthand for `,g`. For the `g`, `n` and `​` (none) types, decimal notation is used if the resulting string would have *precision* or fewer digits; otherwise, exponent notation is used. For example:
 
 ```js
-d3.format(".2")(42);  // "42"
-d3.format(".2")(4.2); // "4.2"
-d3.format(".1")(42);  // "4e+1"
-d3.format(".1")(4.2); // "4"
+d3.format(".2")(42) // "42"
+```
+```js
+d3.format(".2")(4.2) // "4.2"
+```
+```js
+d3.format(".1")(42) // "4e+1"
+```
+```js
+d3.format(".1")(4.2) // "4"
 ```
 
-### locale.formatPrefix(specifier, value)
+## *locale*.formatPrefix(*specifier*, *value*) {#locale_formatPrefix}
 
-[Source](https://github.com/d3/d3-format/blob/main/src/locale.js#L127 "Source")
+```js
+const f = d3.formatPrefix(",.0", 1e-6);
+```
 
-Equivalent to [*locale*.format](#locale_format), except the returned function will convert values to the units of the appropriate [SI prefix](https://en.wikipedia.org/wiki/Metric_prefix#List_of_SI_prefixes) for the specified numeric reference *value* before formatting in fixed point notation. The following prefixes are supported:
+[Source](https://github.com/d3/d3-format/blob/main/src/locale.js) · Equivalent to [*locale*.format](#locale_format), except the returned function will convert values to the units of the appropriate [SI prefix](https://en.wikipedia.org/wiki/Metric_prefix#List_of_SI_prefixes) for the specified numeric reference *value* before formatting in fixed point notation. The following prefixes are supported:
 
 * `y` - yocto, 10⁻²⁴
 * `z` - zepto, 10⁻²¹
@@ -176,15 +237,15 @@ f(0.00042); // "420µ"
 f(0.0042); // "4,200µ"
 ```
 
-This method is useful when formatting multiple numbers in the same units for easy comparison. See [precisionPrefix](#precisionPrefix) for help picking an appropriate precision, and [bl.ocks.org/9764126](http://bl.ocks.org/mbostock/9764126) for an example.
+This method is useful when formatting multiple numbers in the same units for easy comparison. See [precisionPrefix](#precisionPrefix) for help picking an appropriate precision.
 
-## Format specifiers
+## formatSpecifier(*specifier*) {#formatSpecifier}
 
-### d3.formatSpecifier(specifier)
+```js
+d3.formatSpecifier(".1f")
+```
 
-[Source](https://github.com/d3/d3-format/blob/main/src/formatSpecifier.js "Source")
-
-Parses the specified *specifier*, returning an object with exposed fields that correspond to the [format specification mini-language](#locale_format) and a toString method that reconstructs the specifier. For example, `formatSpecifier("s")` returns:
+[Source](https://github.com/d3/d3-format/blob/main/src/formatSpecifier.js) · Parses the specified *specifier*, returning an object with exposed fields that correspond to the [format specification mini-language](#locale_format) and a toString method that reconstructs the specifier. For example, `formatSpecifier("s")` returns:
 
 ```js
 FormatSpecifier {
@@ -210,11 +271,13 @@ const f = d3.format(s);
 f(42); // "42.00";
 ```
 
-### new d3.FormatSpecifier(specifier)
+## new d3.FormatSpecifier(*specifier*) {#FormatSpecifier}
 
-[Source](https://github.com/d3/d3-format/blob/main/src/formatSpecifier.js "Source")
+```js
+new d3.FormatSpecifier({type: "f", precision: 1})
+```
 
-Given the specified *specifier* object, returning an object with exposed fields that correspond to the [format specification mini-language](#locale_format) and a toString method that reconstructs the specifier. For example, `new FormatSpecifier({type: "s"})` returns:
+[Source](https://github.com/d3/d3-format/blob/main/src/formatSpecifier.js) · Given the specified *specifier* object, returning an object with exposed fields that correspond to the [format specification mini-language](#locale_format) and a toString method that reconstructs the specifier. For example, `new FormatSpecifier({type: "s"})` returns:
 
 ```js
 FormatSpecifier {
@@ -231,11 +294,13 @@ FormatSpecifier {
 }
 ```
 
-### d3.precisionFixed(step)
+## precisionFixed(*step*) {#precisionFixed}
 
-[Source](https://github.com/d3/d3-format/blob/main/src/precisionFixed.js "Source")
+```js
+d3.precisionFixed(0.01) // 2
+```
 
-Returns a suggested decimal precision for fixed point notation given the specified numeric *step* value. The *step* represents the minimum absolute difference between values that will be formatted. (This assumes that the values to be formatted are also multiples of *step*.) For example, given the numbers 1, 1.5, and 2, the *step* should be 0.5 and the suggested precision is 1:
+[Source](https://github.com/d3/d3-format/blob/main/src/precisionFixed.js) · Returns a suggested decimal precision for fixed point notation given the specified numeric *step* value. The *step* represents the minimum absolute difference between values that will be formatted. (This assumes that the values to be formatted are also multiples of *step*.) For example, given the numbers 1, 1.5, and 2, the *step* should be 0.5 and the suggested precision is 1:
 
 ```js
 const p = d3.precisionFixed(0.5);
@@ -265,11 +330,13 @@ f(0.50); // "50%"
 f(0.55); // "55%"
 ```
 
-### d3.precisionPrefix(step, value)
+## precisionPrefix(*step*, *value*) {#precisionPrefix}
 
-[Source](https://github.com/d3/d3-format/blob/main/src/precisionPrefix.js "Source")
+```js
+d3.precisionPrefix(1e5, 1.3e6) // 1
+```
 
-Returns a suggested decimal precision for use with [*locale*.formatPrefix](#locale_formatPrefix) given the specified numeric *step* and reference *value*. The *step* represents the minimum absolute difference between values that will be formatted, and *value* determines which SI prefix will be used. (This assumes that the values to be formatted are also multiples of *step*.) For example, given the numbers 1.1e6, 1.2e6, and 1.3e6, the *step* should be 1e5, the *value* could be 1.3e6, and the suggested precision is 1:
+[Source](https://github.com/d3/d3-format/blob/main/src/precisionPrefix.js) · Returns a suggested decimal precision for use with [*locale*.formatPrefix](#locale_formatPrefix) given the specified numeric *step* and reference *value*. The *step* represents the minimum absolute difference between values that will be formatted, and *value* determines which SI prefix will be used. (This assumes that the values to be formatted are also multiples of *step*.) For example, given the numbers 1.1e6, 1.2e6, and 1.3e6, the *step* should be 1e5, the *value* could be 1.3e6, and the suggested precision is 1:
 
 ```js
 const p = d3.precisionPrefix(1e5, 1.3e6);
@@ -279,11 +346,13 @@ f(1.2e6); // "1.2M"
 f(1.3e6); // "1.3M"
 ```
 
-### d3.precisionRound(step, max)
+## precisionRound(*step*, *max*) {#precisionRound}
 
-[Source](https://github.com/d3/d3-format/blob/main/src/precisionRound.js "Source")
+```js
+d3.precisionRound(0.01, 1.01) // 3
+```
 
-Returns a suggested decimal precision for format types that round to significant digits given the specified numeric *step* and *max* values. The *step* represents the minimum absolute difference between values that will be formatted, and the *max* represents the largest absolute value that will be formatted. (This assumes that the values to be formatted are also multiples of *step*.) For example, given the numbers 0.99, 1.0, and 1.01, the *step* should be 0.01, the *max* should be 1.01, and the suggested precision is 3:
+[Source](https://github.com/d3/d3-format/blob/main/src/precisionRound.js) · Returns a suggested decimal precision for format types that round to significant digits given the specified numeric *step* and *max* values. The *step* represents the minimum absolute difference between values that will be formatted, and the *max* represents the largest absolute value that will be formatted. (This assumes that the values to be formatted are also multiples of *step*.) For example, given the numbers 0.99, 1.0, and 1.01, the *step* should be 0.01, the *max* should be 1.01, and the suggested precision is 3:
 
 ```js
 const p = d3.precisionRound(0.01, 1.01);
@@ -311,28 +380,3 @@ const f = d3.format("." + p + "e");
 f(0.01); // "1.00e-2"
 f(1.01); // "1.01e+0"
 ```
-
-## Locales
-
-### d3.formatLocale(definition)
-
-[Source](https://github.com/d3/d3-format/blob/main/src/locale.js "Source")
-
-Returns a *locale* object for the specified *definition* with [*locale*.format](#locale_format) and [*locale*.formatPrefix](#locale_formatPrefix) methods. The *definition* must include the following properties:
-
-* `decimal` - the decimal point (e.g., `"."`).
-* `thousands` - the group separator (e.g., `","`).
-* `grouping` - the array of group sizes (e.g., `[3]`), cycled as needed.
-* `currency` - the currency prefix and suffix (e.g., `["$", ""]`).
-* `numerals` - optional; an array of ten strings to replace the numerals 0-9.
-* `percent` - optional; the percent sign (defaults to `"%"`).
-* `minus` - optional; the minus sign (defaults to `"−"`).
-* `nan` - optional; the not-a-number value (defaults `"NaN"`).
-
-Note that the *thousands* property is a misnomer, as the grouping definition allows groups other than thousands.
-
-### d3.formatDefaultLocale(definition)
-
-[Source](https://github.com/d3/d3-format/blob/main/src/defaultLocale.js "Source")
-
-Equivalent to [d3.formatLocale](#formatLocale), except it also redefines [d3.format](#format) and [d3.formatPrefix](#formatPrefix) to the new locale’s [*locale*.format](#locale_format) and [*locale*.formatPrefix](#locale_formatPrefix). If you do not set a default locale, it defaults to [U.S. English](https://github.com/d3/d3-format/blob/main/locale/en-US.json).
