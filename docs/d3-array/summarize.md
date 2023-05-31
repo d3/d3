@@ -321,7 +321,7 @@ d3.cumsum(penguins, (d) => d.body_mass_g) // [3750, 7550, 10800, 10800, …]
 
 This method ignores undefined and NaN values; this is useful for ignoring missing data. If the iterable contains no numbers, returns zeros. See also [fcumsum](./add.md#fcumsum).
 
-## quantile(iterable, p, accessor) {#quantile}
+## quantile(*iterable*, *p*, *accessor*) {#quantile}
 
 [Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) · [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · Returns the *p*-quantile of the given *iterable* of numbers, where *p* is a number in the range [0, 1]. For example, the median can be computed using *p* = 0.5, the first quartile at *p* = 0.25, and the third quartile at *p* = 0.75. This particular implementation uses the [R-7 method](http://en.wikipedia.org/wiki/Quantile#Quantiles_of_a_population), which is the default for the R programming language and Excel.
 
@@ -337,15 +337,15 @@ d3.quantile(numbers, 0.1); // 2
 
 An optional *accessor* function may be specified, which is equivalent to calling [*array*.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) before computing the quantile.
 
-## quantileIndex(array, p, accessor) {#quantileIndex}
+## quantileIndex(*array*, *p*, *accessor*) {#quantileIndex}
 
 [Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) · Similar to *quantile*, but returns the index to the left of *p*.
 
-## quantileSorted(array, p, accessor) {#quantileSorted}
+## quantileSorted(*array*, *p*, *accessor*) {#quantileSorted}
 
 [Source](https://github.com/d3/d3-array/blob/main/src/quantile.js) · [Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · Similar to *quantile*, but expects the input to be a **sorted** *array* of values. In contrast with *quantile*, the accessor is only called on the elements needed to compute the quantile.
 
-## rank(iterable, comparator) {#rank}
+## rank(*iterable*, *comparator*) {#rank}
 
 [Source](https://github.com/d3/d3-array/blob/main/src/rank.js) · [Examples](https://observablehq.com/@d3/rank) · Returns an array with the rank of each value in the *iterable*, *i.e.* the zero-based index of the value when the iterable is sorted. Nullish values are sorted to the end and ranked NaN. An optional *comparator* or *accessor* function may be specified; the latter is equivalent to calling [*array*.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) before computing the ranks. If *comparator* is not specified, it defaults to [ascending](./sort.md#ascending). Ties (equivalent values) all get the same rank, defined as the first time the value is found.
 
