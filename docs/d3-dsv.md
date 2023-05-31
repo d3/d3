@@ -1,132 +1,52 @@
 # d3-dsv
 
-This module provides a parser and formatter for delimiter-separated values, most commonly [comma-](https://en.wikipedia.org/wiki/Comma-separated_values) (CSV) or tab-separated values (TSV). These tabular formats are popular with spreadsheet programs such as Microsoft Excel, and are often more space-efficient than JSON. This implementation is based on [RFC 4180](http://tools.ietf.org/html/rfc4180).
+This module provides a parser and formatter for delimiter-separated values, most commonly [comma-separated values](https://en.wikipedia.org/wiki/Comma-separated_values) (CSV) or tab-separated values (TSV). These tabular formats are popular with spreadsheet programs such as Microsoft Excel, and are often more space-efficient than JSON. This implementation is based on [RFC 4180](http://tools.ietf.org/html/rfc4180).
 
-Comma (CSV) and tab (TSV) delimiters are built-in. For example, to parse:
+For example, to parse:
 
 ```js
-d3.csvParse("foo,bar\n1,2"); // [{foo: "1", bar: "2"}, columns: ["foo", "bar"]]
-d3.tsvParse("foo\tbar\n1\t2"); // [{foo: "1", bar: "2"}, columns: ["foo", "bar"]]
+d3.csvParse("foo,bar\n1,2") // [{foo: "1", bar: "2"}, columns: ["foo", "bar"]]
+```
+```js
+d3.tsvParse("foo\tbar\n1\t2") // [{foo: "1", bar: "2"}, columns: ["foo", "bar"]]
 ```
 
-Or to format:
+To format:
 
 ```js
-d3.csvFormat([{foo: "1", bar: "2"}]); // "foo,bar\n1,2"
-d3.tsvFormat([{foo: "1", bar: "2"}]); // "foo\tbar\n1\t2"
+d3.csvFormat([{foo: "1", bar: "2"}]) // "foo,bar\n1,2"
+```
+```js
+d3.tsvFormat([{foo: "1", bar: "2"}]) // "foo\tbar\n1\t2"
 ```
 
 To use a different delimiter, such as “|” for pipe-separated values, use [d3.dsvFormat](#dsvFormat):
 
 ```js
-const psv = d3.dsvFormat("|");
-
-console.log(psv.parse("foo|bar\n1|2")); // [{foo: "1", bar: "2"}, columns: ["foo", "bar"]]
+d3.dsvFormat("|").parse("foo|bar\n1|2")) // [{foo: "1", bar: "2"}, columns: ["foo", "bar"]]
 ```
 
-For easy loading of DSV files in a browser, see [d3-fetch](https://github.com/d3/d3-fetch)’s [d3.csv](https://github.com/d3/d3-fetch/blob/master/README.md#csv), [d3.tsv](https://github.com/d3/d3-fetch/blob/master/README.md#tsv) and [d3.dsv](https://github.com/d3/d3-fetch/blob/master/README.md#dsv) methods.
+For easy loading of DSV files in a browser, see [d3-fetch](./d3-fetch.md)’s [d3.csv](./d3-fetch.md#csv), [d3.tsv](./d3-fetch.md#tsv) and [d3.dsv](./d3-fetch.md#dsv) methods.
 
-## CSV
+## dsvFormat(*delimiter*) {#dsvFormat}
 
-### d3.csvParse(string, row)
+```js
+const csv = d3.dsvFormat(",");
+```
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/csv.js "Source")
+[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js) · Constructs a new DSV parser and formatter for the specified *delimiter*. The *delimiter* must be a single character (*i.e.*, a single 16-bit code unit); so, ASCII delimiters are fine, but emoji delimiters are not.
 
-Equivalent to [dsvFormat](#dsvFormat)(",").[parse](#dsv_parse). Note: requires unsafe-eval [content security policy](#content-security-policy).
+## *dsv*.parse(*string*, *row*) {#dsv_parse}
 
-### d3.csvParseRows(string, row)
+:::warning CAUTION
+This method requires the unsafe-eval [content security policy](#content-security-policy).
+:::
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/csv.js "Source")
+```js
+d3.csvParse("foo,bar\n1,2") // [{foo: "1", bar: "2"}, columns: ["foo", "bar"]]
+```
 
-Equivalent to [dsvFormat](#dsvFormat)(",").[parseRows](#dsv_parseRows).
-
-### d3.csvFormat(rows, columns)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/csv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)(",").[format](#dsv_format).
-
-### d3.csvFormatBody(rows, columns)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/csv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)(",").[formatBody](#dsv_formatBody).
-
-### d3.csvFormatRows(rows)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/csv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)(",").[formatRows](#dsv_formatRows).
-
-### d3.csvFormatRow(row)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/csv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)(",").[formatRow](#dsv_formatRow).
-
-### d3.csvFormatValue(value)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/csv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)(",").[formatValue](#dsv_formatValue).
-
-## TSV
-
-### d3.tsvParse(string, row)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/tsv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)("\t").[parse](#dsv_parse). Note: requires unsafe-eval [content security policy](#content-security-policy).
-
-### d3.tsvParseRows(string, row)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/tsv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)("\t").[parseRows](#dsv_parseRows).
-
-### d3.tsvFormat(rows, columns)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/tsv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)("\t").[format](#dsv_format).
-
-### d3.tsvFormatBody(rows, columns)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/tsv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)("\t").[formatBody](#dsv_formatBody).
-
-### d3.tsvFormatRows(rows)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/tsv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)("\t").[formatRows](#dsv_formatRows).
-
-### d3.tsvFormatRow(row)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/tsv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)("\t").[formatRow](#dsv_formatRow).
-
-### d3.tsvFormatValue(value)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/tsv.js "Source")
-
-Equivalent to [dsvFormat](#dsvFormat)("\t").[formatValue](#dsv_formatValue).
-
-## DSV
-
-### d3.dsvFormat(delimiter)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js)
-
-Constructs a new DSV parser and formatter for the specified *delimiter*. The *delimiter* must be a single character (*i.e.*, a single 16-bit code unit); so, ASCII delimiters are fine, but emoji delimiters are not.
-
-### dsv.parse(string, row)
-
-[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js "Source")
-
-Parses the specified *string*, which must be in the delimiter-separated values format with the appropriate delimiter, returning an array of objects representing the parsed rows.
+[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js) · Parses the specified *string*, which must be in the delimiter-separated values format with the appropriate delimiter, returning an array of objects representing the parsed rows.
 
 Unlike [*dsv*.parseRows](#dsv_parseRows), this method requires that the first line of the DSV content contains a delimiter-separated list of column names; these column names become the attributes on the returned objects. For example, consider the following CSV file:
 
@@ -148,7 +68,7 @@ The resulting JavaScript array is:
 The returned array also exposes a `columns` property containing the column names in input order (in contrast to Object.keys, whose iteration order is arbitrary). For example:
 
 ```js
-data.columns; // ["Year", "Make", "Model", "Length"]
+data.columns // ["Year", "Make", "Model", "Length"]
 ```
 
 If the column names are not unique, only the last value is returned for each name; to access all values, use [*dsv*.parseRows](#dsv_parseRows) instead (see [example](https://observablehq.com/@d3/parse-csv-with-duplicate-column-names)).
@@ -168,15 +88,15 @@ const data = d3.csvParse(string, (d) => {
 });
 ```
 
-Note: using `+` rather than [parseInt](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/parseInt) or [parseFloat](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/parseFloat) is typically faster, though more restrictive. For example, `"30px"` when coerced using `+` returns `NaN`, while parseInt and parseFloat return `30`.
+Note: using `+` or `Number` rather than [parseInt](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/parseInt) or [parseFloat](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/parseFloat) is typically faster, though more restrictive. For example, `"30px"` when coerced using `+` returns `NaN`, while parseInt and parseFloat return `30`.
 
-Note: requires unsafe-eval [content security policy](#content-security-policy).
+## *dsv*.parseRows(*string*, *row*) {#dsv_parseRows}
 
-### dsv.parseRows(string, row)
+```js
+d3.csvParseRows("foo,bar\n1,2") // [["foo", "bar"], ["1", "2"]]
+```
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js "Source")
-
-Parses the specified *string*, which must be in the delimiter-separated values format with the appropriate delimiter, returning an array of arrays representing the parsed rows.
+[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js) · Parses the specified *string*, which must be in the delimiter-separated values format with the appropriate delimiter, returning an array of arrays representing the parsed rows.
 
 Unlike [*dsv*.parse](#dsv_parse), this method treats the header line as a standard row, and should be used whenever DSV content does not contain a header. Each row is represented as an array rather than an object. Rows may have variable length. For example, consider the following CSV file, which notably lacks a header line:
 
@@ -211,11 +131,16 @@ const data = d3.csvParseRows(string, (d, i) => {
 
 In effect, *row* is similar to applying a [map](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/map) and [filter](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/filter) operator to the returned rows.
 
-### dsv.format(rows, columns)
+## *dsv*.format(*rows*, *columns*) {#dsv_format}
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js "Source")
+```js
+d3.csvFormat([{foo: "1", bar: "2"}]) // "foo,bar\n1,2"
+```
+```js
+d3.csvFormat([{foo: "1", bar: "2"}], ["foo"]) // "foo\n1"
+```
 
-Formats the specified array of object *rows* as delimiter-separated values, returning a string. This operation is the inverse of [*dsv*.parse](#dsv_parse). Each row will be separated by a newline (`\n`), and each column within each row will be separated by the delimiter (such as a comma, `,`). Values that contain either the delimiter, a double-quote (`"`) or a newline will be escaped using double-quotes.
+[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js) · Formats the specified array of object *rows* as delimiter-separated values, returning a string. This operation is the inverse of [*dsv*.parse](#dsv_parse). Each row will be separated by a newline (`\n`), and each column within each row will be separated by the delimiter (such as a comma, `,`). Values that contain either the delimiter, a double-quote (`"`) or a newline will be escaped using double-quotes.
 
 If *columns* is not specified, the list of column names that forms the header row is determined by the union of all properties on all objects in *rows*; the order of columns is nondeterministic. If *columns* is specified, it is an array of strings representing the column names. For example:
 
@@ -225,24 +150,31 @@ const string = d3.csvFormat(data, ["year", "make", "model", "length"]);
 
 All fields on each row object will be coerced to strings. If the field value is null or undefined, the empty string is used. If the field value is a Date, the [ECMAScript date-time string format](https://www.ecma-international.org/ecma-262/9.0/index.html#sec-date-time-string-format) (a subset of ISO 8601) is used: for example, dates at UTC midnight are formatted as `YYYY-MM-DD`. For more control over which and how fields are formatted, first map *rows* to an array of array of string, and then use [*dsv*.formatRows](#dsv_formatRows).
 
-### dsv.formatBody(rows, columns)
+## *dsv*.formatBody(*rows*, *columns*) {#dsv_formatBody}
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js "Source")
+```js
+d3.csvFormatBody([{foo: "1", bar: "2"}]) // "1,2"
+```
+```js
+d3.csvFormatBody([{foo: "1", bar: "2"}], ["foo"]) // "1"
+```
 
-Equivalent to [*dsv*.format](#dsv_format), but omits the header row. This is useful, for example, when appending rows to an existing file.
+[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js) · Equivalent to [*dsv*.format](#dsv_format), but omits the header row. This is useful, for example, when appending rows to an existing file.
 
-### dsv.formatRows(rows)
+## *dsv*.formatRows(*rows*) {#dsv_formatRows}
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js "Source")
+```js
+d3.csvFormatRows([["foo", "bar"], ["1", "2"]]) // "foo,bar\n1,2"
+```
 
-Formats the specified array of array of string *rows* as delimiter-separated values, returning a string. This operation is the reverse of [*dsv*.parseRows](#dsv_parseRows). Each row will be separated by a newline (`\n`), and each column within each row will be separated by the delimiter (such as a comma, `,`). Values that contain either the delimiter, a double-quote (") or a newline will be escaped using double-quotes.
+[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js) · Formats the specified array of array of string *rows* as delimiter-separated values, returning a string. This operation is the reverse of [*dsv*.parseRows](#dsv_parseRows). Each row will be separated by a newline (`\n`), and each column within each row will be separated by the delimiter (such as a comma, `,`). Values that contain either the delimiter, a double-quote (") or a newline will be escaped using double-quotes.
 
 To convert an array of objects to an array of arrays while explicitly specifying the columns, use [*array*.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map). For example:
 
 ```js
 const string = d3.csvFormatRows(data.map((d, i) => {
   return [
-    d.year.getFullYear(), // Assuming d.year is a Date object.
+    d.year.getUTCFullYear(), // Assuming d.year is a Date object.
     d.make,
     d.model,
     d.length
@@ -260,7 +192,7 @@ const string = d3.csvFormatRows([[
     "length"
   ]].concat(data.map((d, i) => {
   return [
-    d.year.getFullYear(), // Assuming d.year is a Date object.
+    d.year.getUTCFullYear(), // Assuming d.year is a Date object.
     d.make,
     d.model,
     d.length
@@ -268,23 +200,81 @@ const string = d3.csvFormatRows([[
 })));
 ```
 
-### dsv.formatRow(row)
+## *dsv*.formatRow(*row*) {#dsv_formatRow}
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js "Source")
+```js
+d3.csvFormatRow(["foo", "bar"]) // "foo,bar"
+```
 
-Formats a single array *row* of strings as delimiter-separated values, returning a string. Each column within the row will be separated by the delimiter (such as a comma, `,`). Values that contain either the delimiter, a double-quote (") or a newline will be escaped using double-quotes.
+[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js) · Formats a single array *row* of strings as delimiter-separated values, returning a string. Each column within the row will be separated by the delimiter (such as a comma, `,`). Values that contain either the delimiter, a double-quote (") or a newline will be escaped using double-quotes.
 
-### dsv.formatValue(value)
+## *dsv*.formatValue(*value*) {#dsv_formatValue}
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js "Source")
+```js
+d3.csvFormatValue("foo") // "foo"
+```
 
-Format a single *value* or string as a delimiter-separated value, returning a string. A value that contains either the delimiter, a double-quote (") or a newline will be escaped using double-quotes.
+[Source](https://github.com/d3/d3-dsv/blob/master/src/dsv.js) · Format a single *value* or string as a delimiter-separated value, returning a string. A value that contains either the delimiter, a double-quote (") or a newline will be escaped using double-quotes.
 
-### d3.autoType(object)
+## csvParse(*string*, *row*) {#csvParse}
 
-[Source](https://github.com/d3/d3-dsv/blob/master/src/autoType.js "Source")
+Equivalent to [`d3.dsvFormat(",").parse`](#dsv_parse).
 
-Given an *object* (or array) representing a parsed row, infers the types of values on the *object* and coerces them accordingly, returning the mutated *object*. This function is intended to be used as a *row* accessor function in conjunction with [*dsv*.parse](#dsv_parse) and [*dsv*.parseRows](#dsv_parseRow). For example, consider the following CSV file:
+## csvParseRows(*string*, *row*) {#csvParseRows}
+
+Equivalent to [`d3.dsvFormat(",").parseRows`](#dsv_parseRows).
+
+## csvFormat(*rows*, *columns*) {#csvFormat}
+
+Equivalent to [`d3.dsvFormat(",").format`](#dsv_format).
+
+## csvFormatBody(*rows*, *columns*) {#csvFormatBody}
+
+Equivalent to [`d3.dsvFormat(",").formatBody`](#dsv_formatBody).
+
+## csvFormatRows(*rows*) {#csvFormatRows}
+
+Equivalent to [`d3.dsvFormat(",").formatRows`](#dsv_formatRows).
+
+## csvFormatRow(*row*) {#csvFormatRow}
+
+Equivalent to [`d3.dsvFormat(",").formatRow`](#dsv_formatRow).
+
+## csvFormatValue(*value*) {#csvFormatValue}
+
+Equivalent to [`d3.dsvFormat(",").formatValue`](#dsv_formatValue).
+
+## tsvParse(*string*, *row*) {#tsvParse}
+
+Equivalent to [`d3.dsvFormat("\t").parse`](#dsv_parse).
+
+## tsvParseRows(*string*, *row*) {#tsvParseRows}
+
+Equivalent to [`d3.dsvFormat("\t").parseRows`](#dsv_parseRows).
+
+## tsvFormat(*rows*, *columns*) {#tsvFormat}
+
+Equivalent to [`d3.dsvFormat("\t").format`](#dsv_format).
+
+## tsvFormatBody(*rows*, *columns*) {#tsvFormatBody}
+
+Equivalent to [`d3.dsvFormat("\t").formatBody`](#dsv_formatBody).
+
+## tsvFormatRows(*rows*) {#tsvFormatRows}
+
+Equivalent to [`d3.dsvFormat("\t").formatRows`](#dsv_formatRows).
+
+## tsvFormatRow(*row*) {#tsvFormatRow}
+
+Equivalent to [`d3.dsvFormat("\t").formatRow`](#dsv_formatRow).
+
+## tsvFormatValue(*value*) {#tsvFormatValue}
+
+Equivalent to [`d3.dsvFormat("\t").formatValue`](#dsv_formatValue).
+
+## autoType(*object*) {#autoType}
+
+[Source](https://github.com/d3/d3-dsv/blob/master/src/autoType.js) · Given an *object* (or array) representing a parsed row, infers the types of values on the *object* and coerces them accordingly, returning the mutated *object*. This function is intended to be used as a *row* accessor function in conjunction with [*dsv*.parse](#dsv_parse) and [*dsv*.parseRows](#dsv_parseRow). For example, consider the following CSV file:
 
 ```
 Year,Make,Model,Length
@@ -336,199 +326,3 @@ DSV files sometimes begin with a [byte order mark (BOM)](https://en.wikipedia.or
 If the BOM is not removed, the first character of the text is a zero-width non-breaking space. So if a CSV file with a BOM is parsed by [d3.csvParse](#csvParse), the first column’s name will begin with a zero-width non-breaking space. This can be hard to spot since this character is usually invisible when printed.
 
 To remove the BOM before parsing, consider using [strip-bom](https://www.npmjs.com/package/strip-bom).
-
-## Command line reference
-
-### dsv2dsv
-
-#### dsv2dsv options… file
-
-Converts the specified DSV input *file* to DSV (typically with a different delimiter or encoding). If *file* is not specified, defaults to reading from stdin. For example, to convert to CSV to TSV:
-
-```
-csv2tsv < example.csv > example.tsv
-```
-
-To convert windows-1252 CSV to utf-8 CSV:
-
-```
-dsv2dsv --input-encoding windows-1252 < latin1.csv > utf8.csv
-```
-
-#### dsv2dsv -h
-
-dsv2dsv <b>--help</b>
-
-Output usage information.
-
-#### dsv2dsv -V
-
-dsv2dsv <b>--version</b>
-
-Output the version number.
-
-#### dsv2dsv -o file
-
-dsv2dsv <b>--out</b> <i>file</i>
-
-Specify the output file name. Defaults to “-” for stdout.
-
-#### dsv2dsv -r delimiter
-
-dsv2dsv <b>--input-delimiter</b> <i>delimiter</i>
-
-Specify the input delimiter character. Defaults to “,” for reading CSV. (You can enter a tab on the command line by typing ⌃V.)
-
-#### dsv2dsv --input-encoding encoding
-
-Specify the input character encoding. Defaults to “utf8”.
-
-#### dsv2dsv -w delimiter
-
-dsv2dsv <b>--output-delimiter</b> <i>delimiter</i>
-
-Specify the output delimiter character. Defaults to “,” for writing CSV. (You can enter a tab on the command line by typing ⌃V.)
-
-#### dsv2dsv --output-encoding encoding
-
-Specify the output character encoding. Defaults to “utf8”.
-
-#### csv2tsv options… file
-
-Equivalent to [dsv2dsv](#dsv2dsv), but the [output delimiter](#dsv2dsv_output_delimiter) defaults to the tab character (\t).
-
-#### tsv2csv options… file
-
-Equivalent to [dsv2dsv](#dsv2dsv), but the [input delimiter](#dsv2dsv_output_delimiter) defaults to the tab character (\t).
-
-### dsv2json
-
-#### dsv2json options… file
-
-Converts the specified DSV input *file* to JSON. If *file* is not specified, defaults to reading from stdin. For example, to convert to CSV to JSON:
-
-```
-csv2json < example.csv > example.json
-```
-
-Or to convert CSV to a newline-delimited JSON stream:
-
-```
-csv2json -n < example.csv > example.ndjson
-```
-
-#### dsv2json -h
-
-dsv2json <b>--help</b>
-
-Output usage information.
-
-#### dsv2json -V
-
-dsv2json <b>--version</b>
-
-Output the version number.
-
-#### dsv2json -o file
-
-dsv2json <b>--out</b> <i>file</i>
-
-Specify the output file name. Defaults to “-” for stdout.
-
-#### dsv2json -a
-
-dsv2json <b>--auto-type</b>
-
-Use type inference when parsing rows. See <a href="#autoType">d3.autoType</a> for how it works.
-
-#### dsv2json -r delimiter
-
-dsv2json <b>--input-delimiter</b> <i>delimiter</i>
-
-Specify the input delimiter character. Defaults to “,” for reading CSV. (You can enter a tab on the command line by typing ⌃V.)
-
-#### dsv2json --input-encoding encoding
-
-Specify the input character encoding. Defaults to “utf8”.
-
-#### dsv2json -r encoding
-
-dsv2json <b>--output-encoding</b> <i>encoding</i>
-
-Specify the output character encoding. Defaults to “utf8”.
-
-#### dsv2json -n
-
-dsv2json <b>--newline-delimited</b>
-
-Output [newline-delimited JSON](https://github.com/mbostock/ndjson-cli) instead of a single JSON array.
-
-#### csv2json options… file
-
-Equivalent to [dsv2json](#dsv2json).
-
-#### tsv2json options… file
-
-Equivalent to [dsv2json](#dsv2json), but the [input delimiter](#dsv2json_input_delimiter) defaults to the tab character (\t).
-
-### json2dsv
-
-#### json2dsv options… file
-
-Converts the specified JSON input *file* to DSV. If *file* is not specified, defaults to reading from stdin. For example, to convert to JSON to CSV:
-
-```
-json2csv < example.json > example.csv
-```
-
-Or to convert a newline-delimited JSON stream to CSV:
-
-```
-json2csv -n < example.ndjson > example.csv
-```
-
-#### json2dsv -h
-
-json2dsv <b>--help</b>
-
-Output usage information.
-
-#### json2dsv -V
-
-json2dsv <b>--version</b>
-
-Output the version number.
-
-#### json2dsv -o file
-
-json2dsv <b>--out</b> <i>file</i>
-
-Specify the output file name. Defaults to “-” for stdout.
-
-#### json2dsv --input-encoding encoding
-
-Specify the input character encoding. Defaults to “utf8”.
-
-#### json2dsv -w delimiter
-
-json2dsv <b>--output-delimiter</b> <i>delimiter</i>
-
-Specify the output delimiter character. Defaults to “,” for writing CSV. (You can enter a tab on the command line by typing ⌃V.)
-
-#### json2dsv --output-encoding encoding
-
-Specify the output character encoding. Defaults to “utf8”.
-
-#### json2dsv -n
-
-json2dsv <b>--newline-delimited</b>
-
-Read [newline-delimited JSON](https://github.com/mbostock/ndjson-cli) instead of a single JSON array.
-
-#### json2csv options… file
-
-Equivalent to [json2dsv](#json2dsv).
-
-#### json2tsv options… file
-
-Equivalent to [json2dsv](#json2dsv), but the [output delimiter](#json2dsv_output_delimiter) defaults to the tab character (\t).
