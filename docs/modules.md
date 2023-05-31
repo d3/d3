@@ -103,30 +103,30 @@ Sort and reorder arrays of values.
 
 Compute summary statistics.
 
-* [d3.count](./d3-array/group.md#count) - count valid number values in an iterable.
-* [d3.min](./d3-array/group.md#min) - compute the minimum value in an iterable.
-* [d3.minIndex](./d3-array/search.md#minIndex) - compute the index of the minimum value in an iterable.
-* [d3.max](./d3-array/group.md#max) - compute the maximum value in an iterable.
-* [d3.maxIndex](./d3-array/search.md#maxIndex) - compute the index of the maximum value in an iterable.
-* [d3.least](./d3-array/search.md#least) - returns the least element of an iterable.
-* [d3.leastIndex](./d3-array/search.md#leastIndex) - returns the index of the least element of an iterable.
-* [d3.greatest](./d3-array/search.md#greatest) - returns the greatest element of an iterable.
-* [d3.greatestIndex](./d3-array/search.md#greatestIndex) - returns the index of the greatest element of an iterable.
-* [d3.extent](./d3-array/group.md#extent) - compute the minimum and maximum value in an iterable.
-* [d3.mode](./d3-array/group.md#mode) - compute the mode (the most common value) of an iterable of numbers.
-* [d3.sum](./d3-array/group.md#sum) - compute the sum of an iterable of numbers.
-* [d3.mean](./d3-array/group.md#mean) - compute the arithmetic mean of an iterable of numbers.
-* [d3.median](./d3-array/group.md#median) - compute the median of an iterable of numbers (the 0.5-quantile).
-* [d3.medianIndex](./d3-array/group.md#median) - compute the median index of an iterable of numbers (the 0.5-quantile).
-* [d3.cumsum](./d3-array/group.md#cumsum) - compute the cumulative sum of an iterable.
-* [d3.quantile](./d3-array/group.md#quantile) - compute a quantile for an iterable of numbers.
-* [d3.quantileIndex](./d3-array/group.md#quantileIndex) - compute a quantile index for an iterable of numbers.
-* [d3.quantileSorted](./d3-array/group.md#quantileSorted) - compute a quantile for a sorted array of numbers.
-* [d3.rank](./d3-array/group.md#rank) - compute the rank order of an iterable.
-* [d3.variance](./d3-array/group.md#variance) - compute the variance of an iterable of numbers.
-* [d3.deviation](./d3-array/group.md#deviation) - compute the standard deviation of an iterable of numbers.
-* [d3.every](./d3-array/group.md#every) - test if all values satisfy a condition.
-* [d3.some](./d3-array/group.md#some) - test if any value satisfies a condition.
+* [d3.count](./d3-array/summarize.md#count) - count valid number values in an iterable.
+* [d3.min](./d3-array/summarize.md#min) - compute the minimum value in an iterable.
+* [d3.minIndex](./d3-array/summarize.md#minIndex) - compute the index of the minimum value in an iterable.
+* [d3.max](./d3-array/summarize.md#max) - compute the maximum value in an iterable.
+* [d3.maxIndex](./d3-array/summarize.md#maxIndex) - compute the index of the maximum value in an iterable.
+* [d3.least](./d3-array/summarize.md#least) - returns the least element of an iterable.
+* [d3.leastIndex](./d3-array/summarize.md#leastIndex) - returns the index of the least element of an iterable.
+* [d3.greatest](./d3-array/summarize.md#greatest) - returns the greatest element of an iterable.
+* [d3.greatestIndex](./d3-array/summarize.md#greatestIndex) - returns the index of the greatest element of an iterable.
+* [d3.extent](./d3-array/summarize.md#extent) - compute the minimum and maximum value in an iterable.
+* [d3.mode](./d3-array/summarize.md#mode) - compute the mode (the most common value) of an iterable of numbers.
+* [d3.sum](./d3-array/summarize.md#sum) - compute the sum of an iterable of numbers.
+* [d3.mean](./d3-array/summarize.md#mean) - compute the arithmetic mean of an iterable of numbers.
+* [d3.median](./d3-array/summarize.md#median) - compute the median of an iterable of numbers (the 0.5-quantile).
+* [d3.medianIndex](./d3-array/summarize.md#median) - compute the median index of an iterable of numbers (the 0.5-quantile).
+* [d3.cumsum](./d3-array/summarize.md#cumsum) - compute the cumulative sum of an iterable.
+* [d3.quantile](./d3-array/summarize.md#quantile) - compute a quantile for an iterable of numbers.
+* [d3.quantileIndex](./d3-array/summarize.md#quantileIndex) - compute a quantile index for an iterable of numbers.
+* [d3.quantileSorted](./d3-array/summarize.md#quantileSorted) - compute a quantile for a sorted array of numbers.
+* [d3.rank](./d3-array/summarize.md#rank) - compute the rank order of an iterable.
+* [d3.variance](./d3-array/summarize.md#variance) - compute the variance of an iterable of numbers.
+* [d3.deviation](./d3-array/summarize.md#deviation) - compute the standard deviation of an iterable of numbers.
+* [d3.every](./d3-array/summarize.md#every) - test if all values satisfy a condition.
+* [d3.some](./d3-array/summarize.md#some) - test if any value satisfies a condition.
 
 ### [Ticks](./d3-array/ticks.md)
 
