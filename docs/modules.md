@@ -1349,38 +1349,72 @@ A calculator for humanity’s peculiar conventions of time.
 * [*interval*.filter](./d3-time.md#interval_filter) - create a filtered subset of this interval.
 * [*interval*.every](./d3-time.md#interval_every) - create a filtered subset of this interval.
 * [*interval*.count](./d3-time.md#interval_count) - count interval boundaries between two dates.
-* [d3.timeMillisecond](./d3-time.md#timeMillisecond), [d3.utcMillisecond](./d3-time.md#timeMillisecond) - the millisecond interval.
-* [d3.timeMilliseconds](./d3-time.md#timeMillisecond), [d3.utcMilliseconds](./d3-time.md#timeMillisecond) - aliases for millisecond.range.
-* [d3.timeSecond](./d3-time.md#timeSecond), [d3.utcSecond](./d3-time.md#timeSecond) - the second interval.
-* [d3.timeSeconds](./d3-time.md#timeSecond), [d3.utcSeconds](./d3-time.md#timeSecond) - aliases for second.range.
-* [d3.timeMinute](./d3-time.md#timeMinute), [d3.utcMinute](./d3-time.md#timeMinute) - the minute interval.
-* [d3.timeMinutes](./d3-time.md#timeMinute), [d3.utcMinutes](./d3-time.md#timeMinute) - aliases for minute.range.
-* [d3.timeHour](./d3-time.md#timeHour), [d3.utcHour](./d3-time.md#timeHour) - the hour interval.
-* [d3.timeHours](./d3-time.md#timeHour), [d3.utcHours](./d3-time.md#timeHour) - aliases for hour.range.
-* [d3.timeDay](./d3-time.md#timeDay), [d3.utcDay](./d3-time.md#timeDay), [d3.unixDay](./d3-time.md#timeDay) - the day interval.
-* [d3.timeDays](./d3-time.md#timeDay), [d3.utcDays](./d3-time.md#timeDay), [d3.unixDays](./d3-time.md#timeDay) - aliases for day.range.
-* [d3.timeWeek](./d3-time.md#timeWeek), [d3.utcWeek](./d3-time.md#timeWeek) - aliases for sunday.
-* [d3.timeWeeks](./d3-time.md#timeWeek), [d3.utcWeeks](./d3-time.md#timeWeek) - aliases for week.range.
-* [d3.timeSunday](./d3-time.md#timeSunday), [d3.utcSunday](./d3-time.md#timeSunday) - the week interval, starting on Sunday.
-* [d3.timeSundays](./d3-time.md#timeSunday), [d3.utcSundays](./d3-time.md#timeSunday) - aliases for sunday.range.
-* [d3.timeMonday](./d3-time.md#timeMonday), [d3.utcMonday](./d3-time.md#timeMonday) - the week interval, starting on Monday.
-* [d3.timeMondays](./d3-time.md#timeMonday), [d3.utcMondays](./d3-time.md#timeMonday) - aliases for monday.range.
-* [d3.timeTuesday](./d3-time.md#timeTuesday), [d3.utcTuesday](./d3-time.md#timeTuesday) - the week interval, starting on Tuesday.
-* [d3.timeTuesdays](./d3-time.md#timeTuesday), [d3.utcTuesdays](./d3-time.md#timeTuesday) - aliases for tuesday.range.
-* [d3.timeWednesday](./d3-time.md#timeWednesday), [d3.utcWednesday](./d3-time.md#timeWednesday) - the week interval, starting on Wednesday.
-* [d3.timeWednesdays](./d3-time.md#timeWednesday), [d3.utcWednesdays](./d3-time.md#timeWednesday) - aliases for wednesday.range.
-* [d3.timeThursday](./d3-time.md#timeThursday), [d3.utcThursday](./d3-time.md#timeThursday) - the week interval, starting on Thursday.
-* [d3.timeThursdays](./d3-time.md#timeThursday), [d3.utcThursdays](./d3-time.md#timeThursday) - aliases for thursday.range.
-* [d3.timeFriday](./d3-time.md#timeFriday), [d3.utcFriday](./d3-time.md#timeFriday) - the week interval, starting on Friday.
-* [d3.timeFridays](./d3-time.md#timeFriday), [d3.utcFridays](./d3-time.md#timeFriday) - aliases for friday.range.
-* [d3.timeSaturday](./d3-time.md#timeSaturday), [d3.utcSaturday](./d3-time.md#timeSaturday) - the week interval, starting on Saturday.
-* [d3.timeSaturdays](./d3-time.md#timeSaturday), [d3.utcSaturdays](./d3-time.md#timeSaturday) - aliases for saturday.range.
-* [d3.timeMonth](./d3-time.md#timeMonth), [d3.utcMonth](./d3-time.md#timeMonth) - the month interval.
-* [d3.timeMonths](./d3-time.md#timeMonth), [d3.utcMonths](./d3-time.md#timeMonth) - aliases for month.range.
-* [d3.timeYear](./d3-time.md#timeYear), [d3.utcYear](./d3-time.md#timeYear) - the year interval.
-* [d3.timeYears](./d3-time.md#timeYear), [d3.utcYears](./d3-time.md#timeYear) - aliases for year.range.
-* [d3.timeTicks](./d3-time.md#timeTicks), [d3.utcTicks](./d3-time.md#utcTicks) -
-* [d3.timeTickInterval](./d3-time.md#timeTickInterval), [d3.utcTickInterval](./d3-time.md#utcTickInterval) -
+* [d3.timeMillisecond](./d3-time.md#timeMillisecond) - the millisecond interval, local time.
+* [d3.timeSecond](./d3-time.md#timeSecond) - the second interval, local time.
+* [d3.timeMinute](./d3-time.md#timeMinute) - the minute interval, local time.
+* [d3.timeHour](./d3-time.md#timeHour) - the hour interval, local time.
+* [d3.timeDay](./d3-time.md#timeDay) - the day interval, local time.
+* [d3.timeWeek](./d3-time.md#timeWeek) - the Sunday-based week interval, local time.
+* [d3.timeSunday](./d3-time.md#timeSunday) - the Sunday-based week interval, local time.
+* [d3.timeMonday](./d3-time.md#timeMonday) - the Monday-based week interval, local time.
+* [d3.timeTuesday](./d3-time.md#timeTuesday) - the Tuesday-based week interval, local time.
+* [d3.timeWednesday](./d3-time.md#timeWednesday) - the Wednesday-based week interval, local time.
+* [d3.timeThursday](./d3-time.md#timeThursday) - the Thursday-based week interval, local time.
+* [d3.timeFriday](./d3-time.md#timeFriday) - the Friday-based week interval, local time.
+* [d3.timeSaturday](./d3-time.md#timeSaturday) - the Saturday-based week interval, local time.
+* [d3.timeMonth](./d3-time.md#timeMonth) - the month interval, local time.
+* [d3.timeYear](./d3-time.md#timeYear) - the year interval, local time.
+* [d3.utcMillisecond](./d3-time.md#timeMillisecond) - the millisecond interval, UTC time.
+* [d3.utcSecond](./d3-time.md#timeSecond) - the second interval, UTC time.
+* [d3.utcMinute](./d3-time.md#timeMinute) - the minute interval, UTC time.
+* [d3.utcHour](./d3-time.md#timeHour) - the hour interval, UTC time.
+* [d3.utcDay](./d3-time.md#timeDay) - the day interval, UTC time.
+* [d3.utcWeek](./d3-time.md#timeWeek) - the Sunday-based week interval, UTC time.
+* [d3.utcSunday](./d3-time.md#timeSunday) - the Sunday-based week interval, UTC time.
+* [d3.utcMonday](./d3-time.md#timeMonday) - the Monday-based week interval, UTC time.
+* [d3.utcTuesday](./d3-time.md#timeTuesday) - the Tuesday-based week interval, UTC time.
+* [d3.utcWednesday](./d3-time.md#timeWednesday) - the Wednesday-based week interval, UTC time.
+* [d3.utcThursday](./d3-time.md#timeThursday) - the Thursday-based week interval, UTC time.
+* [d3.utcFriday](./d3-time.md#timeFriday) - the Friday-based week interval, UTC time.
+* [d3.utcSaturday](./d3-time.md#timeSaturday) - the Saturday-based week interval, UTC time.
+* [d3.utcMonth](./d3-time.md#timeMonth) - the month interval, UTC time.
+* [d3.utcYear](./d3-time.md#timeYear) - the year interval, UTC time.
+* [d3.unixDay](./d3-time.md#timeDay) - the day interval, UTC time, not month-aligned.
+* [d3.timeMilliseconds](./d3-time.md#timeMilliseconds) - alias for d3.timeMillisecond.range.
+* [d3.timeSeconds](./d3-time.md#timeSeconds) - alias for d3.timeSecond.range.
+* [d3.timeMinutes](./d3-time.md#timeMinutes) - alias for d3.timeMinute.range.
+* [d3.timeHours](./d3-time.md#timeHours) - alias for d3.timeHour.range.
+* [d3.timeDays](./d3-time.md#timeDay) - alias for d3.timeDay.range.
+* [d3.timeWeeks](./d3-time.md#timeWeek) - alias for d3.timeWeek.range.
+* [d3.timeSundays](./d3-time.md#timeSunday) - alias for d3.timeSunday.range.
+* [d3.timeMondays](./d3-time.md#timeMonday) - alias for d3.timeMonday.range.
+* [d3.timeTuesdays](./d3-time.md#timeTuesday) - alias for d3.timeTuesday.range.
+* [d3.timeWednesdays](./d3-time.md#timeWednesday) - alias for d3.timeWednesday.range.
+* [d3.timeThursdays](./d3-time.md#timeThursday) - alias for d3.timeThursday.range.
+* [d3.timeFridays](./d3-time.md#timeFriday) - alias for d3.timeFriday.range.
+* [d3.timeSaturdays](./d3-time.md#timeSaturday) - alias for d3.timeSaturday.range.
+* [d3.timeMonths](./d3-time.md#timeMonth) - alias for d3.timeMonth.range.
+* [d3.timeYears](./d3-time.md#timeYear) - alias for d3.timeYear.range.
+* [d3.utcMilliseconds](./d3-time.md#timeMillisecond) - alias for d3.utcMillisecond.range.
+* [d3.utcSeconds](./d3-time.md#timeSecond) - alias for d3.utcSecond.range.
+* [d3.utcMinutes](./d3-time.md#timeMinute) - alias for d3.utcMinute.range.
+* [d3.utcHours](./d3-time.md#timeHour) - alias for d3.utcHour.range.
+* [d3.utcDays](./d3-time.md#timeDay) - alias for d3.utcDay.range.
+* [d3.utcWeeks](./d3-time.md#timeWeek) - alias for d3.utcWeek.range.
+* [d3.utcSundays](./d3-time.md#timeSunday) - alias for d3.utcSunday.range.
+* [d3.utcMondays](./d3-time.md#timeMonday) - alias for d3.utcMonday.range.
+* [d3.utcTuesdays](./d3-time.md#timeTuesday) - alias for d3.utcTuesday.range.
+* [d3.utcWednesdays](./d3-time.md#timeWednesday) - alias for d3.utcWednesday.range.
+* [d3.utcThursdays](./d3-time.md#timeThursday) - alias for d3.utcThursday.range.
+* [d3.utcFridays](./d3-time.md#timeFriday) - alias for d3.utcFriday.range.
+* [d3.utcSaturdays](./d3-time.md#timeSaturday) - alias for d3.utcSaturday.range.
+* [d3.utcMonths](./d3-time.md#timeMonth) - alias for d3.utcMonth.range.
+* [d3.utcYears](./d3-time.md#timeYear) - alias for d3.utcYear.range.
+* [d3.unixDays](./d3-time.md#timeDay) - alias for d3.unixDay.range.
+* [d3.timeTicks](./d3-time.md#timeTicks) - generate representative values from a time interval.
+* [d3.utcTicks](./d3-time.md#utcTicks) - generate representative values from a time interval.
+* [d3.timeTickInterval](./d3-time.md#timeTickInterval) - generate representative values from a time interval.
+* [d3.utcTickInterval](./d3-time.md#utcTickInterval) - generate representative values from a time interval.
 
 ## [d3-timer](./d3-timer.md)
 
