@@ -166,7 +166,7 @@ d3.interpolateZoom([30, 30, 40], [135, 85, 60])(0.5) // [72, 52, 126.04761005270
 
 The returned interpolator exposes a *duration* property which encodes the recommended transition duration in milliseconds. This duration is based on the path length of the curved trajectory through *x,y* space. If you want a slower or faster transition, multiply this by an arbitrary scale factor (<i>V</i> as described in the original paper).
 
-## *interpolateZoom*.rho(*rho*)
+## *interpolateZoom*.rho(*rho*) {#interpolateZoom_rho}
 
 ```js
 d3.interpolateZoom.rho(0.5)([30, 30, 40], [135, 85, 60])(0.5) // [72, 52, 51.09549882328188]
@@ -304,7 +304,7 @@ d3.interpolateCubehelixLong.gamma(3)("purple", "orange")
 
 [Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/cubehelix.js) · Like [interpolateCubehelix](#interpolateCubehelix), but does not use the shortest path between hues.
 
-## *interpolateColor*.gamma(*gamma*)
+## *interpolateColor*.gamma(*gamma*) {#interpolateColor_gamma}
 
 <ColorRamp n="256" :color="d3.interpolateRgb.gamma(2.2)('purple', 'orange')" />
 
