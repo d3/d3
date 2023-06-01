@@ -1,0 +1,79 @@
+# d3-scale: Point scales
+
+Point scales are a variant of [band scales](#band-scales) with the bandwidth fixed to zero. Point scales are typically used for scatterplots with an ordinal or categorical dimension. The [unknown value](#ordinal_unknown) of a point scale is always undefined: they do not allow implicit domain construction.
+
+<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/point.png" width="648" height="155" alt="point">
+
+### d3.scalePoint(domain, range)
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+Constructs a new point scale with the specified [*domain*](#point_domain) and [*range*](#point_range), no [padding](#point_padding), no [rounding](#point_round) and center [alignment](#point_align). If *domain* is not specified, it defaults to the empty domain. If *range* is not specified, it defaults to the unit range [0, 1].
+
+### point(value)
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+Given a *value* in the input [domain](#point_domain), returns the corresponding point derived from the output [range](#point_range). If the given *value* is not in the scale’s domain, returns undefined.
+
+### point.domain(domain)
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+If *domain* is specified, sets the domain to the specified array of values. The first element in *domain* will be mapped to the first point, the second domain value to the second point, and so on. Domain values are stored internally in an [InternMap](https://github.com/mbostock/internmap) from primitive value to index; the resulting index is then used to determine the point. Thus, a point scale’s values must be coercible to a primitive value, and the primitive domain value uniquely identifies the corresponding point. If *domain* is not specified, this method returns the current domain.
+
+### point.range(range)
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+If *range* is specified, sets the scale’s range to the specified two-element array of numbers. If the elements in the given array are not numbers, they will be coerced to numbers. If *range* is not specified, returns the scale’s current range, which defaults to [0, 1].
+
+### point.rangeRound(range)
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+Sets the scale’s [*range*](#point_range) to the specified two-element array of numbers while also enabling [rounding](#point_round). This is a convenience method equivalent to:
+
+```js
+point
+    .range(range)
+    .round(true);
+```
+
+Rounding is sometimes useful for avoiding antialiasing artifacts, though also consider the [shape-rendering](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering) “crispEdges” styles.
+
+### point.round(round)
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+If *round* is specified, enables or disables rounding accordingly. If rounding is enabled, the position of each point will be integers. Rounding is sometimes useful for avoiding antialiasing artifacts, though also consider the [shape-rendering](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering) “crispEdges” styles. Note that if the width of the domain is not a multiple of the cardinality of the range, there may be leftover unused space, even without padding! Use [*point*.align](#point_align) to specify how the leftover space is distributed.
+
+### point.padding(padding)
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+If *padding* is specified, sets the outer padding to the specified number which is typically in the range [0, 1]. If *padding* is not specified, returns the current outer padding which defaults to 0. The outer padding specifies the amount of blank space, in terms of multiples of the [step](#band_step), to reserve before the first point and after the last point. Equivalent to [*band*.paddingOuter](#band_paddingOuter).
+
+### point.align(align)
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+If *align* is specified, sets the alignment to the specified value which must be in the range [0, 1]. If *align* is not specified, returns the current alignment which defaults to 0.5. The alignment specifies how any leftover unused space in the range is distributed. A value of 0.5 indicates that the leftover space should be equally distributed before the first point and after the last point; *i.e.*, the points should be centered within the range. A value of 0 or 1 may be used to shift the points to one side, say to position them adjacent to an axis.
+
+### point.bandwidth()
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+Returns zero.
+
+### point.step()
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+Returns the distance between the starts of adjacent points.
+
+### point.copy()
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/band.js), [Examples](https://observablehq.com/@d3/d3-scalepoint)
+
+Returns an exact copy of this scale. Changes to this scale will not affect the returned scale, and vice versa.

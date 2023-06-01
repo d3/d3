@@ -890,169 +890,193 @@ Color ramps and palettes for quantitative, ordinal and categorical scales.
 
 Encodings that map abstract data to visual representation.
 
-### [Continuous Scales](./d3-scale.md#continuous-scales)
+### [Linear scales](./d3-scale/linear.md)
 
 Map a continuous, quantitative domain to a continuous range.
 
-* [*continuous*](./d3-scale.md#_continuous) - compute the range value corresponding to a given domain value.
-* [*continuous*.invert](./d3-scale.md#continuous_invert) - compute the domain value corresponding to a given range value.
-* [*continuous*.domain](./d3-scale.md#continuous_domain) - set the input domain.
-* [*continuous*.range](./d3-scale.md#continuous_range) - set the output range.
-* [*continuous*.rangeRound](./d3-scale.md#continuous_rangeRound) - set the output range and enable rounding.
-* [*continuous*.clamp](./d3-scale.md#continuous_clamp) - enable clamping to the domain or range.
-* [*continuous*.unknown](./d3-scale.md#continuous_unknown) - set the output value for unknown inputs.
-* [*continuous*.interpolate](./d3-scale.md#continuous_interpolate) - set the output interpolator.
-* [*continuous*.ticks](./d3-scale.md#continuous_ticks) - compute representative values from the domain.
-* [*continuous*.tickFormat](./d3-scale.md#continuous_tickFormat) - format ticks for human consumption.
-* [*continuous*.nice](./d3-scale.md#continuous_nice) - extend the domain to nice round numbers.
-* [*continuous*.copy](./d3-scale.md#continuous_copy) - create a copy of this scale.
-* [d3.tickFormat](./d3-scale.md#tickFormat) - format ticks for human consumption.
-* [d3.scaleLinear](./d3-scale.md#scaleLinear) - create a quantitative linear scale.
-* [d3.scalePow](./d3-scale.md#scalePow) - create a quantitative power scale.
-* [*pow*](./d3-scale.md#_pow) - compute the range value corresponding to a given domain value.
-* [*pow*.invert](./d3-scale.md#pow_invert) - compute the domain value corresponding to a given range value.
-* [*pow*.exponent](./d3-scale.md#pow_exponent) - set the power exponent.
-* [*pow*.domain](./d3-scale.md#pow_domain) - set the input domain.
-* [*pow*.range](./d3-scale.md#pow_range) - set the output range.
-* [*pow*.rangeRound](./d3-scale.md#pow_rangeRound) - set the output range and enable rounding.
-* [*pow*.clamp](./d3-scale.md#pow_clamp) - enable clamping to the domain or range.
-* [*pow*.interpolate](./d3-scale.md#pow_interpolate) - set the output interpolator.
-* [*pow*.ticks](./d3-scale.md#pow_ticks) - compute representative values from the domain.
-* [*pow*.tickFormat](./d3-scale.md#pow_tickFormat) - format ticks for human consumption.
-* [*pow*.nice](./d3-scale.md#pow_nice) - extend the domain to nice round numbers.
-* [*pow*.copy](./d3-scale.md#pow_copy) - create a copy of this scale.
-* [d3.scaleSqrt](./d3-scale.md#scaleSqrt) - create a quantitative power scale with exponent 0.5.
-* [d3.scaleLog](./d3-scale.md#scaleLog) - create a quantitative logarithmic scale.
-* [*log*](./d3-scale.md#_log) - compute the range value corresponding to a given domain value.
-* [*log*.invert](./d3-scale.md#log_invert) - compute the domain value corresponding to a given range value.
-* [*log*.base](./d3-scale.md#log_base) - set the logarithm base.
-* [*log*.domain](./d3-scale.md#log_domain) - set the input domain.
-* [*log*.range](./d3-scale.md#log_range) - set the output range.
-* [*log*.rangeRound](./d3-scale.md#log_rangeRound) - set the output range and enable rounding.
-* [*log*.clamp](./d3-scale.md#log_clamp) - enable clamping to the domain or range.
-* [*log*.interpolate](./d3-scale.md#log_interpolate) - set the output interpolator.
-* [*log*.ticks](./d3-scale.md#log_ticks) - compute representative values from the domain.
-* [*log*.tickFormat](./d3-scale.md#log_tickFormat) - format ticks for human consumption.
-* [*log*.nice](./d3-scale.md#log_nice) - extend the domain to nice round numbers.
-* [*log*.copy](./d3-scale.md#log_copy) - create a copy of this scale.
-* [d3.scaleSymlog](./d3-scale.md#scaleSymlog) - create a symmetric logarithmic scale.
-* [*symlog*.constant](./d3-scale.md#symlog_constant) - set the constant of a symlog scale.
-* [d3.scaleIdentity](./d3-scale.md#scaleIdentity) - creates an identity scale.
-* [d3.scaleRadial](./d3-scale.md#scaleRadial) - creates a radial scale.
-* [d3.scaleTime](./d3-scale.md#scaleTime) - create a linear scale for time.
-* [*time*](./d3-scale.md#_time) - compute the range value corresponding to a given domain value.
-* [*time*.invert](./d3-scale.md#time_invert) - compute the domain value corresponding to a given range value.
-* [*time*.domain](./d3-scale.md#time_domain) - set the input domain.
-* [*time*.range](./d3-scale.md#time_range) - set the output range.
-* [*time*.rangeRound](./d3-scale.md#time_rangeRound) - set the output range and enable rounding.
-* [*time*.clamp](./d3-scale.md#time_clamp) - enable clamping to the domain or range.
-* [*time*.interpolate](./d3-scale.md#time_interpolate) - set the output interpolator.
-* [*time*.ticks](./d3-scale.md#time_ticks) - compute representative values from the domain.
-* [*time*.tickFormat](./d3-scale.md#time_tickFormat) - format ticks for human consumption.
-* [*time*.nice](./d3-scale.md#time_nice) - extend the domain to nice round times.
-* [*time*.copy](./d3-scale.md#time_copy) - create a copy of this scale.
-* [d3.scaleUtc](./d3-scale.md#scaleUtc) - create a linear scale for UTC.
+* [d3.scaleLinear](./d3-scale/linear.md#scaleLinear) - create a quantitative linear scale.
+* [*linear*](./d3-scale/linear.md#_linear) - compute the range value corresponding to a given domain value.
+* [*linear*.invert](./d3-scale/linear.md#linear_invert) - compute the domain value corresponding to a given range value.
+* [*linear*.domain](./d3-scale/linear.md#linear_domain) - set the input domain.
+* [*linear*.range](./d3-scale/linear.md#linear_range) - set the output range.
+* [*linear*.rangeRound](./d3-scale/linear.md#linear_rangeRound) - set the output range and enable rounding.
+* [*linear*.clamp](./d3-scale/linear.md#linear_clamp) - enable clamping to the domain or range.
+* [*linear*.unknown](./d3-scale/linear.md#linear_unknown) - set the output value for unknown inputs.
+* [*linear*.interpolate](./d3-scale/linear.md#linear_interpolate) - set the output interpolator.
+* [*linear*.ticks](./d3-scale/linear.md#linear_ticks) - compute representative values from the domain.
+* [*linear*.tickFormat](./d3-scale/linear.md#linear_tickFormat) - format ticks for human consumption.
+* [*linear*.nice](./d3-scale/linear.md#linear_nice) - extend the domain to nice round numbers.
+* [*linear*.copy](./d3-scale/linear.md#linear_copy) - create a copy of this scale.
+* [d3.tickFormat](./d3-scale/linear.md#tickFormat) - format ticks for human consumption.
+* [d3.scaleIdentity](./d3-scale/linear.md#scaleIdentity) - creates an identity scale.
+* [d3.scaleRadial](./d3-scale/linear.md#scaleRadial) - creates a radial scale.
 
-### [Sequential Scales](./d3-scale.md#sequential-scales)
+### [Pow scales](./d3-scale/pow.md)
 
-Map a continuous, quantitative domain to a continuous, fixed interpolator.
+* [d3.scalePow](./d3-scale/pow.md#scalePow) - create a quantitative power scale.
+* [*pow*](./d3-scale/pow.md#_pow) - compute the range value corresponding to a given domain value.
+* [*pow*.invert](./d3-scale/pow.md#pow_invert) - compute the domain value corresponding to a given range value.
+* [*pow*.exponent](./d3-scale/pow.md#pow_exponent) - set the power exponent.
+* [*pow*.domain](./d3-scale/pow.md#pow_domain) - set the input domain.
+* [*pow*.range](./d3-scale/pow.md#pow_range) - set the output range.
+* [*pow*.rangeRound](./d3-scale/pow.md#pow_rangeRound) - set the output range and enable rounding.
+* [*pow*.clamp](./d3-scale/pow.md#pow_clamp) - enable clamping to the domain or range.
+* [*pow*.interpolate](./d3-scale/pow.md#pow_interpolate) - set the output interpolator.
+* [*pow*.ticks](./d3-scale/pow.md#pow_ticks) - compute representative values from the domain.
+* [*pow*.tickFormat](./d3-scale/pow.md#pow_tickFormat) - format ticks for human consumption.
+* [*pow*.nice](./d3-scale/pow.md#pow_nice) - extend the domain to nice round numbers.
+* [*pow*.copy](./d3-scale/pow.md#pow_copy) - create a copy of this scale.
+* [d3.scaleSqrt](./d3-scale/pow.md#scaleSqrt) - create a quantitative power scale with exponent 0.5.
 
-* [d3.scaleSequential](./d3-scale.md#scaleSequential) - create a sequential scale.
-* [*sequential*](./d3-scale.md#_sequential) - compute the range value corresponding to an input value.
-* [*sequential*.domain](./d3-scale.md#sequential_domain) - set the input domain.
-* [*sequential*.clamp](./d3-scale.md#sequential_clamp) - enable clamping to the domain.
-* [*sequential*.interpolator](./d3-scale.md#sequential_interpolator) - set the scale’s output interpolator.
-* [*sequential*.range](./d3-scale.md#sequential_range) - set the output range.
-* [*sequential*.rangeRound](./d3-scale.md#sequential_rangeRound) - set the output range and enable rounding.
-* [*sequential*.copy](./d3-scale.md#sequential_copy) -  create a copy of this scale.
-* [d3.scaleSequentialLog](./d3-scale.md#scaleSequentialLog) - create a logarithmic sequential scale.
-* [d3.scaleSequentialPow](./d3-scale.md#scaleSequentialPow) - create a power sequential scale.
-* [d3.scaleSequentialSqrt](./d3-scale.md#scaleSequentialSqrt) - create a power sequential scale with exponent 0.5.
-* [d3.scaleSequentialSymlog](./d3-scale.md#scaleSequentialSymlog) - create a symmetric logarithmic sequential scale.
-* [d3.scaleSequentialQuantile](./d3-scale.md#scaleSequentialQuantile) - create a sequential scale using a *p*-quantile transform.
-* [*sequentialQuantile*.quantiles](./d3-scale.md#sequentialQuantile_quantiles) - return the scale’s quantiles.
+### [Log scales](./d3-scale/log.md)
 
-### [Diverging Scales](./d3-scale.md#diverging-scales)
+* [d3.scaleLog](./d3-scale/log.md#scaleLog) - create a quantitative logarithmic scale.
+* [*log*](./d3-scale/log.md#_log) - compute the range value corresponding to a given domain value.
+* [*log*.invert](./d3-scale/log.md#log_invert) - compute the domain value corresponding to a given range value.
+* [*log*.base](./d3-scale/log.md#log_base) - set the logarithm base.
+* [*log*.domain](./d3-scale/log.md#log_domain) - set the input domain.
+* [*log*.range](./d3-scale/log.md#log_range) - set the output range.
+* [*log*.rangeRound](./d3-scale/log.md#log_rangeRound) - set the output range and enable rounding.
+* [*log*.clamp](./d3-scale/log.md#log_clamp) - enable clamping to the domain or range.
+* [*log*.interpolate](./d3-scale/log.md#log_interpolate) - set the output interpolator.
+* [*log*.ticks](./d3-scale/log.md#log_ticks) - compute representative values from the domain.
+* [*log*.tickFormat](./d3-scale/log.md#log_tickFormat) - format ticks for human consumption.
+* [*log*.nice](./d3-scale/log.md#log_nice) - extend the domain to nice round numbers.
+* [*log*.copy](./d3-scale/log.md#log_copy) - create a copy of this scale.
+
+### [Symlog scales](./d3-scale/symlog.md)
+
+* [d3.scaleSymlog](./d3-scale/symlog.md#scaleSymlog) - create a symmetric logarithmic scale.
+* [*symlog*.constant](./d3-scale/symlog.md#symlog_constant) - set the constant of a symlog scale.
+
+### [Time scales](./d3-scale/time.md)
+
+* [d3.scaleTime](./d3-scale/time.md#scaleTime) - create a linear scale for time.
+* [*time*](./d3-scale/time.md#_time) - compute the range value corresponding to a given domain value.
+* [*time*.invert](./d3-scale/time.md#time_invert) - compute the domain value corresponding to a given range value.
+* [*time*.domain](./d3-scale/time.md#time_domain) - set the input domain.
+* [*time*.range](./d3-scale/time.md#time_range) - set the output range.
+* [*time*.rangeRound](./d3-scale/time.md#time_rangeRound) - set the output range and enable rounding.
+* [*time*.clamp](./d3-scale/time.md#time_clamp) - enable clamping to the domain or range.
+* [*time*.interpolate](./d3-scale/time.md#time_interpolate) - set the output interpolator.
+* [*time*.ticks](./d3-scale/time.md#time_ticks) - compute representative values from the domain.
+* [*time*.tickFormat](./d3-scale/time.md#time_tickFormat) - format ticks for human consumption.
+* [*time*.nice](./d3-scale/time.md#time_nice) - extend the domain to nice round times.
+* [*time*.copy](./d3-scale/time.md#time_copy) - create a copy of this scale.
+* [d3.scaleUtc](./d3-scale/time.md#scaleUtc) - create a linear scale for UTC.
+
+### [Sequential scales](./d3-scale/sequential.md)
 
 Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
-* [d3.scaleDiverging](./d3-scale.md#scaleDiverging) - create a diverging scale.
-* [*diverging*](./d3-scale.md#_diverging) - compute the range value corresponding to an input value.
-* [*diverging*.domain](./d3-scale.md#diverging_domain) - set the input domain.
-* [*diverging*.clamp](./d3-scale.md#diverging_clamp) - enable clamping to the domain or range.
-* [*diverging*.interpolator](./d3-scale.md#diverging_interpolator) - set the scale’s output interpolator.
-* [*diverging*.range](./d3-scale.md#diverging_range) - set the output range.
-* [*diverging*.rangeRound](./d3-scale.md#diverging_rangeRound) - set the output range and enable rounding.
-* [*diverging*.copy](./d3-scale.md#diverging_copy) -  create a copy of this scale.
-* [*diverging*.unknown](./d3-scale.md#diverging_unknown) - set the output value for unknown inputs.
-* [d3.scaleDivergingLog](./d3-scale.md#scaleDivergingLog) - create a diverging logarithmic scale.
-* [d3.scaleDivergingPow](./d3-scale.md#scaleDivergingPow) - create a diverging power scale.
-* [d3.scaleDivergingSqrt](./d3-scale.md#scaleDivergingSqrt) - create a diverging power scale with exponent 0.5.
-* [d3.scaleDivergingSymlog](./d3-scale.md#scaleDivergingSymlog) - create a diverging symmetric logarithmic scale.
+* [d3.scaleSequential](./d3-scale/sequential.md#scaleSequential) - create a sequential scale.
+* [*sequential*](./d3-scale/sequential.md#_sequential) - compute the range value corresponding to an input value.
+* [*sequential*.domain](./d3-scale/sequential.md#sequential_domain) - set the input domain.
+* [*sequential*.clamp](./d3-scale/sequential.md#sequential_clamp) - enable clamping to the domain.
+* [*sequential*.interpolator](./d3-scale/sequential.md#sequential_interpolator) - set the scale’s output interpolator.
+* [*sequential*.range](./d3-scale/sequential.md#sequential_range) - set the output range.
+* [*sequential*.rangeRound](./d3-scale/sequential.md#sequential_rangeRound) - set the output range and enable rounding.
+* [*sequential*.copy](./d3-scale/sequential.md#sequential_copy) -  create a copy of this scale.
+* [d3.scaleSequentialLog](./d3-scale/sequential.md#scaleSequentialLog) - create a logarithmic sequential scale.
+* [d3.scaleSequentialPow](./d3-scale/sequential.md#scaleSequentialPow) - create a power sequential scale.
+* [d3.scaleSequentialSqrt](./d3-scale/sequential.md#scaleSequentialSqrt) - create a power sequential scale with exponent 0.5.
+* [d3.scaleSequentialSymlog](./d3-scale/sequential.md#scaleSequentialSymlog) - create a symmetric logarithmic sequential scale.
+* [d3.scaleSequentialQuantile](./d3-scale/sequential.md#scaleSequentialQuantile) - create a sequential scale using a *p*-quantile transform.
+* [*sequentialQuantile*.quantiles](./d3-scale/sequential.md#sequentialQuantile_quantiles) - return the scale’s quantiles.
 
-### [Quantize Scales](./d3-scale.md#quantize-scales)
+### [Diverging scales](./d3-scale/diverging.md)
+
+Map a continuous, quantitative domain to a continuous, fixed interpolator.
+
+* [d3.scaleDiverging](./d3-scale/diverging.md#scaleDiverging) - create a diverging scale.
+* [*diverging*](./d3-scale/diverging.md#_diverging) - compute the range value corresponding to an input value.
+* [*diverging*.domain](./d3-scale/diverging.md#diverging_domain) - set the input domain.
+* [*diverging*.clamp](./d3-scale/diverging.md#diverging_clamp) - enable clamping to the domain or range.
+* [*diverging*.interpolator](./d3-scale/diverging.md#diverging_interpolator) - set the scale’s output interpolator.
+* [*diverging*.range](./d3-scale/diverging.md#diverging_range) - set the output range.
+* [*diverging*.rangeRound](./d3-scale/diverging.md#diverging_rangeRound) - set the output range and enable rounding.
+* [*diverging*.copy](./d3-scale/diverging.md#diverging_copy) -  create a copy of this scale.
+* [*diverging*.unknown](./d3-scale/diverging.md#diverging_unknown) - set the output value for unknown inputs.
+* [d3.scaleDivergingLog](./d3-scale/diverging.md#scaleDivergingLog) - create a diverging logarithmic scale.
+* [d3.scaleDivergingPow](./d3-scale/diverging.md#scaleDivergingPow) - create a diverging power scale.
+* [d3.scaleDivergingSqrt](./d3-scale/diverging.md#scaleDivergingSqrt) - create a diverging power scale with exponent 0.5.
+* [d3.scaleDivergingSymlog](./d3-scale/diverging.md#scaleDivergingSymlog) - create a diverging symmetric logarithmic scale.
+
+### [Quantize scales](./d3-scale/quantize.md)
 
 Map a continuous, quantitative domain to a discrete range.
 
-* [d3.scaleQuantize](./d3-scale.md#scaleQuantize) - create a uniform quantizing linear scale.
-* [*quantize*](./d3-scale.md#_quantize) - compute the range value corresponding to a given domain value.
-* [*quantize*.invertExtent](./d3-scale.md#quantize_invertExtent) - compute the domain values corresponding to a given range value.
-* [*quantize*.domain](./d3-scale.md#quantize_domain) - set the input domain.
-* [*quantize*.range](./d3-scale.md#quantize_range) - set the output range.
-* [*quantize*.ticks](./d3-scale.md#quantize_ticks) - compute representative values from the domain.
-* [*quantize*.tickFormat](./d3-scale.md#quantize_tickFormat) - format ticks for human consumption.
-* [*quantize*.nice](./d3-scale.md#quantize_nice) - extend the domain to nice round numbers.
-* [*quantize*.thresholds](./d3-scale.md#quantize_thresholds) - return the array of computed thresholds within the domain.
-* [*quantize*.copy](./d3-scale.md#quantize_copy) - create a copy of this scale.
-* [d3.scaleQuantile](./d3-scale.md#scaleQuantile) - create a quantile quantizing linear scale.
-* [*quantile*](./d3-scale.md#_quantile) - compute the range value corresponding to a given domain value.
-* [*quantile*.invertExtent](./d3-scale.md#quantile_invertExtent) - compute the domain values corresponding to a given range value.
-* [*quantile*.domain](./d3-scale.md#quantile_domain) - set the input domain.
-* [*quantile*.range](./d3-scale.md#quantile_range) - set the output range.
-* [*quantile*.quantiles](./d3-scale.md#quantile_quantiles) - get the quantile thresholds.
-* [*quantile*.copy](./d3-scale.md#quantile_copy) - create a copy of this scale.
-* [d3.scaleThreshold](./d3-scale.md#scaleThreshold) - create an arbitrary quantizing linear scale.
-* [*threshold*](./d3-scale.md#_threshold) - compute the range value corresponding to a given domain value.
-* [*threshold*.invertExtent](./d3-scale.md#threshold_invertExtent) - compute the domain values corresponding to a given range value.
-* [*threshold*.domain](./d3-scale.md#threshold_domain) - set the input domain.
-* [*threshold*.range](./d3-scale.md#threshold_range) - set the output range.
-* [*threshold*.copy](./d3-scale.md#threshold_copy) - create a copy of this scale.
+* [d3.scaleQuantize](./d3-scale/quantize.md#scaleQuantize) - create a uniform quantizing linear scale.
+* [*quantize*](./d3-scale/quantize.md#_quantize) - compute the range value corresponding to a given domain value.
+* [*quantize*.invertExtent](./d3-scale/quantize.md#quantize_invertExtent) - compute the domain values corresponding to a given range value.
+* [*quantize*.domain](./d3-scale/quantize.md#quantize_domain) - set the input domain.
+* [*quantize*.range](./d3-scale/quantize.md#quantize_range) - set the output range.
+* [*quantize*.ticks](./d3-scale/quantize.md#quantize_ticks) - compute representative values from the domain.
+* [*quantize*.tickFormat](./d3-scale/quantize.md#quantize_tickFormat) - format ticks for human consumption.
+* [*quantize*.nice](./d3-scale/quantize.md#quantize_nice) - extend the domain to nice round numbers.
+* [*quantize*.thresholds](./d3-scale/quantize.md#quantize_thresholds) - return the array of computed thresholds within the domain.
+* [*quantize*.copy](./d3-scale/quantize.md#quantize_copy) - create a copy of this scale.
 
-### [Ordinal Scales](./d3-scale.md#ordinal-scales)
+### [Quantile scales](./d3-scale/quantile.md)
+
+* [d3.scaleQuantile](./d3-scale/quantile.md#scaleQuantile) - create a quantile quantizing linear scale.
+* [*quantile*](./d3-scale/quantile.md#_quantile) - compute the range value corresponding to a given domain value.
+* [*quantile*.invertExtent](./d3-scale/quantile.md#quantile_invertExtent) - compute the domain values corresponding to a given range value.
+* [*quantile*.domain](./d3-scale/quantile.md#quantile_domain) - set the input domain.
+* [*quantile*.range](./d3-scale/quantile.md#quantile_range) - set the output range.
+* [*quantile*.quantiles](./d3-scale/quantile.md#quantile_quantiles) - get the quantile thresholds.
+* [*quantile*.copy](./d3-scale/quantile.md#quantile_copy) - create a copy of this scale.
+
+### [Threshold scales](./d3-scale/threshold.md)
+
+* [d3.scaleThreshold](./d3-scale/threshold.md#scaleThreshold) - create an arbitrary quantizing linear scale.
+* [*threshold*](./d3-scale/threshold.md#_threshold) - compute the range value corresponding to a given domain value.
+* [*threshold*.invertExtent](./d3-scale/threshold.md#threshold_invertExtent) - compute the domain values corresponding to a given range value.
+* [*threshold*.domain](./d3-scale/threshold.md#threshold_domain) - set the input domain.
+* [*threshold*.range](./d3-scale/threshold.md#threshold_range) - set the output range.
+* [*threshold*.copy](./d3-scale/threshold.md#threshold_copy) - create a copy of this scale.
+
+### [Ordinal scales](./d3-scale/ordinal.md)
 
 Map a discrete domain to a discrete range.
 
-* [d3.scaleOrdinal](./d3-scale.md#scaleOrdinal) - create an ordinal scale.
-* [*ordinal*](./d3-scale.md#_ordinal) - compute the range value corresponding to a given domain value.
-* [*ordinal*.domain](./d3-scale.md#ordinal_domain) - set the input domain.
-* [*ordinal*.range](./d3-scale.md#ordinal_range) - set the output range.
-* [*ordinal*.unknown](./d3-scale.md#ordinal_unknown) - set the output value for unknown inputs.
-* [*ordinal*.copy](./d3-scale.md#ordinal_copy) - create a copy of this scale.
-* [d3.scaleImplicit](./d3-scale.md#scaleImplicit) - a special unknown value for implicit domains.
-* [d3.scaleBand](./d3-scale.md#scaleBand) - create an ordinal band scale.
-* [*band*](./d3-scale.md#_band) - compute the band start corresponding to a given domain value.
-* [*band*.domain](./d3-scale.md#band_domain) - set the input domain.
-* [*band*.range](./d3-scale.md#band_range) - set the output range.
-* [*band*.rangeRound](./d3-scale.md#band_rangeRound) - set the output range and enable rounding.
-* [*band*.round](./d3-scale.md#band_round) - enable rounding.
-* [*band*.paddingInner](./d3-scale.md#band_paddingInner) - set padding between bands.
-* [*band*.paddingOuter](./d3-scale.md#band_paddingOuter) - set padding outside the first and last bands.
-* [*band*.padding](./d3-scale.md#band_padding) - set padding outside and between bands.
-* [*band*.align](./d3-scale.md#band_align) - set band alignment, if there is extra space.
-* [*band*.bandwidth](./d3-scale.md#band_bandwidth) - get the width of each band.
-* [*band*.step](./d3-scale.md#band_step) - get the distance between the starts of adjacent bands.
-* [*band*.copy](./d3-scale.md#band_copy) - create a copy of this scale.
-* [d3.scalePoint](./d3-scale.md#scalePoint) - create an ordinal point scale.
-* [*point*](./d3-scale.md#_point) - compute the point corresponding to a given domain value.
-* [*point*.domain](./d3-scale.md#point_domain) - set the input domain.
-* [*point*.range](./d3-scale.md#point_range) - set the output range.
-* [*point*.rangeRound](./d3-scale.md#point_rangeRound) - set the output range and enable rounding.
-* [*point*.round](./d3-scale.md#point_round) - enable rounding.
-* [*point*.padding](./d3-scale.md#point_padding) - set padding outside the first and last point.
-* [*point*.align](./d3-scale.md#point_align) - set point alignment, if there is extra space.
-* [*point*.bandwidth](./d3-scale.md#point_bandwidth) - returns zero.
-* [*point*.step](./d3-scale.md#point_step) - get the distance between the starts of adjacent points.
-* [*point*.copy](./d3-scale.md#point_copy) - create a copy of this scale.
+* [d3.scaleOrdinal](./d3-scale/ordinal.md#scaleOrdinal) - create an ordinal scale.
+* [*ordinal*](./d3-scale/ordinal.md#_ordinal) - compute the range value corresponding to a given domain value.
+* [*ordinal*.domain](./d3-scale/ordinal.md#ordinal_domain) - set the input domain.
+* [*ordinal*.range](./d3-scale/ordinal.md#ordinal_range) - set the output range.
+* [*ordinal*.unknown](./d3-scale/ordinal.md#ordinal_unknown) - set the output value for unknown inputs.
+* [*ordinal*.copy](./d3-scale/ordinal.md#ordinal_copy) - create a copy of this scale.
+* [d3.scaleImplicit](./d3-scale/ordinal.md#scaleImplicit) - a special unknown value for implicit domains.
+
+### [Band scales](./d3-scale/band.md)
+
+* [d3.scaleBand](./d3-scale/band.md#scaleBand) - create an ordinal band scale.
+* [*band*](./d3-scale/band.md#_band) - compute the band start corresponding to a given domain value.
+* [*band*.domain](./d3-scale/band.md#band_domain) - set the input domain.
+* [*band*.range](./d3-scale/band.md#band_range) - set the output range.
+* [*band*.rangeRound](./d3-scale/band.md#band_rangeRound) - set the output range and enable rounding.
+* [*band*.round](./d3-scale/band.md#band_round) - enable rounding.
+* [*band*.paddingInner](./d3-scale/band.md#band_paddingInner) - set padding between bands.
+* [*band*.paddingOuter](./d3-scale/band.md#band_paddingOuter) - set padding outside the first and last bands.
+* [*band*.padding](./d3-scale/band.md#band_padding) - set padding outside and between bands.
+* [*band*.align](./d3-scale/band.md#band_align) - set band alignment, if there is extra space.
+* [*band*.bandwidth](./d3-scale/band.md#band_bandwidth) - get the width of each band.
+* [*band*.step](./d3-scale/band.md#band_step) - get the distance between the starts of adjacent bands.
+* [*band*.copy](./d3-scale/band.md#band_copy) - create a copy of this scale.
+
+### [Point scales](./d3-scale/point.md)
+
+* [d3.scalePoint](./d3-scale/point.md#scalePoint) - create an ordinal point scale.
+* [*point*](./d3-scale/point.md#_point) - compute the point corresponding to a given domain value.
+* [*point*.domain](./d3-scale/point.md#point_domain) - set the input domain.
+* [*point*.range](./d3-scale/point.md#point_range) - set the output range.
+* [*point*.rangeRound](./d3-scale/point.md#point_rangeRound) - set the output range and enable rounding.
+* [*point*.round](./d3-scale/point.md#point_round) - enable rounding.
+* [*point*.padding](./d3-scale/point.md#point_padding) - set padding outside the first and last point.
+* [*point*.align](./d3-scale/point.md#point_align) - set point alignment, if there is extra space.
+* [*point*.bandwidth](./d3-scale/point.md#point_bandwidth) - returns zero.
+* [*point*.step](./d3-scale/point.md#point_step) - get the distance between the starts of adjacent points.
+* [*point*.copy](./d3-scale/point.md#point_copy) - create a copy of this scale.
 
 ## [d3-selection](./d3-selection.md)
 
