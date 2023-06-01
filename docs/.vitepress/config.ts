@@ -82,7 +82,20 @@ export default defineConfig({
               {text: "Sequential", link: "/d3-scale-chromatic/sequential"},
             ]
           },
-          {text: "d3-selection", link: "/d3-selection"},
+          {
+            text: "d3-selection",
+            link: "/d3-selection",
+            collapsed: true,
+            items: [
+              {text: "Selecting elements", link: "/d3-selection/selecting"},
+              {text: "Modifying elements", link: "/d3-selection/modifying"},
+              {text: "Joining data", link: "/d3-selection/joining"},
+              {text: "Handling events", link: "/d3-selection/events"},
+              {text: "Control flow", link: "/d3-selection/control-flow"},
+              {text: "Local variables", link: "/d3-selection/locals"},
+              {text: "Namespaces", link: "/d3-selection/namespaces"}
+            ]
+          },
         ]
       },
       {
