@@ -69,7 +69,17 @@ export default defineConfig({
         items: [
           {text: "d3-axis", link: "/d3-axis"},
           {text: "d3-color", link: "/d3-color"},
-          {text: "d3-interpolate", link: "/d3-interpolate"},
+          {
+            text: "d3-interpolate",
+            link: "/d3-interpolate",
+            collapsed: true,
+            items: [
+              {text: "Value interpolation", link: "/d3-interpolate/value"},
+              {text: "Color interpolation", link: "/d3-interpolate/color"},
+              {text: "Transform interpolation", link: "/d3-interpolate/transform"},
+              {text: "Zoom interpolation", link: "/d3-interpolate/zoom"},
+            ]
+          },
           {text: "d3-scale", link: "/d3-scale"},
           {
             text: "d3-scale-chromatic",

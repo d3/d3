@@ -6,7 +6,7 @@ outline: 2
 
 D3 is a collection of modules that are designed to work together; you can use the modules independently, or you can use them together as part of the default build.
 
-## d3-array
+## [d3-array](./d3-array.md)
 
 Array manipulation, ordering, searching, summarizing, *etc.*
 
@@ -683,35 +683,46 @@ Layout algorithms for visualizing hierarchical data.
 
 Interpolate numbers, colors, strings, arrays, objects, whatever!
 
-* [d3.interpolate](./d3-interpolate.md#interpolate) - interpolate arbitrary values.
-* [d3.interpolateNumber](./d3-interpolate.md#interpolateNumber) - interpolate numbers.
-* [d3.interpolateRound](./d3-interpolate.md#interpolateRound) - interpolate integers.
-* [d3.interpolateString](./d3-interpolate.md#interpolateString) - interpolate strings with embedded numbers.
-* [d3.interpolateDate](./d3-interpolate.md#interpolateDate) - interpolate dates.
-* [d3.interpolateArray](./d3-interpolate.md#interpolateArray) - interpolate arrays of arbitrary values.
-* [d3.interpolateNumberArray](./d3-interpolate.md#interpolateNumberArray) - interpolate arrays of numbers.
-* [d3.interpolateObject](./d3-interpolate.md#interpolateObject) - interpolate arbitrary objects.
-* [d3.interpolateTransformCss](./d3-interpolate.md#interpolateTransformCss) - interpolate 2D CSS transforms.
-* [d3.interpolateTransformSvg](./d3-interpolate.md#interpolateTransformSvg) - interpolate 2D SVG transforms.
-* [d3.interpolateZoom](./d3-interpolate.md#interpolateZoom) - zoom and pan between two views.
-* [*interpolateZoom*.rho](./d3-interpolate.md#interpolate_rho) - set the curvature *rho* of the zoom interpolator.
-* [d3.interpolateDiscrete](./d3-interpolate.md#interpolateDiscrete) - generate a discrete interpolator from a set of values.
-* [d3.quantize](./d3-interpolate.md#quantize) - generate uniformly-spaced samples from an interpolator.
-* [d3.interpolateRgb](./d3-interpolate.md#interpolateRgb) - interpolate RGB colors.
-* [d3.interpolateRgbBasis](./d3-interpolate.md#interpolateRgbBasis) - generate a B-spline through a set of colors.
-* [d3.interpolateRgbBasisClosed](./d3-interpolate.md#interpolateRgbBasisClosed) - generate a closed B-spline through a set of colors.
-* [d3.interpolateHsl](./d3-interpolate.md#interpolateHsl) - interpolate HSL colors.
-* [d3.interpolateHslLong](./d3-interpolate.md#interpolateHslLong) - interpolate HSL colors, the long way.
-* [d3.interpolateLab](./d3-interpolate.md#interpolateLab) - interpolate Lab colors.
-* [d3.interpolateHcl](./d3-interpolate.md#interpolateHcl) - interpolate HCL colors.
-* [d3.interpolateHclLong](./d3-interpolate.md#interpolateHclLong) - interpolate HCL colors, the long way.
-* [d3.interpolateCubehelix](./d3-interpolate.md#interpolateCubehelix) - interpolate Cubehelix colors.
-* [d3.interpolateCubehelixLong](./d3-interpolate.md#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
-* [*interpolate*.gamma](./d3-interpolate.md#interpolate_gamma) - apply gamma correction during interpolation.
-* [d3.interpolateHue](./d3-interpolate.md#interpolateHue) - interpolate a hue angle.
-* [d3.interpolateBasis](./d3-interpolate.md#interpolateBasis) - generate a B-spline through a set of values.
-* [d3.interpolateBasisClosed](./d3-interpolate.md#interpolateBasisClosed) - generate a closed B-spline through a set of values.
-* [d3.piecewise](./d3-interpolate.md#piecewise) - generate a piecewise linear interpolator from a set of values.
+### [Value interpolation](./d3-interpolate/value.md)
+
+* [d3.interpolate](./d3-interpolate/value.md#interpolate) - interpolate arbitrary values.
+* [d3.interpolateNumber](./d3-interpolate/value.md#interpolateNumber) - interpolate numbers.
+* [d3.interpolateRound](./d3-interpolate/value.md#interpolateRound) - interpolate integers.
+* [d3.interpolateString](./d3-interpolate/value.md#interpolateString) - interpolate strings with embedded numbers.
+* [d3.interpolateDate](./d3-interpolate/value.md#interpolateDate) - interpolate dates.
+* [d3.interpolateArray](./d3-interpolate/value.md#interpolateArray) - interpolate arrays of arbitrary values.
+* [d3.interpolateNumberArray](./d3-interpolate/value.md#interpolateNumberArray) - interpolate arrays of numbers.
+* [d3.interpolateObject](./d3-interpolate/value.md#interpolateObject) - interpolate arbitrary objects.
+* [d3.interpolateBasis](./d3-interpolate/value.md#interpolateBasis) - generate a B-spline through a set of values.
+* [d3.interpolateBasisClosed](./d3-interpolate/value.md#interpolateBasisClosed) - generate a closed B-spline through a set of values.
+* [d3.interpolateDiscrete](./d3-interpolate/value.md#interpolateDiscrete) - generate a discrete interpolator from a set of values.
+* [d3.quantize](./d3-interpolate/value.md#quantize) - generate uniformly-spaced samples from an interpolator.
+* [d3.piecewise](./d3-interpolate/value.md#piecewise) - generate a piecewise linear interpolator from a set of values.
+
+### [Color interpolation](./d3-interpolate/color.md)
+
+* [d3.interpolateRgb](./d3-interpolate/color.md#interpolateRgb) - interpolate RGB colors.
+* [d3.interpolateRgbBasis](./d3-interpolate/color.md#interpolateRgbBasis) - generate a B-spline through a set of colors.
+* [d3.interpolateRgbBasisClosed](./d3-interpolate/color.md#interpolateRgbBasisClosed) - generate a closed B-spline through a set of colors.
+* [d3.interpolateHsl](./d3-interpolate/color.md#interpolateHsl) - interpolate HSL colors.
+* [d3.interpolateHslLong](./d3-interpolate/color.md#interpolateHslLong) - interpolate HSL colors, the long way.
+* [d3.interpolateLab](./d3-interpolate/color.md#interpolateLab) - interpolate Lab colors.
+* [d3.interpolateHcl](./d3-interpolate/color.md#interpolateHcl) - interpolate HCL colors.
+* [d3.interpolateHclLong](./d3-interpolate/color.md#interpolateHclLong) - interpolate HCL colors, the long way.
+* [d3.interpolateCubehelix](./d3-interpolate/color.md#interpolateCubehelix) - interpolate Cubehelix colors.
+* [d3.interpolateCubehelixLong](./d3-interpolate/color.md#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
+* [*interpolateColor*.gamma](./d3-interpolate/color.md#interpolate_gamma) - apply gamma correction during interpolation.
+* [d3.interpolateHue](./d3-interpolate/color.md#interpolateHue) - interpolate a hue angle.
+
+### [Transform interpolation](./d3-interpolate/transform.md)
+
+* [d3.interpolateTransformCss](./d3-interpolate/transform.md#interpolateTransformCss) - interpolate 2D CSS transforms.
+* [d3.interpolateTransformSvg](./d3-interpolate/transform.md#interpolateTransformSvg) - interpolate 2D SVG transforms.
+
+### [Zoom interpolation](./d3-interpolate/zoom.md)
+
+* [d3.interpolateZoom](./d3-interpolate/zoom.md#interpolateZoom) - zoom and pan between two views.
+* [*interpolateZoom*.rho](./d3-interpolate/zoom.md#interpolate_rho) - set the curvature *rho* of the zoom interpolator.
 
 ## [d3-path](./d3-path.md)
 
@@ -788,95 +799,92 @@ Generate random numbers from various distributions.
 
 Color ramps and palettes for quantitative, ordinal and categorical scales.
 
-### Categorical
+### [Categorical](./d3-scale-chromatic/categorical.md)
 
-* [d3.schemeCategory10](./d3-scale-chromatic.md#schemeCategory10) - an array of ten categorical colors.
-* [d3.schemeAccent](./d3-scale-chromatic.md#schemeAccent) - an array of eight categorical colors.
-* [d3.schemeDark2](./d3-scale-chromatic.md#schemeDark2) - an array of eight categorical colors.
-* [d3.schemePaired](./d3-scale-chromatic.md#schemePaired) - an array of twelve categorical colors.
-* [d3.schemePastel1](./d3-scale-chromatic.md#schemePastel1) - an array of nine categorical colors.
-* [d3.schemePastel2](./d3-scale-chromatic.md#schemePastel2) - an array of eight categorical colors.
-* [d3.schemeSet1](./d3-scale-chromatic.md#schemeSet1) - an array of nine categorical colors.
-* [d3.schemeSet2](./d3-scale-chromatic.md#schemeSet2) - an array of eight categorical colors.
-* [d3.schemeSet3](./d3-scale-chromatic.md#schemeSet3) - an array of twelve categorical colors.
-* [d3.schemeTableau10](./d3-scale-chromatic.md#schemeTableau10) - an array of ten categorical colors.
+* [d3.schemeCategory10](./d3-scale-chromatic/categorical.md.md#schemeCategory10) - an array of ten categorical colors.
+* [d3.schemeAccent](./d3-scale-chromatic/categorical.md.md#schemeAccent) - an array of eight categorical colors.
+* [d3.schemeDark2](./d3-scale-chromatic/categorical.md.md#schemeDark2) - an array of eight categorical colors.
+* [d3.schemePaired](./d3-scale-chromatic/categorical.md.md#schemePaired) - an array of twelve categorical colors.
+* [d3.schemePastel1](./d3-scale-chromatic/categorical.md.md#schemePastel1) - an array of nine categorical colors.
+* [d3.schemePastel2](./d3-scale-chromatic/categorical.md.md#schemePastel2) - an array of eight categorical colors.
+* [d3.schemeSet1](./d3-scale-chromatic/categorical.md.md#schemeSet1) - an array of nine categorical colors.
+* [d3.schemeSet2](./d3-scale-chromatic/categorical.md.md#schemeSet2) - an array of eight categorical colors.
+* [d3.schemeSet3](./d3-scale-chromatic/categorical.md.md#schemeSet3) - an array of twelve categorical colors.
+* [d3.schemeTableau10](./d3-scale-chromatic/categorical.md.md#schemeTableau10) - an array of ten categorical colors.
 
-### Diverging
+### [Cyclical](./d3-scale-chromatic/cyclical.md)
 
-* [d3.interpolateBrBG](./d3-scale-chromatic.md#interpolateBrBG) - ColorBrewer BrBG interpolator.
-* [d3.interpolatePiYG](./d3-scale-chromatic.md#interpolatePiYG) - ColorBrewer PiYG interpolator.
-* [d3.interpolatePRGn](./d3-scale-chromatic.md#interpolatePRGn) - ColorBrewer PRGn interpolator.
-* [d3.interpolatePuOr](./d3-scale-chromatic.md#interpolatePuOr) - ColorBrewer PuOr interpolator.
-* [d3.interpolateRdBu](./d3-scale-chromatic.md#interpolateRdBu) - ColorBrewer RdBu interpolator.
-* [d3.interpolateRdGy](./d3-scale-chromatic.md#interpolateRdGy) - ColorBrewer RdGy interpolator.
-* [d3.interpolateRdYlBu](./d3-scale-chromatic.md#interpolateRdYlBu) - ColorBrewer RdYlBu interpolator.
-* [d3.interpolateRdYlGn](./d3-scale-chromatic.md#interpolateRdYlGn) - ColorBrewer RdYlGn interpolator.
-* [d3.interpolateSpectral](./d3-scale-chromatic.md#interpolateSpectral) - ColorBrewer spectral interpolator.
-* [d3.schemeBrBG](./d3-scale-chromatic.md#schemeBrBG) - ColorBrewer BrBG scheme.
-* [d3.schemePiYG](./d3-scale-chromatic.md#schemePiYG) - ColorBrewer PiYG scheme.
-* [d3.schemePRGn](./d3-scale-chromatic.md#schemePRGn) - ColorBrewer PRGn scheme.
-* [d3.schemePuOr](./d3-scale-chromatic.md#schemePuOr) - ColorBrewer PuOr scheme.
-* [d3.schemeRdBu](./d3-scale-chromatic.md#schemeRdBu) - ColorBrewer RdBu scheme.
-* [d3.schemeRdGy](./d3-scale-chromatic.md#schemeRdGy) - ColorBrewer RdGy scheme.
-* [d3.schemeRdYlBu](./d3-scale-chromatic.md#schemeRdYlBu) - ColorBrewer RdYlBu scheme.
-* [d3.schemeRdYlGn](./d3-scale-chromatic.md#schemeRdYlGn) - ColorBrewer RdYlGn scheme.
-* [d3.schemeSpectral](./d3-scale-chromatic.md#schemeSpectral) - ColorBrewer spectral scheme.
+* [d3.interpolateRainbow](./d3-scale-chromatic/cyclical.md.md#interpolateRainbow) - the “less-angry” rainbow
+* [d3.interpolateSinebow](./d3-scale-chromatic/cyclical.md.md#interpolateSinebow) - the “sinebow” smooth rainbow
 
-### Sequential (Single Hue)
+### [Diverging](./d3-scale-chromatic/diverging.md)
 
-* [d3.interpolateBlues](./d3-scale-chromatic.md#interpolateBlues) -
-* [d3.interpolateGreens](./d3-scale-chromatic.md#interpolateGreens) -
-* [d3.interpolateGreys](./d3-scale-chromatic.md#interpolateGreys) -
-* [d3.interpolateOranges](./d3-scale-chromatic.md#interpolateOranges) -
-* [d3.interpolatePurples](./d3-scale-chromatic.md#interpolatePurples) -
-* [d3.interpolateReds](./d3-scale-chromatic.md#interpolateReds) -
-* [d3.schemeBlues](./d3-scale-chromatic.md#schemeBlues) -
-* [d3.schemeGreens](./d3-scale-chromatic.md#schemeGreens) -
-* [d3.schemeGreys](./d3-scale-chromatic.md#schemeGreys) -
-* [d3.schemeOranges](./d3-scale-chromatic.md#schemeOranges) -
-* [d3.schemePurples](./d3-scale-chromatic.md#schemePurples) -
-* [d3.schemeReds](./d3-scale-chromatic.md#schemeReds) -
+* [d3.interpolateBrBG](./d3-scale-chromatic/diverging.md.md#interpolateBrBG) - ColorBrewer BrBG interpolator.
+* [d3.interpolatePiYG](./d3-scale-chromatic/diverging.md.md#interpolatePiYG) - ColorBrewer PiYG interpolator.
+* [d3.interpolatePRGn](./d3-scale-chromatic/diverging.md.md#interpolatePRGn) - ColorBrewer PRGn interpolator.
+* [d3.interpolatePuOr](./d3-scale-chromatic/diverging.md.md#interpolatePuOr) - ColorBrewer PuOr interpolator.
+* [d3.interpolateRdBu](./d3-scale-chromatic/diverging.md.md#interpolateRdBu) - ColorBrewer RdBu interpolator.
+* [d3.interpolateRdGy](./d3-scale-chromatic/diverging.md.md#interpolateRdGy) - ColorBrewer RdGy interpolator.
+* [d3.interpolateRdYlBu](./d3-scale-chromatic/diverging.md.md#interpolateRdYlBu) - ColorBrewer RdYlBu interpolator.
+* [d3.interpolateRdYlGn](./d3-scale-chromatic/diverging.md.md#interpolateRdYlGn) - ColorBrewer RdYlGn interpolator.
+* [d3.interpolateSpectral](./d3-scale-chromatic/diverging.md.md#interpolateSpectral) - ColorBrewer spectral interpolator.
+* [d3.schemeBrBG](./d3-scale-chromatic/diverging.md.md#schemeBrBG) - ColorBrewer BrBG scheme.
+* [d3.schemePiYG](./d3-scale-chromatic/diverging.md.md#schemePiYG) - ColorBrewer PiYG scheme.
+* [d3.schemePRGn](./d3-scale-chromatic/diverging.md.md#schemePRGn) - ColorBrewer PRGn scheme.
+* [d3.schemePuOr](./d3-scale-chromatic/diverging.md.md#schemePuOr) - ColorBrewer PuOr scheme.
+* [d3.schemeRdBu](./d3-scale-chromatic/diverging.md.md#schemeRdBu) - ColorBrewer RdBu scheme.
+* [d3.schemeRdGy](./d3-scale-chromatic/diverging.md.md#schemeRdGy) - ColorBrewer RdGy scheme.
+* [d3.schemeRdYlBu](./d3-scale-chromatic/diverging.md.md#schemeRdYlBu) - ColorBrewer RdYlBu scheme.
+* [d3.schemeRdYlGn](./d3-scale-chromatic/diverging.md.md#schemeRdYlGn) - ColorBrewer RdYlGn scheme.
+* [d3.schemeSpectral](./d3-scale-chromatic/diverging.md.md#schemeSpectral) - ColorBrewer spectral scheme.
 
-### Sequential (Multi-Hue)
+### [Sequential](./d3-scale-chromatic/sequential.md)
 
-* [d3.interpolateBuGn](./d3-scale-chromatic.md#interpolateBuGn) - ColorBrewer BuGn interpolator.
-* [d3.interpolateBuPu](./d3-scale-chromatic.md#interpolateBuPu) - ColorBrewer BuPu interpolator.
-* [d3.interpolateCividis](./d3-scale-chromatic.md#interpolateCividis) - cividis interpolator.
-* [d3.interpolateCool](./d3-scale-chromatic.md#interpolateCool) - cool interpolator.
-* [d3.interpolateCubehelixDefault](./d3-scale-chromatic.md#interpolateCubehelixDefault) - cubehelix interpolator.
-* [d3.interpolateGnBu](./d3-scale-chromatic.md#interpolateGnBu) - ColorBrewer GnBu interpolator.
-* [d3.interpolateInferno](./d3-scale-chromatic.md#interpolateInferno) - inferno interpolator.
-* [d3.interpolateMagma](./d3-scale-chromatic.md#interpolateMagma) - magma interpolator.
-* [d3.interpolateOrRd](./d3-scale-chromatic.md#interpolateOrRd) - ColorBrewer OrRd interpolator.
-* [d3.interpolatePlasma](./d3-scale-chromatic.md#interpolatePlasma) - plasma interpolator.
-* [d3.interpolatePuBu](./d3-scale-chromatic.md#interpolatePuBu) - ColorBrewer PuBu interpolator.
-* [d3.interpolatePuBuGn](./d3-scale-chromatic.md#interpolatePuBuGn) - ColorBrewer PuBuGn interpolator.
-* [d3.interpolatePuRd](./d3-scale-chromatic.md#interpolatePuRd) - ColorBrewer PuRd interpolator.
-* [d3.interpolateRdPu](./d3-scale-chromatic.md#interpolateRdPu) - ColorBrewer RdPu interpolator.
-* [d3.interpolateTurbo](./d3-scale-chromatic.md#interpolateTurbo) - turbo interpolator.
-* [d3.interpolateViridis](./d3-scale-chromatic.md#interpolateViridis) - viridis interpolator.
-* [d3.interpolateWarm](./d3-scale-chromatic.md#interpolateWarm) - warm interpolator.
-* [d3.interpolateYlGn](./d3-scale-chromatic.md#interpolateYlGn) - ColorBrewer YlGn interpolator.
-* [d3.interpolateYlGnBu](./d3-scale-chromatic.md#interpolateYlGnBu) - ColorBrewer YlGnBu interpolator.
-* [d3.interpolateYlOrBr](./d3-scale-chromatic.md#interpolateYlOrBr) - ColorBrewer YlOrBr interpolator.
-* [d3.interpolateYlOrRd](./d3-scale-chromatic.md#interpolateYlOrRd) - ColorBrewer YlOrRd interpolator.
-* [d3.schemeBuGn](./d3-scale-chromatic.md#schemeBuGn) - ColorBrewer BuGn scheme.
-* [d3.schemeBuPu](./d3-scale-chromatic.md#schemeBuPu) - ColorBrewer BuPu scheme.
-* [d3.schemeGnBu](./d3-scale-chromatic.md#schemeGnBu) - ColorBrewer GnBu scheme.
-* [d3.schemeOrRd](./d3-scale-chromatic.md#schemeOrRd) - ColorBrewer OrRd scheme.
-* [d3.schemePuBu](./d3-scale-chromatic.md#schemePuBu) - ColorBrewer PuBu scheme.
-* [d3.schemePuBuGn](./d3-scale-chromatic.md#schemePuBuGn) - ColorBrewer PuBuGn scheme.
-* [d3.schemePuRd](./d3-scale-chromatic.md#schemePuRd) - ColorBrewer PuRd scheme.
-* [d3.schemeRdPu](./d3-scale-chromatic.md#schemeRdPu) - ColorBrewer RdPu scheme.
-* [d3.schemeYlGn](./d3-scale-chromatic.md#schemeYlGn) - ColorBrewer YlGn scheme.
-* [d3.schemeYlGnBu](./d3-scale-chromatic.md#schemeYlGnBu) - ColorBrewer YlGnBu scheme.
-* [d3.schemeYlOrBr](./d3-scale-chromatic.md#schemeYlOrBr) - ColorBrewer YlOrBr scheme.
-* [d3.schemeYlOrRd](./d3-scale-chromatic.md#schemeYlOrRd) - ColorBrewer YlOrRd scheme.
-
-### Cyclical
-
-* [d3.interpolateRainbow](./d3-scale-chromatic.md#interpolateRainbow) - the “less-angry” rainbow
-* [d3.interpolateSinebow](./d3-scale-chromatic.md#interpolateSinebow) - the “sinebow” smooth rainbow
+* [d3.interpolateBlues](./d3-scale-chromatic/sequential.md.md#interpolateBlues) -
+* [d3.interpolateGreens](./d3-scale-chromatic/sequential.md.md#interpolateGreens) -
+* [d3.interpolateGreys](./d3-scale-chromatic/sequential.md.md#interpolateGreys) -
+* [d3.interpolateOranges](./d3-scale-chromatic/sequential.md.md#interpolateOranges) -
+* [d3.interpolatePurples](./d3-scale-chromatic/sequential.md.md#interpolatePurples) -
+* [d3.interpolateReds](./d3-scale-chromatic/sequential.md.md#interpolateReds) -
+* [d3.schemeBlues](./d3-scale-chromatic/sequential.md.md#schemeBlues) -
+* [d3.schemeGreens](./d3-scale-chromatic/sequential.md.md#schemeGreens) -
+* [d3.schemeGreys](./d3-scale-chromatic/sequential.md.md#schemeGreys) -
+* [d3.schemeOranges](./d3-scale-chromatic/sequential.md.md#schemeOranges) -
+* [d3.schemePurples](./d3-scale-chromatic/sequential.md.md#schemePurples) -
+* [d3.schemeReds](./d3-scale-chromatic/sequential.md.md#schemeReds) -
+* [d3.interpolateBuGn](./d3-scale-chromatic/sequential.md.md#interpolateBuGn) - ColorBrewer BuGn interpolator.
+* [d3.interpolateBuPu](./d3-scale-chromatic/sequential.md.md#interpolateBuPu) - ColorBrewer BuPu interpolator.
+* [d3.interpolateCividis](./d3-scale-chromatic/sequential.md.md#interpolateCividis) - cividis interpolator.
+* [d3.interpolateCool](./d3-scale-chromatic/sequential.md.md#interpolateCool) - cool interpolator.
+* [d3.interpolateCubehelixDefault](./d3-scale-chromatic/sequential.md.md#interpolateCubehelixDefault) - cubehelix interpolator.
+* [d3.interpolateGnBu](./d3-scale-chromatic/sequential.md.md#interpolateGnBu) - ColorBrewer GnBu interpolator.
+* [d3.interpolateInferno](./d3-scale-chromatic/sequential.md.md#interpolateInferno) - inferno interpolator.
+* [d3.interpolateMagma](./d3-scale-chromatic/sequential.md.md#interpolateMagma) - magma interpolator.
+* [d3.interpolateOrRd](./d3-scale-chromatic/sequential.md.md#interpolateOrRd) - ColorBrewer OrRd interpolator.
+* [d3.interpolatePlasma](./d3-scale-chromatic/sequential.md.md#interpolatePlasma) - plasma interpolator.
+* [d3.interpolatePuBu](./d3-scale-chromatic/sequential.md.md#interpolatePuBu) - ColorBrewer PuBu interpolator.
+* [d3.interpolatePuBuGn](./d3-scale-chromatic/sequential.md.md#interpolatePuBuGn) - ColorBrewer PuBuGn interpolator.
+* [d3.interpolatePuRd](./d3-scale-chromatic/sequential.md.md#interpolatePuRd) - ColorBrewer PuRd interpolator.
+* [d3.interpolateRdPu](./d3-scale-chromatic/sequential.md.md#interpolateRdPu) - ColorBrewer RdPu interpolator.
+* [d3.interpolateTurbo](./d3-scale-chromatic/sequential.md.md#interpolateTurbo) - turbo interpolator.
+* [d3.interpolateViridis](./d3-scale-chromatic/sequential.md.md#interpolateViridis) - viridis interpolator.
+* [d3.interpolateWarm](./d3-scale-chromatic/sequential.md.md#interpolateWarm) - warm interpolator.
+* [d3.interpolateYlGn](./d3-scale-chromatic/sequential.md.md#interpolateYlGn) - ColorBrewer YlGn interpolator.
+* [d3.interpolateYlGnBu](./d3-scale-chromatic/sequential.md.md#interpolateYlGnBu) - ColorBrewer YlGnBu interpolator.
+* [d3.interpolateYlOrBr](./d3-scale-chromatic/sequential.md.md#interpolateYlOrBr) - ColorBrewer YlOrBr interpolator.
+* [d3.interpolateYlOrRd](./d3-scale-chromatic/sequential.md.md#interpolateYlOrRd) - ColorBrewer YlOrRd interpolator.
+* [d3.schemeBuGn](./d3-scale-chromatic/sequential.md.md#schemeBuGn) - ColorBrewer BuGn scheme.
+* [d3.schemeBuPu](./d3-scale-chromatic/sequential.md.md#schemeBuPu) - ColorBrewer BuPu scheme.
+* [d3.schemeGnBu](./d3-scale-chromatic/sequential.md.md#schemeGnBu) - ColorBrewer GnBu scheme.
+* [d3.schemeOrRd](./d3-scale-chromatic/sequential.md.md#schemeOrRd) - ColorBrewer OrRd scheme.
+* [d3.schemePuBu](./d3-scale-chromatic/sequential.md.md#schemePuBu) - ColorBrewer PuBu scheme.
+* [d3.schemePuBuGn](./d3-scale-chromatic/sequential.md.md#schemePuBuGn) - ColorBrewer PuBuGn scheme.
+* [d3.schemePuRd](./d3-scale-chromatic/sequential.md.md#schemePuRd) - ColorBrewer PuRd scheme.
+* [d3.schemeRdPu](./d3-scale-chromatic/sequential.md.md#schemeRdPu) - ColorBrewer RdPu scheme.
+* [d3.schemeYlGn](./d3-scale-chromatic/sequential.md.md#schemeYlGn) - ColorBrewer YlGn scheme.
+* [d3.schemeYlGnBu](./d3-scale-chromatic/sequential.md.md#schemeYlGnBu) - ColorBrewer YlGnBu scheme.
+* [d3.schemeYlOrBr](./d3-scale-chromatic/sequential.md.md#schemeYlOrBr) - ColorBrewer YlOrBr scheme.
+* [d3.schemeYlOrRd](./d3-scale-chromatic/sequential.md.md#schemeYlOrRd) - ColorBrewer YlOrRd scheme.
 
 ## [d3-scale](./d3-scale.md)
 
@@ -1050,80 +1058,80 @@ Map a discrete domain to a discrete range.
 
 Transform the DOM by selecting elements and joining to data.
 
-### [Selecting Elements](./d3-selection.md#selecting-elements)
+### [Selecting elements](./d3-selection/selecting.md)
 
-* [d3.selection](./d3-selection.md#selection) - select the root document element.
-* [d3.select](./d3-selection.md#select) - select an element from the document.
-* [d3.selectAll](./d3-selection.md#selectAll) - select multiple elements from the document.
-* [*selection*.select](./d3-selection.md#selection_select) - select a descendant element for each selected element.
-* [*selection*.selectAll](./d3-selection.md#selection_selectAll) - select multiple descendants for each selected element.
-* [*selection*.filter](./d3-selection.md#selection_filter) - filter elements based on data.
-* [*selection*.merge](./d3-selection.md#selection_merge) - merge this selection with another.
-* [*selection*.selectChild](./d3-selection.md#selection_selectChild) - select a child element for each selected element.
-* [*selection*.selectChildren](./d3-selection.md#selection_selectChildren) - select the children elements for each selected element.
-* [*selection*.selection](./d3-selection.md#selection_selection) - return the selection.
-* [d3.matcher](./d3-selection.md#matcher) - test whether an element matches a selector.
-* [d3.selector](./d3-selection.md#selector) - select an element.
-* [d3.selectorAll](./d3-selection.md#selectorAll) - select elements.
-* [d3.window](./d3-selection.md#window) - get a node’s owner window.
-* [d3.style](./d3-selection.md#style) - get a node’s current style value.
+* [d3.selection](./d3-selection/selecting.md#selection) - select the root document element.
+* [d3.select](./d3-selection/selecting.md#select) - select an element from the document.
+* [d3.selectAll](./d3-selection/selecting.md#selectAll) - select multiple elements from the document.
+* [*selection*.select](./d3-selection/selecting.md#selection_select) - select a descendant element for each selected element.
+* [*selection*.selectAll](./d3-selection/selecting.md#selection_selectAll) - select multiple descendants for each selected element.
+* [*selection*.filter](./d3-selection/selecting.md#selection_filter) - filter elements based on data.
+* [*selection*.merge](./d3-selection/selecting.md#selection_merge) - merge this selection with another.
+* [*selection*.selectChild](./d3-selection/selecting.md#selection_selectChild) - select a child element for each selected element.
+* [*selection*.selectChildren](./d3-selection/selecting.md#selection_selectChildren) - select the children elements for each selected element.
+* [*selection*.selection](./d3-selection/selecting.md#selection_selection) - return the selection.
+* [d3.matcher](./d3-selection/selecting.md#matcher) - test whether an element matches a selector.
+* [d3.selector](./d3-selection/selecting.md#selector) - select an element.
+* [d3.selectorAll](./d3-selection/selecting.md#selectorAll) - select elements.
+* [d3.window](./d3-selection/selecting.md#window) - get a node’s owner window.
+* [d3.style](./d3-selection/selecting.md#style) - get a node’s current style value.
 
-### [Modifying Elements](./d3-selection.md#modifying-elements)
+### [Modifying elements](./d3-selection/modifying.md)
 
-* [*selection*.attr](./d3-selection.md#selection_attr) - get or set an attribute.
-* [*selection*.classed](./d3-selection.md#selection_classed) - get, add or remove CSS classes.
-* [*selection*.style](./d3-selection.md#selection_style) - get or set a style property.
-* [*selection*.property](./d3-selection.md#selection_property) - get or set a (raw) property.
-* [*selection*.text](./d3-selection.md#selection_text) - get or set the text content.
-* [*selection*.html](./d3-selection.md#selection_html) - get or set the inner HTML.
-* [*selection*.append](./d3-selection.md#selection_append) - create, append and select new elements.
-* [*selection*.insert](./d3-selection.md#selection_insert) - create, insert and select new elements.
-* [*selection*.remove](./d3-selection.md#selection_remove) - remove elements from the document.
-* [*selection*.clone](./d3-selection.md#selection_clone) - insert clones of selected elements.
-* [*selection*.sort](./d3-selection.md#selection_sort) - sort elements in the document based on data.
-* [*selection*.order](./d3-selection.md#selection_order) - reorders elements in the document to match the selection.
-* [*selection*.raise](./d3-selection.md#selection_raise) - reorders each element as the last child of its parent.
-* [*selection*.lower](./d3-selection.md#selection_lower) - reorders each element as the first child of its parent.
-* [d3.create](./d3-selection.md#create) - create and select a detached element.
-* [d3.creator](./d3-selection.md#creator) - create an element by name.
+* [*selection*.attr](./d3-selection/modifying.md#selection_attr) - get or set an attribute.
+* [*selection*.classed](./d3-selection/modifying.md#selection_classed) - get, add or remove CSS classes.
+* [*selection*.style](./d3-selection/modifying.md#selection_style) - get or set a style property.
+* [*selection*.property](./d3-selection/modifying.md#selection_property) - get or set a (raw) property.
+* [*selection*.text](./d3-selection/modifying.md#selection_text) - get or set the text content.
+* [*selection*.html](./d3-selection/modifying.md#selection_html) - get or set the inner HTML.
+* [*selection*.append](./d3-selection/modifying.md#selection_append) - create, append and select new elements.
+* [*selection*.insert](./d3-selection/modifying.md#selection_insert) - create, insert and select new elements.
+* [*selection*.remove](./d3-selection/modifying.md#selection_remove) - remove elements from the document.
+* [*selection*.clone](./d3-selection/modifying.md#selection_clone) - insert clones of selected elements.
+* [*selection*.sort](./d3-selection/modifying.md#selection_sort) - sort elements in the document based on data.
+* [*selection*.order](./d3-selection/modifying.md#selection_order) - reorders elements in the document to match the selection.
+* [*selection*.raise](./d3-selection/modifying.md#selection_raise) - reorders each element as the last child of its parent.
+* [*selection*.lower](./d3-selection/modifying.md#selection_lower) - reorders each element as the first child of its parent.
+* [d3.create](./d3-selection/modifying.md#create) - create and select a detached element.
+* [d3.creator](./d3-selection/modifying.md#creator) - create an element by name.
 
-### [Joining Data](./d3-selection.md#joining-data)
+### [Joining data](./d3-selection/joining.md)
 
-* [*selection*.data](./d3-selection.md#selection_data) - bind elements to data.
-* [*selection*.join](./d3-selection.md#selection_join) - enter, update or exit elements based on data.
-* [*selection*.enter](./d3-selection.md#selection_enter) - get the enter selection (data missing elements).
-* [*selection*.exit](./d3-selection.md#selection_exit) - get the exit selection (elements missing data).
-* [*selection*.datum](./d3-selection.md#selection_datum) - get or set element data (without joining).
+* [*selection*.data](./d3-selection/joining.md#selection_data) - bind elements to data.
+* [*selection*.join](./d3-selection/joining.md#selection_join) - enter, update or exit elements based on data.
+* [*selection*.enter](./d3-selection/joining.md#selection_enter) - get the enter selection (data missing elements).
+* [*selection*.exit](./d3-selection/joining.md#selection_exit) - get the exit selection (elements missing data).
+* [*selection*.datum](./d3-selection/joining.md#selection_datum) - get or set element data (without joining).
 
-### [Handling Events](./d3-selection.md#handling-events)
+### [Handling events](./d3-selection/events.md)
 
-* [*selection*.on](./d3-selection.md#selection_on) - add or remove event listeners.
-* [*selection*.dispatch](./d3-selection.md#selection_dispatch) - dispatch a custom event.
-* [d3.pointer](./d3-selection.md#pointer) - get the pointer’s position of an event.
-* [d3.pointers](./d3-selection.md#pointers) - get the pointers’ positions of an event.
+* [*selection*.on](./d3-selection/events.md#selection_on) - add or remove event listeners.
+* [*selection*.dispatch](./d3-selection/events.md#selection_dispatch) - dispatch a custom event.
+* [d3.pointer](./d3-selection/events.md#pointer) - get the pointer’s position of an event.
+* [d3.pointers](./d3-selection/events.md#pointers) - get the pointers’ positions of an event.
 
-### [Control Flow](./d3-selection.md#control-flow)
+### [Control flow](./d3-selection/control-flow.md)
 
-* [*selection*.each](./d3-selection.md#selection_each) - call a function for each element.
-* [*selection*.call](./d3-selection.md#selection_call) - call a function with this selection.
-* [*selection*.empty](./d3-selection.md#selection_empty) - returns true if this selection is empty.
-* [*selection*.nodes](./d3-selection.md#selection_nodes) - returns an array of all selected elements.
-* [*selection*.node](./d3-selection.md#selection_node) - returns the first (non-null) element.
-* [*selection*.size](./d3-selection.md#selection_size) - returns the count of elements.
-* [*selection*[Symbol.iterator]](./d3-selection.md#selection_iterator) - iterate over the selection’s nodes.
+* [*selection*.each](./d3-selection/control-flow.md#selection_each) - call a function for each element.
+* [*selection*.call](./d3-selection/control-flow.md#selection_call) - call a function with this selection.
+* [*selection*.empty](./d3-selection/control-flow.md#selection_empty) - returns true if this selection is empty.
+* [*selection*.nodes](./d3-selection/control-flow.md#selection_nodes) - returns an array of all selected elements.
+* [*selection*.node](./d3-selection/control-flow.md#selection_node) - returns the first (non-null) element.
+* [*selection*.size](./d3-selection/control-flow.md#selection_size) - returns the count of elements.
+* [*selection*[Symbol.iterator]](./d3-selection/control-flow.md#selection_iterator) - iterate over the selection’s nodes.
 
-### [Local Variables](./d3-selection.md#local-variables)
+### [Local variables](./d3-selection/locals.md)
 
-* [d3.local](./d3-selection.md#local) - declares a new local variable.
-* [*local*.set](./d3-selection.md#local_set) - set a local variable’s value.
-* [*local*.get](./d3-selection.md#local_get) - get a local variable’s value.
-* [*local*.remove](./d3-selection.md#local_remove) - delete a local variable.
-* [*local*.toString](./d3-selection.md#local_toString) - get the property identifier of a local variable.
+* [d3.local](./d3-selection/locals.md#local) - declares a new local variable.
+* [*local*.set](./d3-selection/locals.md#local_set) - set a local variable’s value.
+* [*local*.get](./d3-selection/locals.md#local_get) - get a local variable’s value.
+* [*local*.remove](./d3-selection/locals.md#local_remove) - delete a local variable.
+* [*local*.toString](./d3-selection/locals.md#local_toString) - get the property identifier of a local variable.
 
-### [Namespaces](./d3-selection.md#namespaces)
+### [Namespaces](./d3-selection/namespaces.md)
 
-* [d3.namespace](./d3-selection.md#namespace) - qualify a prefixed XML name, such as “xlink:href”.
-* [d3.namespaces](./d3-selection.md#namespaces) - the built-in XML namespaces.
+* [d3.namespace](./d3-selection/namespaces.md#namespace) - qualify a prefixed XML name, such as “xlink:href”.
+* [d3.namespaces](./d3-selection/namespaces.md#namespaces) - the built-in XML namespaces.
 
 ## [d3-shape](./d3-shape.md)
 
