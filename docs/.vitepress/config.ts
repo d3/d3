@@ -85,19 +85,19 @@ export default defineConfig({
             link: "/d3-scale",
             collapsed: true,
             items: [
-              {text: "Linear", link: "/d3-scale/linear"},
-              {text: "Time", link: "/d3-scale/time"},
-              {text: "Pow", link: "/d3-scale/pow"},
-              {text: "Log", link: "/d3-scale/log"},
-              {text: "Symlog", link: "/d3-scale/symlog"},
-              {text: "Ordinal", link: "/d3-scale/ordinal"},
-              {text: "Band", link: "/d3-scale/band"},
-              {text: "Point", link: "/d3-scale/point"},
-              {text: "Sequential", link: "/d3-scale/sequential"},
-              {text: "Diverging", link: "/d3-scale/diverging"},
-              {text: "Quantize", link: "/d3-scale/quantize"},
-              {text: "Quantile", link: "/d3-scale/quantile"},
-              {text: "Threshold", link: "/d3-scale/threshold"}
+              {text: "Linear scales", link: "/d3-scale/linear"},
+              {text: "Time scales", link: "/d3-scale/time"},
+              {text: "Pow scales", link: "/d3-scale/pow"},
+              {text: "Log scales", link: "/d3-scale/log"},
+              {text: "Symlog scales", link: "/d3-scale/symlog"},
+              {text: "Ordinal scales", link: "/d3-scale/ordinal"},
+              {text: "Band scales", link: "/d3-scale/band"},
+              {text: "Point scales", link: "/d3-scale/point"},
+              {text: "Sequential scales", link: "/d3-scale/sequential"},
+              {text: "Diverging scales", link: "/d3-scale/diverging"},
+              {text: "Quantize scales", link: "/d3-scale/quantize"},
+              {text: "Quantile scales", link: "/d3-scale/quantile"},
+              {text: "Threshold scales", link: "/d3-scale/threshold"}
             ]
           },
           {
@@ -105,10 +105,10 @@ export default defineConfig({
             link: "/d3-scale-chromatic",
             collapsed: true,
             items: [
-              {text: "Categorical", link: "/d3-scale-chromatic/categorical"},
-              {text: "Cyclical", link: "/d3-scale-chromatic/cyclical"},
-              {text: "Diverging", link: "/d3-scale-chromatic/diverging"},
-              {text: "Sequential", link: "/d3-scale-chromatic/sequential"},
+              {text: "Categorical schemes", link: "/d3-scale-chromatic/categorical"},
+              {text: "Cyclical schemes", link: "/d3-scale-chromatic/cyclical"},
+              {text: "Diverging schemes", link: "/d3-scale-chromatic/diverging"},
+              {text: "Sequential schemes", link: "/d3-scale-chromatic/sequential"},
             ]
           },
           {
