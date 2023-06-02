@@ -1,101 +1,73 @@
 # Sequential scales
 
-Sequential scales, like [diverging scales](#diverging-scales), are similar to [continuous scales](#continuous-scales) in that they map a continuous, numeric input domain to a continuous output range. However, unlike continuous scales, the input domain and output range of a sequential scale always has exactly two elements, and the output range is typically specified as an interpolator rather than an array of values. These scales do not expose [invert](#continuous_invert) and [interpolate](#continuous_interpolate) methods.
+Sequential scales are similar to [linear scales](./linear.md) in that they map a continuous, numeric input domain to a continuous output range. Unlike linear scales, the input domain and output range of a sequential scale always has exactly two elements, and the output range is typically specified as an interpolator rather than an array of values. Sequential scales are typically used for a color encoding; see also [d3-scale-chromatic](../d3-scale-chromatic.md). These scales do not expose [invert](./linear.md#linear_invert) and [interpolate](./linear.md#linear_interpolate) methods. There are also [log](#scaleSequentialLog), [pow](#scaleSequentialPow), [symlog](#scaleSequentialSymlog), and [quantile](#scaleSequentialQuantile) variants of sequential scales.
 
-### d3.scaleSequential(domain, interpolator)
+## scaleSequential(*domain*, *interpolator*) {#scaleSequential}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
-
-Constructs a new sequential scale with the specified [*domain*](#sequential_domain) and [*interpolator*](#sequential_interpolator) function or array. If *domain* is not specified, it defaults to [0, 1]. If *interpolator* is not specified, it defaults to the identity function. When the scale is [applied](#_sequential), the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the minimum value and 1 represents the maximum value. For example, to implement the ill-advised [HSL](https://github.com/d3/d3-color/blob/main/README.md#hsl) rainbow scale:
+[Examples](https://observablehq.com/@d3/sequential-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js) · Constructs a new sequential scale with the specified [*domain*](#sequential_domain) and [*interpolator*](#sequential_interpolator) function or array.
 
 ```js
-var rainbow = d3.scaleSequential(function(t) {
-  return d3.hsl(t * 360, 1, 0.5) + "";
-});
+const color = d3.scaleSequential([0, 100], d3.interpolateBlues);
 ```
 
-A more aesthetically-pleasing and perceptually-effective cyclical hue encoding is to use [d3.interpolateRainbow](https://github.com/d3/d3-scale-chromatic/blob/main/README.md#interpolateRainbow):
+If *domain* is not specified, it defaults to [0, 1].
 
 ```js
-var rainbow = d3.scaleSequential(d3.interpolateRainbow);
+const color = d3.scaleSequential(d3.interpolateBlues);
 ```
 
-If *interpolator* is an array, it represents the scale’s two-element output range and is converted to an interpolator function using [d3.interpolate](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolate).
+If *interpolator* is not specified, it defaults to the identity function.
 
-### sequential(value)
+```js
+const identity = d3.scaleSequential();
+```
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+When the scale is [applied](#_sequential), the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the minimum value and 1 represents the maximum value. For example, to implement the ill-advised [HSL](https://github.com/d3/d3-color/blob/main/README.md#hsl) rainbow scale (please use [interpolateRainbow](../d3-scale-chromatic/cyclical.md#interpolateRainbow) instead):
 
-See [*continuous*](#_continuous).
+```js
+const rainbow = d3.scaleSequential((t) => d3.hsl(t * 360, 1, 0.5) + "");
+```
 
-### sequential.domain(domain)
+If *interpolator* is an array, it represents the scale’s two-element output range and is converted to an interpolator function using [d3.interpolate](../d3-interpolate/value.md#interpolate).
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+```js
+const color = d3.scaleSequential(["red", "blue"]);
+```
 
-See [*continuous*.domain](#continuous_domain). Note that a sequential scale’s domain must be numeric and must contain exactly two values.
+A sequential scale’s domain must be numeric and must contain exactly two values.
 
-### sequential.clamp(clamp)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
-
-See [*continuous*.clamp](#continuous_clamp).
-
-### sequential.interpolator(interpolator)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+## *sequential*.interpolator(*interpolator*) {#sequential_interpolator}
 
 If *interpolator* is specified, sets the scale’s interpolator to the specified function. If *interpolator* is not specified, returns the scale’s current interpolator.
 
-### sequential.range(range)
+## *sequential*.range(*range*) {#sequential_range}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+See [*linear*.range](./linear.md#linear_range). If *range* is specified, the given two-element array is converted to an interpolator function using [d3.interpolate](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolate).
 
-See [*continuous*.range](#continuous_range). If *range* is specified, the given two-element array is converted to an interpolator function using [d3.interpolate](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolate).
+## *sequential*.rangeRound(*range*) {#sequential_rangeRound}
 
-### sequential.rangeRound(range)
+See [*linear*.rangeRound](./linear.md#linear_rangeRound). If *range* is specified, implicitly uses [d3.interpolateRound](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolateRound) as the interpolator.
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+## scaleSequentialLog(*domain*, *range*) {#scaleSequentialLog}
 
-See [*continuous*.rangeRound](#continuous_rangeRound). If *range* is specified, implicitly uses [d3.interpolateRound](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolateRound) as the interpolator.
+Returns a new sequential scale with a logarithmic transform, analogous to a [log scale](./log.md).
 
-### sequential.copy()
+## scaleSequentialPow(*domain*, *range*) {#scaleSequentialPow}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+Returns a new sequential scale with an exponential transform, analogous to a [power scale](./pow.md).
 
-See [*continuous*.copy](#continuous_copy).
+## scaleSequentialSqrt(*domain*, *range*) {#scaleSequentialSqrt}
 
-### d3.scaleSequentialLog(domain, range)
+Returns a new sequential scale with a square-root transform, analogous to a [sqrt scale](./pow.md#scaleSqrt).
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+## scaleSequentialSymlog(*domain*, *range*) {#scaleSequentialSymlog}
 
-A [sequential scale](#sequential-scales) with a logarithmic transform, analogous to a [log scale](#log-scales).
+Returns a new sequential scale with a symmetric logarithmic transform, analogous to a [symlog scale](./symlog.md).
 
-### d3.scaleSequentialPow(domain, range)
+## scaleSequentialQuantile(*domain*, *range*) {#scaleSequentialQuantile}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+[Source](https://github.com/d3/d3-scale/blob/main/src/sequentialQuantile.js) · Returns a new sequential scale with a *p*-quantile transform, analogous to a [quantile scale](./quantile.md).
 
-A [sequential scale](#sequential-scales) with an exponential transform, analogous to a [power scale](#pow-scales).
-
-### d3.scaleSequentialSqrt(domain, range)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
-
-A [sequential scale](#sequential-scales) with a square-root transform, analogous to a [d3.scaleSqrt](#scaleSqrt).
-
-### d3.scaleSequentialSymlog(domain, range)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js), [Examples](https://observablehq.com/@d3/sequential-scales)
-
-A [sequential scale](#sequential-scales) with a symmetric logarithmic transform, analogous to a [symlog scale](#symlog-scales).
-
-### d3.scaleSequentialQuantile(domain, range)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequentialQuantile.js), [Examples](https://observablehq.com/@d3/sequential-scales)
-
-A [sequential scale](#sequential-scales) using a *p*-quantile transform, analogous to a [quantile scale](#quantile-scales).
-
-### sequentialQuantile.quantiles(n)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/sequentialQuantile.js), [Examples](https://observablehq.com/@d3/sequential-scales)
+## *sequentialQuantile*.quantiles(*n*) {#sequentialQuantile_quantiles}
 
 Returns an array of *n* + 1 quantiles. For example, if *n* = 4, returns an array of five numbers: the minimum value, the first quartile, the median, the third quartile, and the maximum.

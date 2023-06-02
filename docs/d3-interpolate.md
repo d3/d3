@@ -1,10 +1,3 @@
-<script setup>
-
-import * as d3 from "d3";
-import ColorRamp from "./components/ColorRamp.vue";
-
-</script>
-
 # d3-interpolate
 
 This module provides a variety of interpolation methods for blending between two values. Values may be numbers, colors, strings, arrays, or even deeply-nested objects. For example:
