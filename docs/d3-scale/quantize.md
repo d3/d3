@@ -49,7 +49,8 @@ width.invertExtent(2); // [40, 70]
 [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · If *domain* is specified, sets the scale’s domain to the specified two-element array of numbers.
 
 ```js
-const color = d3.scaleQuantize(d3.schemeBlues[9]).domain([0, 100]);
+const color = d3.scaleQuantize(d3.schemeBlues[9]);
+color.domain([0, 100]);
 ```
 
 If the elements in the given array are not numbers, they will be coerced to numbers. The numbers must be in ascending order or the behavior of the scale is undefined.
@@ -65,7 +66,8 @@ color.domain() // [0, 100]
 [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · If *range* is specified, sets the scale’s range to the specified array of values.
 
 ```js
-const color = d3.scaleQuantize().range(d3.schemeBlues[5]);
+const color = d3.scaleQuantize();
+color.range(d3.schemeBlues[5]);
 ```
 
 The array may contain any number of discrete values. The elements in the given array need not be numbers; any value or type will work.
