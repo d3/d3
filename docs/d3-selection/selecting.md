@@ -42,7 +42,7 @@ And then to use:
 d3.selectAll("input[type=checkbox]").checked(true);
 ```
 
-## select(*selector*) {#select} {#select}
+## select(*selector*) {#select}
 
 [Source](https://github.com/d3/d3-selection/blob/main/src/select.js) · Selects the first element that matches the specified *selector* string.
 
@@ -68,7 +68,7 @@ Or, to make a clicked paragraph red:
 d3.selectAll("p").on("click", (event) => d3.select(event.currentTarget).style("color", "red"));
 ```
 
-## selectAll(*selector*) {#selectAll} {#selectAll}
+## selectAll(*selector*) {#selectAll}
 
 [Source](https://github.com/d3/d3-selection/blob/main/src/selectAll.js) · Selects all elements that match the specified *selector* string.
 
