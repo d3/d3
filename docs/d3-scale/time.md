@@ -2,7 +2,7 @@
 
 Time scales are a variant of [linear scales](./linear.md) that have a temporal domain: domain values are coerced to [dates](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date) rather than numbers, and [invert](#time_invert) likewise returns a date. Time scales implement [ticks](#time_ticks) based on [calendar intervals](../d3-time.md), taking the pain out of generating axes for temporal domains.
 
-## d3.scaleTime(*domain*, *range*) {#scaleTime}
+## scaleTime(*domain*, *range*) {#scaleTime}
 
 [Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Constructs a new time scale with the specified [domain](#time_domain) and [range](#time_range), the [default](../d3-interpolate/value.md#interpolate) [interpolator](#time_interpolate) and [clamping](#time_clamp) disabled. For example, to create a position encoding:
 
@@ -16,7 +16,7 @@ x.invert(640); // Sat Jan 01 2000 16:00:00 GMT-0800 (PST)
 
 If *domain* is not specified, it defaults to [2000-01-01, 2000-01-02] in local time. If *range* is not specified, it defaults to [0, 1].
 
-## d3.scaleUtc(*domain*, *range*) {#scaleUtc}
+## scaleUtc(*domain*, *range*) {#scaleUtc}
 
 [Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/utcTime.js) · Equivalent to [scaleTime](#scaleTime), but the returned time scale operates in [Coordinated Universal Time](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) rather than local time. For example, to create a position encoding:
 

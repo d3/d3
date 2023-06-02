@@ -2,7 +2,7 @@
 
 Unlike [continuous scales](./linear.md), ordinal scales have a discrete domain and range. For example, an ordinal scale might map a set of named categories to a set of colors, or determine the horizontal positions of columns in a column chart.
 
-## d3.scaleOrdinal(*domain*, *range*) {#scaleOrdinal}
+## scaleOrdinal(*domain*, *range*) {#scaleOrdinal}
 
 [Examples](https://observablehq.com/@d3/d3-scaleordinal) · [Source](https://github.com/d3/d3-scale/blob/main/src/ordinal.js) · Constructs a new ordinal scale with the specified [*domain*](#ordinal_domain) and [*range*](#ordinal_range).
 
@@ -90,7 +90,7 @@ const c2 = c1.copy();
 
 Changes to this scale will not affect the returned scale, and vice versa.
 
-## d3.scaleImplicit {#scaleImplicit}
+## scaleImplicit {#scaleImplicit}
 
 [Examples](https://observablehq.com/@d3/d3-scaleordinal) · [Source](https://github.com/d3/d3-scale/blob/main/src/ordinal.js) · A special value for [*ordinal*.unknown](#ordinal_unknown) that enables implicit domain construction: unknown values are implicitly added to the domain.
 
