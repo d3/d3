@@ -6,7 +6,7 @@ import ColorSwatches from "../components/ColorSwatches.vue";
 
 </script>
 
-# d3-scale-chromatic: Sequential schemes
+# Sequential schemes
 
 Sequential color schemes are available as continuous interpolators (often used with [d3.scaleSequential](https://github.com/d3/d3-scale/blob/main/README.md#sequential-scales)) and as discrete schemes (often used with [d3.scaleOrdinal](https://github.com/d3/d3-scale/blob/main/README.md#ordinal-scales)).
 

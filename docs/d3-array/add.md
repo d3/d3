@@ -1,4 +1,4 @@
-# d3-array: Add {#top}
+# Adding numbers
 
 Add floating point numbers with full precision.
 

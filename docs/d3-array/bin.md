@@ -1,4 +1,4 @@
-# d3-array: Bin {#top}
+# Binning data
 
 Bin quantitative values into consecutive, non-overlapping intervals, as in histograms. (See also Observable Plot’s [bin transform](https://observablehq.com/plot/transforms/bin).)
 

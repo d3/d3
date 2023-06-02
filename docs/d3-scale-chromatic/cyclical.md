@@ -5,7 +5,7 @@ import ColorRamp from "../components/ColorRamp.vue";
 
 </script>
 
-# d3-scale-chromatic: Cyclical schemes
+# Cyclical schemes
 
 To create a cyclical continuous color scale using the [Rainbow](#interpolateRainbow) color scheme:
 

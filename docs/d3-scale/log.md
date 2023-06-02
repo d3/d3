@@ -1,4 +1,4 @@
-# d3-scale: Logarithmic scales
+# Logarithmic scales
 
 Logarithmic (“log”) scales are like [linear scales](./linear.md) except that a logarithmic transform is applied to the input domain value before the output range value is computed. The mapping to the range value *y* can be expressed as a function of the domain value *x*: *y* = *m* log(<i>x</i>) + *b*.
 

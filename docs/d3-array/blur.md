@@ -1,4 +1,4 @@
-# d3-array: Blur {#top}
+# Blurring data
 
 A [box blur](https://en.wikipedia.org/wiki/Box_blur) implementation for 1D, 2D, and RGBA images; supports fractional radius.
 

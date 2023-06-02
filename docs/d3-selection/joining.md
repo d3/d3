@@ -1,4 +1,4 @@
-# d3-selection: Joining data
+# Joining data
 
 For an introduction, see [Thinking With Joins](http://bost.ocks.org/mike/join/) and the [*selection*.join notebook](https://observablehq.com/@d3/selection-join).
 

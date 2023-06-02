@@ -1,4 +1,4 @@
-# d3-array: Ticks {#top}
+# Ticks {#Ticks}
 
 Generate representative values from a continuous interval.
 

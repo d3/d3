@@ -6,7 +6,7 @@ import ColorSwatches from "../components/ColorSwatches.vue";
 
 </script>
 
-# d3-interpolate: Value interpolation
+# Value interpolation
 
 These are the most general interpolators, suitable for most values.
 

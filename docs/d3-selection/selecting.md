@@ -1,4 +1,4 @@
-# d3-selection: Selecting elements
+# Selecting elements
 
 A *selection* is a set of elements from the DOM. Typically these elements are identified by [selectors](http://www.w3.org/TR/selectors-api/) such as `.fancy` for elements with the class *fancy*, or `div` to select DIV elements.
 

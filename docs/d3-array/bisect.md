@@ -1,4 +1,4 @@
-# d3-array: Bisect {#top}
+# Bisecting data
 
 Bisection, or binary search, quickly finds a given value in a sorted array. It is often used to find the position at which to insert a new value into an array while maintaining sorted order.
 

@@ -1,4 +1,4 @@
-# d3-selection: Namespaces
+# Namespaces
 
 XML namespaces are fun! Right? 🤪 Fortunately you can mostly ignore them.
 

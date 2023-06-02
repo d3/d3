@@ -1,4 +1,4 @@
-# d3-array: Intern {#top}
+# Interning values
 
 The [InternMap](#InternMap) and [InternSet](#InternSet) classes extend the native JavaScript Map and Set classes, respectively, allowing Dates and other non-primitive keys by bypassing the [SameValueZero algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness) when determining key equality. [d3.group](./group.md#group), [d3.rollup](./group.md#rollup) and [d3.index](./group.md#index) use an InternMap rather than a native Map.
 

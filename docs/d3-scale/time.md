@@ -1,4 +1,4 @@
-# d3-scale: Time scales
+# Time scales
 
 Time scales are a variant of [linear scales](./linear.md) that have a temporal domain: domain values are coerced to [dates](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date) rather than numbers, and [invert](#time_invert) likewise returns a date. Time scales implement [ticks](#time_ticks) based on [calendar intervals](../d3-time.md), taking the pain out of generating axes for temporal domains.
 

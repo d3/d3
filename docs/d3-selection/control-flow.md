@@ -1,4 +1,4 @@
-# d3-selection: Control flow
+# Control flow
 
 For advanced usage, selections provide methods for custom control flow.
 

@@ -1,4 +1,4 @@
-# d3-array: Sets {#top}
+# Set operations
 
 Logical set operations for any iterable.
 

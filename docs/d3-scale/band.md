@@ -1,4 +1,4 @@
-# d3-scale: Band scales
+# Band scales
 
 Band scales are like [ordinal scales](./ordinal.md) except the output range is continuous and numeric. The scale divides the continuous range into uniform bands. Band scales are typically used for bar charts with an ordinal or categorical dimension. See Observable Plot’s [discrete scales](https://observablehq.com/plot/features/scales#discrete-scales) for an interactive demo.
 

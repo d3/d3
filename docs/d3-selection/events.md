@@ -1,4 +1,4 @@
-# d3-selection: Handling events
+# Handling events
 
 For interaction, selections allow listening for and dispatching of events.
 

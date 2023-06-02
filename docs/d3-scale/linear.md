@@ -1,4 +1,4 @@
-# d3-scale: Linear scales
+# Linear scales
 
 Linear scales map a continuous, quantitative input [domain](#linear_domain) to a continuous output [range](#linear_range) using a linear transformation (translate and scale). If the range is also numeric, the mapping may be [inverted](#linear_invert). Linear scales are a good default choice for continuous quantitative data because they preserve proportional differences. Each range value *y* can be expressed as a function of the domain value *x*: *y* = *mx* + *b*.
 

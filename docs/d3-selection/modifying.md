@@ -1,4 +1,4 @@
-# d3-selection: Modifying elements
+# Modifying elements
 
 After selecting elements, use the selection to modify the elements. For example, to set the class and color style of all paragraph elements in the current document:
 

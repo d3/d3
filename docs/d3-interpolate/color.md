@@ -5,7 +5,7 @@ import ColorRamp from "../components/ColorRamp.vue";
 
 </script>
 
-# d3-interpolate: Color interpolation
+# Color interpolation
 
 Interpolators for colors in various color spaces.
 

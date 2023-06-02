@@ -1,4 +1,4 @@
-# d3-scale: Quantile scales
+# Quantile scales
 
 Quantile scales map a sampled input domain to a discrete range. The domain is considered continuous and thus the scale will accept any reasonable input value; however, the domain is specified as a discrete set of sample values. The number of values in (the cardinality of) the output range determines the number of quantiles that will be computed from the domain. To compute the quantiles, the domain is sorted, and treated as a [population of discrete values](https://en.wikipedia.org/wiki/Quantile#Quantiles_of_a_population); see d3-array’s [quantile](https://github.com/d3/d3-array/blob/main/README.md#quantile). See [this quantile choropleth](https://observablehq.com/@d3/quantile-choropleth) for an example.
 

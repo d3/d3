@@ -1,4 +1,4 @@
-# d3-scale: Power scales
+# Power scales
 
 Power (“pow”) scales are similar to [linear scales](./linear.md), except an exponential transform is applied to the input domain value before the output range value is computed. Each range value *y* can be expressed as a function of the domain value *x*: *y* = *mx^k* + *b*, where *k* is the [exponent](#pow_exponent) value. Power scales also support negative domain values, in which case the input value and the resulting output value are multiplied by -1.
 

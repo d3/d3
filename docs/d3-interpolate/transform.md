@@ -1,4 +1,4 @@
-# d3-interpolate: Transform interpolation
+# Transform interpolation
 
 Interpolators for CSS and SVG transforms. The interpolation method is standardized by CSS: see [matrix decomposition for animation](http://www.w3.org/TR/css3-2d-transforms/#matrix-decomposition).
 

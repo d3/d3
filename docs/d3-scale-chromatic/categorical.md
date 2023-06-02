@@ -5,7 +5,7 @@ import ColorSwatches from "../components/ColorSwatches.vue";
 
 </script>
 
-# d3-scale-chromatic: Categorical schemes
+# Categorical schemes
 
 For example, to create a categorical color scale using the [Accent](#schemeAccent) color scheme:
 

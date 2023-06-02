@@ -1,4 +1,4 @@
-# d3-array: Sort {#top}
+# Sorting data
 
 Sort values; see also [bisect](./bisect.md).
 

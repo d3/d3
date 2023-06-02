@@ -1,4 +1,4 @@
-# d3-array: Summarize {#top}
+# Summarizing data
 
 Compute summary statistics.
 

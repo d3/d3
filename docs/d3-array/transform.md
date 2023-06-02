@@ -1,4 +1,4 @@
-# d3-array: Transform {#top}
+# Transforming data
 
 Transform arrays and generate new arrays.
 
