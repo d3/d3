@@ -195,4 +195,12 @@ This method will not work with interpolators that do not return defensive copies
 d3.piecewise(d3.interpolateRgb.gamma(2.2), ["red", "green", "blue"])
 ```
 
-The returned interpolator maps *t* in [0, 1 / (*n* - 1)] to *interpolate*(*values*[0], *values*[1]), *t* in [1 / (*n* - 1), 2 / (*n* - 1)] to *interpolate*(*values*[1], *values*[2]), and so on, where *n* = *values*.length. In effect, this is a lightweight [linear scale](../d3-scale.md#linear-scales). If *interpolate* is not specified, defaults to [interpolate](#interpolate).
+If *interpolate* is not specified, defaults to [interpolate](#interpolate).
+
+<ColorRamp :color="d3.piecewise(['red', 'green', 'blue'])" />
+
+```js
+d3.piecewise(["red", "green", "blue"])
+```
+
+The returned interpolator maps *t* in [0, 1 / (*n* - 1)] to *interpolate*(*values*[0], *values*[1]), *t* in [1 / (*n* - 1), 2 / (*n* - 1)] to *interpolate*(*values*[1], *values*[2]), and so on, where *n* = *values*.length. In effect, this is a lightweight [linear scale](../d3-scale.md#linear-scales).

@@ -1,87 +1,81 @@
 # Diverging scales
 
-Diverging scales, like [sequential scales](#sequential-scales), are similar to [continuous scales](#continuous-scales) in that they map a continuous, numeric input domain to a continuous output range. However, unlike continuous scales, the input domain and output range of a diverging scale always has exactly three elements, and the output range is typically specified as an interpolator rather than an array of values. These scales do not expose [invert](#continuous_invert) and [interpolate](#continuous_interpolate) methods.
+Diverging scales are similar to [linear scales](./linear.md) in that they map a continuous, numeric input domain to a continuous output range. Unlike linear scales, the input domain and output range of a diverging scale always has exactly two elements, and the output range is typically specified as an interpolator rather than an array of values. Diverging scales are typically used for a color encoding; see also [d3-scale-chromatic](../d3-scale-chromatic.md). These scales do not expose [invert](./linear.md#linear_invert) and [interpolate](./linear.md#linear_interpolate) methods. There are also [log](#scaleDivergingLog), [pow](#scaleDivergingPow), and [symlog](#scaleDivergingSymlog) variants of diverging scales.
 
-### d3.scaleDiverging(domain, interpolator)
+## scaleDiverging(*domain*, *interpolator*) {#scaleDiverging}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
-
-Constructs a new diverging scale with the specified [*domain*](#diverging_domain) and [*interpolator*](#diverging_interpolator) function or array. If *domain* is not specified, it defaults to [0, 0.5, 1]. If *interpolator* is not specified, it defaults to the identity function. When the scale is [applied](#_diverging), the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the extreme negative value, 0.5 represents the neutral value, and 1 represents the extreme positive value. For example, using [d3.interpolateSpectral](https://github.com/d3/d3-scale-chromatic/blob/main/README.md#interpolateSpectral):
+[Examples](https://observablehq.com/@d3/diverging-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js) · Constructs a new diverging scale with the specified [*domain*](#diverging_domain) and [*interpolator*](#diverging_interpolator) function or array.
 
 ```js
-var spectral = d3.scaleDiverging(d3.interpolateSpectral);
+const color = d3.scaleDiverging([-1, 0, 1], d3.interpolateRdBu);
 ```
 
-If *interpolator* is an array, it represents the scale’s three-element output range and is converted to an interpolator function using [d3.interpolate](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolate) and [d3.piecewise](https://github.com/d3/d3-interpolate/blob/main/README.md#piecewise).
+If *domain* is not specified, it defaults to [0, 0.5, 1].
 
-### diverging(value)
+```js
+const color = d3.scaleDiverging(d3.interpolateRdBu);
+```
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+If *interpolator* is not specified, it defaults to the identity function.
 
-See [*continuous*](#_continuous).
+```js
+const identity = d3.scaleDiverging();
+```
 
-### diverging.domain(domain)
+When the scale is [applied](#_diverging), the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the extreme negative value, 0.5 represents the neutral value, and 1 represents the extreme positive value.
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+If *interpolator* is an array, it represents the scale’s three-element output range and is converted to an interpolator function using [d3.interpolate](../d3-interpolate/value.md#interpolate) and [d3.piecewise](../d3-interpolate/value.md#piecewise).
 
-See [*continuous*.domain](#continuous_domain). Note that a diverging scale’s domain must be numeric and must contain exactly three values. The default domain is [0, 0.5, 1].
+```js
+const color = d3.scaleDiverging(["blue", "white", "red"]);
+```
 
-### diverging.clamp(clamp)
+A diverging scale’s domain must be numeric and must contain exactly three values. The default domain is [0, 0.5, 1].
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+## *diverging*.interpolator(*interpolator*) {#diverging_interpolator}
 
-See [*continuous*.clamp](#continuous_clamp).
+If *interpolator* is specified, sets the scale’s interpolator to the specified function.
 
-### diverging.interpolator(interpolator)
+```js
+const color = d3.scaleDiverging().interpolator(d3.interpolateRdBu);
+```
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+If *interpolator* is not specified, returns the scale’s current interpolator.
 
-If *interpolator* is specified, sets the scale’s interpolator to the specified function. If *interpolator* is not specified, returns the scale’s current interpolator.
+```js
+color.interpolator() // d3.interpolateRdBu
+```
 
-### diverging.range(range)
+## *diverging*.range(*range*) {#diverging_range}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+See [*linear*.range](./linear.md#linear_range). If *range* is specified, the given three-element array is converted to an interpolator function using [piecewise](../d3-interpolate/value.md#piecewise).
 
-See [*continuous*.range](#continuous_range). If *range* is specified, the given three-element array is converted to an interpolator function using [d3.interpolate](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolate) and [d3.piecewise](https://github.com/d3/d3-interpolate/blob/main/README.md#piecewise).
+```js
+const color = d3.scaleDiverging().range(["blue", "white", "red"]);
+```
 
-### diverging.rangeRound(range)
+The above is equivalent to:
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+```js
+const color = d3.scaleDiverging(d3.piecewise(["blue", "white", "red"]));
+```
 
-See [*continuous*.range](#continuous_rangeRound). If *range* is specified, implicitly uses [d3.interpolateRound](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolateRound) as the interpolator.
+## *diverging*.rangeRound(*range*) {#diverging_rangeRound}
 
-### diverging.copy()
+See [*linear*.range](./linear.md#linear_rangeRound). If *range* is specified, implicitly uses [interpolateRound](../d3-interpolate/value.md#interpolateRound) as the interpolator.
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+## scaleDivergingLog(*domain*, *range*) {#scaleDivergingLog}
 
-See [*continuous*.copy](#continuous_copy).
+Returns a new diverging scale with a logarithmic transform, analogous to a [log scale](./log.md).
 
-### diverging.unknown()
+## scaleDivergingPow(*domain*, *range*) {#scaleDivergingPow}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+Returns a new diverging scale with an exponential transform, analogous to a [power scale](./pow.md).
 
-See [*continuous*.unknown](#continuous_unknown).
+## scaleDivergingSqrt(*domain*, *range*) {#scaleDivergingSqrt}
 
-### d3.scaleDivergingLog(domain, range)
+Returns a new diverging scale with a square-root transform, analogous to a [sqrt scale](./pow.md#scaleSqrt).
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
+## scaleDivergingSymlog(*domain*, *range*) {#scaleDivergingSymlog}
 
-A [diverging scale](#diverging-scales) with a logarithmic transform, analogous to a [log scale](#log-scales).
-
-### d3.scaleDivergingPow(domain, range)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
-
-A [diverging scale](#diverging-scales) with an exponential transform, analogous to a [power scale](#pow-scales).
-
-### d3.scaleDivergingSqrt(domain, range)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
-
-A [diverging scale](#diverging-scales) with a square-root transform, analogous to a [d3.scaleSqrt](#scaleSqrt).
-
-### d3.scaleDivergingSymlog(domain, range)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js), [Examples](https://observablehq.com/@d3/diverging-scales)
-
-A [diverging scale](#diverging-scales) with a symmetric logarithmic transform, analogous to a [symlog scale](#symlog-scales).
+Returns a new diverging scale with a symmetric logarithmic transform, analogous to a [symlog scale](./symlog.md).

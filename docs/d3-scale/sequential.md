@@ -22,13 +22,13 @@ If *interpolator* is not specified, it defaults to the identity function.
 const identity = d3.scaleSequential();
 ```
 
-When the scale is [applied](#_sequential), the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the minimum value and 1 represents the maximum value. For example, to implement the ill-advised [HSL](https://github.com/d3/d3-color/blob/main/README.md#hsl) rainbow scale (please use [interpolateRainbow](../d3-scale-chromatic/cyclical.md#interpolateRainbow) instead):
+When the scale is [applied](#_sequential), the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the minimum value and 1 represents the maximum value. For example, to implement the ill-advised angry rainbow scale (please use [interpolateRainbow](../d3-scale-chromatic/cyclical.md#interpolateRainbow) instead):
 
 ```js
 const rainbow = d3.scaleSequential((t) => d3.hsl(t * 360, 1, 0.5) + "");
 ```
 
-If *interpolator* is an array, it represents the scale’s two-element output range and is converted to an interpolator function using [d3.interpolate](../d3-interpolate/value.md#interpolate).
+If *interpolator* is an array, it represents the scale’s two-element output range and is converted to an interpolator function using [interpolate](../d3-interpolate/value.md#interpolate).
 
 ```js
 const color = d3.scaleSequential(["red", "blue"]);
@@ -38,15 +38,35 @@ A sequential scale’s domain must be numeric and must contain exactly two value
 
 ## *sequential*.interpolator(*interpolator*) {#sequential_interpolator}
 
-If *interpolator* is specified, sets the scale’s interpolator to the specified function. If *interpolator* is not specified, returns the scale’s current interpolator.
+If *interpolator* is specified, sets the scale’s interpolator to the specified function.
+
+```js
+const color = d3.scaleSequential().interpolator(d3.interpolateBlues);
+```
+
+If *interpolator* is not specified, returns the scale’s current interpolator.
+
+```js
+color.interpolator() // d3.interpolateBlues
+```
 
 ## *sequential*.range(*range*) {#sequential_range}
 
-See [*linear*.range](./linear.md#linear_range). If *range* is specified, the given two-element array is converted to an interpolator function using [d3.interpolate](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolate).
+See [*linear*.range](./linear.md#linear_range). If *range* is specified, the given two-element array is converted to an interpolator function using [interpolate](../d3-interpolate/value.md#interpolate).
+
+```js
+const color = d3.scaleSequential().range(["red", "blue"]);
+```
+
+The above is equivalent to:
+
+```js
+const color = d3.scaleSequential(d3.interpolate("red", "blue"));
+```
 
 ## *sequential*.rangeRound(*range*) {#sequential_rangeRound}
 
-See [*linear*.rangeRound](./linear.md#linear_rangeRound). If *range* is specified, implicitly uses [d3.interpolateRound](https://github.com/d3/d3-interpolate/blob/main/README.md#interpolateRound) as the interpolator.
+See [*linear*.rangeRound](./linear.md#linear_rangeRound). If *range* is specified, implicitly uses [interpolateRound](../d3-interpolate/value.md#interpolateRound) as the interpolator.
 
 ## scaleSequentialLog(*domain*, *range*) {#scaleSequentialLog}
 
