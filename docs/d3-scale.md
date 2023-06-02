@@ -14,8 +14,8 @@ See one of:
 * [Point scales](./d3-scale/point.md) - for categorical or ordinal data as a position encoding
 * [Sequential scales](./d3-scale/sequential.md) - for quantitative data as a sequential color encoding
 * [Diverging scales](./d3-scale/diverging.md) - for quantitative data as a diverging color encoding
-* [Quantize scales](./d3-scale/quantize.md) - for quantitative data as a discrete encoding
 * [Quantile scales](./d3-scale/quantile.md) - for quantitative data as a discrete encoding
+* [Quantize scales](./d3-scale/quantize.md) - for quantitative data as a discrete encoding
 * [Threshold scales](./d3-scale/threshold.md) - for quantitative data as a discrete encoding
 
 For visualizing the scale’s encoding, see [d3-axis](./d3-axis.md), as well as [*scale*.ticks](./d3-scale/linear.md#linear_ticks) and [*scale*.tickFormat](./d3-scale/linear.md#linear_tickFormat). For color schemes, see [d3-scale-chromatic](./d3-scale-chromatic.md).

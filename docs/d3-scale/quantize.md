@@ -1,24 +1,27 @@
 # Quantize scales
 
-Quantize scales are similar to [linear scales](#linear-scales), except they use a discrete rather than continuous range. The continuous input domain is divided into uniform segments based on the number of values in (*i.e.*, the cardinality of) the output range. Each range value *y* can be expressed as a quantized linear function of the domain value *x*: *y* = *m round(x)* + *b*. See [this choropleth](https://observablehq.com/@d3/choropleth) for an example.
+Quantize scales are similar to [linear scales](./linear.md), except they use a discrete rather than continuous range. The continuous input domain is divided into uniform segments based on the number of values in (*i.e.*, the cardinality of) the output range. Each range value *y* can be expressed as a quantized linear function of the domain value *x*: *y* = *m round(x)* + *b*. See [the quantized choropleth](https://observablehq.com/@d3/choropleth/2?intent=fork) for an example.
 
-### d3.scaleQuantize(domain, range)
+## scaleQuantize(*domain*, *range*) {#scaleQuantize}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales)
-
-Constructs a new quantize scale with the specified [*domain*](#quantize_domain) and [*range*](#quantize_range). If either *domain* or *range* is not specified, each defaults to [0, 1]. Thus, the default quantize scale is equivalent to the [Math.round](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Math/round) function.
-
-### quantize(value)
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales)
-
-Given a *value* in the input [domain](#quantize_domain), returns the corresponding value in the output [range](#quantize_range). For example, to apply a color encoding:
+[Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · Constructs a new quantize scale with the specified [*domain*](#quantize_domain) and [*range*](#quantize_range).
 
 ```js
-var color = d3.scaleQuantize()
-    .domain([0, 1])
-    .range(["brown", "steelblue"]);
+const color = d3.scaleQuantize([0, 100], d3.schemeBlues[9]);
+```
 
+If either *domain* or *range* is not specified, each defaults to [0, 1].
+
+```js
+const color = d3.scaleQuantize(d3.schemeBlues[9]);
+```
+
+## *quantize*(*value*) {#_quantize}
+
+[Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · Given a *value* in the input [domain](#quantize_domain), returns the corresponding value in the output [range](#quantize_range). For example, to apply a color encoding:
+
+```js
+const color = d3.scaleQuantize([0, 1], ["brown", "steelblue"]);
 color(0.49); // "brown"
 color(0.51); // "steelblue"
 ```
@@ -26,67 +29,59 @@ color(0.51); // "steelblue"
 Or dividing the domain into three equally-sized parts with different range values to compute an appropriate stroke width:
 
 ```js
-var width = d3.scaleQuantize()
-    .domain([10, 100])
-    .range([1, 2, 4]);
-
+const width = d3.scaleQuantize([10, 100], [1, 2, 4]);
 width(20); // 1
 width(50); // 2
 width(80); // 4
 ```
 
-### quantize.invertExtent(value)
+## *quantize*.invertExtent(*value*) {#quantize_invertExtent}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales)
-
-Returns the extent of values in the [domain](#quantize_domain) [<i>x0</i>, <i>x1</i>] for the corresponding *value* in the [range](#quantize_range): the inverse of [*quantize*](#_quantize). This method is useful for interaction, say to determine the value in the domain that corresponds to the pixel location under the mouse.
+[Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · Returns the extent of values in the [domain](#quantize_domain) [<i>x0</i>, <i>x1</i>] for the corresponding *value* in the [range](#quantize_range): the inverse of [*quantize*](#_quantize). This method is useful for interaction, say to determine the value in the domain that corresponds to the pixel location under the mouse.
 
 ```js
-var width = d3.scaleQuantize()
-    .domain([10, 100])
-    .range([1, 2, 4]);
-
+const width = d3.scaleQuantize([10, 100], [1, 2, 4]);
 width.invertExtent(2); // [40, 70]
 ```
 
-### quantize.domain(domain)
+## *quantize*.domain(*domain*) {#quantize_domain}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales)
+[Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · If *domain* is specified, sets the scale’s domain to the specified two-element array of numbers.
 
-If *domain* is specified, sets the scale’s domain to the specified two-element array of numbers. If the elements in the given array are not numbers, they will be coerced to numbers. The numbers must be in ascending order or the behavior of the scale is undefined. If *domain* is not specified, returns the scale’s current domain.
+```js
+const color = d3.scaleQuantize(d3.schemeBlues[9]).domain([0, 100]);
+```
 
-### quantize.range(range)
+If the elements in the given array are not numbers, they will be coerced to numbers. The numbers must be in ascending order or the behavior of the scale is undefined.
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales)
+If *domain* is not specified, returns the scale’s current domain.
 
-If *range* is specified, sets the scale’s range to the specified array of values. The array may contain any number of discrete values. The elements in the given array need not be numbers; any value or type will work. If *range* is not specified, returns the scale’s current range.
+```js
+color.domain() // [0, 100]
+```
 
-### quantize.ticks(count)
+## *quantize*.range(*range*) {#quantize_range}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/scale-ticks)
+[Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · If *range* is specified, sets the scale’s range to the specified array of values.
 
-Equivalent to [*continuous*.ticks](#continuous_ticks).
+```js
+const color = d3.scaleQuantize().range(d3.schemeBlues[5]);
+```
 
-### quantize.tickFormat(count, specifier)
+The array may contain any number of discrete values. The elements in the given array need not be numbers; any value or type will work.
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/linear.js), [Examples](https://observablehq.com/@d3/scale-ticks)
+If *range* is not specified, returns the scale’s current range.
 
-Equivalent to [*continuous*.tickFormat](#continuous_tickFormat).
+```js
+color.range() // ["#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"]
+```
 
-### quantize.nice()
+## *quantize*.thresholds() {#quantize_thresholds}
 
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales)
+[Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · Returns the array of computed thresholds within the [domain](#quantize_domain).
 
-Equivalent to [*continuous*.nice](#continuous_nice).
+```js
+color.thresholds() // [0.2, 0.4, 0.6, 0.8]
+```
 
-### quantize.thresholds()
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales)
-
-Returns the array of computed thresholds within the [domain](#quantize_domain).
-
-### quantize.copy()
-
-[Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js), [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales)
-
-Returns an exact copy of this scale. Changes to this scale will not affect the returned scale, and vice versa.
+The number of returned thresholds is one less than the length of the [range](#quantize_range): values less than the first threshold are assigned the first element in the range, whereas values greater than or equal to the last threshold are assigned the last element in the range.

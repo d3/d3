@@ -95,8 +95,8 @@ export default defineConfig({
               {text: "Point scales", link: "/d3-scale/point"},
               {text: "Sequential scales", link: "/d3-scale/sequential"},
               {text: "Diverging scales", link: "/d3-scale/diverging"},
-              {text: "Quantize scales", link: "/d3-scale/quantize"},
               {text: "Quantile scales", link: "/d3-scale/quantile"},
+              {text: "Quantize scales", link: "/d3-scale/quantize"},
               {text: "Threshold scales", link: "/d3-scale/threshold"}
             ]
           },
