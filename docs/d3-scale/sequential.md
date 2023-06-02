@@ -90,4 +90,13 @@ Returns a new sequential scale with a symmetric logarithmic transform, analogous
 
 ## *sequentialQuantile*.quantiles(*n*) {#sequentialQuantile_quantiles}
 
-Returns an array of *n* + 1 quantiles. For example, if *n* = 4, returns an array of five numbers: the minimum value, the first quartile, the median, the third quartile, and the maximum.
+[Source](https://github.com/d3/d3-scale/blob/main/src/sequentialQuantile.js) · Returns an array of *n* + 1 quantiles.
+
+```js
+const color = d3.scaleSequentialQuantile()
+    .domain(penguins.map((d) => d.body_mass_g))
+    .interpolator(d3.interpolateBlues);
+color.quantiles(4); // [2700, 3550, 4050, 4750, 6300]
+```
+
+For example, if *n* = 4, returns an array of five numbers: the minimum value, the first quartile, the median, the third quartile, and the maximum.
