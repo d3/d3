@@ -87,3 +87,14 @@ color.thresholds() // [0.2, 0.4, 0.6, 0.8]
 ```
 
 The number of returned thresholds is one less than the length of the [range](#quantize_range): values less than the first threshold are assigned the first element in the range, whereas values greater than or equal to the last threshold are assigned the last element in the range.
+
+## *quantize*.copy() {#quantize_copy}
+
+[Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantize.js) · Returns an exact copy of this scale.
+
+```js
+const c1 = d3.scaleQuantize(d3.schemeBlues[5]);
+const c2 = c1.copy();
+```
+
+Changes to this scale will not affect the returned scale, and vice versa.
