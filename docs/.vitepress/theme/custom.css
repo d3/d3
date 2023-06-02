@@ -50,3 +50,11 @@
 .vp-doc p:hover .header-anchor {
   opacity: 1;
 }
+
+.vp-doc .plot,
+.vp-doc .plot-ramp {
+  background: none;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
