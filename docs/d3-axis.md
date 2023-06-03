@@ -258,16 +258,16 @@ axis.tickPadding() // 0
 
 ## *axis*.offset(offset) {#axis_offset}
 
-[Source](https://github.com/d3/d3-axis/blob/main/src/axis.js) · If *offset* is specified, sets the offset to the specified value in pixels and returns the axis.
+[Source](https://github.com/d3/d3-axis/blob/main/src/axis.js) · If *offset* is specified, sets the pixel offset to the specified value in pixels and returns the axis.
 
 ```js
 const axis = d3.axisBottom(x).offset(0);
 ```
 
-If *offset* is not specified, returns the current offset.
+If *offset* is not specified, returns the current pixel offset.
 
 ```js
 axis.offset() // 0
 ```
 
-The offset defaults to 0 on devices with a [devicePixelRatio](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio) greater than 1, and 0.5px otherwise. This default offset ensures crisp edges on low-resolution devices.
+The pixel offset defaults to 0 on devices with a [devicePixelRatio](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio) greater than 1, and 0.5 otherwise. This default pixel offset ensures crisp edges on low-resolution devices.
