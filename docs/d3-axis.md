@@ -7,7 +7,7 @@ import PlotRender from "./components/PlotRender.js";
 
 # d3-axis
 
-The axis component renders human-readable reference marks for [scales](./d3-scale.md).
+The axis component renders human-readable reference marks for [scales](./d3-scale.md). The orientation of an axis is fixed; to change the orientation, remove the old axis and create a new axis.
 
 Axes are rendered at the origin. To change the position of the axis with respect to the chart, specify a [transform attribute](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on the containing element.
 
@@ -20,9 +20,7 @@ d3.select("body").append("svg")
     .call(axis);
 ```
 
-The elements created by the axis are considered part of its public API. You can apply external stylesheets or modify the generated axis elements to [customize the axis appearance](https://observablehq.com/@d3/styled-axes).
-
-An axis consists of a [path element](https://www.w3.org/TR/SVG/paths.html#PathElement) of class “domain” representing the extent of the scale’s domain, followed by transformed [g elements](https://www.w3.org/TR/SVG/struct.html#Groups) of class “tick” representing each of the scale’s ticks. Each tick has a [line element](https://www.w3.org/TR/SVG/shapes.html#LineElement) to draw the tick line, and a [text element](https://www.w3.org/TR/SVG/text.html#TextElement) for the tick label. For example, here is a typical bottom-oriented axis:
+The elements created by the axis are considered part of its public API. You can apply external stylesheets or modify the generated axis elements to [customize the axis appearance](https://observablehq.com/@d3/styled-axes). An axis consists of a [path element](https://www.w3.org/TR/SVG/paths.html#PathElement) of class “domain” representing the extent of the scale’s domain, followed by transformed [g elements](https://www.w3.org/TR/SVG/struct.html#Groups) of class “tick” representing each of the scale’s ticks. Each tick has a [line element](https://www.w3.org/TR/SVG/shapes.html#LineElement) to draw the tick line, and a [text element](https://www.w3.org/TR/SVG/text.html#TextElement) for the tick label. For example, here is a typical bottom-oriented axis:
 
 ```html
 <g fill="none" font-size="10" font-family="sans-serif" text-anchor="middle">
@@ -53,8 +51,6 @@ An axis consists of a [path element](https://www.w3.org/TR/SVG/paths.html#PathEl
   </g>
 </g>
 ```
-
-The orientation of an axis is fixed; to change the orientation, remove the old axis and create a new axis.
 
 ## axisTop(*scale*) {#axisTop}
 
