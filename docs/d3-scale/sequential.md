@@ -96,6 +96,7 @@ Returns a new sequential scale with a symmetric logarithmic transform, analogous
 const color = d3.scaleSequentialQuantile()
     .domain(penguins.map((d) => d.body_mass_g))
     .interpolator(d3.interpolateBlues);
+
 color.quantiles(4); // [2700, 3550, 4050, 4750, 6300]
 ```
 
