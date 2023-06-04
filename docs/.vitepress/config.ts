@@ -16,7 +16,6 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/logo.svg",
-    outline: "deep",
     nav: [
       {text: "Home", link: "/"},
       {text: "Examples", link: "https://observablehq.com/@d3/gallery"},
