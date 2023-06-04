@@ -140,7 +140,21 @@ export default defineConfig({
           {text: "d3-path", link: "/d3-path"},
           {text: "d3-polygon", link: "/d3-polygon"},
           {text: "d3-quadtree", link: "/d3-quadtree"},
-          {text: "d3-shape", link: "/d3-shape"},
+          {
+            text: "d3-shape",
+            link: "/d3-shape",
+            collapsed: true,
+            items: [
+              {text: "Arcs", link: "/d3-shape/arc"},
+              {text: "Areas", link: "/d3-shape/area"},
+              {text: "Curves", link: "/d3-shape/curve"},
+              {text: "Lines", link: "/d3-shape/line"},
+              {text: "Links", link: "/d3-shape/link"},
+              {text: "Pies", link: "/d3-shape/pie"},
+              {text: "Stacks", link: "/d3-shape/stack"},
+              {text: "Symbols", link: "/d3-shape/symbol"}
+            ]
+          },
         ]
       },
       {

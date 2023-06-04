@@ -1161,194 +1161,194 @@ Transform the DOM by selecting elements and joining to data.
 
 Graphical primitives for visualization.
 
-### [Arcs](./d3-shape.md#arcs)
+### [Arcs](./d3-shape/arc.md)
 
 Circular or annular sectors, as in a pie or donut chart.
 
-* [d3.arc](./d3-shape.md#arc) - create a new arc generator.
-* [*arc*](./d3-shape.md#_arc) - generate an arc for the given datum.
-* [*arc*.centroid](./d3-shape.md#arc_centroid) - compute an arc’s midpoint.
-* [*arc*.innerRadius](./d3-shape.md#arc_innerRadius) - set the inner radius.
-* [*arc*.outerRadius](./d3-shape.md#arc_outerRadius) - set the outer radius.
-* [*arc*.cornerRadius](./d3-shape.md#arc_cornerRadius) - set the corner radius, for rounded corners.
-* [*arc*.startAngle](./d3-shape.md#arc_startAngle) - set the start angle.
-* [*arc*.endAngle](./d3-shape.md#arc_endAngle) - set the end angle.
-* [*arc*.padAngle](./d3-shape.md#arc_padAngle) - set the angle between adjacent arcs, for padded arcs.
-* [*arc*.padRadius](./d3-shape.md#arc_padRadius) - set the radius at which to linearize padding.
-* [*arc*.context](./d3-shape.md#arc_context) - set the rendering context.
-* [*arc*.digits](./d3-shape.md#arc_digits) - set the output precision.
+* [d3.arc](./d3-shape/arc.md#arc) - create a new arc generator.
+* [*arc*](./d3-shape/arc.md#_arc) - generate an arc for the given datum.
+* [*arc*.centroid](./d3-shape/arc.md#arc_centroid) - compute an arc’s midpoint.
+* [*arc*.innerRadius](./d3-shape/arc.md#arc_innerRadius) - set the inner radius.
+* [*arc*.outerRadius](./d3-shape/arc.md#arc_outerRadius) - set the outer radius.
+* [*arc*.cornerRadius](./d3-shape/arc.md#arc_cornerRadius) - set the corner radius, for rounded corners.
+* [*arc*.startAngle](./d3-shape/arc.md#arc_startAngle) - set the start angle.
+* [*arc*.endAngle](./d3-shape/arc.md#arc_endAngle) - set the end angle.
+* [*arc*.padAngle](./d3-shape/arc.md#arc_padAngle) - set the angle between adjacent arcs, for padded arcs.
+* [*arc*.padRadius](./d3-shape/arc.md#arc_padRadius) - set the radius at which to linearize padding.
+* [*arc*.context](./d3-shape/arc.md#arc_context) - set the rendering context.
+* [*arc*.digits](./d3-shape/arc.md#arc_digits) - set the output precision.
 
-### [Pies](./d3-shape.md#pies)
+### [Pies](./d3-shape/pie.md)
 
 Compute the necessary angles to represent a tabular dataset as a pie or donut chart.
 
-* [d3.pie](./d3-shape.md#pie) - create a new pie generator.
-* [*pie*](./d3-shape.md#_pie) - compute the arc angles for the given dataset.
-* [*pie*.value](./d3-shape.md#pie_value) - set the value accessor.
-* [*pie*.sort](./d3-shape.md#pie_sort) - set the sort order comparator.
-* [*pie*.sortValues](./d3-shape.md#pie_sortValues) - set the sort order comparator.
-* [*pie*.startAngle](./d3-shape.md#pie_startAngle) - set the overall start angle.
-* [*pie*.endAngle](./d3-shape.md#pie_endAngle) - set the overall end angle.
-* [*pie*.padAngle](./d3-shape.md#pie_padAngle) - set the pad angle between adjacent arcs.
+* [d3.pie](./d3-shape/pie.md#pie) - create a new pie generator.
+* [*pie*](./d3-shape/pie.md#_pie) - compute the arc angles for the given dataset.
+* [*pie*.value](./d3-shape/pie.md#pie_value) - set the value accessor.
+* [*pie*.sort](./d3-shape/pie.md#pie_sort) - set the sort order comparator.
+* [*pie*.sortValues](./d3-shape/pie.md#pie_sortValues) - set the sort order comparator.
+* [*pie*.startAngle](./d3-shape/pie.md#pie_startAngle) - set the overall start angle.
+* [*pie*.endAngle](./d3-shape/pie.md#pie_endAngle) - set the overall end angle.
+* [*pie*.padAngle](./d3-shape/pie.md#pie_padAngle) - set the pad angle between adjacent arcs.
 
-### [Lines](./d3-shape.md#lines)
+### [Lines](./d3-shape/line.md)
 
 A spline or polyline, as in a line chart.
 
-* [d3.line](./d3-shape.md#line) - create a new line generator.
-* [*line*](./d3-shape.md#_line) - generate a line for the given dataset.
-* [*line*.x](./d3-shape.md#line_x) - set the *x* accessor.
-* [*line*.y](./d3-shape.md#line_y) - set the *y* accessor.
-* [*line*.defined](./d3-shape.md#line_defined) - set the defined accessor.
-* [*line*.curve](./d3-shape.md#line_curve) - set the curve interpolator.
-* [*line*.context](./d3-shape.md#line_context) - set the rendering context.
-* [*line*.digits](./d3-shape.md#line_digits) - set the output precision.
-* [d3.lineRadial](./d3-shape.md#lineRadial) - create a new radial line generator.
-* [*lineRadial*](./d3-shape.md#_lineRadial) - generate a line for the given dataset.
-* [*lineRadial*.angle](./d3-shape.md#lineRadial_angle) - set the angle accessor.
-* [*lineRadial*.radius](./d3-shape.md#lineRadial_radius) - set the radius accessor.
-* [*lineRadial*.defined](./d3-shape.md#lineRadial_defined) - set the defined accessor.
-* [*lineRadial*.curve](./d3-shape.md#lineRadial_curve) - set the curve interpolator.
-* [*lineRadial*.context](./d3-shape.md#lineRadial_context) - set the rendering context.
-* [*lineRadial*.digits](./d3-shape.md#lineRadial_digits) - set the output precision.
+* [d3.line](./d3-shape/line.md#line) - create a new line generator.
+* [*line*](./d3-shape/line.md#_line) - generate a line for the given dataset.
+* [*line*.x](./d3-shape/line.md#line_x) - set the *x* accessor.
+* [*line*.y](./d3-shape/line.md#line_y) - set the *y* accessor.
+* [*line*.defined](./d3-shape/line.md#line_defined) - set the defined accessor.
+* [*line*.curve](./d3-shape/line.md#line_curve) - set the curve interpolator.
+* [*line*.context](./d3-shape/line.md#line_context) - set the rendering context.
+* [*line*.digits](./d3-shape/line.md#line_digits) - set the output precision.
+* [d3.lineRadial](./d3-shape/line.md#lineRadial) - create a new radial line generator.
+* [*lineRadial*](./d3-shape/line.md#_lineRadial) - generate a line for the given dataset.
+* [*lineRadial*.angle](./d3-shape/line.md#lineRadial_angle) - set the angle accessor.
+* [*lineRadial*.radius](./d3-shape/line.md#lineRadial_radius) - set the radius accessor.
+* [*lineRadial*.defined](./d3-shape/line.md#lineRadial_defined) - set the defined accessor.
+* [*lineRadial*.curve](./d3-shape/line.md#lineRadial_curve) - set the curve interpolator.
+* [*lineRadial*.context](./d3-shape/line.md#lineRadial_context) - set the rendering context.
+* [*lineRadial*.digits](./d3-shape/line.md#lineRadial_digits) - set the output precision.
 
-### [Areas](./d3-shape.md#areas)
+### [Areas](./d3-shape/area.md)
 
 An area, defined by a bounding topline and baseline, as in an area chart.
 
-* [d3.area](./d3-shape.md#area) - create a new area generator.
-* [*area*](./d3-shape.md#_area) - generate an area for the given dataset.
-* [*area*.x](./d3-shape.md#area_x) - set the *x0* and *x1* accessors.
-* [*area*.x0](./d3-shape.md#area_x0) - set the baseline *x* accessor.
-* [*area*.x1](./d3-shape.md#area_x1) - set the topline *x* accessor.
-* [*area*.y](./d3-shape.md#area_y) - set the *y0* and *y1* accessors.
-* [*area*.y0](./d3-shape.md#area_y0) - set the baseline *y* accessor.
-* [*area*.y1](./d3-shape.md#area_y1) - set the topline *y* accessor.
-* [*area*.defined](./d3-shape.md#area_defined) - set the defined accessor.
-* [*area*.curve](./d3-shape.md#area_curve) - set the curve interpolator.
-* [*area*.context](./d3-shape.md#area_context) - set the rendering context.
-* [*area*.digits](./d3-shape.md#area_digits) - set the output precision.
-* [*area*.lineX0](./d3-shape.md#area_lineX0) - derive a line for the left edge of an area.
-* [*area*.lineY0](./d3-shape.md#area_lineY0) - derive a line for the top edge of an area.
-* [*area*.lineX1](./d3-shape.md#area_lineX1) - derive a line for the right edge of an area.
-* [*area*.lineY1](./d3-shape.md#area_lineY1) - derive a line for the bottom edge of an area.
-* [d3.areaRadial](./d3-shape.md#areaRadial) - create a new radial area generator.
-* [*areaRadial*](./d3-shape.md#_areaRadial) - generate an area for the given dataset.
-* [*areaRadial*.angle](./d3-shape.md#areaRadial_angle) - set the start and end angle accessors.
-* [*areaRadial*.startAngle](./d3-shape.md#areaRadial_startAngle) - set the start angle accessor.
-* [*areaRadial*.endAngle](./d3-shape.md#areaRadial_endAngle) - set the end angle accessor.
-* [*areaRadial*.radius](./d3-shape.md#areaRadial_radius) - set the inner and outer radius accessors.
-* [*areaRadial*.innerRadius](./d3-shape.md#areaRadial_innerRadius) - set the inner radius accessor.
-* [*areaRadial*.outerRadius](./d3-shape.md#areaRadial_outerRadius) - set the outer radius accessor.
-* [*areaRadial*.defined](./d3-shape.md#areaRadial_defined) - set the defined accessor.
-* [*areaRadial*.curve](./d3-shape.md#areaRadial_curve) - set the curve interpolator.
-* [*areaRadial*.context](./d3-shape.md#areaRadial_context) - set the rendering context.
-* [*areaRadial*.digits](./d3-shape.md#areaRadial_digits) - set the output precision.
-* [*areaRadial*.lineStartAngle](./d3-shape.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
-* [*areaRadial*.lineInnerRadius](./d3-shape.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
-* [*areaRadial*.lineEndAngle](./d3-shape.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
-* [*areaRadial*.lineOuterRadius](./d3-shape.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
+* [d3.area](./d3-shape/area.md#area) - create a new area generator.
+* [*area*](./d3-shape/area.md#_area) - generate an area for the given dataset.
+* [*area*.x](./d3-shape/area.md#area_x) - set the *x0* and *x1* accessors.
+* [*area*.x0](./d3-shape/area.md#area_x0) - set the baseline *x* accessor.
+* [*area*.x1](./d3-shape/area.md#area_x1) - set the topline *x* accessor.
+* [*area*.y](./d3-shape/area.md#area_y) - set the *y0* and *y1* accessors.
+* [*area*.y0](./d3-shape/area.md#area_y0) - set the baseline *y* accessor.
+* [*area*.y1](./d3-shape/area.md#area_y1) - set the topline *y* accessor.
+* [*area*.defined](./d3-shape/area.md#area_defined) - set the defined accessor.
+* [*area*.curve](./d3-shape/area.md#area_curve) - set the curve interpolator.
+* [*area*.context](./d3-shape/area.md#area_context) - set the rendering context.
+* [*area*.digits](./d3-shape/area.md#area_digits) - set the output precision.
+* [*area*.lineX0](./d3-shape/area.md#area_lineX0) - derive a line for the left edge of an area.
+* [*area*.lineY0](./d3-shape/area.md#area_lineY0) - derive a line for the top edge of an area.
+* [*area*.lineX1](./d3-shape/area.md#area_lineX1) - derive a line for the right edge of an area.
+* [*area*.lineY1](./d3-shape/area.md#area_lineY1) - derive a line for the bottom edge of an area.
+* [d3.areaRadial](./d3-shape/area.md#areaRadial) - create a new radial area generator.
+* [*areaRadial*](./d3-shape/area.md#_areaRadial) - generate an area for the given dataset.
+* [*areaRadial*.angle](./d3-shape/area.md#areaRadial_angle) - set the start and end angle accessors.
+* [*areaRadial*.startAngle](./d3-shape/area.md#areaRadial_startAngle) - set the start angle accessor.
+* [*areaRadial*.endAngle](./d3-shape/area.md#areaRadial_endAngle) - set the end angle accessor.
+* [*areaRadial*.radius](./d3-shape/area.md#areaRadial_radius) - set the inner and outer radius accessors.
+* [*areaRadial*.innerRadius](./d3-shape/area.md#areaRadial_innerRadius) - set the inner radius accessor.
+* [*areaRadial*.outerRadius](./d3-shape/area.md#areaRadial_outerRadius) - set the outer radius accessor.
+* [*areaRadial*.defined](./d3-shape/area.md#areaRadial_defined) - set the defined accessor.
+* [*areaRadial*.curve](./d3-shape/area.md#areaRadial_curve) - set the curve interpolator.
+* [*areaRadial*.context](./d3-shape/area.md#areaRadial_context) - set the rendering context.
+* [*areaRadial*.digits](./d3-shape/area.md#areaRadial_digits) - set the output precision.
+* [*areaRadial*.lineStartAngle](./d3-shape/area.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
+* [*areaRadial*.lineInnerRadius](./d3-shape/area.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
+* [*areaRadial*.lineEndAngle](./d3-shape/area.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
+* [*areaRadial*.lineOuterRadius](./d3-shape/area.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
 
-### [Curves](./d3-shape.md#curves)
+### [Curves](./d3-shape/curve.md)
 
 Interpolate between points to produce a continuous shape.
 
-* [d3.curveBasis](./d3-shape.md#curveBasis) - a cubic basis spline, repeating the end points.
-* [d3.curveBasisClosed](./d3-shape.md#curveBasisClosed) - a closed cubic basis spline.
-* [d3.curveBasisOpen](./d3-shape.md#curveBasisOpen) - a cubic basis spline.
-* [d3.curveBundle](./d3-shape.md#curveBundle) - a straightened cubic basis spline.
-* [*bundle*.beta](./d3-shape.md#curveBundle_beta) - set the bundle tension *beta*.
-* [d3.curveBumpX](./d3-shape.md#curveBumpX) - a cubic Bézier spline with horizontal tangents.
-* [d3.curveBumpY](./d3-shape.md#curveBumpY) - a cubic Bézier spline with vertical tangents.
-* [d3.curveCardinal](./d3-shape.md#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
-* [d3.curveCardinalClosed](./d3-shape.md#curveCardinalClosed) - a closed cubic cardinal spline.
-* [d3.curveCardinalOpen](./d3-shape.md#curveCardinalOpen) - a cubic cardinal spline.
-* [*cardinal*.tension](./d3-shape.md#curveCardinal_tension) - set the cardinal spline tension.
-* [d3.curveCatmullRom](./d3-shape.md#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
-* [d3.curveCatmullRomClosed](./d3-shape.md#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
-* [d3.curveCatmullRomOpen](./d3-shape.md#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
-* [*catmullRom*.alpha](./d3-shape.md#curveCatmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
-* [d3.curveLinear](./d3-shape.md#curveLinear) - a polyline.
-* [d3.curveLinearClosed](./d3-shape.md#curveLinearClosed) - a closed polyline.
-* [d3.curveMonotoneX](./d3-shape.md#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
-* [d3.curveMonotoneY](./d3-shape.md#curveMonotoneY) - a cubic spline that, given monotonicity in *y*, preserves it in *x*.
-* [d3.curveNatural](./d3-shape.md#curveNatural) - a natural cubic spline.
-* [d3.curveStep](./d3-shape.md#curveStep) - a piecewise constant function.
-* [d3.curveStepAfter](./d3-shape.md#curveStepAfter) - a piecewise constant function.
-* [d3.curveStepBefore](./d3-shape.md#curveStepBefore) - a piecewise constant function.
-* [*curve*.areaStart](./d3-shape.md#curve_areaStart) - start a new area segment.
-* [*curve*.areaEnd](./d3-shape.md#curve_areaEnd) - end the current area segment.
-* [*curve*.lineStart](./d3-shape.md#curve_lineStart) - start a new line segment.
-* [*curve*.lineEnd](./d3-shape.md#curve_lineEnd) - end the current line segment.
-* [*curve*.point](./d3-shape.md#curve_point) - add a point to the current line segment.
+* [d3.curveBasis](./d3-shape/curve.md#curveBasis) - a cubic basis spline, repeating the end points.
+* [d3.curveBasisClosed](./d3-shape/curve.md#curveBasisClosed) - a closed cubic basis spline.
+* [d3.curveBasisOpen](./d3-shape/curve.md#curveBasisOpen) - a cubic basis spline.
+* [d3.curveBundle](./d3-shape/curve.md#curveBundle) - a straightened cubic basis spline.
+* [*bundle*.beta](./d3-shape/curve.md#curveBundle_beta) - set the bundle tension *beta*.
+* [d3.curveBumpX](./d3-shape/curve.md#curveBumpX) - a cubic Bézier spline with horizontal tangents.
+* [d3.curveBumpY](./d3-shape/curve.md#curveBumpY) - a cubic Bézier spline with vertical tangents.
+* [d3.curveCardinal](./d3-shape/curve.md#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
+* [d3.curveCardinalClosed](./d3-shape/curve.md#curveCardinalClosed) - a closed cubic cardinal spline.
+* [d3.curveCardinalOpen](./d3-shape/curve.md#curveCardinalOpen) - a cubic cardinal spline.
+* [*cardinal*.tension](./d3-shape/curve.md#curveCardinal_tension) - set the cardinal spline tension.
+* [d3.curveCatmullRom](./d3-shape/curve.md#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
+* [d3.curveCatmullRomClosed](./d3-shape/curve.md#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
+* [d3.curveCatmullRomOpen](./d3-shape/curve.md#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
+* [*catmullRom*.alpha](./d3-shape/curve.md#curveCatmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
+* [d3.curveLinear](./d3-shape/curve.md#curveLinear) - a polyline.
+* [d3.curveLinearClosed](./d3-shape/curve.md#curveLinearClosed) - a closed polyline.
+* [d3.curveMonotoneX](./d3-shape/curve.md#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
+* [d3.curveMonotoneY](./d3-shape/curve.md#curveMonotoneY) - a cubic spline that, given monotonicity in *y*, preserves it in *x*.
+* [d3.curveNatural](./d3-shape/curve.md#curveNatural) - a natural cubic spline.
+* [d3.curveStep](./d3-shape/curve.md#curveStep) - a piecewise constant function.
+* [d3.curveStepAfter](./d3-shape/curve.md#curveStepAfter) - a piecewise constant function.
+* [d3.curveStepBefore](./d3-shape/curve.md#curveStepBefore) - a piecewise constant function.
+* [*curve*.areaStart](./d3-shape/curve.md#curve_areaStart) - start a new area segment.
+* [*curve*.areaEnd](./d3-shape/curve.md#curve_areaEnd) - end the current area segment.
+* [*curve*.lineStart](./d3-shape/curve.md#curve_lineStart) - start a new line segment.
+* [*curve*.lineEnd](./d3-shape/curve.md#curve_lineEnd) - end the current line segment.
+* [*curve*.point](./d3-shape/curve.md#curve_point) - add a point to the current line segment.
 
-### [Links](./d3-shape.md#links)
+### [Links](./d3-shape/link.md)
 
 A smooth cubic Bézier curve from a source to a target.
 
-* [d3.link](./d3-shape.md#link) - create a new link generator.
-* [d3.linkVertical](./d3-shape.md#linkVertical) - create a new vertical link generator.
-* [d3.linkHorizontal](./d3-shape.md#linkHorizontal) - create a new horizontal link generator.
-* [*link*](./d3-shape.md#_link) - generate a link.
-* [*link*.source](./d3-shape.md#link_source) - set the source accessor.
-* [*link*.target](./d3-shape.md#link_target) - set the target accessor.
-* [*link*.x](./d3-shape.md#link_x) - set the point *x*-accessor.
-* [*link*.y](./d3-shape.md#link_y) - set the point *y*-accessor.
-* [*link*.context](./d3-shape.md#link_context) - set the rendering context.
-* [*link*.digits](./d3-shape.md#link_digits) - set the output precision.
-* [d3.linkRadial](./d3-shape.md#linkRadial) - create a new radial link generator.
-* [*linkRadial*.angle](./d3-shape.md#linkRadial_angle) - set the point *angle* accessor.
-* [*linkRadial*.radius](./d3-shape.md#linkRadial_radius) - set the point *radius* accessor.
+* [d3.link](./d3-shape/link.md#link) - create a new link generator.
+* [d3.linkVertical](./d3-shape/link.md#linkVertical) - create a new vertical link generator.
+* [d3.linkHorizontal](./d3-shape/link.md#linkHorizontal) - create a new horizontal link generator.
+* [*link*](./d3-shape/link.md#_link) - generate a link.
+* [*link*.source](./d3-shape/link.md#link_source) - set the source accessor.
+* [*link*.target](./d3-shape/link.md#link_target) - set the target accessor.
+* [*link*.x](./d3-shape/link.md#link_x) - set the point *x*-accessor.
+* [*link*.y](./d3-shape/link.md#link_y) - set the point *y*-accessor.
+* [*link*.context](./d3-shape/link.md#link_context) - set the rendering context.
+* [*link*.digits](./d3-shape/link.md#link_digits) - set the output precision.
+* [d3.linkRadial](./d3-shape/link.md#linkRadial) - create a new radial link generator.
+* [*linkRadial*.angle](./d3-shape/link.md#linkRadial_angle) - set the point *angle* accessor.
+* [*linkRadial*.radius](./d3-shape/link.md#linkRadial_radius) - set the point *radius* accessor.
 
-### [Symbols](./d3-shape.md#symbols)
+### [Symbols](./d3-shape/symbol.md)
 
 A categorical shape encoding, as in a scatterplot.
 
-* [d3.symbol](./d3-shape.md#symbol) - create a new symbol generator.
-* [*symbol*](./d3-shape.md#_symbol) - generate a symbol for the given datum.
-* [*symbol*.type](./d3-shape.md#symbol_type) - set the symbol type.
-* [*symbol*.size](./d3-shape.md#symbol_size) - set the size of the symbol in square pixels.
-* [*symbol*.context](./d3-shape.md#symbol_context) - set the rendering context.
-* [*symbol*.digits](./d3-shape.md#symbol_digits) - set the output precision.
-* [d3.symbolsFill](./d3-shape.md#symbolsFill) - an array of built-in symbol types for filling.
-* [d3.symbolsStroke](./d3-shape.md#symbolsStroke) - an array of built-in symbol types for stroking.
-* [d3.symbolAsterisk](./d3-shape.md#symbolAsterisk) - an asterisk; for stroke.
-* [d3.symbolCircle](./d3-shape.md#symbolCircle) - a circle; for fill or stroke.
-* [d3.symbolCross](./d3-shape.md#symbolCross) - a Greek cross with arms of equal length; for fill.
-* [d3.symbolDiamond](./d3-shape.md#symbolDiamond) - a rhombus; for fill.
-* [d3.symbolDiamond2](./d3-shape.md#symbolDiamond2) - a rotated square; for stroke.
-* [d3.symbolPlus](./d3-shape.md#symbolPlus) - a plus sign; for stroke.
-* [d3.symbolSquare](./d3-shape.md#symbolSquare) - a square; for fill.
-* [d3.symbolSquare2](./d3-shape.md#symbolSquare2) - a square; for stroke.
-* [d3.symbolStar](./d3-shape.md#symbolStar) - a pentagonal star (pentagram); for fill.
-* [d3.symbolTriangle](./d3-shape.md#symbolTriangle) - an up-pointing triangle; for fill.
-* [d3.symbolTriangle2](./d3-shape.md#symbolTriangle2) - an up-pointing triangle; for stroke.
-* [d3.symbolWye](./d3-shape.md#symbolWye) - a Y shape; for fill.
-* [d3.symbolX](./d3-shape.md#symbolX) - an X shape; for stroke.
-* [d3.pointRadial](./d3-shape.md#pointRadial) - relative coordinates of a point given an angle and radius.
-* [*symbolType*.draw](./d3-shape.md#symbolType_draw) - draw this symbol to the given context.
+* [d3.symbol](./d3-shape/symbol.md#symbol) - create a new symbol generator.
+* [*symbol*](./d3-shape/symbol.md#_symbol) - generate a symbol for the given datum.
+* [*symbol*.type](./d3-shape/symbol.md#symbol_type) - set the symbol type.
+* [*symbol*.size](./d3-shape/symbol.md#symbol_size) - set the size of the symbol in square pixels.
+* [*symbol*.context](./d3-shape/symbol.md#symbol_context) - set the rendering context.
+* [*symbol*.digits](./d3-shape/symbol.md#symbol_digits) - set the output precision.
+* [d3.symbolsFill](./d3-shape/symbol.md#symbolsFill) - an array of built-in symbol types for filling.
+* [d3.symbolsStroke](./d3-shape/symbol.md#symbolsStroke) - an array of built-in symbol types for stroking.
+* [d3.symbolAsterisk](./d3-shape/symbol.md#symbolAsterisk) - an asterisk; for stroke.
+* [d3.symbolCircle](./d3-shape/symbol.md#symbolCircle) - a circle; for fill or stroke.
+* [d3.symbolCross](./d3-shape/symbol.md#symbolCross) - a Greek cross with arms of equal length; for fill.
+* [d3.symbolDiamond](./d3-shape/symbol.md#symbolDiamond) - a rhombus; for fill.
+* [d3.symbolDiamond2](./d3-shape/symbol.md#symbolDiamond2) - a rotated square; for stroke.
+* [d3.symbolPlus](./d3-shape/symbol.md#symbolPlus) - a plus sign; for stroke.
+* [d3.symbolSquare](./d3-shape/symbol.md#symbolSquare) - a square; for fill.
+* [d3.symbolSquare2](./d3-shape/symbol.md#symbolSquare2) - a square; for stroke.
+* [d3.symbolStar](./d3-shape/symbol.md#symbolStar) - a pentagonal star (pentagram); for fill.
+* [d3.symbolTriangle](./d3-shape/symbol.md#symbolTriangle) - an up-pointing triangle; for fill.
+* [d3.symbolTriangle2](./d3-shape/symbol.md#symbolTriangle2) - an up-pointing triangle; for stroke.
+* [d3.symbolWye](./d3-shape/symbol.md#symbolWye) - a Y shape; for fill.
+* [d3.symbolX](./d3-shape/symbol.md#symbolX) - an X shape; for stroke.
+* [d3.pointRadial](./d3-shape/symbol.md#pointRadial) - relative coordinates of a point given an angle and radius.
+* [*symbolType*.draw](./d3-shape/symbol.md#symbolType_draw) - draw this symbol to the given context.
 
-### [Stacks](./d3-shape.md#stacks)
+### [Stacks](./d3-shape/stack.md)
 
 Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 
-* [d3.stack](./d3-shape.md#stack) - create a new stack generator.
-* [*stack*](./d3-shape.md#_stack) - generate a stack for the given dataset.
-* [*stack*.keys](./d3-shape.md#stack_keys) - set the keys accessor.
-* [*stack*.value](./d3-shape.md#stack_value) - set the value accessor.
-* [*stack*.order](./d3-shape.md#stack_order) - set the order accessor.
-* [*stack*.offset](./d3-shape.md#stack_offset) - set the offset accessor.
-* [d3.stackOrderAppearance](./d3-shape.md#stackOrderAppearance) - put the earliest series on bottom.
-* [d3.stackOrderAscending](./d3-shape.md#stackOrderAscending) - put the smallest series on bottom.
-* [d3.stackOrderDescending](./d3-shape.md#stackOrderDescending) - put the largest series on bottom.
-* [d3.stackOrderInsideOut](./d3-shape.md#stackOrderInsideOut) - put earlier series in the middle.
-* [d3.stackOrderNone](./d3-shape.md#stackOrderNone) - use the given series order.
-* [d3.stackOrderReverse](./d3-shape.md#stackOrderReverse) - use the reverse of the given series order.
-* [d3.stackOffsetExpand](./d3-shape.md#stackOffsetExpand) - normalize the baseline to zero and topline to one.
-* [d3.stackOffsetDiverging](./d3-shape.md#stackOffsetDiverging) - positive above zero; negative below zero.
-* [d3.stackOffsetNone](./d3-shape.md#stackOffsetNone) - apply a zero baseline.
-* [d3.stackOffsetSilhouette](./d3-shape.md#stackOffsetSilhouette) - center the streamgraph around zero.
-* [d3.stackOffsetWiggle](./d3-shape.md#stackOffsetWiggle) - minimize streamgraph wiggling.
+* [d3.stack](./d3-shape/stack.md#stack) - create a new stack generator.
+* [*stack*](./d3-shape/stack.md#_stack) - generate a stack for the given dataset.
+* [*stack*.keys](./d3-shape/stack.md#stack_keys) - set the keys accessor.
+* [*stack*.value](./d3-shape/stack.md#stack_value) - set the value accessor.
+* [*stack*.order](./d3-shape/stack.md#stack_order) - set the order accessor.
+* [*stack*.offset](./d3-shape/stack.md#stack_offset) - set the offset accessor.
+* [d3.stackOrderAppearance](./d3-shape/stack.md#stackOrderAppearance) - put the earliest series on bottom.
+* [d3.stackOrderAscending](./d3-shape/stack.md#stackOrderAscending) - put the smallest series on bottom.
+* [d3.stackOrderDescending](./d3-shape/stack.md#stackOrderDescending) - put the largest series on bottom.
+* [d3.stackOrderInsideOut](./d3-shape/stack.md#stackOrderInsideOut) - put earlier series in the middle.
+* [d3.stackOrderNone](./d3-shape/stack.md#stackOrderNone) - use the given series order.
+* [d3.stackOrderReverse](./d3-shape/stack.md#stackOrderReverse) - use the reverse of the given series order.
+* [d3.stackOffsetExpand](./d3-shape/stack.md#stackOffsetExpand) - normalize the baseline to zero and topline to one.
+* [d3.stackOffsetDiverging](./d3-shape/stack.md#stackOffsetDiverging) - positive above zero; negative below zero.
+* [d3.stackOffsetNone](./d3-shape/stack.md#stackOffsetNone) - apply a zero baseline.
+* [d3.stackOffsetSilhouette](./d3-shape/stack.md#stackOffsetSilhouette) - center the streamgraph around zero.
+* [d3.stackOffsetWiggle](./d3-shape/stack.md#stackOffsetWiggle) - minimize streamgraph wiggling.
 
 ## [d3-time-format](./d3-time-format.md)
 

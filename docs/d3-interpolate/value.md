@@ -132,7 +132,7 @@ Internally, an object template is created that has the same properties as *b*. F
 
 For example, if *a* is the object `{x: 0, y: 1}` and *b* is the object `{x: 1, y: 10, z: 100}`, the result of the interpolator for *t* = 0.5 is the object `{x: 0.5, y: 5.5, z: 100}`.
 
-Object interpolation is particularly useful for *dataspace interpolation*, where data is interpolated rather than attribute values. For example, you can interpolate an object which describes an arc in a pie chart, and then use [arc](../d3-shape.md#arc) to compute the new SVG path data.
+Object interpolation is particularly useful for *dataspace interpolation*, where data is interpolated rather than attribute values. For example, you can interpolate an object which describes an arc in a pie chart, and then use [arc](../d3-shape/arc.md) to compute the new SVG path data.
 
 :::warning CAUTION
 **No defensive copy** of the template object is created; modifications of the returned object may adversely affect subsequent evaluation of the interpolator. No copy is made for performance reasons; interpolators are often part of the inner loop of [animated transitions](../d3-transition.md).
@@ -146,7 +146,7 @@ Object interpolation is particularly useful for *dataspace interpolation*, where
 d3.interpolateBasis([0, 0.1, 0.4, 1])(0.5) // 0.2604166666666667
 ```
 
-Implicit control points are generated such that the interpolator returns *values*[0] at *t* = 0 and *values*[*values*.length - 1] at *t* = 1. See also [curveBasis](../d3-shape.md#curveBasis) and [interpolateRgbBasis](./color.md#interpolateRgbBasis).
+Implicit control points are generated such that the interpolator returns *values*[0] at *t* = 0 and *values*[*values*.length - 1] at *t* = 1. See also [curveBasis](../d3-shape/curve.md#curveBasis) and [interpolateRgbBasis](./color.md#interpolateRgbBasis).
 
 ## interpolateBasisClosed(*values*) {#interpolateBasisClosed}
 
@@ -157,7 +157,7 @@ Implicit control points are generated such that the interpolator returns *values
 d3.interpolateBasisClosed([0, 0.1, 0.4, 1])(0.5) // 0.45
 ```
 
-The control points are implicitly repeated such that the resulting one-dimensional spline has cyclical C² continuity when repeated around *t* in [0,1]. See also [curveBasisClosed](../d3-shape.md#curveBasisClosed) and [interpolateRgbBasisClosed](./color.md#interpolateRgbBasisClosed).
+The control points are implicitly repeated such that the resulting one-dimensional spline has cyclical C² continuity when repeated around *t* in [0,1]. See also [curveBasisClosed](../d3-shape/curve.md#curveBasisClosed) and [interpolateRgbBasisClosed](./color.md#interpolateRgbBasisClosed).
 
 ## interpolateDiscrete(*values*) {#interpolateDiscrete}
 
