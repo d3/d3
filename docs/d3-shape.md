@@ -32,3 +32,5 @@ See one of:
 - [Pies](./d3-shape/pie.md) - compute angles for a pie or donut chart.
 - [Stacks](./d3-shape/stack.md) - stack adjacent shapes, as in a stacked bar chart.
 - [Symbols](./d3-shape/symbol.md) - a categorical shape encoding, as in a scatterplot.
+- [Radial areas](./d3-shape/radial-area.md) - like [area](./d3-shape/area.md), but in polar coordinates.
+- [Radial lines](./d3-shape/radial-line.md) - like [line](./d3-shape/line.md), but in polar coordinates.

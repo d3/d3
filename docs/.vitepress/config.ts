@@ -152,7 +152,9 @@ export default defineConfig({
               {text: "Links", link: "/d3-shape/link"},
               {text: "Pies", link: "/d3-shape/pie"},
               {text: "Stacks", link: "/d3-shape/stack"},
-              {text: "Symbols", link: "/d3-shape/symbol"}
+              {text: "Symbols", link: "/d3-shape/symbol"},
+              {text: "Radial areas", link: "/d3-shape/radial-area"},
+              {text: "Radial lines", link: "/d3-shape/radial-line"}
             ]
           },
         ]

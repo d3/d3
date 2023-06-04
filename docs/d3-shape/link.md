@@ -1,4 +1,4 @@
-## Links
+# Links
 
 [<img alt="Tidy Tree" src="https://raw.githubusercontent.com/d3/d3-hierarchy/master/img/tree.png">](https://observablehq.com/@d3/tidy-tree)
 
