@@ -15,32 +15,32 @@ function render(el, {padAngle, padRadius, cornerRadius}) {
     .selectAll("svg")
     .data([null])
     .join("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("viewBox", [-width / 2, -height / 2, width, height]);
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-width / 2, -height / 2, width, height]);
 
   svg.selectChildren("[fill='none']")
     .data(cornerRadius ? [null] : [])
     .join("g")
-    .attr("fill", "none")
-    .attr("stroke", "currentColor")
+      .attr("fill", "none")
+      .attr("stroke", "currentColor")
     .selectAll("path")
     .data(pie(data))
     .join("path")
-    .attr("d", arc.cornerRadius(0));
+      .attr("d", arc.cornerRadius(0));
 
   svg.selectChildren("[fill='currentColor']")
     .data([null])
     .join("g")
-    .attr("fill", "currentColor")
-    .attr("fill-opacity", 0.2)
-    .attr("stroke", "currentColor")
-    .attr("stroke-width", "1.5px")
-    .attr("stroke-linejoin", "round")
+      .attr("fill", "currentColor")
+      .attr("fill-opacity", 0.2)
+      .attr("stroke", "currentColor")
+      .attr("stroke-width", "1.5px")
+      .attr("stroke-linejoin", "round")
     .selectAll("path")
     .data(pie(data))
     .join("path")
-    .attr("d", arc.cornerRadius(cornerRadius));
+      .attr("d", arc.cornerRadius(cornerRadius));
 
   return svg.node();
 }

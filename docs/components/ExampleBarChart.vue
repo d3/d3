@@ -32,6 +32,7 @@ export default {
 
     // Add a rect for each bar.
     svg.append("g")
+        .attr("fill", "currentColor")
       .selectAll()
       .data(alphabet)
       .join("rect")
