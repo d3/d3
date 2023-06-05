@@ -48,7 +48,7 @@ const arc = d3.arc()
 
 ## *arc*(...*arguments*) {#_arc}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/arc.js) · Generates an arc for the given *arguments*. The *arguments* are arbitrary; they are simply propagated to the arc generator’s accessor functions along with the `this` object. For example, with the default settings, an object with radii and angles is expected:
+[Source](https://github.com/d3/d3-shape/blob/main/src/arc.js) · Generates an arc for the given *arguments*. The *arguments* are arbitrary; they are propagated to the arc generator’s accessor functions along with the `this` object. For example, with the default settings, an object with radii and angles is expected:
 
 ```js
 const arc = d3.arc();
@@ -78,7 +78,7 @@ If the arc generator has a [context](#arc_context), then the arc is rendered to 
 
 [Examples](https://observablehq.com/@d3/pie-settings) · [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js) · Computes the midpoint [*x*, *y*] of the center line of the arc that would be [generated](#_arc) by the given *arguments*.
 
-The *arguments* are arbitrary; they are simply propagated to the arc generator’s accessor functions along with the `this` object. To be consistent with the generated arc, the accessors must be deterministic, *i.e.*, return the same value given the same arguments. The midpoint is defined as ([startAngle](#arc_startAngle) + [endAngle](#arc_endAngle)) / 2 and ([innerRadius](#arc_innerRadius) + [outerRadius](#arc_outerRadius)) / 2. For example:
+The *arguments* are arbitrary; they are propagated to the arc generator’s accessor functions along with the `this` object. To be consistent with the generated arc, the accessors must be deterministic, *i.e.*, return the same value given the same arguments. The midpoint is defined as ([startAngle](#arc_startAngle) + [endAngle](#arc_endAngle)) / 2 and ([innerRadius](#arc_innerRadius) + [outerRadius](#arc_outerRadius)) / 2. For example:
 
 Note that this is **not the geometric center** of the arc, which may be outside the arc; this method is merely a convenience for positioning labels.
 

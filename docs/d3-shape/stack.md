@@ -18,7 +18,7 @@ Constructs a new stack generator with the default settings.
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/stack.js)
 
-Generates a stack for the given array of *data*, returning an array representing each series. Any additional *arguments* are arbitrary; they are simply propagated to accessors along with the `this` object.
+Generates a stack for the given array of *data*, returning an array representing each series. Any additional *arguments* are arbitrary; they are propagated to accessors along with the `this` object.
 
 The series are determined by the [keys accessor](#stack_keys); each series *i* in the returned array corresponds to the *i*th key. Each series is an array of points, where each point *j* corresponds to the *j*th element in the input *data*. Lastly, each point is represented as an array [*y0*, *y1*] where *y0* is the lower value (baseline) and *y1* is the upper value (topline); the difference between *y0* and *y1* corresponds to the computed [value](#stack_value) for this point. The key for each series is available as *series*.key, and the [index](#stack_order) as *series*.index. The input data element for each point is available as *point*.data.
 

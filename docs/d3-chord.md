@@ -98,7 +98,7 @@ Creates a new ribbon generator with the default settings.
 
 [Source](https://github.com/d3/d3-chord/blob/main/src/ribbon.js)
 
-Generates a ribbon for the given *arguments*. The *arguments* are arbitrary; they are simply propagated to the ribbon generator’s accessor functions along with the `this` object. For example, with the default settings, a [chord object](#_chord) expected:
+Generates a ribbon for the given *arguments*. The *arguments* are arbitrary; they are propagated to the ribbon generator’s accessor functions along with the `this` object. For example, with the default settings, a [chord object](#_chord) expected:
 
 ```js
 const ribbon = d3.ribbon();

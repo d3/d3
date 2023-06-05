@@ -83,7 +83,7 @@ function value(d) {
 }
 ```
 
-The default value accessor assumes that the input data are numbers, or that they are coercible to numbers using [valueOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf). If your data are not simply numbers, then you should specify an accessor that returns the corresponding numeric value for a given datum. For example, given a CSV file with *number* and *name* fields:
+The default value accessor assumes that the input data are numbers, or that they are coercible to numbers using [valueOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf). If your data are not numbers, then you should specify an accessor that returns the corresponding numeric value for a given datum. For example, given a CSV file with *number* and *name* fields:
 
 ```csv
 number,name

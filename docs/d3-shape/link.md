@@ -30,7 +30,7 @@ const link = d3.link(d3.curveBumpX);
 
 ## *link*(...*arguments*) {#_link}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Generates a link for the given *arguments*. The *arguments* are arbitrary; they are simply propagated to the link generator’s accessor functions along with the `this` object. With the default settings, an object with *source* and *target* properties is expected.
+[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Generates a link for the given *arguments*. The *arguments* are arbitrary; they are propagated to the link generator’s accessor functions along with the `this` object. With the default settings, an object with *source* and *target* properties is expected.
 
 ```js
 link({source: [100, 100], target: [300, 300]}) // "M100,100C200,100,200,300,300,300"
