@@ -1,3 +1,10 @@
+<script setup>
+
+import * as d3 from "d3";
+import ColorRamp from "./components/ColorRamp.vue";
+
+</script>
+
 # d3-interpolate
 
 This module provides a variety of interpolation methods for blending between two values. Values may be numbers, colors, strings, arrays, or even deeply-nested objects. For example:
@@ -17,6 +24,10 @@ You can interpolate more than just numbers. To find the perceptual midpoint betw
 ```js
 d3.interpolateLab("steelblue", "brown")(0.5); // "rgb(142, 92, 109)"
 ```
+
+Or, as a color ramp from *t* = 0 to *t* = 1:
+
+<ColorRamp :color='d3.interpolateLab("steelblue", "brown")' />
 
 Here’s a more elaborate example demonstrating type inference used by [interpolate](./d3-interpolate/value.md#interpolate):
 
