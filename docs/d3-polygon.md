@@ -4,6 +4,9 @@ import * as Plot from "@observablehq/plot";
 import * as d3 from "d3";
 import PlotRender from "./components/PlotRender.js";
 
+const random = d3.randomNormal.source(d3.randomLcg(42))();
+const points = Array.from({length: 1000}, () => [random(), random()]);
+
 </script>
 
 # d3-polygon
@@ -28,13 +31,14 @@ d3.polygonArea([[1, 1], [1.5, 0], [2, 1]]) // [1.5, 0.6666666666666666]
 
 ## polygonHull(*points*) {#polygonHull}
 
-<PlotRender defer :options='((points) => ({
+<PlotRender defer :options='{
   axis: null,
+  aspectRatio: 1,
   marks: [
     Plot.dot(points, {r: 2, fill: "currentColor"}),
     Plot.hull(points)
   ]
-}))(Array.from({length: 1000}, ((r) => () => [r(), r()])(d3.randomNormal.source(d3.randomLcg(42))())))' />
+}' />
 
 ```js
 d3.polygonHull(points) // [[3.0872864263338777, -1.300100095019402], [1.6559368816733773, -2.5092525689499605], …]
