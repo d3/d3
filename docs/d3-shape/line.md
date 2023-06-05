@@ -1,26 +1,54 @@
 # Lines
 
-[<img width="295" height="154" alt="Line Chart" src="./img/line.png">](https://observablehq.com/@d3/line-chart)
+<!-- https://observablehq.com/@d3/line-chart -->
 
-The line generator produces a [spline](https://en.wikipedia.org/wiki/Spline_\(mathematics\)) or [polyline](https://en.wikipedia.org/wiki/Polygonal_chain), as in a line chart. Lines also appear in many other visualization types, such as the links in [hierarchical edge bundling](https://observablehq.com/@d3/hierarchical-edge-bundling).
+[Examples](https://observablehq.com/@d3/line-chart/2?intent=fork) · The line generator produces a [spline](https://en.wikipedia.org/wiki/Spline_(mathematics)) or [polyline](https://en.wikipedia.org/wiki/Polygonal_chain) as in a line chart. Lines also appear in many other visualization types, such as the links in [hierarchical edge bundling](https://observablehq.com/@d3/hierarchical-edge-bundling). See also [radial lines](./radial-line.md).
 
-### d3.line(x, y)
+## line(*x*, *y*) {#line}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
+[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · Constructs a new line generator with the given *x* and *y* accessor.
 
-Constructs a new line generator with the default settings. If *x* or *y* are specified, sets the corresponding accessors to the specified function or number and returns this line generator.
+```js
+const line = d3.line((d) => x(d.Date), (d) => y(d.Close));
+```
 
-### line(data)
+If *x* or *y* are not specified, the respective defaults will be used. The above can be expressed more explicitly as:
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
+```js
+const line = d3.line()
+    .x((d) => x(d.Date))
+    .y((d) => y(d.Close));
+```
 
-Generates a line for the given array of *data*. Depending on this line generator’s associated [curve](#line_curve), the given input *data* may need to be sorted by *x*-value before being passed to the line generator. If the line generator has a [context](#line_context), then the line is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls and this function returns void. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string is returned.
+## *line*(*data*) {#_line}
 
-### line.x(x)
+[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · Generates a line for the given array of *data*.
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
+```js
+svg.append("path").attr("d", line(data)).attr("stroke", "currentColor");
+```
 
-If *x* is specified, sets the x accessor to the specified function or number and returns this line generator. If *x* is not specified, returns the current x accessor, which defaults to:
+If the line generator has a [context](#line_context), then the line is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls and this function returns void. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string is returned.
+
+:::warning CAUTION
+Depending on this line generator’s associated [curve](#line_curve), the given input *data* may need to be sorted by *x*-value before being passed to the line generator.
+:::
+
+## *line*.x(*x*) {#line_x}
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *x* is specified, sets the x accessor to the specified function or number and returns this line generator.
+
+```js
+const line = d3.line().x((d) => x(d.Date));
+```
+
+If *x* is not specified, returns the current x accessor.
+
+```js
+line.x() // (d) => x(d.Date)
+```
+
+The x accessor defaults to:
 
 ```js
 function x(d) {
@@ -28,29 +56,27 @@ function x(d) {
 }
 ```
 
-When a line is [generated](#_line), the x accessor will be invoked for each [defined](#line_defined) element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments. The default x accessor assumes that the input data are two-element arrays of numbers. If your data are in a different format, or if you wish to transform the data before rendering, then you should specify a custom accessor. For example, if `x` is a [time scale](https://github.com/d3/d3-scale#time-scales) and `y` is a [linear scale](https://github.com/d3/d3-scale#linear-scales):
+When a line is [generated](#_line), the x accessor will be invoked for each [defined](#line_defined) element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments.
+
+The default x accessor assumes that the input data are two-element arrays of numbers. If your data are in a different format, or if you wish to transform the data before rendering, then you should specify a custom accessor.
+
+## *line*.y(y) {#line_y}
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *y* is specified, sets the y accessor to the specified function or number and returns this line generator.
 
 ```js
-const data = [
-  {date: new Date(2007, 3, 24), value: 93.24},
-  {date: new Date(2007, 3, 25), value: 95.35},
-  {date: new Date(2007, 3, 26), value: 98.84},
-  {date: new Date(2007, 3, 27), value: 99.92},
-  {date: new Date(2007, 3, 30), value: 99.80},
-  {date: new Date(2007, 4,  1), value: 99.47},
-  …
-];
-
-const line = d3.line()
-    .x(d => x(d.date))
-    .y(d => y(d.value));
+const line = d3.line().y((d) => y(d.Close));
 ```
 
-### line.y(y)
+When a line is [generated](#_line), the y accessor will be invoked for each [defined](#line_defined) element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments.
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
+If *y* is not specified, returns the current y accessor.
 
-If *y* is specified, sets the y accessor to the specified function or number and returns this line generator. If *y* is not specified, returns the current y accessor, which defaults to:
+```js
+line.y() // (d) => y(d.Close)
+```
+
+The y accessor defaults to:
 
 ```js
 function y(d) {
@@ -58,13 +84,25 @@ function y(d) {
 }
 ```
 
-When a line is [generated](#_line), the y accessor will be invoked for each [defined](#line_defined) element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments. The default y accessor assumes that the input data are two-element arrays of numbers. See [*line*.x](#line_x) for more information.
+The default y accessor assumes that the input data are two-element arrays of numbers. See [*line*.x](#line_x) for more information.
 
-### line.defined(defined)
+## *line*.defined(*defined*) {#line_defined}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
+[Examples](https://observablehq.com/@d3/line-chart-missing-data/2?intent=fork) · [Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *defined* is specified, sets the defined accessor to the specified function or boolean and returns this line generator.
 
-If *defined* is specified, sets the defined accessor to the specified function or boolean and returns this line generator. If *defined* is not specified, returns the current defined accessor, which defaults to:
+```js
+const line = d3.line().defined((d) => !isNaN(d.Close));
+```
+
+When a line is [generated](#_line), the defined accessor will be invoked for each element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments. If the given element is defined (*i.e.*, if the defined accessor returns a truthy value for this element), the [x](#line_x) and [y](#line_y) accessors will subsequently be evaluated and the point will be added to the current line segment. Otherwise, the element will be skipped, the current line segment will be ended, and a new line segment will be generated for the next defined point.
+
+If *defined* is not specified, returns the current defined accessor.
+
+```js
+line.defined() // (d) => !isNaN(d.Close)
+```
+
+The defined accessor defaults to the constant true, and assumes that the input data is always defined:
 
 ```js
 function defined() {
@@ -72,26 +110,51 @@ function defined() {
 }
 ```
 
-The default accessor thus assumes that the input data is always defined. When a line is [generated](#_line), the defined accessor will be invoked for each element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments. If the given element is defined (*i.e.*, if the defined accessor returns a truthy value for this element), the [x](#line_x) and [y](#line_y) accessors will subsequently be evaluated and the point will be added to the current line segment. Otherwise, the element will be skipped, the current line segment will be ended, and a new line segment will be generated for the next defined point. As a result, the generated line may have several discrete segments. For example:
+Note that if a line segment consists of only a single point, it may appear invisible unless rendered with rounded or square [line caps](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-linecap). In addition, some curves such as [curveCardinalOpen](./curve.md#curveCardinalOpen) only render a visible segment if it contains multiple points.
 
-[<img src="./img/line-defined.png" width="480" height="250" alt="Line with Missing Data">](https://observablehq.com/@d3/line-with-missing-data)
+## *line*.curve(*curve*) {#line_curve}
 
-Note that if a line segment consists of only a single point, it may appear invisible unless rendered with rounded or square [line caps](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-linecap). In addition, some curves such as [curveCardinalOpen](#curveCardinalOpen) only render a visible segment if it contains multiple points.
+[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *curve* is specified, sets the [curve factory](#curves) and returns this line generator.
 
-### line.curve(curve)
+```js
+const line = d3.line().curve(d3.curveStep);
+```
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
+If *curve* is not specified, returns the current curve factory, which defaults to [curveLinear](#curveLinear).
 
-If *curve* is specified, sets the [curve factory](#curves) and returns this line generator. If *curve* is not specified, returns the current curve factory, which defaults to [curveLinear](#curveLinear).
+```js
+line.curve() // d3.curveStep
+```
 
-### line.context(context)
+## *line*.context(context) {#line_context}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
+[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *context* is specified, sets the context and returns this line generator.
 
-If *context* is specified, sets the context and returns this line generator. If *context* is not specified, returns the current context, which defaults to null. If the context is not null, then the [generated line](#_line) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated line is returned.
+```js
+const context = canvas.getContext("2d");
+const line = d3.line().context(context);
+```
 
-### line.digits(digits)
+If *context* is not specified, returns the current context.
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js)
+```js
+line.context() // context
+```
 
-If *digits* is specified, sets the maximum number of digits after the decimal separator and returns this line generator. If *digits* is not specified, returns the current maximum fraction digits, which defaults to 3. This option only applies when the associated [*context*](#line_context) is null, as when this line generator is used to produce [path data](http://www.w3.org/TR/SVG/paths.html#PathData).
+The context defaults to null. If the context is not null, then the [generated line](#_line) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated line is returned.
+
+## *line*.digits(*digits*) {#line_digits}
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *digits* is specified, sets the maximum number of digits after the decimal separator and returns this line generator.
+
+```js
+const line = d3.line().digits(3);
+```
+
+If *digits* is not specified, returns the current maximum fraction digits, which defaults to 3.
+
+```js
+line.digits() // 3
+```
+
+This option only applies when the associated [*context*](#line_context) is null, as when this line generator is used to produce [path data](http://www.w3.org/TR/SVG/paths.html#PathData).
