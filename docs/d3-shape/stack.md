@@ -1,3 +1,18 @@
+<script setup>
+
+import * as Plot from "@observablehq/plot";
+import * as d3 from "d3";
+import {computed, ref, shallowRef, onMounted} from "vue";
+import PlotRender from "../components/PlotRender.js";
+
+const riaa = shallowRef([]);
+
+onMounted(() => {
+  d3.csv("../data/riaa-us-revenue.csv", d3.autoType).then((data) => (riaa.value = data));
+});
+
+</script>
+
 # Stacks
 
 <!-- https://observablehq.com/@mbostock/streamgraph-transitions -->
@@ -191,6 +206,20 @@ Stack orders are typically not used directly, but are instead passed to [*stack*
 
 ### stackOrderAppearance(*series*) {#stackOrderAppearance}
 
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1000 // convert millions to billions
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", order: "appearance"}),
+    Plot.ruleY([0])
+  ]
+}' />
+
 ```js
 const stack = d3.stack().order(d3.stackOrderAppearance);
 ```
@@ -198,6 +227,20 @@ const stack = d3.stack().order(d3.stackOrderAppearance);
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/appearance.js) · Returns a series order such that the earliest series (according to the maximum value) is at the bottom.
 
 ### stackOrderAscending(*series*) {#stackOrderAscending}
+
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1000 // convert millions to billions
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", order: "sum"}),
+    Plot.ruleY([0])
+  ]
+}' />
 
 ```js
 const stack = d3.stack().order(d3.stackOrderAscending);
@@ -207,6 +250,20 @@ const stack = d3.stack().order(d3.stackOrderAscending);
 
 ### stackOrderDescending(*series*) {#stackOrderDescending}
 
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1000 // convert millions to billions
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", order: "-sum"}),
+    Plot.ruleY([0])
+  ]
+}' />
+
 ```js
 const stack = d3.stack().order(d3.stackOrderDescending);
 ```
@@ -214,6 +271,19 @@ const stack = d3.stack().order(d3.stackOrderDescending);
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/descending.js) · Returns a series order such that the largest series (according to the sum of values) is at the bottom.
 
 ### stackOrderInsideOut(*series*) {#stackOrderInsideOut}
+
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1000 // convert millions to billions
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", offset: "wiggle", order: "inside-out"}),
+  ]
+}' />
 
 ```js
 const stack = d3.stack().order(d3.stackOrderInsideOut);
@@ -223,6 +293,20 @@ const stack = d3.stack().order(d3.stackOrderInsideOut);
 
 ### stackOrderNone(*series*) {#stackOrderNone}
 
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1000 // convert millions to billions
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", order: null}),
+    Plot.ruleY([0])
+  ]
+}' />
+
 ```js
 const stack = d3.stack().order(d3.stackOrderNone);
 ```
@@ -230,6 +314,20 @@ const stack = d3.stack().order(d3.stackOrderNone);
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/none.js) · Returns the given series order [0, 1, … *n* - 1] where *n* is the number of elements in *series*. Thus, the stack order is given by the [key accessor](#stack_keys).
 
 ### stackOrderReverse(*series*) {#stackOrderReverse}
+
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1000 // convert millions to billions
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", order: null, reverse: true}),
+    Plot.ruleY([0])
+  ]
+}' />
 
 ```js
 const stack = d3.stack().order(d3.stackOrderReverse);
@@ -243,6 +341,20 @@ Stack offsets are typically not used directly, but are instead passed to [*stack
 
 ### stackOffsetExpand(*series*, *order*) {#stackOffsetExpand}
 
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (%)",
+    percent: true
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", offset: "expand", order: "-appearance"}),
+    Plot.ruleY([0])
+  ]
+}' />
+
 ```js
 const stack = d3.stack().offset(d3.stackOffsetExpand);
 ```
@@ -250,6 +362,20 @@ const stack = d3.stack().offset(d3.stackOffsetExpand);
 [Source](https://github.com/d3/d3-shape/blob/main/src/offset/expand.js) · Applies a zero baseline and normalizes the values for each point such that the topline is always one.
 
 ### stackOffsetDiverging(*series*, *order*) {#stackOffsetDiverging}
+
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1e3
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: (d) => (d.group === "Disc" ? -1 : 1) * d.revenue, z: "format", fill: "group", order: "appearance"}),
+    Plot.ruleY([0])
+  ]
+}' />
 
 ```js
 const stack = d3.stack().offset(d3.stackOffsetDiverging);
@@ -259,6 +385,20 @@ const stack = d3.stack().offset(d3.stackOffsetDiverging);
 
 ### stackOffsetNone(*series*, *order*) {#stackOffsetNone}
 
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1e3
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", order: "appearance"}),
+    Plot.ruleY([0])
+  ]
+}' />
+
 ```js
 const stack = d3.stack().offset(d3.stackOffsetNone);
 ```
@@ -267,6 +407,19 @@ const stack = d3.stack().offset(d3.stackOffsetNone);
 
 ### stackOffsetSilhouette(*series*, *order*) {#stackOffsetSilhouette}
 
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1e3
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", offset: "center", order: "appearance"})
+  ]
+}' />
+
 ```js
 const stack = d3.stack().offset(d3.stackOffsetSilhouette);
 ```
@@ -274,6 +427,19 @@ const stack = d3.stack().offset(d3.stackOffsetSilhouette);
 [Source](https://github.com/d3/d3-shape/blob/main/src/offset/silhouette.js) · Shifts the baseline down such that the center of the streamgraph is always at zero.
 
 ### stackOffsetWiggle(*series*, *order*) {#stackOffsetWiggle}
+
+<PlotRender defer :options='{
+  height: 200,
+  style: {marginTop: "1em"},
+  y: {
+    grid: true,
+    label: "Annual revenue (billions)",
+    transform: (d) => d / 1e3
+  },
+  marks: [
+    Plot.areaY(riaa, {x: "year", y: "revenue", z: "format", fill: "group", offset: "wiggle"})
+  ]
+}' />
 
 ```js
 const stack = d3.stack().offset(d3.stackOffsetWiggle);
