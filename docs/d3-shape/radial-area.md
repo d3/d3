@@ -1,6 +1,6 @@
 # Radial areas
 
-[Examples](https://observablehq.com/@d3/radial-area-chart) · A radial area generator is like the standard Cartesian [area generator](./area.md) except the [x](./area.md#area_x) and [y](./area.md#area_y) accessors are replaced with [angle](#areaRadial_angle) and [radius](#areaRadial_radius) accessors. Radial areas are always positioned relative to the origin; use a [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) to change the origin.
+[Examples](https://observablehq.com/@d3/radial-area-chart) · A radial area generator is like the standard Cartesian [area generator](./area.md) except the [x](./area.md#area_x) and [y](./area.md#area_y) accessors are replaced with [angle](#areaRadial_angle) and [radius](#areaRadial_radius) accessors. Radial areas are positioned relative to the origin; use a [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) to change the origin.
 
 ## areaRadial() {#areaRadial}
 
