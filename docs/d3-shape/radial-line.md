@@ -1,43 +1,60 @@
 # Radial lines
 
-A radial line generator is equivalent to the standard Cartesian [line generator](./line.md), except the [x](./line.md#line_x) and [y](./line.md#line_y) accessors are replaced with [angle](#lineRadial_angle) and [radius](#lineRadial_radius) accessors. Radial lines are positioned relative to the origin; use a [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) to change the origin.
+[Examples](https://observablehq.com/@d3/d3-lineradial) · A radial line generator is like the Cartesian [line generator](./line.md) except the [x](./line.md#line_x) and [y](./line.md#line_y) accessors are replaced with [angle](#lineRadial_angle) and [radius](#lineRadial_radius) accessors. Radial lines are positioned relative to the origin; use a [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) to change the origin.
 
-### d3.lineRadial()
+## lineRadial() {#lineRadial}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js), [Examples](https://observablehq.com/@d3/d3-lineradial)
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Constructs a new radial line generator with the default settings.
 
-<img alt="Radial Line" width="250" height="250" src="./img/line-radial.png">
+```js
+const line = d3.lineRadial();
+```
 
-Constructs a new radial line generator with the default settings.
+## *lineRadial*(*data*) {#_lineRadial}
 
-### lineRadial(data)
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Equivalent to [*line*](./line.md#_line).
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L4), [Examples](https://observablehq.com/@d3/d3-lineradial)
+```js
+svg.append("path").attr("d", line(data)).attr("stroke", "currentColor");
+```
 
-Equivalent to [*line*](#_line).
+## *lineRadial*.angle(*angle*) {#lineRadial_angle}
 
-### lineRadial.angle(angle)
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Equivalent to [*line*.x](./line.md#line_x), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock).
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L7), [Examples](https://observablehq.com/@d3/d3-lineradial)
+```js
+const line = d3.lineRadial().angle((d) => a(d.Date));
+```
 
-Equivalent to [*line*.x](./line.md#line_x), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock).
+## *lineRadial*.radius(*radius*) {#lineRadial_radius}
 
-### lineRadial.radius(radius)
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Equivalent to [*line*.y](./line.md#line_y), except the accessor returns the radius: the distance from the origin.
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L8), [Examples](https://observablehq.com/@d3/d3-lineradial)
+```js
+const line = d3.lineRadial().radius((d) => r(d.temperature));
+```
 
-Equivalent to [*line*.y](./line.md#line_y), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
+## *lineRadial*.defined(*defined*) {#lineRadial_defined}
 
-### lineRadial.defined(defined)
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Equivalent to [*line*.defined](./line.md#line_defined).
 
-Equivalent to [*line*.defined](./line.md#line_defined).
+```js
+const line = d3.lineRadial().defined((d) => !isNaN(d.temperature));
+```
 
-### lineRadial.curve(curve)
+## *lineRadial*.curve(*curve*) {#lineRadial_curve}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js), [Examples](https://observablehq.com/@d3/d3-lineradial)
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Equivalent to [*line*.curve](./line.md#line_curve). Note that [curveMonotoneX](#curveMonotoneX) or [curveMonotoneY](#curveMonotoneY) are not recommended for radial lines because they assume that the data is monotonic in *x* or *y*, which is typically untrue of radial lines.
 
-Equivalent to [*line*.curve](./line.md#line_curve). Note that [curveMonotoneX](#curveMonotoneX) or [curveMonotoneY](#curveMonotoneY) are not recommended for radial lines because they assume that the data is monotonic in *x* or *y*, which is typically untrue of radial lines.
+```js
+const line = d3.lineRadial().curve(d3.curveBasis);
+```
 
-### lineRadial.context(context)
+## *lineRadial*.context(*context*) {#lineRadial_context}
 
-Equivalent to [*line*.context](./line.md#line_context).
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Equivalent to [*line*.context](./line.md#line_context).
+
+```js
+const context = canvas.getContext("2d");
+const line = d3.lineRadial().context(context);
+```

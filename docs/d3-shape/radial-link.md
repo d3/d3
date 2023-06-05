@@ -1,6 +1,6 @@
 # Radial links
 
-A radial link generator is equivalent to the standard Cartesian [link generator](./link.md), except the [x](./link.md#link_x) and [y](./link.md#link_y) accessors are replaced with [angle](#linkRadial_angle) and [radius](#linkRadial_radius) accessors. Radial links are positioned relative to the origin; use a [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) to change the origin.
+A radial link generator is like the Cartesian [link generator](./link.md) except the [x](./link.md#link_x) and [y](./link.md#link_y) accessors are replaced with [angle](#linkRadial_angle) and [radius](#linkRadial_radius) accessors. Radial links are positioned relative to the origin; use a [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) to change the origin.
 
 ## linkRadial() {#linkRadial}
 
@@ -18,4 +18,4 @@ const link = d3.linkRadial()
 
 ## *linkRadial*.radius(*radius*) {#linkRadial_radius}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Equivalent to [*link*.y](./link.md#link_y), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
+[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Equivalent to [*link*.y](./link.md#link_y), except the accessor returns the radius: the distance from the origin.
