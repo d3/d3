@@ -51,6 +51,11 @@
   opacity: 1;
 }
 
+.vp-doc .plot {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
 .vp-doc .plot,
 .vp-doc .plot-ramp {
   background: none;

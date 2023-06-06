@@ -2,7 +2,7 @@
 
 import * as Plot from "@observablehq/plot";
 import * as d3 from "d3";
-import {computed, ref, shallowRef, onMounted} from "vue";
+import {ref, shallowRef, onMounted} from "vue";
 import PlotRender from "../components/PlotRender.js";
 
 const riaa = shallowRef([]);
@@ -208,7 +208,6 @@ Stack orders are typically not used directly, but are instead passed to [*stack*
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -230,7 +229,6 @@ const stack = d3.stack().order(d3.stackOrderAppearance);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -252,7 +250,6 @@ const stack = d3.stack().order(d3.stackOrderAscending);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -274,7 +271,6 @@ const stack = d3.stack().order(d3.stackOrderDescending);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -295,7 +291,6 @@ const stack = d3.stack().order(d3.stackOrderInsideOut);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -317,7 +312,6 @@ const stack = d3.stack().order(d3.stackOrderNone);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -343,7 +337,6 @@ Stack offsets are typically not used directly, but are instead passed to [*stack
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (%)",
@@ -365,7 +358,6 @@ const stack = d3.stack().offset(d3.stackOffsetExpand);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -387,7 +379,6 @@ const stack = d3.stack().offset(d3.stackOffsetDiverging);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -409,7 +400,6 @@ const stack = d3.stack().offset(d3.stackOffsetNone);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",
@@ -430,7 +420,6 @@ const stack = d3.stack().offset(d3.stackOffsetSilhouette);
 
 <PlotRender defer :options='{
   height: 200,
-  style: {marginTop: "1em"},
   y: {
     grid: true,
     label: "Annual revenue (billions)",

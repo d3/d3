@@ -13,7 +13,6 @@ Generate random numbers from various distributions. For seeded random number gen
 ## randomUniform(*min*, *max*) {#randomUniform}
 
 <PlotRender :options='{
-  style: {marginTop: "1em"},
   height: 120,
   nice: true,
   marks: [
@@ -30,7 +29,6 @@ d3.randomUniform(6) // generate numbers ≥0 and <6
 ## randomInt(*min*, *max*) {#randomInt}
 
 <PlotRender :options='{
-  style: {marginTop: "1em"},
   height: 120,
   nice: true,
   marks: [
@@ -47,7 +45,6 @@ d3.randomInt(100) // generate integers ≥0 and <100
 ## randomNormal(*mu*, *sigma*) {#randomNormal}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 240,
   nice: true,
   marks: [
@@ -64,7 +61,6 @@ d3.randomNormal(0, 1) // mean of 0, and standard deviation of 1
 ## randomLogNormal(*mu*, *sigma*) {#randomLogNormal}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 240,
   nice: true,
   marks: [
@@ -81,7 +77,6 @@ d3.randomLogNormal(0, 1)
 ## randomBates(*n*) {#randomBates}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 180,
   nice: true,
   marks: [
@@ -98,7 +93,6 @@ d3.randomBates(3) // generates numbers between 0 and 1
 ## randomIrwinHall(*n*) {#randomIrwinHall}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 180,
   nice: true,
   marks: [
@@ -115,7 +109,6 @@ d3.randomIrwinHall(3) // generates numbers between 0 and 3
 ## randomExponential(*lambda*) {#randomExponential}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 190,
   nice: true,
   marks: [
@@ -132,7 +125,6 @@ d3.randomExponential(1 / 40)
 ## randomPareto(*alpha*) {#randomPareto}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 210,
   nice: true,
   marks: [
@@ -149,7 +141,6 @@ d3.randomPareto(6)
 ## randomBernoulli(*p*) {#randomBernoulli}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 120,
   nice: true,
   width: 60,
@@ -168,7 +159,6 @@ d3.randomBernoulli(0.5)
 ## randomGeometric(*p*) {#randomGeometric}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 240,
   nice: true,
   marks: [
@@ -185,7 +175,6 @@ d3.randomGeometric(0.1)
 ## randomBinomial(*n*, *p*) {#randomBinomial}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 240,
   x: {domain: [0, 40]},
   marks: [
@@ -202,7 +191,6 @@ d3.randomBinomial(40, 0.5)
 ## randomGamma(*k*, *theta*) {#randomGamma}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 200,
   nice: true,
   marks: [
@@ -219,7 +207,6 @@ d3.randomGamma(2, 1)
 ## randomBeta(*alpha*, *beta*) {#randomBeta}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 160,
   nice: true,
   marks: [
@@ -236,7 +223,6 @@ d3.randomBeta(3, 1.5)
 ## randomWeibull(*k*, *a*, *b*) {#randomWeibull}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 200,
   nice: true,
   marks: [
@@ -259,7 +245,6 @@ In all three cases, *a* is the location parameter and *b* is the scale parameter
 ## randomCauchy(*a*, *b*) {#randomCauchy}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 200,
   nice: true,
   x: {domain: [-5, 5]},
@@ -277,7 +262,6 @@ d3.randomCauchy(0, 1) // above, clipped to [-5, 5] because “fat tails”
 ## randomLogistic(*a*, *b*) {#randomLogistic}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 300,
   nice: true,
   marks: [
@@ -294,7 +278,6 @@ d3.randomLogistic(0, 1)
 ## randomPoisson(*lambda*) {#randomPoisson}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 150,
   nice: true,
   marks: [
@@ -321,7 +304,6 @@ random(); // -0.6253955998897069
 ## randomLcg(*seed*) {#randomLcg}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   height: 120,
   nice: true,
   marks: [

@@ -407,7 +407,7 @@ Returns the transformation of the specified *x*-coordinate, *xk* + *t<sub>x</sub
 
 [Source](https://github.com/d3/d3-zoom/blob/main/src/transform.js)
 
-Returns the transformation of the specified *y*-coordinate, *yk* + *t<sub>y</sub>*.
+Returns the transformation of the specified y coordinate, *yk* + *t<sub>y</sub>*.
 
 #### transform.invert(point)
 
@@ -425,7 +425,7 @@ Returns the inverse transformation of the specified *x*-coordinate, (*x* - *t<su
 
 [Source](https://github.com/d3/d3-zoom/blob/main/src/transform.js)
 
-Returns the inverse transformation of the specified *y*-coordinate, (*y* - *t<sub>y</sub>*) / *k*.
+Returns the inverse transformation of the specified y coordinate, (*y* - *t<sub>y</sub>*) / *k*.
 
 #### transform.rescaleX(x)
 

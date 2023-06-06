@@ -211,7 +211,7 @@ If *x* is specified, sets the *x*-coordinate of the centering position to the sp
 
 [Source](https://github.com/d3/d3-force/blob/main/src/center.js)
 
-If *y* is specified, sets the *y*-coordinate of the centering position to the specified number and returns this force. If *y* is not specified, returns the current *y*-coordinate, which defaults to zero.
+If *y* is specified, sets the y coordinate of the centering position to the specified number and returns this force. If *y* is not specified, returns the current y coordinate, which defaults to zero.
 
 ### center.strength(strength)
 
@@ -493,7 +493,7 @@ function y() {
 }
 ```
 
-The *y*-accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target *y*-coordinate of each node is only recomputed when the force is initialized or when this method is called with a new *y*, and not on every application of the force.
+The *y*-accessor is invoked for each [node](#simulation_nodes) in the simulation, being passed the *node* and its zero-based *index*. The resulting number is then stored internally, such that the target y coordinate of each node is only recomputed when the force is initialized or when this method is called with a new *y*, and not on every application of the force.
 
 ### d3.forceRadial(radius, x, y)
 
@@ -537,4 +537,4 @@ If *x* is specified, sets the *x*-coordinate of the circle center to the specifi
 
 [Source](https://github.com/d3/d3-force/blob/main/src/radial.js)
 
-If *y* is specified, sets the *y*-coordinate of the circle center to the specified number and returns this force. If *y* is not specified, returns the current *y*-coordinate of the center, which defaults to zero.
+If *y* is specified, sets the y coordinate of the circle center to the specified number and returns this force. If *y* is not specified, returns the current y coordinate of the center, which defaults to zero.

@@ -13,7 +13,6 @@ const points = Array.from({length: 1000}, () => [random(), random()]);
 # Voronoi diagrams
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -65,7 +64,6 @@ The bounds of the viewport [*xmin*, *ymin*, *xmax*, *ymax*] for rendering the Vo
 ## *voronoi*.render(*context*) {#voronoi_render}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -82,7 +80,6 @@ The bounds of the viewport [*xmin*, *ymin*, *xmax*, *ymax*] for rendering the Vo
 ## *voronoi*.renderBounds(*context*) {#voronoi_renderBounds}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -99,7 +96,7 @@ The bounds of the viewport [*xmin*, *ymin*, *xmax*, *ymax*] for rendering the Vo
 ## *voronoi*.renderCell(*i*, *context*) {#voronoi_renderCell}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em", marginBottom: "1em", overflow: "hidden"},
+  style: {overflow: "hidden"},
   axis: null,
   width: 688,
   height: 688,

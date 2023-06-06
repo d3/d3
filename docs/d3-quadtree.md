@@ -17,7 +17,6 @@ const findState = shallowRef({x: 0, y: 0, i: -1});
 # d3-quadtree
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   aspectRatio: 1,
   round: true,
@@ -214,7 +213,6 @@ tree.size() // 2
 ## *quadtree*.find(*x*, *y*, *radius*) {#quadtree_find}
 
 <PlotRender defer v-once :options='{
-  style: {marginTop: "1em"},
   axis: null,
   aspectRatio: 1,
   round: true,
@@ -337,4 +335,4 @@ The `length` property may be used to distinguish leaf nodes from internal nodes:
 if (!node.length) do console.log(node.data); while (node = node.next);
 ```
 
-The point’s *x*- and y coordinates **must not be modified** while the point is in the quadtree. To update a point’s position, [remove](#quadtree_remove) the point and then re-[add](#quadtree_add) it to the quadtree at the new position. Alternatively, you may discard the existing quadtree entirely and create a new one from scratch; this may be more efficient if many of the points have moved.
+The point’s x and y coordinates **must not be modified** while the point is in the quadtree. To update a point’s position, [remove](#quadtree_remove) the point and then re-[add](#quadtree_add) it to the quadtree at the new position. Alternatively, you may discard the existing quadtree entirely and create a new one from scratch; this may be more efficient if many of the points have moved.

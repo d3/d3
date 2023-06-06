@@ -131,7 +131,15 @@ export default defineConfig({
         collapsed: true,
         items: [
           {text: "d3-chord", link: "/d3-chord"},
-          {text: "d3-contour", link: "/d3-contour"},
+          {
+            text: "d3-contour",
+            link: "/d3-contour",
+            collapsed: true,
+            items: [
+              {text: "Contour polygons", link: "/d3-contour/contour"},
+              {text: "Density estimation", link: "/d3-contour/density"}
+            ]
+          },
           {
             text: "d3-delaunay",
             link: "/d3-delaunay",

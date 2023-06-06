@@ -15,7 +15,6 @@ const neighborsState = shallowRef({i: -1, N: []});
 # Delaunay triangulations
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -100,7 +99,7 @@ Delaunay.from is typically slower than [new Delaunay](#Delaunay) because it requ
 const delaunay = d3.Delaunay.from([[0, 0], [0, 1], [1, 0], [1, 1]]);
 ```
 
-Otherwise, *fx* and *fy* are functions that are invoked for each element in the *points* array in order, and must return the respective *x*- and *y*-coordinate for each point.
+Otherwise, *fx* and *fy* are functions that are invoked for each element in the *points* array in order, and must return the respective x and y coordinate for each point.
 
 ```js
 const delaunay = d3.Delaunay.from([{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 0}, {x: 1, y: 1}], (d) => d.x, (d) => d.y);
@@ -111,7 +110,6 @@ If *that* is specified, the functions *fx* and *fy* are invoked with *that* as *
 ## *delaunay*.find(*x*, *y*, *i*) {#delaunay_find}
 
 <PlotRender defer v-once :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -156,7 +154,6 @@ delaunay.find({{findState.x}}, {{findState.y}}) // {{findState.i}}
 ## *delaunay*.neighbors(*i*) {#delaunay_neighbors}
 
 <PlotRender defer v-once :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -216,7 +213,6 @@ delaunay.neighbors({{neighborsState.i}}) // [{{neighborsState.N.join(", ")}}]
 ## *delaunay*.render(*context*) {#delaunay_render}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -233,7 +229,6 @@ delaunay.neighbors({{neighborsState.i}}) // [{{neighborsState.N.join(", ")}}]
 ## *delaunay*.renderHull(*context*) {#delaunay_renderHull}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -250,7 +245,6 @@ delaunay.neighbors({{neighborsState.i}}) // [{{neighborsState.N.join(", ")}}]
 ## *delaunay*.renderTriangle(*i*, *context*) {#delaunay_renderTriangle}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,
@@ -290,7 +284,6 @@ delaunay.neighbors({{neighborsState.i}}) // [{{neighborsState.N.join(", ")}}]
 ## *delaunay*.renderPoints(*context*, *radius*) {#delaunay_renderPoints}
 
 <PlotRender defer :options='{
-  style: {marginTop: "1em"},
   axis: null,
   width: 688,
   height: 688,

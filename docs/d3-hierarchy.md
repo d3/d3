@@ -357,7 +357,7 @@ Creates a new cluster layout with default settings.
 Lays out the specified *root* [hierarchy](#hierarchy), assigning the following properties on *root* and its descendants:
 
 * *node*.x - the *x*-coordinate of the node
-* *node*.y - the *y*-coordinate of the node
+* *node*.y - the y coordinate of the node
 
 The coordinates *x* and *y* represent an arbitrary coordinate system; for example, you can treat *x* as an angle and *y* as a radius to produce a [radial layout](https://observablehq.com/@d3/radial-dendrogram). You may want to call [*root*.sort](#node_sort) before passing the hierarchy to the cluster layout.
 
@@ -398,7 +398,7 @@ Creates a new tree layout with default settings.
 Lays out the specified *root* [hierarchy](#hierarchy), assigning the following properties on *root* and its descendants:
 
 * *node*.x - the *x*-coordinate of the node
-* *node*.y - the *y*-coordinate of the node
+* *node*.y - the y coordinate of the node
 
 The coordinates *x* and *y* represent an arbitrary coordinate system; for example, you can treat *x* as an angle and *y* as a radius to produce a [radial layout](https://observablehq.com/@d3/radial-tidy-tree). You may want to call [*root*.sort](#node_sort) before passing the hierarchy to the tree layout.
 
@@ -591,7 +591,7 @@ Creates a new pack layout with the default settings.
 Lays out the specified *root* [hierarchy](#hierarchy), assigning the following properties on *root* and its descendants:
 
 * *node*.x - the *x*-coordinate of the circle’s center
-* *node*.y - the *y*-coordinate of the circle’s center
+* *node*.y - the y coordinate of the circle’s center
 * *node*.r - the radius of the circle
 
 You must call [*root*.sum](#node_sum) before passing the hierarchy to the pack layout. You probably also want to call [*root*.sort](#node_sort) to order the hierarchy before computing the layout.
@@ -615,7 +615,7 @@ If *padding* is specified, sets this pack layout’s padding accessor to the spe
 Packs the specified array of *circles*, each of which must have a *circle*.r property specifying the circle’s radius. Assigns the following properties to each circle:
 
 * *circle*.x - the *x*-coordinate of the circle’s center
-* *circle*.y - the *y*-coordinate of the circle’s center
+* *circle*.y - the y coordinate of the circle’s center
 
 The circles are positioned according to the front-chain packing algorithm by [Wang *et al.*](https://dl.acm.org/citation.cfm?id=1124851)
 

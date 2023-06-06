@@ -437,7 +437,7 @@ Force-directed graph layout using velocity Verlet integration.
 * [*force*.initialize](./d3-force.md#force_initialize) - initialize the force with the given nodes.
 * [d3.forceCenter](./d3-force.md#forceCenter) - create a centering force.
 * [*center*.x](./d3-force.md#center_x) - set the center *x*-coordinate.
-* [*center*.y](./d3-force.md#center_y) - set the center *y*-coordinate.
+* [*center*.y](./d3-force.md#center_y) - set the center y coordinate.
 * [*center*.strength](./d3-force.md#center_strength) - set the strength of the centering force.
 * [d3.forceCollide](./d3-force.md#forceCollide) - create a circle collision force.
 * [*collide*.radius](./d3-force.md#collide_radius) - set the circle radius.
@@ -459,12 +459,12 @@ Force-directed graph layout using velocity Verlet integration.
 * [*x*.x](./d3-force.md#x_x) - set the target *x*-coordinate.
 * [d3.forceY](./d3-force.md#forceY) - create an *y*-positioning force.
 * [*y*.strength](./d3-force.md#y_strength) - set the force strength.
-* [*y*.y](./d3-force.md#y_y) - set the target *y*-coordinate.
+* [*y*.y](./d3-force.md#y_y) - set the target y coordinate.
 * [d3.forceRadial](./d3-force.md#forceRadial) - create a radial positioning force.
 * [*radial*.strength](./d3-force.md#radial_strength) - set the force strength.
 * [*radial*.radius](./d3-force.md#radial_radius) - set the target radius.
 * [*radial*.x](./d3-force.md#radial_x) - set the target center *x*-coordinate.
-* [*radial*.y](./d3-force.md#radial_y) - set the target center *y*-coordinate.
+* [*radial*.y](./d3-force.md#radial_y) - set the target center y coordinate.
 
 ## [d3-format](./d3-format.md)
 
@@ -1526,11 +1526,11 @@ Pan and zoom SVG, HTML or Canvas using mouse or touch input.
 * [*transform*.translate](./d3-zoom.md#transform_translate) - translate a transform by the specified amount.
 * [*transform*.apply](./d3-zoom.md#transform_apply) - apply the transform to the given point.
 * [*transform*.applyX](./d3-zoom.md#transform_applyX) - apply the transform to the given *x*-coordinate.
-* [*transform*.applyY](./d3-zoom.md#transform_applyY) - apply the transform to the given *y*-coordinate.
+* [*transform*.applyY](./d3-zoom.md#transform_applyY) - apply the transform to the given y coordinate.
 * [*transform*.invert](./d3-zoom.md#transform_invert) - unapply the transform to the given point.
 * [*transform*.invertX](./d3-zoom.md#transform_invertX) - unapply the transform to the given *x*-coordinate.
-* [*transform*.invertY](./d3-zoom.md#transform_invertY) - unapply the transform to the given *y*-coordinate.
-* [*transform*.rescaleX](./d3-zoom.md#transform_rescaleX) - apply the transform to an *x*-scale’s domain.
-* [*transform*.rescaleY](./d3-zoom.md#transform_rescaleY) - apply the transform to a *y*-scale’s domain.
+* [*transform*.invertY](./d3-zoom.md#transform_invertY) - unapply the transform to the given y coordinate.
+* [*transform*.rescaleX](./d3-zoom.md#transform_rescaleX) - apply the transform to an x scale’s domain.
+* [*transform*.rescaleY](./d3-zoom.md#transform_rescaleY) - apply the transform to a y scale’s domain.
 * [*transform*.toString](./d3-zoom.md#transform_toString) - format the transform as an SVG transform string.
 * [d3.zoomIdentity](./d3-zoom.md#zoomIdentity) - the identity transform.
