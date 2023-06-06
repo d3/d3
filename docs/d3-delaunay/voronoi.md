@@ -1,74 +1,129 @@
+<script setup>
+
+import * as Plot from "@observablehq/plot";
+import * as d3 from "d3";
+import {shallowRef} from "vue";
+import PlotRender from "../components/PlotRender.js";
+
+const random = d3.randomNormal.source(d3.randomLcg(42))();
+const points = Array.from({length: 1000}, () => [random(), random()]);
+
+</script>
+
 # Voronoi diagrams
 
-## voronoi.delaunay
+<PlotRender defer :options='{
+  style: {marginTop: "1em"},
+  axis: null,
+  width: 688,
+  height: 688,
+  x: {domain: [-4, 3.5]},
+  y: {domain: [-3, 3.5]},
+  marks: [
+    Plot.dot(points, {r: 2, fill: "currentColor"}),
+    Plot.voronoiMesh(points, {strokeOpacity: 0.3})
+  ]
+}' />
+
+Given a set of points, the Voronoi diagram partitions the plane into cells representing the region of the plane that is closest to the corresponding point. The Voronoi diagram is the dual of the [Delaunay triangulation](./delaunay.md).
+
+## *delaunay*.voronoi(*bounds*) {#delaunay_voronoi}
+
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the Voronoi diagram for the given [Delaunay triangulation](./delaunay.md). When rendering, the diagram will be clipped to the specified *bounds* = [*xmin*, *ymin*, *xmax*, *ymax*].
+
+```js
+const delaunay = d3.Delaunay.from([[0, 0], [0, 100], [100, 0], [100, 100]]);
+const voronoi = delaunay.voronoi([0, 0, 640, 480]);
+```
+
+If *bounds* is not specified, it defaults to [0, 0, 960, 500]. The Voronoi diagram is returned even in degenerate cases where no triangulation exists — namely 0, 1 or 2 points, and collinear points.
+
+### *voronoi*.delaunay
 
 The Voronoi diagram’s associated [Delaunay triangulation](#delaunay).
 
-## voronoi.circumcenters
+### *voronoi*.circumcenters
 
 The [circumcenters](http://mathworld.wolfram.com/Circumcenter.html) of the Delaunay triangles as a Float64Array [*cx0*, *cy0*, *cx1*, *cy1*, …]. Each contiguous pair of coordinates *cx*, *cy* is the circumcenter for the corresponding triangle. These circumcenters form the coordinates of the Voronoi cell polygons.
 
-## voronoi.vectors
+### *voronoi*.vectors
 
 A Float64Array [*vx0*, *vy0*, *wx0*, *wy0*, …] where each non-zero quadruple describes an open (infinite) cell on the outer hull, giving the directions of two open half-lines.
 
-## voronoi.xmin
-## voronoi.ymin
-## voronoi.xmax
-## voronoi.ymax
+### *voronoi*.xmin<br>*voronoi*.ymin<br>*voronoi*.xmax<br>*voronoi*.ymax {#voronoi_bounds}
 
-The bounds of the viewport [*xmin*, *ymin*, *xmax*, *ymax*] for rendering the Voronoi diagram. These values only affect the rendering methods ([*voronoi*.render](#voronoi_render), [*voronoi*.renderBounds](#voronoi_renderBounds), [*cell*.render](#cell_render)).
+The bounds of the viewport [*xmin*, *ymin*, *xmax*, *ymax*] for rendering the Voronoi diagram. These values only affect the rendering methods ([*voronoi*.render](#voronoi_render), [*voronoi*.renderBounds](#voronoi_renderBounds), [*voronoi*.renderCell](#voronoi_renderCell)).
 
-## voronoi.contains(i, x, y)
+## *voronoi*.contains(*i*, *x*, *y*) {#voronoi_contains}
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/cell.js "Source")
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/cell.js) · Returns true if the cell with the specified index *i* contains the specified point ⟨*x*, *y*⟩; *i.e.*, whether the point *i* is the closest point in the diagram to the specified point. (This method is not affected by the associated Voronoi diagram’s viewport [bounds](#voronoi_bounds).)
 
-Returns true if the cell with the specified index *i* contains the specified point ⟨*x*, *y*⟩. (This method is not affected by the associated Voronoi diagram’s viewport [bounds](#voronoi_xmin).)
+## *voronoi*.neighbors(*i*) {#voronoi_neighbors}
 
-## voronoi.neighbors(i)
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Returns an iterable over the indexes of the cells that share a common edge with the specified cell *i*. Voronoi neighbors are always neighbors on the Delaunay graph, but the converse is false when the common edge has been clipped out by the Voronoi diagram’s viewport.
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
+## *voronoi*.render(*context*) {#voronoi_render}
 
-Returns an iterable over the indexes of the cells that share a common edge with the specified cell *i*. Voronoi neighbors are always neighbors on the Delaunay graph, but the converse is false when the common edge has been clipped out by the Voronoi diagram’s viewport.
+<PlotRender defer :options='{
+  style: {marginTop: "1em"},
+  axis: null,
+  width: 688,
+  height: 688,
+  x: {domain: [-4, 3.5]},
+  y: {domain: [-3, 3.5]},
+  marks: [
+    Plot.dot(points, {r: 2, fill: "currentColor"}),
+    Plot.voronoiMesh(points, {strokeOpacity: 1})
+  ]
+}' />
 
-## voronoi.render(context)
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Renders the mesh of Voronoi cells to the specified *context*. The specified *context* must implement the *context*.moveTo and *context*.lineTo methods from the [CanvasPathMethods API](https://www.w3.org/TR/2dcontext/#canvaspathmethods). If a *context* is not specified, an SVG path string is returned instead.
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
+## *voronoi*.renderBounds(*context*) {#voronoi_renderBounds}
 
-<img alt="voronoi.render" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/voronoi-mesh.png">
+<PlotRender defer :options='{
+  style: {marginTop: "1em"},
+  axis: null,
+  width: 688,
+  height: 688,
+  x: {domain: [-4, 3.5]},
+  y: {domain: [-3, 3.5]},
+  marks: [
+    Plot.dot(points, {r: 2, fill: "currentColor", clip: true}),
+    Plot.frame()
+  ]
+}' />
 
-Renders the mesh of Voronoi cells to the specified *context*. The specified *context* must implement the *context*.moveTo and *context*.lineTo methods from the [CanvasPathMethods API](https://www.w3.org/TR/2dcontext/#canvaspathmethods). If a *context* is not specified, an SVG path string is returned instead.
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Renders the viewport extent to the specified *context*. The specified *context* must implement the *context*.rect method from the [CanvasPathMethods API](https://www.w3.org/TR/2dcontext/#canvaspathmethods). Equivalent to *context*.rect(*voronoi*.xmin, *voronoi*.ymin, *voronoi*.xmax - *voronoi*.xmin, *voronoi*.ymax - *voronoi*.ymin). If a *context* is not specified, an SVG path string is returned instead.
 
-## voronoi.renderBounds(context)
+## *voronoi*.renderCell(*i*, *context*) {#voronoi_renderCell}
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
+<PlotRender defer :options='{
+  style: {marginTop: "1em", marginBottom: "1em", overflow: "hidden"},
+  axis: null,
+  width: 688,
+  height: 688,
+  x: {domain: [-4, 3.5]},
+  y: {domain: [-3, 3.5]},
+  color: {scheme: $dark ? "turbo" : "orrd"},
+  marks: [
+    Plot.voronoi(Array.from(d3.union(d3.Delaunay.from(points).triangles), (i) => points[i]), {fill: (d, i) => -i}),
+    Plot.dot(points, {r: 2, fill: "black"}),
+    Plot.voronoiMesh(points, {stroke: "black", strokeOpacity: 1}),
+    Plot.frame({stroke: "black"}),
+  ]
+}' />
 
-<img alt="voronoi.renderBounds" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/voronoi-bounds.png">
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Renders the cell with the specified index *i* to the specified *context*. The specified *context* must implement the *context*.moveTo , *context*.lineTo and *context*.closePath methods from the [CanvasPathMethods API](https://www.w3.org/TR/2dcontext/#canvaspathmethods). If a *context* is not specified, an SVG path string is returned instead.
 
-Renders the viewport extent to the specified *context*. The specified *context* must implement the *context*.rect method from the [CanvasPathMethods API](https://www.w3.org/TR/2dcontext/#canvaspathmethods). Equivalent to *context*.rect(*voronoi*.xmin, *voronoi*.ymin, *voronoi*.xmax - *voronoi*.xmin, *voronoi*.ymax - *voronoi*.ymin). If a *context* is not specified, an SVG path string is returned instead.
+## *voronoi*.cellPolygons() {#voronoi_cellPolygons}
 
-## voronoi.renderCell(i, context)
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Returns an iterable over the non-empty [polygons for each cell](#voronoi_cellPolygon), with the cell index as property. See also [*voronoi*.renderCell](#voronoi_renderCell).
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
+## *voronoi*.cellPolygon(*i*) {#voronoi_cellPolygon}
 
-<img alt="cell.render" src="https://raw.githubusercontent.com/d3/d3-delaunay/master/img/spectral.png">
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Returns the convex, closed polygon [[*x0*, *y0*], [*x1*, *y1*], …, [*x0*, *y0*]] representing the cell for the specified point *i*. See also [*voronoi*.renderCell](#voronoi_renderCell).
 
-Renders the cell with the specified index *i* to the specified *context*. The specified *context* must implement the *context*.moveTo , *context*.lineTo and *context*.closePath methods from the [CanvasPathMethods API](https://www.w3.org/TR/2dcontext/#canvaspathmethods). If a *context* is not specified, an SVG path string is returned instead.
+## *voronoi*.update() {#voronoi_update}
 
-## voronoi.cellPolygons()
-
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
-
-Returns an iterable over the non-empty [polygons for each cell](#voronoi_cellPolygon), with the cell index as property.
-
-## voronoi.cellPolygon(i)
-
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
-
-Returns the convex, closed polygon [[*x0*, *y0*], [*x1*, *y1*], …, [*x0*, *y0*]] representing the cell for the specified point *i*.
-
-## voronoi.update()
-
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js "Source")
-
-Updates the Voronoi diagram and underlying triangulation after the points have been modified in-place — useful for Lloyd’s relaxation.
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Updates the Voronoi diagram and underlying triangulation after the points have been modified in-place — useful for Lloyd’s relaxation. Calls [*delaunay*.update](./delaunay.md#delaunay_update) on the underlying Delaunay triangulation.

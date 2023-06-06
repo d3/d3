@@ -27,14 +27,14 @@ const neighborsState = shallowRef({i: -1, N: []});
   ]
 }' />
 
-The Delaunay triangulation is a triangular mesh formed from a set of points in *x* and *y*. No point is inside the circumcircle of any triangle, which is a nice geometric property for certain applications, and tends to avoid “sliver” triangles.
+The Delaunay triangulation is a triangular mesh formed from a set of points in *x* and *y*. No point is inside the circumcircle of any triangle, which is a nice geometric property for certain applications, and tends to avoid “sliver” triangles. The Delaunay triangulation is the dual of the [Voronoi diagram](./voronoi.md).
 
 ## new Delaunay(*points*) {#Delaunay}
 
 [Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the Delaunay triangulation for the given flat array [*x0*, *y0*, *x1*, *y1*, …] of *points*.
 
 ```js
-const delaunay = new Delaunay(Float64Array.of(0, 0, 0, 1, 1, 0, 1, 1));
+const delaunay = new d3.Delaunay(Float64Array.of(0, 0, 0, 1, 1, 0, 1, 1));
 ```
 
 The given *points* may be any array-like type, but is typically a Float64Array.
@@ -97,13 +97,13 @@ Delaunay.from is typically slower than [new Delaunay](#Delaunay) because it requ
 [Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the Delaunay triangulation for the given array or iterable of *points*. If *fx* and *fy* are not specified, then *points* is assumed to be an array of two-element arrays of numbers: [[*x0*, *y0*], [*x1*, *y1*], …].
 
 ```js
-const delaunay = Delaunay.from([[0, 0], [0, 1], [1, 0], [1, 1]]);
+const delaunay = d3.Delaunay.from([[0, 0], [0, 1], [1, 0], [1, 1]]);
 ```
 
 Otherwise, *fx* and *fy* are functions that are invoked for each element in the *points* array in order, and must return the respective *x*- and *y*-coordinate for each point.
 
 ```js
-const delaunay = Delaunay.from([{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 0}, {x: 1, y: 1}], (d) => d.x, (d) => d.y);
+const delaunay = d3.Delaunay.from([{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 0}, {x: 1, y: 1}], (d) => d.x, (d) => d.y);
 ```
 
 If *that* is specified, the functions *fx* and *fy* are invoked with *that* as *this*. (See [Array.from](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/from) for reference.)
@@ -305,22 +305,27 @@ delaunay.neighbors({{neighborsState.i}}) // [{{neighborsState.N.join(", ")}}]
 
 ## *delaunay*.hullPolygon() {#delaunay_hullPolygon}
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the closed polygon [[*x0*, *y0*], [*x1*, *y1*], …, [*x0*, *y0*]] representing the convex hull.
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the closed polygon [[*x0*, *y0*], [*x1*, *y1*], …, [*x0*, *y0*]] representing the convex hull. See also [*delaunay*.renderHull](#delaunay_renderHull).
 
 ## *delaunay*.trianglePolygons() {#delaunay_trianglePolygons}
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns an iterable over the [polygons for each triangle](#delaunay_trianglePolygon), in order.
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns an iterable over the [polygons for each triangle](#delaunay_trianglePolygon), in order. See also [*delaunay*.renderTriangle](#delaunay_renderTriangle).
 
 ## *delaunay*.trianglePolygon(*i*) {#delaunay_trianglePolygon}
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the closed polygon [[*x0*, *y0*], [*x1*, *y1*], [*x2*, *y2*], [*x0*, *y0*]] representing the triangle *i*.
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the closed polygon [[*x0*, *y0*], [*x1*, *y1*], [*x2*, *y2*], [*x0*, *y0*]] representing the triangle *i*. See also [*delaunay*.renderTriangle](#delaunay_renderTriangle).
 
 ## *delaunay*.update() {#delaunay_update}
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Updates the triangulation after the points have been modified in-place.
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Recomputes the triangulation after the points have been modified in-place.
 
 ## *delaunay*.voronoi(*bounds*) {#delaunay_voronoi}
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the [Voronoi diagram](./voronoi.md) for the associated [points](#delaunay_points). When rendering, the diagram will be clipped to the specified *bounds* = [*xmin*, *ymin*, *xmax*, *ymax*]. If *bounds* is not specified, it defaults to [0, 0, 960, 500]. See [To Infinity and Back Again](https://observablehq.com/@mbostock/to-infinity-and-back-again) for an interactive explanation of Voronoi cell clipping.
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/delaunay.js) · Returns the [Voronoi diagram](./voronoi.md) for the given Delaunay triangulation. When rendering, the diagram will be clipped to the specified *bounds* = [*xmin*, *ymin*, *xmax*, *ymax*].
 
-The Voronoi diagram is returned even in degenerate cases where no triangulation exists — namely 0, 1 or 2 points, and collinear points.
+```js
+const delaunay = d3.Delaunay.from(points);
+const voronoi = delaunay.voronoi([0, 0, 640, 480]);
+```
+
+If *bounds* is not specified, it defaults to [0, 0, 960, 500]. The Voronoi diagram is returned even in degenerate cases where no triangulation exists — namely 0, 1 or 2 points, and collinear points.
