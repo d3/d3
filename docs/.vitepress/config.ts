@@ -132,7 +132,15 @@ export default defineConfig({
         items: [
           {text: "d3-chord", link: "/d3-chord"},
           {text: "d3-contour", link: "/d3-contour"},
-          {text: "d3-delaunay", link: "/d3-delaunay"},
+          {
+            text: "d3-delaunay",
+            link: "/d3-delaunay",
+            collapsed: true,
+            items: [
+              {text: "Delaunay triangulations", link: "/d3-delaunay/delaunay"},
+              {text: "Voronoi diagrams", link: "/d3-delaunay/voronoi"}
+            ]
+          },
           {text: "d3-force", link: "/d3-force"},
           {text: "d3-geo", link: "/d3-geo"},
           {text: "d3-hierarchy", link: "/d3-hierarchy"},
