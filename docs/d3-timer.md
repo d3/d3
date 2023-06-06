@@ -2,44 +2,19 @@
 
 This module provides an efficient queue capable of managing thousands of concurrent animations, while guaranteeing consistent, synchronized timing with concurrent or staged animations. Internally, it uses [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) for fluid animation (if available), switching to [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout) for delays longer than 24ms.
 
-## Installing
+## now() {#now}
 
-If you use npm, `npm install d3-timer`. You can also download the [latest release on GitHub](https://github.com/d3/d3-timer/releases/latest). For vanilla HTML in modern browsers, import d3-timer from Skypack:
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js) · Returns the current time as defined by [performance.now](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now) if available, and [Date.now](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/now) if not.
 
-```html
-<script type="module">
-
-import {timer} from "https://cdn.skypack.dev/d3-timer@3";
-
-const t = timer(callback);
-
-</script>
+```js
+d3.now() // 1236.3000000715256
 ```
 
-For legacy environments, you can load d3-timer’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
+The current time is updated at the start of a frame; it is thus consistent during the frame, and any timers scheduled during the same frame will be synchronized. If this method is called outside of a frame, such as in response to a user event, the current time is calculated and then fixed until the next frame, again ensuring consistent timing during event handling.
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/d3-timer@3"></script>
-<script>
+## timer(*callback*, *delay*, *time*) {#timer}
 
-const timer = d3.timer(callback);
-
-</script>
-```
-
-## API Reference
-
-#### d3.now()
-
-[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
-
-Returns the current time as defined by [performance.now](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now) if available, and [Date.now](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/now) if not. The current time is updated at the start of a frame; it is thus consistent during the frame, and any timers scheduled during the same frame will be synchronized. If this method is called outside of a frame, such as in response to a user event, the current time is calculated and then fixed until the next frame, again ensuring consistent timing during event handling.
-
-#### d3.timer(callback, delay, time)
-
-[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
-
-Schedules a new timer, invoking the specified *callback* repeatedly until the timer is [stopped](#timer_stop). An optional numeric *delay* in milliseconds may be specified to invoke the given *callback* after a delay; if *delay* is not specified, it defaults to zero. The delay is relative to the specified *time* in milliseconds; if *time* is not specified, it defaults to [now](#now).
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js) · Schedules a new timer, invoking the specified *callback* repeatedly until the timer is [stopped](#timer_stop). An optional numeric *delay* in milliseconds may be specified to invoke the given *callback* after a delay; if *delay* is not specified, it defaults to zero. The delay is relative to the specified *time* in milliseconds; if *time* is not specified, it defaults to [now](#now).
 
 The *callback* is passed the (apparent) *elapsed* time since the timer became active. For example:
 
@@ -70,32 +45,22 @@ This produces roughly the following console output:
 
 If [timer](#timer) is called within the callback of another timer, the new timer callback (if eligible as determined by the specified *delay* and *time*) will be invoked immediately at the end of the current frame, rather than waiting until the next frame. Within a frame, timer callbacks are guaranteed to be invoked in the order they were scheduled, regardless of their start time.
 
-#### timer.restart(callback, delay, time)
+## *timer*.restart(*callback*, *delay*, *time*) {#timer_restart}
 
-[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js) · Restart a timer with the specified *callback* and optional *delay* and *time*. This is equivalent to stopping this timer and creating a new timer with the specified arguments, although this timer retains the original invocation priority.
 
-Restart a timer with the specified *callback* and optional *delay* and *time*. This is equivalent to stopping this timer and creating a new timer with the specified arguments, although this timer retains the original invocation priority.
+## *timer*.stop() {#timer_stop}
 
-#### timer.stop()
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js) · Stops this timer, preventing subsequent callbacks. This method has no effect if the timer has already stopped.
 
-[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
+## timerFlush() {#timerFlush}
 
-Stops this timer, preventing subsequent callbacks. This method has no effect if the timer has already stopped.
+[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js) · Immediately invoke any eligible timer callbacks. Note that zero-delay timers are normally first executed after one frame (~17ms). This can cause a brief flicker because the browser renders the page twice: once at the end of the first event loop, then again immediately on the first timer callback. By flushing the timer queue at the end of the first event loop, you can run any zero-delay timers immediately and avoid the flicker.
 
-#### d3.timerFlush()
+## timeout(*callback*, *delay*, *time*) {#timeout}
 
-[Source](https://github.com/d3/d3-timer/blob/main/src/timer.js "Source")
+[Source](https://github.com/d3/d3-timer/blob/main/src/timeout.js) · Like [timer](#timer), except the timer automatically [stops](#timer_stop) on its first callback. A suitable replacement for [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout) that is guaranteed to not run in the background. The *callback* is passed the elapsed time.
 
-Immediately invoke any eligible timer callbacks. Note that zero-delay timers are normally first executed after one frame (~17ms). This can cause a brief flicker because the browser renders the page twice: once at the end of the first event loop, then again immediately on the first timer callback. By flushing the timer queue at the end of the first event loop, you can run any zero-delay timers immediately and avoid the flicker.
+## interval(*callback*, *delay*, *time*) {#interval}
 
-#### d3.timeout(callback, delay, time)
-
-[Source](https://github.com/d3/d3-timer/blob/main/src/timeout.js "Source")
-
-Like [timer](#timer), except the timer automatically [stops](#timer_stop) on its first callback. A suitable replacement for [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout) that is guaranteed to not run in the background. The *callback* is passed the elapsed time.
-
-#### d3.interval(callback, delay, time)
-
-[Source](https://github.com/d3/d3-timer/blob/main/src/interval.js "Source")
-
-Like [timer](#timer), except the *callback* is invoked only every *delay* milliseconds; if *delay* is not specified, this is equivalent to [timer](#timer). A suitable replacement for [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval) that is guaranteed to not run in the background. The *callback* is passed the elapsed time.
+[Source](https://github.com/d3/d3-timer/blob/main/src/interval.js) · Like [timer](#timer), except the *callback* is invoked only every *delay* milliseconds; if *delay* is not specified, this is equivalent to [timer](#timer). A suitable replacement for [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval) that is guaranteed to not run in the background. The *callback* is passed the elapsed time.
