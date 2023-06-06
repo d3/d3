@@ -130,7 +130,15 @@ export default defineConfig({
         text: "Geometry",
         collapsed: true,
         items: [
-          {text: "d3-chord", link: "/d3-chord"},
+          {
+            text: "d3-chord",
+            link: "/d3-chord",
+            collapsed: true,
+            items: [
+              {text: "Chords", link: "/d3-chord/chord"},
+              {text: "Ribbons", link: "/d3-chord/ribbon"}
+            ]
+          },
           {
             text: "d3-contour",
             link: "/d3-contour",
