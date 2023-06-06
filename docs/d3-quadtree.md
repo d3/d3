@@ -2,10 +2,15 @@
 
 import * as Plot from "@observablehq/plot";
 import * as d3 from "d3";
+import {shallowRef} from "vue";
 import PlotRender from "./components/PlotRender.js";
+import quadtree_findVisited from "./components/quadtreeFindVisited.js";
+import quadtree_nodes from "./components/quadtreeNodes.js";
 
 const random = d3.randomNormal.source(d3.randomLcg(42))();
 const points = Array.from({length: 1000}, () => [random(), random()]);
+const tree = d3.quadtree(d3.range(points.length), (i) => points[i][0], (i) => points[i][1]);
+const findState = shallowRef({x: 0, y: 0, i: -1});
 
 </script>
 
@@ -20,7 +25,7 @@ const points = Array.from({length: 1000}, () => [random(), random()]);
     Plot.dot(points, {r: 2, fill: "currentColor"}),
     (() => {
       const nodes = [];
-      d3.quadtree(points).visit((node, x1, y1, x2, y2) => void nodes.push({x1, y1, x2, y2}));
+      tree.visit((node, x1, y1, x2, y2) => void nodes.push({x1, y1, x2, y2}));
       return Plot.rect(nodes, {stroke: "currentColor", x1: "x1", y1: "y1", x2: "x2", y2: "y2"});
     })()
   ]
@@ -208,10 +213,70 @@ tree.size() // 2
 
 ## *quadtree*.find(*x*, *y*, *radius*) {#quadtree_find}
 
+<PlotRender defer v-once :options='{
+  style: {marginTop: "1em"},
+  axis: null,
+  aspectRatio: 1,
+  round: true,
+  marks: [
+    Plot.dot(points, {r: 2, fill: "currentColor"}),
+    Plot.rect(quadtree_nodes.call(tree), {stroke: "currentColor", x1: "x1", y1: "y1", x2: "x2", y2: "y2"}),
+    Plot.rect({length: 1}, {
+      stroke: "red",
+      strokeOpacity: 0.5,
+      render(index, scales, values, dimensions, context, next) {
+        function update(x, y) {
+          const visited = quadtree_findVisited.call(tree, x, y);
+          return next(
+            d3.range(visited.length),
+            scales,
+            {
+              x1: visited.map((d, i) => scales.x(d.x0) + d.dx0),
+              y1: visited.map((d, i) => scales.y(d.y0) - d.dy0),
+              x2: visited.map((d, i) => scales.x(d.x1) + d.dx1),
+              y2: visited.map((d, i) => scales.y(d.y1) - d.dy1)
+            },
+            dimensions,
+            context
+          );
+        }
+        let rect = update(0, 0);
+        context.ownerSVGElement.addEventListener("pointermove", (event) => {
+          const [x, y] = d3.pointer(event);
+          const newrect = update(scales.x.invert(x), scales.y.invert(y));
+          rect.replaceWith(newrect);
+          rect = newrect;
+        });
+        return rect;
+      }
+    }),
+    Plot.dot(points, {
+      r: 3.5,
+      stroke: "red",
+      strokeWidth: 3,
+      render(index, scales, values, dimensions, context, next) {
+        function update(x, y) {
+          const i = tree.find(x, y);
+          findState = {x, y, i};
+          return next([i], scales, values, dimensions, context);
+        }
+        let dot = update(0, 0);
+        context.ownerSVGElement.addEventListener("pointermove", (event) => {
+          const [x, y] = d3.pointer(event);
+          const newdot = update(scales.x.invert(x), scales.y.invert(y));
+          dot.replaceWith(newdot);
+          dot = newdot;
+        });
+        return dot;
+      }
+    }),
+  ]
+}' />
+
 [Source](https://github.com/d3/d3-quadtree/blob/main/src/find.js) · Returns the datum closest to the position ⟨*x*,*y*⟩ with the given search *radius*. If *radius* is not specified, it defaults to infinity.
 
-```js
-tree.find(0, 1) // [0, 0]
+```js-vue
+tree.find({{findState.x.toFixed(3)}}, {{findState.y.toFixed(3)}}) // {{points[findState.i] && `[${points[findState.i].map((p) => p.toFixed(3)).join(", ")}]`}}
 ```
 
 If there is no datum within the search area, returns undefined.
