@@ -1,6 +1,6 @@
 # Ribbons
 
-A ribbon visually represents the volume of flow between two nodes in a [chord diagram](./chord.md). Ribbons come in two varieties: [ribbon](#ribbon) represents a bidirectional flow, while [ribbonArrow](#ribbonArrow) represents a unidirectional flow. The latter is suitable for [chordDirected](./chord.md#chordDirected).
+A ribbon visually represents the volume of flow between two nodes in a [chord diagram](../d3-chord.md). Ribbons come in two varieties: [ribbon](#ribbon) represents a bidirectional flow, while [ribbonArrow](#ribbonArrow) represents a unidirectional flow. The latter is suitable for [chordDirected](./chord.md#chordDirected).
 
 ## ribbon() {#ribbon}
 
