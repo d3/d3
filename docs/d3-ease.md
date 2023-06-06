@@ -1,69 +1,87 @@
+<script setup>
+
+import * as d3 from "d3";
+import {ref} from "vue";
+import ExampleEase from "./components/ExampleEase.vue";
+
+const amplitude = ref(1);
+const exponent = ref(2);
+const period = ref(0.3);
+const overshoot = ref(1.7);
+
+</script>
+
 # d3-ease
 
-*Easing* is a method of distorting time to control apparent motion in animation. It is most commonly used for [slow-in, slow-out](https://en.wikipedia.org/wiki/12_basic_principles_of_animation#Slow_In_and_Slow_Out). By easing time, [animated transitions](https://github.com/d3/d3-transition) are smoother and exhibit more plausible motion.
+[Examples](https://observablehq.com/@d3/easing) · *Easing* is a method of distorting time to control apparent motion in animation. It is most commonly used for [slow-in, slow-out](https://en.wikipedia.org/wiki/12_basic_principles_of_animation#Slow_In_and_Slow_Out). By easing time, [animated transitions](./d3-transition.md) are smoother and exhibit more plausible motion.
 
-The easing types in this module implement the [ease method](#ease_ease), which takes a normalized time *t* and returns the corresponding “eased” time *tʹ*. Both the normalized time and the eased time are typically in the range [0,1], where 0 represents the start of the animation and 1 represents the end; some easing types, such as [elastic](#easeElastic), may return eased times slightly outside this range. A good easing type should return 0 if *t* = 0 and 1 if *t* = 1. See the [easing explorer](https://observablehq.com/@d3/easing) for a visual demonstration.
+The easing types in this module implement the [ease method](#_ease) which takes a normalized time *t* and returns the corresponding “eased” time *tʹ*. Both the normalized time and the eased time are typically in the range [0,1], where 0 represents the start of the animation and 1 represents the end; some easing types, such as [easeElastic](#easeElastic), may return eased times slightly outside this range. A good easing type should return 0 if *t* = 0 and 1 if *t* = 1.
 
 These easing types are largely based on work by [Robert Penner](http://robertpenner.com/easing/).
 
-## Eases
+## *ease*(*t*) {#_ease}
 
-### ease(t)
-
-Given the specified normalized time *t*, typically in the range [0,1], returns the “eased” time *tʹ*, also typically in [0,1]. 0 represents the start of the animation and 1 represents the end. A good implementation returns 0 if *t* = 0 and 1 if *t* = 1. See the [easing explorer](https://observablehq.com/@d3/easing) for a visual demonstration. For example, to apply [cubic](#easeCubic) easing:
+Given the specified normalized time *t*, typically in the range [0,1], returns the “eased” time *tʹ*, also typically in [0,1]. 0 represents the start of the animation and 1 represents the end. A good implementation returns 0 if *t* = 0 and 1 if *t* = 1. For example, to apply [easeCubic](#easeCubic) easing:
 
 ```js
 const te = d3.easeCubic(t);
 ```
 
-Similarly, to apply custom [elastic](#easeElastic) easing:
+To apply custom [elastic](#easeElastic) easing, create your easing function before the animation starts:
 
 ```js
-// Before the animation starts, create your easing function.
-const customElastic = d3.easeElastic.period(0.4);
-
-// During the animation, apply the easing function.
-const te = customElastic(t);
+const ease = d3.easeElastic.period(0.4);
 ```
 
-### d3.easeLinear(t)
+Then during the animation, apply the easing function:
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/linear.js "Source")
+```js
+const te = ease(t);
+```
 
-Linear easing; the identity function; *linear*(*t*) returns *t*.
+See also [*transition*.ease](./d3-transition.md#transition_ease).
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/linear.png" alt="linear">](https://observablehq.com/@d3/easing#linear)
+## easeLinear(*t*) {#easeLinear}
 
-### d3.easePolyIn(t)
+<ExampleEase :eases='[{y: d3.easeLinear}]' />
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/poly.js#L3 "Source")
+[Source](https://github.com/d3/d3-ease/blob/main/src/linear.js) · Linear easing; the identity function; *linear*(*t*) returns *t*.
 
-Polynomial easing; raises *t* to the specified [exponent](#poly_exponent). If the exponent is not specified, it defaults to 3, equivalent to [cubicIn](#easeCubicIn).
+## easePoly(*t*) {#easePoly}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/polyIn.png" alt="polyIn">](https://observablehq.com/@d3/easing#polyIn)
+Alias for [easePolyInOut](#easePolyInOut).
 
-### d3.easePolyOut(t)
+## easePolyIn(*t*) {#easePolyIn}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/poly.js#L15 "Source")
+<ExampleEase label="exponent" :eases='[0.5, 1, 1.5, 2, 3, 4].map((e) => ({y: d3.easePolyIn.exponent(e), stroke: e}))' />
 
-Reverse polynomial easing; equivalent to 1 - [polyIn](#easePolyIn)(1 - *t*). If the [exponent](#poly_exponent) is not specified, it defaults to 3, equivalent to [cubicOut](#easeCubicOut).
+[Source](https://github.com/d3/d3-ease/blob/main/src/poly.js) · Polynomial easing; raises *t* to the specified [exponent](#easePoly_exponent). If the exponent is not specified, it defaults to 3, equivalent to [easeCubicIn](#easeCubicIn).
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/polyOut.png" alt="polyOut">](https://observablehq.com/@d3/easing#polyOut)
+## easePolyOut(*t*) {#easePolyOut}
 
-### d3.easePoly(t)
+<ExampleEase label="exponent" :eases='[0.5, 1, 1.5, 2, 3, 4].map((e) => ({y: d3.easePolyOut.exponent(e), stroke: e}))' />
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/poly.js "Source")
-<br><a name="easePolyInOut" href="#easePolyInOut">#</a> d3.<b>easePolyInOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/poly.js#L27 "Source")
+[Source](https://github.com/d3/d3-ease/blob/main/src/poly.js) · Reverse polynomial easing; equivalent to 1 - [easePolyIn](#easePolyIn)(1 - *t*). If the exponent is not specified, it defaults to 3, equivalent to [easeCubicOut](#easeCubicOut).
 
-Symmetric polynomial easing; scales [polyIn](#easePolyIn) for *t* in [0, 0.5] and [polyOut](#easePolyOut) for *t* in [0.5, 1]. If the [exponent](#poly_exponent) is not specified, it defaults to 3, equivalent to [cubic](#easeCubic).
+## easePolyInOut(*t*) {#easePolyInOut}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/polyInOut.png" alt="polyInOut">](https://observablehq.com/@d3/easing#polyInOut)
+<ExampleEase label="exponent" :eases='[0.5, 1, 1.5, 2, 3, 4].map((e) => ({y: d3.easePolyInOut.exponent(e), stroke: e}))' />
 
-### poly.exponent(e)
+[Source](https://github.com/d3/d3-ease/blob/main/src/poly.js) · Symmetric polynomial easing; scales [easePolyIn](#easePolyIn) for *t* in 0–0.5 and [easePolyOut](#easePolyOut) for *t* in 0.5–1. If the exponent is not specified, it defaults to 3, equivalent to [easeCubic](#easeCubic).
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/poly.js#L1 "Source")
+## easePoly.exponent(*e*) {#easePoly_exponent}
 
-Returns a new polynomial easing with the specified exponent *e*. For example, to create equivalents of [linear](#easeLinear), [quad](#easeQuad), and [cubic](#easeCubic):
+<p>
+  <label class="label-input">
+    <span>Exponent:</span>
+    <input type="range" v-model.number="exponent" min="1" max="8" step="0.01">
+    <span style="font-variant-numeric: tabular-nums;">{{exponent.toFixed(2)}}</span>
+  </label>
+</p>
+
+<ExampleEase label="exponent" :eases='[{y: d3.easePolyInOut.exponent(exponent)}]' />
+
+[Source](https://github.com/d3/d3-ease/blob/main/src/poly.js) · Returns a new polynomial easing with the specified exponent *e*. For example, to create equivalents of [easeLinear](#easeLinear), [easeQuad](#easeQuad), and [easeCubic](#easeCubic):
 
 ```js
 const linear = d3.easePoly.exponent(1);
@@ -71,220 +89,220 @@ const quad = d3.easePoly.exponent(2);
 const cubic = d3.easePoly.exponent(3);
 ```
 
-### d3.easeQuadIn(t)
+## easeQuad(*t*) {#easeQuad}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/quad.js#L1 "Source")
+Alias for [easeQuadInOut](#easeQuadInOut).
 
-Quadratic easing; equivalent to [polyIn](#easePolyIn).[exponent](#poly_exponent)(2).
+## easeQuadIn(*t*) {#easeQuadIn}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/quadIn.png" alt="quadIn">](https://observablehq.com/@d3/easing#quadIn)
+<ExampleEase label="exponent" :eases='[{y: d3.easeQuadIn}]' />
 
-### d3.easeQuadOut(t)
+[Source](https://github.com/d3/d3-ease/blob/main/src/quad.js) · Quadratic easing; equivalent to [easePolyIn](#easePolyIn).[exponent](#easePoly_exponent)(2).
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/quad.js#L5 "Source")
+## easeQuadOut(*t*) {#easeQuadOut}
 
-Reverse quadratic easing; equivalent to 1 - [quadIn](#easeQuadIn)(1 - *t*). Also equivalent to [polyOut](#easePolyOut).[exponent](#poly_exponent)(2).
+<ExampleEase label="exponent" :eases='[{y: d3.easeQuadOut}]' />
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/quadOut.png" alt="quadOut">](https://observablehq.com/@d3/easing#quadOut)
+[Source](https://github.com/d3/d3-ease/blob/main/src/quad.js) · Reverse quadratic easing; equivalent to 1 - [easeQuadIn](#easeQuadIn)(1 - *t*). Also equivalent to [easePolyOut](#easePolyOut).[exponent](#easePoly_exponent)(2).
 
-### d3.easeQuad(t)
+## easeQuadInOut(*t*) {#easeQuadInOut}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/quad.js "Source")
-<br><a name="easeQuadInOut" href="#easeQuadInOut">#</a> d3.<b>easeQuadInOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/quad.js#L9 "Source")
+<ExampleEase label="exponent" :eases='[{y: d3.easeQuadInOut}]' />
 
-Symmetric quadratic easing; scales [quadIn](#easeQuadIn) for *t* in [0, 0.5] and [quadOut](#easeQuadOut) for *t* in [0.5, 1]. Also equivalent to [poly](#easePoly).[exponent](#poly_exponent)(2).
+[Source](https://github.com/d3/d3-ease/blob/main/src/quad.js) · Symmetric quadratic easing; scales [easeQuadIn](#easeQuadIn) for *t* in 0–0.5 and [easeQuadOut](#easeQuadOut) for *t* in 0.5–1. Also equivalent to [easePoly](#easePoly).[exponent](#easePoly_exponent)(2).
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/quadInOut.png" alt="quadInOut">](https://observablehq.com/@d3/easing#quadInOut)
+## easeCubic(*t*) {#easeCubic}
 
-### d3.easeCubicIn(t)
+Alias for [easeCubicInOut](#easeCubicInOut).
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/cubic.js#L1 "Source")
+## easeCubicIn(*t*) {#easeCubicIn}
 
-Cubic easing; equivalent to [polyIn](#easePolyIn).[exponent](#poly_exponent)(3).
+<ExampleEase :eases='[{y: d3.easeCubicIn}]' />
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/cubicIn.png" alt="cubicIn">](https://observablehq.com/@d3/easing#cubicIn)
+[Source](https://github.com/d3/d3-ease/blob/main/src/cubic.js) · Cubic easing; equivalent to [easePolyIn](#easePolyIn).[exponent](#easePoly_exponent)(3).
 
-### d3.easeCubicOut(t)
+## easeCubicOut(*t*) {#easeCubicOut}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/cubic.js#L5 "Source")
+<ExampleEase :eases='[{y: d3.easeCubicOut}]' />
 
-Reverse cubic easing; equivalent to 1 - [cubicIn](#easeCubicIn)(1 - *t*). Also equivalent to [polyOut](#easePolyOut).[exponent](#poly_exponent)(3).
+[Source](https://github.com/d3/d3-ease/blob/main/src/cubic.js) · Reverse cubic easing; equivalent to 1 - [easeCubicIn](#easeCubicIn)(1 - *t*). Also equivalent to [easePolyOut](#easePolyOut).[exponent](#easePoly_exponent)(3).
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/cubicOut.png" alt="cubicOut">](https://observablehq.com/@d3/easing#cubicOut)
+## easeCubicInOut(*t*) {#easeCubicInOut}
 
-### d3.easeCubic(t)
+<ExampleEase :eases='[{y: d3.easeCubicInOut}]' />
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/cubic.js "Source")
-<br><a name="easeCubicInOut" href="#easeCubicInOut">#</a> d3.<b>easeCubicInOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/cubic.js#L9 "Source")
+[Source](https://github.com/d3/d3-ease/blob/main/src/cubic.js) · Symmetric cubic easing; scales [easeCubicIn](#easeCubicIn) for *t* in 0–0.5 and [easeCubicOut](#easeCubicOut) for *t* in 0.5–1. Also equivalent to [easePoly](#easePoly).[exponent](#easePoly_exponent)(3).
 
-Symmetric cubic easing; scales [cubicIn](#easeCubicIn) for *t* in [0, 0.5] and [cubicOut](#easeCubicOut) for *t* in [0.5, 1]. Also equivalent to [poly](#easePoly).[exponent](#poly_exponent)(3).
+## easeSin(*t*) {#easeSin}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/cubicInOut.png" alt="cubicInOut">](https://observablehq.com/@d3/easing#cubicInOut)
+Alias for [easeSinInOut](#easeSinInOut).
 
-### d3.easeSinIn(t)
+## easeSinIn(*t*) {#easeSinIn}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/sin.js#L4 "Source")
+<ExampleEase :eases='[{y: d3.easeSinIn}]' />
 
-Sinusoidal easing; returns sin(*t*).
+[Source](https://github.com/d3/d3-ease/blob/main/src/sin.js) · Sinusoidal easing; returns sin(*t*).
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/sinIn.png" alt="sinIn">](https://observablehq.com/@d3/easing#sinIn)
+## easeSinOut(*t*) {#easeSinOut}
 
-### d3.easeSinOut(t)
+<ExampleEase :eases='[{y: d3.easeSinOut}]' />
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/sin.js#L8 "Source")
+[Source](https://github.com/d3/d3-ease/blob/main/src/sin.js) · Reverse sinusoidal easing; equivalent to 1 - [easeSinIn](#easeSinIn)(1 - *t*).
 
-Reverse sinusoidal easing; equivalent to 1 - [sinIn](#easeSinIn)(1 - *t*).
+## easeSinInOut(*t*) {#easeSinInOut}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/sinOut.png" alt="sinOut">](https://observablehq.com/@d3/easing#sinOut)
+<ExampleEase :eases='[{y: d3.easeSinInOut}]' />
 
-### d3.easeSin(t)
+[Source](https://github.com/d3/d3-ease/blob/main/src/sin.js) · Symmetric sinusoidal easing; scales [easeSinIn](#easeSinIn) for *t* in 0–0.5 and [easeSinOut](#easeSinOut) for *t* in 0.5–1.
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/sin.js "Source")
-<br><a name="easeSinInOut" href="#easeSinInOut">#</a> d3.<b>easeSinInOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/sin.js#L12 "Source")
+## easeExp(*t*) {#easeExp}
 
-Symmetric sinusoidal easing; scales [sinIn](#easeSinIn) for *t* in [0, 0.5] and [sinOut](#easeSinOut) for *t* in [0.5, 1].
+Alias for [easeExpInOut](#easeExpInOut).
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/sinInOut.png" alt="sinInOut">](https://observablehq.com/@d3/easing#sinInOut)
+## easeExpIn(*t*) {#easeExpIn}
 
-### d3.easeExpIn(t)
+<ExampleEase :eases='[{y: d3.easeExpIn}]' />
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/exp.js#L1 "Source")
+[Source](https://github.com/d3/d3-ease/blob/main/src/exp.js) · Exponential easing; raises 2 to the exponent 10 × (*t* - 1).
 
-Exponential easing; raises 2 to the exponent 10 \* (*t* - 1).
+## easeExpOut(*t*) {#easeExpOut}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/expIn.png" alt="expIn">](https://observablehq.com/@d3/easing#expIn)
+<ExampleEase :eases='[{y: d3.easeExpOut}]' />
 
-### d3.easeExpOut(t)
+[Source](https://github.com/d3/d3-ease/blob/main/src/exp.js) · Reverse exponential easing; equivalent to 1 - [easeExpIn](#easeExpIn)(1 - *t*).
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/exp.js#L5 "Source")
+## easeExpInOut(*t*) {#easeExpInOut}
 
-Reverse exponential easing; equivalent to 1 - [expIn](#easeExpIn)(1 - *t*).
+<ExampleEase :eases='[{y: d3.easeExpInOut}]' />
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/expOut.png" alt="expOut">](https://observablehq.com/@d3/easing#expOut)
+[Source](https://github.com/d3/d3-ease/blob/main/src/exp.js) · Symmetric exponential easing; scales [easeExpIn](#easeExpIn) for *t* in 0–0.5 and [easeExpOut](#easeExpOut) for *t* in 0.5–1.
 
-### d3.easeExp(t)
+## easeCircle(*t*) {#easeCircle}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/exp.js "Source")
-<br><a name="easeExpInOut" href="#easeExpInOut">#</a> d3.<b>easeExpInOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/exp.js#L9 "Source")
+Alias for [easeCircleInOut](#easeCircleInOut).
 
-Symmetric exponential easing; scales [expIn](#easeExpIn) for *t* in [0, 0.5] and [expOut](#easeExpOut) for *t* in [0.5, 1].
+## easeCircleIn(*t*) {#easeCircleIn}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/expInOut.png" alt="expInOut">](https://observablehq.com/@d3/easing#expInOut)
+<ExampleEase :eases='[{y: d3.easeCircleIn}]' />
 
-### d3.easeCircleIn(t)
+[Source](https://github.com/d3/d3-ease/blob/main/src/circle.js) · Circular easing.
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/circle.js#L1 "Source")
+## easeCircleOut(*t*) {#easeCircleOut}
 
-Circular easing.
+<ExampleEase :eases='[{y: d3.easeCircleOut}]' />
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/circleIn.png" alt="circleIn">](https://observablehq.com/@d3/easing#circleIn)
+[Source](https://github.com/d3/d3-ease/blob/main/src/circle.js) · Reverse circular easing; equivalent to 1 - [easeCircleIn](#easeCircleIn)(1 - *t*).
 
-### d3.easeCircleOut(t)
+## easeCircleInOut(*t*) {#easeCircleInOut}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/circle.js#L5 "Source")
+<ExampleEase :eases='[{y: d3.easeCircleInOut}]' />
 
-Reverse circular easing; equivalent to 1 - [circleIn](#easeCircleIn)(1 - *t*).
+[Source](https://github.com/d3/d3-ease/blob/main/src/circle.js) · Symmetric circular easing; scales [easeCircleIn](#easeCircleIn) for *t* in 0–0.5 and [easeCircleOut](#easeCircleOut) for *t* in 0.5–1.
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/circleOut.png" alt="circleOut">](https://observablehq.com/@d3/easing#circleOut)
+## easeElastic(*t*) {#easeElastic}
 
-### d3.easeCircle(t)
+Alias for [easeElasticOut](#easeElasticOut).
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/circle.js "Source")
-<br><a name="easeCircleInOut" href="#easeCircleInOut">#</a> d3.<b>easeCircleInOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/circle.js#L9 "Source")
+## easeElasticIn(*t*) {#easeElasticIn}
 
-Symmetric circular easing; scales [circleIn](#easeCircleIn) for *t* in [0, 0.5] and [circleOut](#easeCircleOut) for *t* in [0.5, 1].
+<ExampleEase label="amplitude" :eases='[1, 1.1, 1.2, 1.3, 1.4, 1.5].map((a) => ({y: d3.easeElasticIn.amplitude(a), stroke: a}))' />
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/circleInOut.png" alt="circleInOut">](https://observablehq.com/@d3/easing#circleInOut)
+[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js) · Elastic easing, like a rubber band. The [amplitude](#easeElastic_amplitude) and [period](#easeElastic_period) of the oscillation are configurable; if not specified, they default to 1 and 0.3, respectively.
 
-### d3.easeElasticIn(t)
+## easeElasticOut(*t*) {#easeElasticOut}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js#L5 "Source")
+<ExampleEase label="amplitude" :eases='[1, 1.1, 1.2, 1.3, 1.4, 1.5].map((a) => ({y: d3.easeElasticOut.amplitude(a), stroke: a}))' />
 
-Elastic easing, like a rubber band. The [amplitude](#elastic_amplitude) and [period](#elastic_period) of the oscillation are configurable; if not specified, they default to 1 and 0.3, respectively.
+[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js) · Reverse elastic easing; equivalent to 1 - [elasticIn](#easeElasticIn)(1 - *t*).
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/elasticIn.png" alt="elasticIn">](https://observablehq.com/@d3/easing#elasticIn)
+## easeElasticInOut(*t*) {#easeElasticInOut}
 
-### d3.easeElastic(t)
+<ExampleEase label="amplitude" :eases='[1, 1.1, 1.2, 1.3, 1.4, 1.5].map((a) => ({y: d3.easeElasticInOut.amplitude(a), stroke: a}))' />
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js "Source")
-<br><a name="easeElasticOut" href="#easeElasticOut">#</a> d3.<b>easeElasticOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/elastic.js#L18 "Source")
+[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js) · Symmetric elastic easing; scales [elasticIn](#easeElasticIn) for *t* in 0–0.5 and [elasticOut](#easeElasticOut) for *t* in 0.5–1.
 
-Reverse elastic easing; equivalent to 1 - [elasticIn](#easeElasticIn)(1 - *t*).
+## easeElastic.amplitude(*a*) {#easeElastic_amplitude}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/elasticOut.png" alt="elasticOut">](https://observablehq.com/@d3/easing#elasticOut)
+<p>
+  <label class="label-input">
+    <span>Amplitude:</span>
+    <input type="range" v-model.number="amplitude" min="1" max="4" step="0.01">
+    <span style="font-variant-numeric: tabular-nums;">{{amplitude.toFixed(2)}}</span>
+  </label>
+</p>
 
-### d3.easeElasticInOut(t)
+<ExampleEase label="amplitude" :eases='[{y: d3.easeElastic.amplitude(amplitude)}]' />
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js#L31 "Source")
+[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js) · Returns a new elastic easing with the specified amplitude *a*. The amplitude *a* must be greater than or equal to 1.
 
-Symmetric elastic easing; scales [elasticIn](#easeElasticIn) for *t* in [0, 0.5] and [elasticOut](#easeElasticOut) for *t* in [0.5, 1].
+## easeElastic.period(*p*) {#easeElastic_period}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/elasticInOut.png" alt="elasticInOut">](https://observablehq.com/@d3/easing#elasticInOut)
+<p>
+  <label class="label-input">
+    <span>Period:</span>
+    <input type="range" v-model.number="period" min="0.1" max="1.5" step="0.01">
+    <span style="font-variant-numeric: tabular-nums;">{{period.toFixed(2)}}</span>
+  </label>
+</p>
 
-### elastic.amplitude(a)
+<ExampleEase label="period" :eases='[{y: d3.easeElastic.period(period)}]' />
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js#L40 "Source")
+[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js) · Returns a new elastic easing with the specified period *p*.
 
-Returns a new elastic easing with the specified amplitude *a*.
+## easeBack(*t*) {#easeBack}
 
-### elastic.period(p)
+Alias for [easeBackInOut](#easeBackInOut).
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/elastic.js#L41 "Source")
+## easeBackIn(*t*) {#easeBackIn}
 
-Returns a new elastic easing with the specified period *p*.
+<ExampleEase label="overshoot" :eases='d3.ticks(0.5, 3, 6).map((a) => ({y: d3.easeBackIn.overshoot(a), stroke: a}))' />
 
-### d3.easeBackIn(t)
+[Source](https://github.com/d3/d3-ease/blob/main/src/back.js) · [Anticipatory](https://en.wikipedia.org/wiki/12_basic_principles_of_animation#Anticipation) easing like a dancer bending her knees before jumping off the floor. The degree of [overshoot](#easeBack_overshoot) is configurable; if not specified, it defaults to 1.70158.
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/back.js#L3 "Source")
+## easeBackOut(*t*) {#easeBackOut}
 
-[Anticipatory](https://en.wikipedia.org/wiki/12_basic_principles_of_animation#Anticipation) easing, like a dancer bending his knees before jumping off the floor. The degree of [overshoot](#back_overshoot) is configurable; if not specified, it defaults to 1.70158.
+<ExampleEase label="overshoot" :eases='d3.ticks(0.5, 3, 6).map((a) => ({y: d3.easeBackOut.overshoot(a), stroke: a}))' />
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/backIn.png" alt="backIn">](https://observablehq.com/@d3/easing#backIn)
+[Source](https://github.com/d3/d3-ease/blob/main/src/back.js) · Reverse anticipatory easing; equivalent to 1 - [easeBackIn](#easeBackIn)(1 - *t*).
 
-### d3.easeBackOut(t)
+## easeBackInOut(*t*) {#easeBackInOut}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/back.js#L15 "Source")
+<ExampleEase label="overshoot" :eases='d3.ticks(0.5, 3, 6).map((a) => ({y: d3.easeBackInOut.overshoot(a), stroke: a}))' />
 
-Reverse anticipatory easing; equivalent to 1 - [backIn](#easeBackIn)(1 - *t*).
+[Source](https://github.com/d3/d3-ease/blob/main/src/back.js) · Symmetric anticipatory easing; scales [easeBackIn](#easeBackIn) for *t* in 0–0.5 and [easeBackOut](#easeBackOut) for *t* in 0.5–1.
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/backOut.png" alt="backOut">](https://observablehq.com/@d3/easing#backOut)
+## easeBack.overshoot(*s*) {#easeBack_overshoot}
 
-### d3.easeBack(t)
+<p>
+  <label class="label-input">
+    <span>Overshoot:</span>
+    <input type="range" v-model.number="overshoot" min="0" max="5" step="0.01">
+    <span style="font-variant-numeric: tabular-nums;">{{overshoot.toFixed(2)}}</span>
+  </label>
+</p>
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/back.js "Source")
-<br><a name="easeBackInOut" href="#easeBackInOut">#</a> d3.<b>easeBackInOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/back.js#L27 "Source")
+<ExampleEase label="overshoot" :eases='[{y: d3.easeBack.overshoot(overshoot)}]' />
 
-Symmetric anticipatory easing; scales [backIn](#easeBackIn) for *t* in [0, 0.5] and [backOut](#easeBackOut) for *t* in [0.5, 1].
+[Source](https://github.com/d3/d3-ease/blob/main/src/back.js) · Returns a new back easing with the specified overshoot *s*.
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/backInOut.png" alt="backInOut">](https://observablehq.com/@d3/easing#backInOut)
+## easeBounce(*t*) {#easeBounce}
 
-### back.overshoot(s)
+Alias for [easeBounceOut](#easeBounceOut).
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/back.js#L1 "Source")
+## easeBounceIn(*t*) {#easeBounceIn}
 
-Returns a new back easing with the specified overshoot *s*.
+<ExampleEase :eases='[{y: d3.easeBounceIn}]' />
 
-### d3.easeBounceIn(t)
+[Source](https://github.com/d3/d3-ease/blob/main/src/bounce.js) · Bounce easing, like a rubber ball.
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/bounce.js#L12 "Source")
+## easeBounceOut(*t*) {#easeBounceOut}
 
-Bounce easing, like a rubber ball.
+<ExampleEase :eases='[{y: d3.easeBounceOut}]' />
 
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/bounceIn.png" alt="bounceIn">](https://observablehq.com/@d3/easing#bounceIn)
+[Source](https://github.com/d3/d3-ease/blob/main/src/bounce.js) · Reverse bounce easing; equivalent to 1 - [easeBounceIn](#easeBounceIn)(1 - *t*).
 
-### d3.easeBounce(t)
+## easeBounceInOut(*t*) {#easeBounceInOut}
 
-[Source](https://github.com/d3/d3-ease/blob/main/src/bounce.js "Source")
-<br><a name="easeBounceOut" href="#easeBounceOut">#</a> d3.<b>easeBounceOut</b>(<i>t</i>) [<>](https://github.com/d3/d3-ease/blob/main/src/bounce.js#L16 "Source")
+<ExampleEase :eases='[{y: d3.easeBounceInOut}]' />
 
-Reverse bounce easing; equivalent to 1 - [bounceIn](#easeBounceIn)(1 - *t*).
-
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/bounceOut.png" alt="bounceOut">](https://observablehq.com/@d3/easing#bounceOut)
-
-### d3.easeBounceInOut(t)
-
-[Source](https://github.com/d3/d3-ease/blob/main/src/bounce.js#L20 "Source")
-
-Symmetric bounce easing; scales [bounceIn](#easeBounceIn) for *t* in [0, 0.5] and [bounceOut](#easeBounceOut) for *t* in [0.5, 1].
-
-[<img src="https://raw.githubusercontent.com/d3/d3-ease/master/img/bounceInOut.png" alt="bounceInOut">](https://observablehq.com/@d3/easing#bounceInOut)
+[Source](https://github.com/d3/d3-ease/blob/main/src/bounce.js) · Symmetric bounce easing; scales [easeBounceIn](#easeBounceIn) for *t* in 0–0.5 and [easeBounceOut](#easeBounceOut) for *t* in 0.5–1.
