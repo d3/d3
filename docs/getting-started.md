@@ -1,6 +1,6 @@
 <script setup>
 
-import ExampleBarChart from "./components/ExampleBarChart.vue";
+import ExampleBlankChart from "./components/ExampleBlankChart.vue";
 
 </script>
 
@@ -10,29 +10,28 @@ D3 supports a variety of environments.
 
 ## Try D3 online
 
-The fastest way to get started (and get help) with D3 is on [Observable](https://observablehq.com)! D3 is available by default in notebooks as part of Observable’s standard library. To create something with D3, return the generated DOM element from a cell. Here is an example bar chart:
+The fastest way to get started (and get help) with D3 is on [Observable](https://observablehq.com)! D3 is available by default in notebooks as part of Observable’s standard library. To create something with D3, return the generated DOM element from a cell. Here is a blank chart to get you started:
 
-<ExampleBarChart />
+<ExampleBlankChart />
 
 ```js
 {
   // Declare the chart dimensions and margins.
   const width = 640;
   const height = 400;
-  const marginTop = 30;
-  const marginRight = 0;
+  const marginTop = 20;
+  const marginRight = 20;
   const marginBottom = 30;
   const marginLeft = 40;
 
   // Declare the x (horizontal position) scale.
-  const x = d3.scaleBand()
-      .domain(alphabet.map((d) => d.letter))
-      .range([marginLeft, width - marginRight])
-      .padding(0.1);
+  const x = d3.scaleUtc()
+      .domain([new Date("2023-01-01"), new Date("2024-01-01")])
+      .range([marginLeft, width - marginRight]);
 
   // Declare the y (vertical position) scale.
   const y = d3.scaleLinear()
-      .domain([0, d3.max(alphabet, (d) => d.frequency)])
+      .domain([0, 100])
       .range([height - marginBottom, marginTop]);
 
   // Create the SVG container.
@@ -40,20 +39,10 @@ The fastest way to get started (and get help) with D3 is on [Observable](https:/
       .attr("width", width)
       .attr("height", height);
 
-  // Add a rect for each bar.
-  svg.append("g")
-    .selectAll()
-    .data(alphabet)
-    .join("rect")
-      .attr("x", (d) => x(d.letter))
-      .attr("y", (d) => y(d.frequency))
-      .attr("height", (d) => y(0) - y(d.frequency))
-      .attr("width", x.bandwidth());
-
   // Add the x-axis.
   svg.append("g")
       .attr("transform", `translate(0,${height - marginBottom})`)
-      .call(d3.axisBottom(x).tickSizeOuter(0));
+      .call(d3.axisBottom(x));
 
   // Add the y-axis.
   svg.append("g")
@@ -67,8 +56,13 @@ The fastest way to get started (and get help) with D3 is on [Observable](https:/
 
 As a more complete example, try one of these starter templates:
 
+* [Area chart](https://observablehq.com/@d3/area-chart/2?intent=fork)
 * [Bar chart](https://observablehq.com/@d3/bar-chart/2?intent=fork)
+* [Donut chart](https://observablehq.com/@d3/donut-chart/2?intent=fork)
 * [Histogram](https://observablehq.com/@d3/histogram/2?intent=fork)
+* [Line chart](https://observablehq.com/@d3/line-chart/2?intent=fork)
+
+See the [D3 gallery](https://observablehq.com/@d3/gallery) for more forkable examples.
 
 Observable includes a few D3 snippets when you click **+** to add a cell (type “d3” when the cell menu is open to filter), as well as convenient [sample datasets](https://observablehq.com/@observablehq/sample-datasets) to try out D3 features. Or upload a CSV or JSON file to start playing with your data. You can also fork any of the [hundreds of notebooks](https://observablehq.com/@d3?tab=notebooks) we’ve published for a head start.
 
@@ -89,23 +83,19 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 // Declare the chart dimensions and margins.
 const width = 640;
 const height = 400;
-const marginTop = 30;
-const marginRight = 0;
+const marginTop = 20;
+const marginRight = 20;
 const marginBottom = 30;
 const marginLeft = 40;
 
-// Load the data.
-const alphabet = await d3.csv("alphabet.csv");
-
 // Declare the x (horizontal position) scale.
-const x = d3.scaleBand()
-    .domain(alphabet.map((d) => d.letter))
-    .range([marginLeft, width - marginRight])
-    .padding(0.1);
+const x = d3.scaleUtc()
+    .domain([new Date("2023-01-01"), new Date("2024-01-01")])
+    .range([marginLeft, width - marginRight]);
 
 // Declare the y (vertical position) scale.
 const y = d3.scaleLinear()
-    .domain([0, d3.max(alphabet, (d) => d.frequency)])
+    .domain([0, 100])
     .range([height - marginBottom, marginTop]);
 
 // Create the SVG container.
@@ -113,20 +103,10 @@ const svg = d3.create("svg")
     .attr("width", width)
     .attr("height", height);
 
-// Add a rect for each bar.
-svg.append("g")
-  .selectAll()
-  .data(alphabet)
-  .join("rect")
-    .attr("x", (d) => x(d.letter))
-    .attr("y", (d) => y(d.frequency))
-    .attr("height", (d) => y(0) - y(d.frequency))
-    .attr("width", x.bandwidth());
-
 // Add the x-axis.
 svg.append("g")
     .attr("transform", `translate(0,${height - marginBottom})`)
-    .call(d3.axisBottom(x).tickSizeOuter(0));
+    .call(d3.axisBottom(x));
 
 // Add the y-axis.
 svg.append("g")
@@ -148,23 +128,19 @@ container.append(svg.node());
 // Declare the chart dimensions and margins.
 const width = 640;
 const height = 400;
-const marginTop = 30;
-const marginRight = 0;
+const marginTop = 20;
+const marginRight = 20;
 const marginBottom = 30;
 const marginLeft = 40;
 
-// Load the data.
-const alphabet = await d3.csv("alphabet.csv");
-
 // Declare the x (horizontal position) scale.
-const x = d3.scaleBand()
-    .domain(alphabet.map((d) => d.letter))
-    .range([marginLeft, width - marginRight])
-    .padding(0.1);
+const x = d3.scaleUtc()
+    .domain([new Date("2023-01-01"), new Date("2024-01-01")])
+    .range([marginLeft, width - marginRight]);
 
 // Declare the y (vertical position) scale.
 const y = d3.scaleLinear()
-    .domain([0, d3.max(alphabet, (d) => d.frequency)])
+    .domain([0, 100])
     .range([height - marginBottom, marginTop]);
 
 // Create the SVG container.
@@ -172,20 +148,10 @@ const svg = d3.create("svg")
     .attr("width", width)
     .attr("height", height);
 
-// Add a rect for each bar.
-svg.append("g")
-  .selectAll()
-  .data(alphabet)
-  .join("rect")
-    .attr("x", (d) => x(d.letter))
-    .attr("y", (d) => y(d.frequency))
-    .attr("height", (d) => y(0) - y(d.frequency))
-    .attr("width", x.bandwidth());
-
 // Add the x-axis.
 svg.append("g")
     .attr("transform", `translate(0,${height - marginBottom})`)
-    .call(d3.axisBottom(x).tickSizeOuter(0));
+    .call(d3.axisBottom(x));
 
 // Add the y-axis.
 svg.append("g")
@@ -207,23 +173,19 @@ container.append(svg.node());
 // Declare the chart dimensions and margins.
 const width = 640;
 const height = 400;
-const marginTop = 30;
-const marginRight = 0;
+const marginTop = 20;
+const marginRight = 20;
 const marginBottom = 30;
 const marginLeft = 40;
 
-// Load the data.
-const alphabet = await d3.csv("alphabet.csv");
-
 // Declare the x (horizontal position) scale.
-const x = d3.scaleBand()
-    .domain(alphabet.map((d) => d.letter))
-    .range([marginLeft, width - marginRight])
-    .padding(0.1);
+const x = d3.scaleUtc()
+    .domain([new Date("2023-01-01"), new Date("2024-01-01")])
+    .range([marginLeft, width - marginRight]);
 
 // Declare the y (vertical position) scale.
 const y = d3.scaleLinear()
-    .domain([0, d3.max(alphabet, (d) => d.frequency)])
+    .domain([0, 100])
     .range([height - marginBottom, marginTop]);
 
 // Create the SVG container.
@@ -231,20 +193,10 @@ const svg = d3.create("svg")
     .attr("width", width)
     .attr("height", height);
 
-// Add a rect for each bar.
-svg.append("g")
-  .selectAll()
-  .data(alphabet)
-  .join("rect")
-    .attr("x", (d) => x(d.letter))
-    .attr("y", (d) => y(d.frequency))
-    .attr("height", (d) => y(0) - y(d.frequency))
-    .attr("width", x.bandwidth());
-
 // Add the x-axis.
 svg.append("g")
     .attr("transform", `translate(0,${height - marginBottom})`)
-    .call(d3.axisBottom(x).tickSizeOuter(0));
+    .call(d3.axisBottom(x));
 
 // Add the y-axis.
 svg.append("g")
@@ -258,11 +210,12 @@ container.append(svg.node());
 ```
 :::
 
-If you’d prefer to run D3 locally (or entirely offline), you can download the UMD bundle of D3 here:
+If you’d prefer to run D3 locally (or offline), you can download the UMD bundles of D3 here:
 
 - <a href="./d3.v7.js" download>d3.v7.js</a>
+- <a href="./d3.v7.min.js" download>d3.v7.min.js</a>
 
-Then, create an `index.html` file as shown above in the **UMD + local** tab. If you prefer smaller minified files, you can download <a href="./d3.v7.min.js" download>d3.v7.min.js</a> and then update the `src` attribute above accordingly.
+Then, create an `index.html` file as shown above in the **UMD + local** tab. Use the non-minified bundle for debugging, and the minified bundle for faster performance in production.
 
 ## Installing from npm
 
@@ -303,7 +256,3 @@ import {mean, median} from "d3-array";
 ```
 
 TypeScript declarations are available via DefinitelyTyped.
-
-## D3 in React
-
-TODO
