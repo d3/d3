@@ -157,7 +157,19 @@ export default defineConfig({
               {text: "Voronoi diagrams", link: "/d3-delaunay/voronoi"}
             ]
           },
-          {text: "d3-force", link: "/d3-force"},
+          {
+            text: "d3-force",
+            link: "/d3-force",
+            collapsed: true,
+            items: [
+              {text: "Force simulations", link: "/d3-force/simulation"},
+              {text: "Center force", link: "/d3-force/center"},
+              {text: "Collide force", link: "/d3-force/collide"},
+              {text: "Link force", link: "/d3-force/link"},
+              {text: "Many-body force", link: "/d3-force/many-body"},
+              {text: "Position forces", link: "/d3-force/position"},
+            ]
+          },
           {text: "d3-geo", link: "/d3-geo"},
           {text: "d3-hierarchy", link: "/d3-hierarchy"},
           {text: "d3-path", link: "/d3-path"},

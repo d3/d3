@@ -419,52 +419,52 @@ Convenience methods on top of the Fetch API.
 
 Force-directed graph layout using velocity Verlet integration.
 
-* [d3.forceSimulation](./d3-force.md#forceSimulation) - create a new force simulation.
-* [*simulation*.restart](./d3-force.md#simulation_restart) - reheat and restart the simulation’s timer.
-* [*simulation*.stop](./d3-force.md#simulation_stop) - stop the simulation’s timer.
-* [*simulation*.tick](./d3-force.md#simulation_tick) - advance the simulation one step.
-* [*simulation*.nodes](./d3-force.md#simulation_nodes) - set the simulation’s nodes.
-* [*simulation*.alpha](./d3-force.md#simulation_alpha) - set the current alpha.
-* [*simulation*.alphaMin](./d3-force.md#simulation_alphaMin) - set the minimum alpha threshold.
-* [*simulation*.alphaDecay](./d3-force.md#simulation_alphaDecay) - set the alpha exponential decay rate.
-* [*simulation*.alphaTarget](./d3-force.md#simulation_alphaTarget) - set the target alpha.
-* [*simulation*.velocityDecay](./d3-force.md#simulation_velocityDecay) - set the velocity decay rate.
-* [*simulation*.force](./d3-force.md#simulation_force) - add or remove a force.
-* [*simulation*.find](./d3-force.md#simulation_find) - find the closest node to the given position.
-* [*simulation*.randomSource](./d3-force.md#simulation_randomSource) - set the simulation’s random source.
-* [*simulation*.on](./d3-force.md#simulation_on) - add or remove an event listener.
+* [d3.forceSimulation](./d3-force/simulation.md#forceSimulation) - create a new force simulation.
+* [*simulation*.restart](./d3-force/simulation.md#simulation_restart) - reheat and restart the simulation’s timer.
+* [*simulation*.stop](./d3-force/simulation.md#simulation_stop) - stop the simulation’s timer.
+* [*simulation*.tick](./d3-force/simulation.md#simulation_tick) - advance the simulation one step.
+* [*simulation*.nodes](./d3-force/simulation.md#simulation_nodes) - set the simulation’s nodes.
+* [*simulation*.alpha](./d3-force/simulation.md#simulation_alpha) - set the current alpha.
+* [*simulation*.alphaMin](./d3-force/simulation.md#simulation_alphaMin) - set the minimum alpha threshold.
+* [*simulation*.alphaDecay](./d3-force/simulation.md#simulation_alphaDecay) - set the alpha exponential decay rate.
+* [*simulation*.alphaTarget](./d3-force/simulation.md#simulation_alphaTarget) - set the target alpha.
+* [*simulation*.velocityDecay](./d3-force/simulation.md#simulation_velocityDecay) - set the velocity decay rate.
+* [*simulation*.force](./d3-force/simulation.md#simulation_force) - add or remove a force.
+* [*simulation*.find](./d3-force/simulation.md#simulation_find) - find the closest node to the given position.
+* [*simulation*.randomSource](./d3-force/simulation.md#simulation_randomSource) - set the simulation’s random source.
+* [*simulation*.on](./d3-force/simulation.md#simulation_on) - add or remove an event listener.
 * [*force*](./d3-force.md#_force) - apply the force.
 * [*force*.initialize](./d3-force.md#force_initialize) - initialize the force with the given nodes.
-* [d3.forceCenter](./d3-force.md#forceCenter) - create a centering force.
-* [*center*.x](./d3-force.md#center_x) - set the center *x*-coordinate.
-* [*center*.y](./d3-force.md#center_y) - set the center y coordinate.
-* [*center*.strength](./d3-force.md#center_strength) - set the strength of the centering force.
-* [d3.forceCollide](./d3-force.md#forceCollide) - create a circle collision force.
-* [*collide*.radius](./d3-force.md#collide_radius) - set the circle radius.
-* [*collide*.strength](./d3-force.md#collide_strength) - set the collision resolution strength.
-* [*collide*.iterations](./d3-force.md#collide_iterations) - set the number of iterations.
-* [d3.forceLink](./d3-force.md#forceLink) - create a link force.
-* [*link*.links](./d3-force.md#link_links) - set the array of links.
-* [*link*.id](./d3-force.md#link_id) - link nodes by numeric index or string identifier.
-* [*link*.distance](./d3-force.md#link_distance) - set the link distance.
-* [*link*.strength](./d3-force.md#link_strength) - set the link strength.
-* [*link*.iterations](./d3-force.md#link_iterations) - set the number of iterations.
-* [d3.forceManyBody](./d3-force.md#forceManyBody) - create a many-body force.
-* [*manyBody*.strength](./d3-force.md#manyBody_strength) - set the force strength.
-* [*manyBody*.theta](./d3-force.md#manyBody_theta) - set the Barnes–Hut approximation accuracy.
-* [*manyBody*.distanceMin](./d3-force.md#manyBody_distanceMin) - limit the force when nodes are close.
-* [*manyBody*.distanceMax](./d3-force.md#manyBody_distanceMax) - limit the force when nodes are far.
-* [d3.forceX](./d3-force.md#forceX) - create an *x*-positioning force.
-* [*x*.strength](./d3-force.md#x_strength) - set the force strength.
-* [*x*.x](./d3-force.md#x_x) - set the target *x*-coordinate.
-* [d3.forceY](./d3-force.md#forceY) - create an *y*-positioning force.
-* [*y*.strength](./d3-force.md#y_strength) - set the force strength.
-* [*y*.y](./d3-force.md#y_y) - set the target y coordinate.
-* [d3.forceRadial](./d3-force.md#forceRadial) - create a radial positioning force.
-* [*radial*.strength](./d3-force.md#radial_strength) - set the force strength.
-* [*radial*.radius](./d3-force.md#radial_radius) - set the target radius.
-* [*radial*.x](./d3-force.md#radial_x) - set the target center *x*-coordinate.
-* [*radial*.y](./d3-force.md#radial_y) - set the target center y coordinate.
+* [d3.forceCenter](./d3-force/center.md#forceCenter) - create a centering force.
+* [*center*.x](./d3-force/center.md#center_x) - set the center *x*-coordinate.
+* [*center*.y](./d3-force/center.md#center_y) - set the center y coordinate.
+* [*center*.strength](./d3-force/center.md#center_strength) - set the strength of the centering force.
+* [d3.forceCollide](./d3-force/collide.md#forceCollide) - create a circle collision force.
+* [*collide*.radius](./d3-force/collide.md#collide_radius) - set the circle radius.
+* [*collide*.strength](./d3-force/collide.md#collide_strength) - set the collision resolution strength.
+* [*collide*.iterations](./d3-force/collide.md#collide_iterations) - set the number of iterations.
+* [d3.forceLink](./d3-force/link.md#forceLink) - create a link force.
+* [*link*.links](./d3-force/link.md#link_links) - set the array of links.
+* [*link*.id](./d3-force/link.md#link_id) - link nodes by numeric index or string identifier.
+* [*link*.distance](./d3-force/link.md#link_distance) - set the link distance.
+* [*link*.strength](./d3-force/link.md#link_strength) - set the link strength.
+* [*link*.iterations](./d3-force/link.md#link_iterations) - set the number of iterations.
+* [d3.forceManyBody](./d3-force/many-body.md#forceManyBody) - create a many-body force.
+* [*manyBody*.strength](./d3-force/many-body.md#manyBody_strength) - set the force strength.
+* [*manyBody*.theta](./d3-force/many-body.md#manyBody_theta) - set the Barnes–Hut approximation accuracy.
+* [*manyBody*.distanceMin](./d3-force/many-body.md#manyBody_distanceMin) - limit the force when nodes are close.
+* [*manyBody*.distanceMax](./d3-force/many-body.md#manyBody_distanceMax) - limit the force when nodes are far.
+* [d3.forceX](./d3-force/position.md#forceX) - create an *x*-positioning force.
+* [*x*.strength](./d3-force/position.md#x_strength) - set the force strength.
+* [*x*.x](./d3-force/position.md#x_x) - set the target *x*-coordinate.
+* [d3.forceY](./d3-force/position.md#forceY) - create an *y*-positioning force.
+* [*y*.strength](./d3-force/position.md#y_strength) - set the force strength.
+* [*y*.y](./d3-force/position.md#y_y) - set the target y coordinate.
+* [d3.forceRadial](./d3-force/position.md#forceRadial) - create a radial positioning force.
+* [*radial*.strength](./d3-force/position.md#radial_strength) - set the force strength.
+* [*radial*.radius](./d3-force/position.md#radial_radius) - set the target radius.
+* [*radial*.x](./d3-force/position.md#radial_x) - set the target center *x*-coordinate.
+* [*radial*.y](./d3-force/position.md#radial_y) - set the target center y coordinate.
 
 ## [d3-format](./d3-format.md)
 
