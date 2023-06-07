@@ -1,6 +1,6 @@
 # d3-brush
 
-Brushing is the interactive specification a one- or two-dimensional selected region using a pointing gesture, such as by clicking and dragging the mouse. Brushing is often used to select discrete elements, such as dots in a scatterplot or files on a desktop. It can also be used to zoom-in to a region of interest, or to select continuous regions for [cross-filtering data](http://square.github.io/crossfilter/) or live histograms:
+Brushing is the interactive specification a one- or two-dimensional selected region using a pointing gesture, such as by clicking and dragging the mouse. Brushing is often used to select discrete elements, such as dots in a scatterplot or files on a desktop. It can also be used to zoom-in to a region of interest, or to select continuous regions for [cross-filtering data](https://square.github.io/crossfilter/) or live histograms:
 
 [<img alt="Mona Lisa Histogram" src="https://raw.githubusercontent.com/d3/d3-brush/master/img/mona-lisa.jpg" width="420" height="219">](https://observablehq.com/@d3/mona-lisa-histogram)
 
@@ -14,31 +14,21 @@ Or you can have the brush recenter when you click outside the current selection:
 
 [<img alt="Click-to-Recenter" src="https://raw.githubusercontent.com/d3/d3-brush/master/img/recenter.jpg" width="420" height="219">](https://observablehq.com/@d3/click-to-recenter-brush)
 
-## Brushes
+## brush() {#brush}
 
-### d3.brush()
+[Examples](https://observablehq.com/@d3/brushable-scatterplot) · [Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · Creates a new two-dimensional brush.
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js), [Examples](https://observablehq.com/@d3/brushable-scatterplot)
+## brushX() {#brushX}
 
-Creates a new two-dimensional brush.
+[Examples](https://observablehq.com/@d3/focus-context) · [Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · Creates a new one-dimensional brush along the *x*-dimension.
 
-### d3.brushX()
+## brushY() {#brushY}
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js), [Examples](https://observablehq.com/@d3/focus-context)
+[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · Creates a new one-dimensional brush along the *y*-dimension.
 
-Creates a new one-dimensional brush along the *x*-dimension.
+## *brush*(*group*) {#_brush}
 
-### d3.brushY()
-
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js)
-
-Creates a new one-dimensional brush along the *y*-dimension.
-
-### brush(group)
-
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js), [Examples](https://observablehq.com/@d3/brushable-scatterplot-matrix)
-
-Applies the brush to the specified *group*, which must be a [selection](https://github.com/d3/d3-selection) of SVG [G elements](https://www.w3.org/TR/SVG/struct.html#Groups). This function is typically not invoked directly, and is instead invoked via [*selection*.call](https://github.com/d3/d3-selection#selection_call). For example, to render a brush:
+[Examples](https://observablehq.com/@d3/brushable-scatterplot-matrix) · [Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · Applies the brush to the specified *group*, which must be a [selection](./d3-selection.md) of SVG [G elements](https://www.w3.org/TR/SVG/struct.html#Groups). This function is typically not invoked directly, and is instead invoked via [*selection*.call](./d3-selection/control-flow.md#selection_call). For example, to render a brush:
 
 ```js
 svg.append("g")
@@ -46,7 +36,7 @@ svg.append("g")
     .call(d3.brush().on("brush", brushed));
 ```
 
-Internally, the brush uses [*selection*.on](https://github.com/d3/d3-selection#selection_on) to bind the necessary event listeners for dragging. The listeners use the name `.brush`, so you can subsequently unbind the brush event listeners as follows:
+Internally, the brush uses [*selection*.on](./d3-selection/events.md#selection_on) to bind the necessary event listeners for dragging. The listeners use the name `.brush`, so you can subsequently unbind the brush event listeners as follows:
 
 ```js
 group.on(".brush", null);
@@ -71,23 +61,17 @@ The brush also creates the SVG elements necessary to display the brush selection
 
 The overlay rect covers the brushable area defined by [*brush*.extent](#brush_extent). The selection rect covers the area defined by the current [brush selection](#brushSelection). The handle rects cover the edges and corners of the brush selection, allowing the corresponding value in the brush selection to be modified interactively. To modify the brush selection programmatically, use [*brush*.move](#brush_move).
 
-### brush.move(group, selection, event)
+## *brush*.move(*group*, *selection*, *event*) {#brush_move}
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js), [Examples](https://observablehq.com/d/93b91f86f9ebc9b9)
+[Examples](https://observablehq.com/d/93b91f86f9ebc9b9) · [Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · Sets the active *selection* of the brush on the specified *group*, which must be a [selection](./d3-selection.md) or a [transition](./d3-transition.md) of SVG [G elements](https://www.w3.org/TR/SVG/struct.html#Groups). The *selection* must be defined as an array of numbers, or null to clear the brush selection. For a [two-dimensional brush](#brush), it must be defined as [[*x0*, *y0*], [*x1*, *y1*]], where *x0* is the minimum *x*-value, *y0* is the minimum *y*-value, *x1* is the maximum *x*-value, and *y1* is the maximum *y*-value. For an [*x*-brush](#brushX), it must be defined as [*x0*, *x1*]; for a [*y*-brush](#brushY), it must be defined as [*y0*, *y1*]. The selection may also be specified as a function which returns such an array; if a function, it is invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. The returned array defines the brush selection for that element.
 
-Sets the active *selection* of the brush on the specified *group*, which must be a [selection](https://github.com/d3/d3-selection) or a [transition](https://github.com/d3/d3-transition) of SVG [G elements](https://www.w3.org/TR/SVG/struct.html#Groups). The *selection* must be defined as an array of numbers, or null to clear the brush selection. For a [two-dimensional brush](#brush), it must be defined as [[*x0*, *y0*], [*x1*, *y1*]], where *x0* is the minimum *x*-value, *y0* is the minimum *y*-value, *x1* is the maximum *x*-value, and *y1* is the maximum *y*-value. For an [*x*-brush](#brushX), it must be defined as [*x0*, *x1*]; for a [*y*-brush](#brushY), it must be defined as [*y0*, *y1*]. The selection may also be specified as a function which returns such an array; if a function, it is invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. The returned array defines the brush selection for that element.
+## *brush*.clear(*group*, *event*) {#brush_clear}
 
-### brush.clear(group, event)
+[Examples](https://observablehq.com/@d3/double-click-brush-clear) · [Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · An alias for [*brush*.move](#brush_move) with the null selection.
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js), [Examples](https://observablehq.com/@d3/double-click-brush-clear)
+## *brush*.extent(*extent*) {#brush_extent}
 
-An alias for [*brush*.move](#brush_move) with the null selection.
-
-### brush.extent(extent)
-
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js), [Examples](https://observablehq.com/@d3/brush-snapping)
-
-If *extent* is specified, sets the brushable extent to the specified array of points [[*x0*, *y0*], [*x1*, *y1*]], where [*x0*, *y0*] is the top-left corner and [*x1*, *y1*] is the bottom-right corner, and returns this brush. The *extent* may also be specified as a function which returns such an array; if a function, it is invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. If *extent* is not specified, returns the current extent accessor, which defaults to:
+[Examples](https://observablehq.com/@d3/brush-snapping) · [Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · If *extent* is specified, sets the brushable extent to the specified array of points [[*x0*, *y0*], [*x1*, *y1*]], where [*x0*, *y0*] is the top-left corner and [*x1*, *y1*] is the bottom-right corner, and returns this brush. The *extent* may also be specified as a function which returns such an array; if a function, it is invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. If *extent* is not specified, returns the current extent accessor, which defaults to:
 
 ```js
 function defaultExtent() {
@@ -104,11 +88,9 @@ This default implementation requires that the owner SVG element have a defined [
 
 The brush extent determines the size of the invisible overlay and also constrains the brush selection; the brush selection cannot go outside the brush extent.
 
-### brush.filter(filter)
+## *brush*.filter(*filter*) {#brush_filter}
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js), [Examples](https://observablehq.com/@d3/brush-filter)
-
-If *filter* is specified, sets the filter to the specified function and returns the brush. If *filter* is not specified, returns the current filter, which defaults to:
+[Examples](https://observablehq.com/@d3/brush-filter) · [Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · If *filter* is specified, sets the filter to the specified function and returns the brush. If *filter* is not specified, returns the current filter, which defaults to:
 
 ```js
 function filter(event) {
@@ -118,11 +100,9 @@ function filter(event) {
 
 If the filter returns falsey, the initiating event is ignored and no brush gesture is started. Thus, the filter determines which input events are ignored. The default filter ignores mousedown events on secondary buttons, since those buttons are typically intended for other purposes, such as the context menu.
 
-### brush.touchable(touchable)
+## *brush*.touchable(*touchable*) {#brush_touchable}
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js)
-
-If *touchable* is specified, sets the touch support detector to the specified function and returns the brush. If *touchable* is not specified, returns the current touch support detector, which defaults to:
+[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · If *touchable* is specified, sets the touch support detector to the specified function and returns the brush. If *touchable* is not specified, returns the current touch support detector, which defaults to:
 
 ```js
 function touchable() {
@@ -132,23 +112,17 @@ function touchable() {
 
 Touch event listeners are only registered if the detector returns truthy for the corresponding element when the brush is [applied](#_brush). The default detector works well for most browsers that are capable of touch input, but not all; Chrome’s mobile device emulator, for example, fails detection.
 
-### brush.keyModifiers(modifiers)
+## *brush*.keyModifiers(*modifiers*) {#brush_keyModifiers}
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js)
+[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · If *modifiers* is specified, sets whether the brush listens to key events during brushing and returns the brush. If *modifiers* is not specified, returns the current behavior, which defaults to true.
 
-If *modifiers* is specified, sets whether the brush listens to key events during brushing and returns the brush. If *modifiers* is not specified, returns the current behavior, which defaults to true.
+## *brush*.handleSize(*size*) {#brush_handleSize}
 
-### brush.handleSize(size)
+[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · If *size* is specified, sets the size of the brush handles to the specified number and returns the brush. If *size* is not specified, returns the current handle size, which defaults to six. This method must be called before [applying the brush](#_brush) to a selection; changing the handle size does not affect brushes that were previously rendered.
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js)
+## *brush*.on(*typenames*, *listener*) {#brush_on}
 
-If *size* is specified, sets the size of the brush handles to the specified number and returns the brush. If *size* is not specified, returns the current handle size, which defaults to six. This method must be called before [applying the brush](#_brush) to a selection; changing the handle size does not affect brushes that were previously rendered.
-
-### brush.on(typenames, listener)
-
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js)
-
-If *listener* is specified, sets the event *listener* for the specified *typenames* and returns the brush. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the same context and arguments as [*selection*.on](https://github.com/d3/d3-selection#selection_on) listeners: the current event `event` and datum `d`, with the `this` context as the current DOM element.
+[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · If *listener* is specified, sets the event *listener* for the specified *typenames* and returns the brush. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the same context and arguments as [*selection*.on](./d3-selection/events.md#selection_on) listeners: the current event `event` and datum `d`, with the `this` context as the current DOM element.
 
 The *typenames* is a string containing one or more *typename* separated by whitespace. Each *typename* is a *type*, optionally followed by a period (`.`) and a *name*, such as `brush.foo` and `brush.bar`; the name allows multiple listeners to be registered for the same *type*. The *type* must be one of the following:
 
@@ -156,15 +130,13 @@ The *typenames* is a string containing one or more *typename* separated by white
 * `brush` - when the brush moves, such as on mousemove.
 * `end` - at the end of a brush gesture, such as on mouseup.
 
-See [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) and [Brush Events](#brush-events) for more.
+See [*dispatch*.on](./d3-dispatch.md#dispatch_on) and [brush events](#brush-events) for more.
 
-### d3.brushSelection(node)
+## brushSelection(*node*) {#brushSelection}
 
-[Source](https://github.com/d3/d3-brush/blob/main/src/brush.js), [Examples](https://observablehq.com/@d3/double-click-brush-clear)
+[Examples](https://observablehq.com/@d3/double-click-brush-clear) · [Source](https://github.com/d3/d3-brush/blob/main/src/brush.js) · Returns the current brush selection for the specified *node*. Internally, an element’s brush state is stored as *element*.\_\_brush; however, you should use this method rather than accessing it directly. If the given *node* has no selection, returns null. Otherwise, the *selection* is defined as an array of numbers. For a [two-dimensional brush](#brush), it is [[*x0*, *y0*], [*x1*, *y1*]], where *x0* is the minimum *x*-value, *y0* is the minimum *y*-value, *x1* is the maximum *x*-value, and *y1* is the maximum *y*-value. For an [*x*-brush](#brushX), it is [*x0*, *x1*]; for a [*y*-brush](#brushY), it is [*y0*, *y1*].
 
-Returns the current brush selection for the specified *node*. Internally, an element’s brush state is stored as *element*.\_\_brush; however, you should use this method rather than accessing it directly. If the given *node* has no selection, returns null. Otherwise, the *selection* is defined as an array of numbers. For a [two-dimensional brush](#brush), it is [[*x0*, *y0*], [*x1*, *y1*]], where *x0* is the minimum *x*-value, *y0* is the minimum *y*-value, *x1* is the maximum *x*-value, and *y1* is the maximum *y*-value. For an [*x*-brush](#brushX), it is [*x0*, *x1*]; for a [*y*-brush](#brushY), it is [*y0*, *y1*].
-
-## Brush Events
+## Brush events
 
 When a [brush event listener](#brush_on) is invoked, it receives the current brush event. The *event* object exposes several fields:
 
