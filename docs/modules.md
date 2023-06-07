@@ -191,27 +191,27 @@ Select a one- or two-dimensional region using the mouse or touch.
 
 ## [d3-chord](./d3-chord.md)
 
-* [d3.chord](./d3-chord.md#chord) - create a new chord layout.
-* [*chord*](./d3-chord.md#_chord) - compute the layout for the given matrix.
-* [*chord*.padAngle](./d3-chord.md#chord_padAngle) - set the padding between adjacent groups.
-* [*chord*.sortGroups](./d3-chord.md#chord_sortGroups) - define the group order.
-* [*chord*.sortSubgroups](./d3-chord.md#chord_sortSubgroups) - define the source and target order within groups.
-* [*chord*.sortChords](./d3-chord.md#chord_sortChords) - define the chord order across groups.
-* [d3.chordDirected](./d3-chord.md#chordDirected) - create a directed chord generator.
-* [d3.chordTranspose](./d3-chord.md#chordTranspose) - create a transposed chord generator.
-* [d3.ribbon](./d3-chord.md#ribbon) - create a ribbon shape generator.
-* [*ribbon*](./d3-chord.md#_ribbon) - generate a ribbon shape.
-* [*ribbon*.source](./d3-chord.md#ribbon_source) - set the source accessor.
-* [*ribbon*.target](./d3-chord.md#ribbon_target) - set the target accessor.
-* [*ribbon*.radius](./d3-chord.md#ribbon_radius) - set the ribbon source and target radius.
-* [*ribbon*.sourceRadius](./d3-chord.md#ribbon_sourceRadius) - set the ribbon source radius.
-* [*ribbon*.targetRadius](./d3-chord.md#ribbon_targetRadius) - set the ribbon target radius.
-* [*ribbon*.startAngle](./d3-chord.md#ribbon_startAngle) - set the ribbon source or target start angle.
-* [*ribbon*.endAngle](./d3-chord.md#ribbon_endAngle) - set the ribbon source or target end angle.
-* [*ribbon*.padAngle](./d3-chord.md#ribbon_padAngle) - set the pad angle accessor.
-* [*ribbon*.context](./d3-chord.md#ribbon_context) - set the render context.
-* [d3.ribbonArrow](./d3-chord.md#ribbonArrow) - create an arrow ribbon generator.
-* [*ribbonArrow*.headRadius](./d3-chord.md#ribbonArrow_headRadius) - set the arrowhead radius accessor.
+* [d3.chord](./d3-chord/chord.md#chord) - create a new chord layout.
+* [*chord*](./d3-chord/chord.md#_chord) - compute the layout for the given matrix.
+* [*chord*.padAngle](./d3-chord/chord.md#chord_padAngle) - set the padding between adjacent groups.
+* [*chord*.sortGroups](./d3-chord/chord.md#chord_sortGroups) - define the group order.
+* [*chord*.sortSubgroups](./d3-chord/chord.md#chord_sortSubgroups) - define the source and target order within groups.
+* [*chord*.sortChords](./d3-chord/chord.md#chord_sortChords) - define the chord order across groups.
+* [d3.chordDirected](./d3-chord/chord.md#chordDirected) - create a directed chord generator.
+* [d3.chordTranspose](./d3-chord/chord.md#chordTranspose) - create a transposed chord generator.
+* [d3.ribbon](./d3-chord/ribbon.md#ribbon) - create a ribbon shape generator.
+* [*ribbon*](./d3-chord/ribbon.md#_ribbon) - generate a ribbon shape.
+* [*ribbon*.source](./d3-chord/ribbon.md#ribbon_source) - set the source accessor.
+* [*ribbon*.target](./d3-chord/ribbon.md#ribbon_target) - set the target accessor.
+* [*ribbon*.radius](./d3-chord/ribbon.md#ribbon_radius) - set the ribbon source and target radius.
+* [*ribbon*.sourceRadius](./d3-chord/ribbon.md#ribbon_sourceRadius) - set the ribbon source radius.
+* [*ribbon*.targetRadius](./d3-chord/ribbon.md#ribbon_targetRadius) - set the ribbon target radius.
+* [*ribbon*.startAngle](./d3-chord/ribbon.md#ribbon_startAngle) - set the ribbon source or target start angle.
+* [*ribbon*.endAngle](./d3-chord/ribbon.md#ribbon_endAngle) - set the ribbon source or target end angle.
+* [*ribbon*.padAngle](./d3-chord/ribbon.md#ribbon_padAngle) - set the pad angle accessor.
+* [*ribbon*.context](./d3-chord/ribbon.md#ribbon_context) - set the render context.
+* [d3.ribbonArrow](./d3-chord/ribbon.md#ribbonArrow) - create an arrow ribbon generator.
+* [*ribbonArrow*.headRadius](./d3-chord/ribbon.md#ribbonArrow_headRadius) - set the arrowhead radius accessor.
 
 ## [d3-color](./d3-color.md)
 
@@ -243,60 +243,60 @@ Color manipulation and color space conversion.
 
 Compute contour polygons using marching squares.
 
-* [d3.contours](./d3-contour.md#contours) - create a new contour generator.
-* [*contours*](./d3-contour.md#_contours) - compute the contours for a given grid of values.
-* [*contours*.contour](./d3-contour.md#contours_contour) - compute a contour for a given value.
-* [*contours*.size](./d3-contour.md#contours_size) - set the size of a contour generator.
-* [*contours*.smooth](./d3-contour.md#contours_smooth) - set whether or not the generated contours are smoothed.
-* [*contours*.thresholds](./d3-contour.md#contours_thresholds) - set the thresholds of a contour generator.
-* [d3.contourDensity](./d3-contour.md#contourDensity) - create a new density estimator.
-* [*density*](./d3-contour.md#_density) - estimate the density of a given array of samples.
-* [*density*.x](./d3-contour.md#density_x) - set the *x* accessor of the density estimator.
-* [*density*.y](./d3-contour.md#density_y) - set the *y* accessor of the density estimator.
-* [*density*.weight](./d3-contour.md#density_weight) - set the *weight* accessor of the density estimator.
-* [*density*.size](./d3-contour.md#density_size) - set the size of the density estimator.
-* [*density*.cellSize](./d3-contour.md#density_cellSize) - set the cell size of the density estimator.
-* [*density*.thresholds](./d3-contour.md#density_thresholds) - set the thresholds of the density estimator.
-* [*density*.bandwidth](./d3-contour.md#density_bandwidth) - set the bandwidth of the density estimator.
-* [*density*.contours](./d3-contour.md#density_contours) - compute density contours.
+* [d3.contours](./d3-contour/contour.md#contours) - create a new contour generator.
+* [*contours*](./d3-contour/contour.md#_contours) - compute the contours for a given grid of values.
+* [*contours*.contour](./d3-contour/contour.md#contours_contour) - compute a contour for a given value.
+* [*contours*.size](./d3-contour/contour.md#contours_size) - set the size of a contour generator.
+* [*contours*.smooth](./d3-contour/contour.md#contours_smooth) - set whether or not the generated contours are smoothed.
+* [*contours*.thresholds](./d3-contour/contour.md#contours_thresholds) - set the thresholds of a contour generator.
+* [d3.contourDensity](./d3-contour/density.md#contourDensity) - create a new density estimator.
+* [*density*](./d3-contour/density.md#_density) - estimate the density of a given array of samples.
+* [*density*.x](./d3-contour/density.md#density_x) - set the *x* accessor of the density estimator.
+* [*density*.y](./d3-contour/density.md#density_y) - set the *y* accessor of the density estimator.
+* [*density*.weight](./d3-contour/density.md#density_weight) - set the *weight* accessor of the density estimator.
+* [*density*.size](./d3-contour/density.md#density_size) - set the size of the density estimator.
+* [*density*.cellSize](./d3-contour/density.md#density_cellSize) - set the cell size of the density estimator.
+* [*density*.thresholds](./d3-contour/density.md#density_thresholds) - set the thresholds of the density estimator.
+* [*density*.bandwidth](./d3-contour/density.md#density_bandwidth) - set the bandwidth of the density estimator.
+* [*density*.contours](./d3-contour/density.md#density_contours) - compute density contours.
 
 ## [d3-delaunay](./d3-delaunay.md)
 
 Compute the Voronoi diagram of a set of two-dimensional points.
 
-* [new Delaunay](./d3-delaunay.md#new_Delaunay) - create a delaunay triangulation for an array of point coordinates.
-* [Delaunay.from](./d3-delaunay.md#delaunay_from) - create a delaunay triangulation for an iterable of points.
-* [*delaunay*.points](./d3-delaunay.md#delaunay_points) - the coordinates of the points.
-* [*delaunay*.halfedges](./d3-delaunay.md#delaunay_halfedges) - the delaunay halfedges.
-* [*delaunay*.hull](./d3-delaunay.md#delaunay_hull) - the convex hull as point indices.
-* [*delaunay*.triangles](./d3-delaunay.md#delaunay_triangles) - the delaunay triangles.
-* [*delaunay*.inedges](./d3-delaunay.md#delaunay_inedges) - the delaunay inedges
-* [*delaunay*.find](./d3-delaunay.md#delaunay_find) - find the closest point in the delaunay triangulation.
-* [*delaunay*.neighbors](./d3-delaunay.md#delaunay_neighbors) - the neighbors of a point in the delaunay triangulation.
-* [*delaunay*.render](./d3-delaunay.md#delaunay_render) - render the edges of the delaunay triangulation.
-* [*delaunay*.renderHull](./d3-delaunay.md#delaunay_renderHull) - render the convex hull.
-* [*delaunay*.renderTriangle](./d3-delaunay.md#delaunay_renderTriangle) - render a triangle.
-* [*delaunay*.renderPoints](./d3-delaunay.md#delaunay_renderPoints) - render the points.
-* [*delaunay*.hullPolygon](./d3-delaunay.md#delaunay_hullPolygon) - the closed convex hull as point coordinates.
-* [*delaunay*.trianglePolygons](./d3-delaunay.md#delaunay_trianglePolygons) - iterate over all the triangles as polygons.
-* [*delaunay*.trianglePolygon](./d3-delaunay.md#delaunay_trianglePolygon) - return a triangle as a polygon.
-* [*delaunay*.update](./d3-delaunay.md#delaunay_update) - update a delaunay triangulation in place.
-* [*delaunay*.voronoi](./d3-delaunay.md#delaunay_voronoi) - compute the voronoi diagram associated with a delaunay triangulation.
-* [*voronoi*.delaunay](./d3-delaunay.md#voronoi_delaunay) - the voronoi diagram’s source delaunay triangulation.
-* [*voronoi*.circumcenters](./d3-delaunay.md#voronoi_circumcenters) - the triangles’ circumcenters.
-* [*voronoi*.vectors](./d3-delaunay.md#voronoi_vectors) - directions for the outer (infinite) cells of the voronoi diagram.
-* [*voronoi*.xmin](./d3-delaunay.md#voronoi_xmin) - set the *xmin* bound of the extent.
-* [*voronoi*.ymin](./d3-delaunay.md#voronoi_ymin) - set the *ymin* bound of the extent.
-* [*voronoi*.xmax](./d3-delaunay.md#voronoi_xmax) - set the *xmax* bound of the extent.
-* [*voronoi*.ymax](./d3-delaunay.md#voronoi_ymax) - set the *ymax* bound of the extent.
-* [*voronoi*.contains](./d3-delaunay.md#voronoi_contains) - test whether a point is inside a voronoi cell.
-* [*voronoi*.neighbors](./d3-delaunay.md#voronoi_neighbors) - the neighbors of a point in the voronoi diagram.
-* [*voronoi*.render](./d3-delaunay.md#voronoi_render) - render the mesh of voronoi cells.
-* [*voronoi*.renderBounds](./d3-delaunay.md#voronoi_renderBounds) - render the extent.
-* [*voronoi*.renderCell](./d3-delaunay.md#voronoi_renderCell) - render a voronoi cell.
-* [*voronoi*.cellPolygons](./d3-delaunay.md#voronoi_cellPolygons) - iterate over all the cells as polygons.
-* [*voronoi*.cellPolygon](./d3-delaunay.md#voronoi_cellPolygon) - return a cell as a polygon.
-* [*voronoi*.update](./d3-delaunay.md#voronoi_update) - update a voronoi diagram in place.
+* [new Delaunay](./d3-delaunay/delaunay.md#Delaunay) - create a delaunay triangulation for an array of point coordinates.
+* [Delaunay.from](./d3-delaunay/delaunay.md#delaunay_from) - create a delaunay triangulation for an iterable of points.
+* [*delaunay*.points](./d3-delaunay/delaunay.md#delaunay_points) - the coordinates of the points.
+* [*delaunay*.halfedges](./d3-delaunay/delaunay.md#delaunay_halfedges) - the delaunay halfedges.
+* [*delaunay*.hull](./d3-delaunay/delaunay.md#delaunay_hull) - the convex hull as point indices.
+* [*delaunay*.triangles](./d3-delaunay/delaunay.md#delaunay_triangles) - the delaunay triangles.
+* [*delaunay*.inedges](./d3-delaunay/delaunay.md#delaunay_inedges) - the delaunay inedges
+* [*delaunay*.find](./d3-delaunay/delaunay.md#delaunay_find) - find the closest point in the delaunay triangulation.
+* [*delaunay*.neighbors](./d3-delaunay/delaunay.md#delaunay_neighbors) - the neighbors of a point in the delaunay triangulation.
+* [*delaunay*.render](./d3-delaunay/delaunay.md#delaunay_render) - render the edges of the delaunay triangulation.
+* [*delaunay*.renderHull](./d3-delaunay/delaunay.md#delaunay_renderHull) - render the convex hull.
+* [*delaunay*.renderTriangle](./d3-delaunay/delaunay.md#delaunay_renderTriangle) - render a triangle.
+* [*delaunay*.renderPoints](./d3-delaunay/delaunay.md#delaunay_renderPoints) - render the points.
+* [*delaunay*.hullPolygon](./d3-delaunay/delaunay.md#delaunay_hullPolygon) - the closed convex hull as point coordinates.
+* [*delaunay*.trianglePolygons](./d3-delaunay/delaunay.md#delaunay_trianglePolygons) - iterate over all the triangles as polygons.
+* [*delaunay*.trianglePolygon](./d3-delaunay/delaunay.md#delaunay_trianglePolygon) - return a triangle as a polygon.
+* [*delaunay*.update](./d3-delaunay/delaunay.md#delaunay_update) - update a delaunay triangulation in place.
+* [*delaunay*.voronoi](./d3-delaunay/voronoi.md#delaunay_voronoi) - compute the voronoi diagram associated with a delaunay triangulation.
+* [*voronoi*.delaunay](./d3-delaunay/voronoi.md#voronoi_delaunay) - the voronoi diagram’s source delaunay triangulation.
+* [*voronoi*.circumcenters](./d3-delaunay/voronoi.md#voronoi_circumcenters) - the triangles’ circumcenters.
+* [*voronoi*.vectors](./d3-delaunay/voronoi.md#voronoi_vectors) - directions for the outer (infinite) cells of the voronoi diagram.
+* [*voronoi*.xmin](./d3-delaunay/voronoi.md#voronoi_xmin) - set the *xmin* bound of the extent.
+* [*voronoi*.ymin](./d3-delaunay/voronoi.md#voronoi_ymin) - set the *ymin* bound of the extent.
+* [*voronoi*.xmax](./d3-delaunay/voronoi.md#voronoi_xmax) - set the *xmax* bound of the extent.
+* [*voronoi*.ymax](./d3-delaunay/voronoi.md#voronoi_ymax) - set the *ymax* bound of the extent.
+* [*voronoi*.contains](./d3-delaunay/voronoi.md#voronoi_contains) - test whether a point is inside a voronoi cell.
+* [*voronoi*.neighbors](./d3-delaunay/voronoi.md#voronoi_neighbors) - the neighbors of a point in the voronoi diagram.
+* [*voronoi*.render](./d3-delaunay/voronoi.md#voronoi_render) - render the mesh of voronoi cells.
+* [*voronoi*.renderBounds](./d3-delaunay/voronoi.md#voronoi_renderBounds) - render the extent.
+* [*voronoi*.renderCell](./d3-delaunay/voronoi.md#voronoi_renderCell) - render a voronoi cell.
+* [*voronoi*.cellPolygons](./d3-delaunay/voronoi.md#voronoi_cellPolygons) - iterate over all the cells as polygons.
+* [*voronoi*.cellPolygon](./d3-delaunay/voronoi.md#voronoi_cellPolygon) - return a cell as a polygon.
+* [*voronoi*.update](./d3-delaunay/voronoi.md#voronoi_update) - update a voronoi diagram in place.
 
 ## [d3-dispatch](./d3-dispatch.md)
 
@@ -1462,41 +1462,41 @@ An efficient queue for managing thousands of concurrent animations.
 
 ## [d3-transition](./d3-transition.md)
 
-Animated transitions for [selections](#selections).
+Animated transitions for [selections](./d3-selection.md).
 
-* [*selection*.transition](./d3-transition.md#selection_transition) - schedule a transition for the selected elements.
-* [*selection*.interrupt](./d3-transition.md#selection_interrupt) - interrupt and cancel transitions on the selected elements.
-* [d3.interrupt](./d3-transition.md#interrupt) - interrupt the active transition for a given node.
-* [d3.transition](./d3-transition.md#transition) - schedule a transition on the root document element.
-* [*transition*.select](./d3-transition.md#transition_select) - schedule a transition on the selected elements.
-* [*transition*.selectAll](./d3-transition.md#transition_selectAll) - schedule a transition on the selected elements.
-* [*transition*.selectChild](./d3-transition.md#transition_selectChild) - select a child element for each selected element.
-* [*transition*.selectChildren](./d3-transition.md#transition_selectChildren) - select the children elements for each selected element.
-* [*transition*.selection](./d3-transition.md#transition_selection) - returns a selection for this transition.
-* [*transition*.filter](./d3-transition.md#transition_filter) - filter elements based on data.
-* [*transition*.merge](./d3-transition.md#transition_merge) - merge this transition with another.
-* [*transition*.transition](./d3-transition.md#transition_transition) - schedule a new transition following this one.
-* [d3.active](./d3-transition.md#active) - select the active transition for a given node.
-* [*transition*.attr](./d3-transition.md#transition_attr) - tween the given attribute using the default interpolator.
-* [*transition*.attrTween](./d3-transition.md#transition_attrTween) - tween the given attribute using a custom interpolator.
-* [*transition*.style](./d3-transition.md#transition_style) - tween the given style property using the default interpolator.
-* [*transition*.styleTween](./d3-transition.md#transition_styleTween) - tween the given style property using a custom interpolator.
-* [*transition*.text](./d3-transition.md#transition_text) - set the text content when the transition starts.
-* [*transition*.textTween](./d3-transition.md#transition_textTween) - tween the text using a custom interpolator.
-* [*transition*.remove](./d3-transition.md#transition_remove) - remove the selected elements when the transition ends.
-* [*transition*.tween](./d3-transition.md#transition_tween) - run custom code during the transition.
-* [*transition*.delay](./d3-transition.md#transition_delay) - specify per-element delay in milliseconds.
-* [*transition*.duration](./d3-transition.md#transition_duration) - specify per-element duration in milliseconds.
-* [*transition*.ease](./d3-transition.md#transition_ease) - specify the easing function.
-* [*transition*.easeVarying](./d3-transition.md#transition_easeVarying) - specify an easing function factory.
-* [*transition*.end](./d3-transition.md#transition_end) - a promise that resolves when a transition ends.
-* [*transition*.on](./d3-transition.md#transition_on) - await the end of a transition.
-* [*transition*.each](./d3-transition.md#transition_each) - call a function for each element.
-* [*transition*.call](./d3-transition.md#transition_call) - call a function with this transition.
-* [*transition*.empty](./d3-transition.md#transition_empty) - returns true if this transition is empty.
-* [*transition*.nodes](./d3-transition.md#transition_nodes) - returns an array of all selected elements.
-* [*transition*.node](./d3-transition.md#transition_node) - returns the first (non-null) element.
-* [*transition*.size](./d3-transition.md#transition_size) - returns the count of elements.
+* [*selection*.transition](./d3-transition/selecting.md#selection_transition) - schedule a transition for the selected elements.
+* [*selection*.interrupt](./d3-transition/control-flow.md#selection_interrupt) - interrupt and cancel transitions on the selected elements.
+* [d3.interrupt](./d3-transition/control-flow.md#interrupt) - interrupt the active transition for a given node.
+* [d3.transition](./d3-transition/selecting.md#transition) - schedule a transition on the root document element.
+* [*transition*.select](./d3-transition/selecting.md#transition_select) - schedule a transition on the selected elements.
+* [*transition*.selectAll](./d3-transition/selecting.md#transition_selectAll) - schedule a transition on the selected elements.
+* [*transition*.selectChild](./d3-transition/selecting.md#transition_selectChild) - select a child element for each selected element.
+* [*transition*.selectChildren](./d3-transition/selecting.md#transition_selectChildren) - select the children elements for each selected element.
+* [*transition*.selection](./d3-transition/selecting.md#transition_selection) - returns a selection for this transition.
+* [*transition*.filter](./d3-transition/selecting.md#transition_filter) - filter elements based on data.
+* [*transition*.merge](./d3-transition/selecting.md#transition_merge) - merge this transition with another.
+* [*transition*.transition](./d3-transition/selecting.md#transition_transition) - schedule a new transition following this one.
+* [d3.active](./d3-transition/selecting.md#active) - select the active transition for a given node.
+* [*transition*.attr](./d3-transition/modifying.md#transition_attr) - tween the given attribute using the default interpolator.
+* [*transition*.attrTween](./d3-transition/modifying.md#transition_attrTween) - tween the given attribute using a custom interpolator.
+* [*transition*.style](./d3-transition/modifying.md#transition_style) - tween the given style property using the default interpolator.
+* [*transition*.styleTween](./d3-transition/modifying.md#transition_styleTween) - tween the given style property using a custom interpolator.
+* [*transition*.text](./d3-transition/modifying.md#transition_text) - set the text content when the transition starts.
+* [*transition*.textTween](./d3-transition/modifying.md#transition_textTween) - tween the text using a custom interpolator.
+* [*transition*.remove](./d3-transition/modifying.md#transition_remove) - remove the selected elements when the transition ends.
+* [*transition*.tween](./d3-transition/modifying.md#transition_tween) - run custom code during the transition.
+* [*transition*.delay](./d3-transition/timing.md#transition_delay) - specify per-element delay in milliseconds.
+* [*transition*.duration](./d3-transition/timing.md#transition_duration) - specify per-element duration in milliseconds.
+* [*transition*.ease](./d3-transition/timing.md#transition_ease) - specify the easing function.
+* [*transition*.easeVarying](./d3-transition/timing.md#transition_easeVarying) - specify an easing function factory.
+* [*transition*.end](./d3-transition/control-flow.md#transition_end) - a promise that resolves when a transition ends.
+* [*transition*.on](./d3-transition/control-flow.md#transition_on) - await the end of a transition.
+* [*transition*.each](./d3-transition/control-flow.md#transition_each) - call a function for each element.
+* [*transition*.call](./d3-transition/control-flow.md#transition_call) - call a function with this transition.
+* [*transition*.empty](./d3-transition/control-flow.md#transition_empty) - returns true if this transition is empty.
+* [*transition*.nodes](./d3-transition/control-flow.md#transition_nodes) - returns an array of all selected elements.
+* [*transition*.node](./d3-transition/control-flow.md#transition_node) - returns the first (non-null) element.
+* [*transition*.size](./d3-transition/control-flow.md#transition_size) - returns the count of elements.
 
 ## [d3-zoom](./d3-zoom.md)
 

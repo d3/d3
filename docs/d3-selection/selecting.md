@@ -181,7 +181,7 @@ If no *selector* is specified, selects the first child (if any). If the *selecto
 
 ## *selection*.selection() {#selection_selection}
 
-[Source](https://github.com/d3/d3-selection/blob/main/src/selection/index.js) · Returns the selection (for symmetry with [*transition*.selection](../d3-transition.md#transition_selection)).
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/index.js) · Returns the selection (for symmetry with [*transition*.selection](../d3-transition/selecting.md#transition_selection)).
 
 ## matcher(*selector*) {#matcher}
 

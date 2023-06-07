@@ -39,7 +39,7 @@ Then during the animation, apply the easing function:
 const te = ease(t);
 ```
 
-See also [*transition*.ease](./d3-transition.md#transition_ease).
+See also [*transition*.ease](./d3-transition/timing.md#transition_ease).
 
 ## easeLinear {#easeLinear}
 
