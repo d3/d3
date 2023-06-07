@@ -7,6 +7,7 @@ import PlotRender from "../components/PlotRender.js";
 
 const random = d3.randomNormal.source(d3.randomLcg(42))();
 const points = Array.from({length: 1000}, () => [random(), random()]);
+const neighborsState = shallowRef({i: -1, N: []});
 
 </script>
 
@@ -58,6 +59,62 @@ The bounds of the viewport [*xmin*, *ymin*, *xmax*, *ymax*] for rendering the Vo
 [Source](https://github.com/d3/d3-delaunay/blob/main/src/cell.js) · Returns true if the cell with the specified index *i* contains the specified point ⟨*x*, *y*⟩; *i.e.*, whether the point *i* is the closest point in the diagram to the specified point. (This method is not affected by the associated Voronoi diagram’s viewport [bounds](#voronoi_bounds).)
 
 ## *voronoi*.neighbors(*i*) {#voronoi_neighbors}
+
+<PlotRender defer v-once :options='{
+  axis: null,
+  width: 688,
+  height: 688,
+  x: {domain: [-4, 3.5]},
+  y: {domain: [-3, 3.5]},
+  marks: [
+    Plot.dot(points, {r: 2, fill: "currentColor"}),
+    Plot.voronoiMesh(points, {strokeOpacity: 0.3}),
+    Plot.link(points, {
+      x1: (d) => d[0],
+      y1: (d) => d[1],
+      x2: (d) => d[0],
+      y2: (d) => d[1],
+      stroke: "red",
+      strokeWidth: 2,
+      markerStart: "dot",
+      markerEnd: "arrow",
+      render(index, scales, values, dimensions, context, next) {
+        const {x1: X, y1: Y} = values;
+        const delaunay = d3.Delaunay.from(points, (d, i) => X[i], (d, i) => Y[i]);
+        const voronoi = delaunay.voronoi([0, 0, dimensions.width, dimensions.height]);
+        function update(x, y) {
+          const i = delaunay.find(x, y);
+          const N = Array.from(voronoi.neighbors(i));
+          neighborsState = {i, N};
+          return next(
+            d3.range(N.length),
+            scales,
+            {
+              x1: N.map(() => X[i]),
+              x2: N.map((j) => X[j]),
+              y1: N.map(() => Y[i]),
+              y2: N.map((j) => Y[j])
+            },
+            dimensions,
+            context
+          );
+        }
+        let line = update(0, 0);
+        context.ownerSVGElement.addEventListener("pointermove", (event) => {
+          const [x, y] = d3.pointer(event);
+          const newline = update(Math.round(x), Math.round(y));
+          line.replaceWith(newline);
+          line = newline;
+        });
+        return line;
+      }
+    }),
+  ]
+}' />
+
+```js-vue
+voronoi.neighbors({{neighborsState.i}}) // [{{neighborsState.N.join(", ")}}]
+```
 
 [Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Returns an iterable over the indexes of the cells that share a common edge with the specified cell *i*. Voronoi neighbors are always neighbors on the Delaunay graph, but the converse is false when the common edge has been clipped out by the Voronoi diagram’s viewport.
 
