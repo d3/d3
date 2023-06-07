@@ -169,7 +169,27 @@ export default defineConfig({
               {text: "Position forces", link: "/d3-force/position"},
             ]
           },
-          {text: "d3-geo", link: "/d3-geo"},
+          {
+            text: "d3-geo",
+            link: "/d3-geo",
+            collapsed: true,
+            items: [
+              {text: "Paths", link: "/d3-geo/path"},
+              {
+                text: "Projections",
+                link: "/d3-geo/projection",
+                collapsed: true,
+                items: [
+                  {text: "Azimuthal projections", link: "/d3-geo/azimuthal"},
+                  {text: "Conic projections", link: "/d3-geo/conic"},
+                  {text: "Cylindrical projections", link: "/d3-geo/cylindrical"},
+                ]
+              },
+              {text: "Streams", link: "/d3-geo/stream"},
+              {text: "Spherical shapes", link: "/d3-geo/shape"},
+              {text: "Spherical math", link: "/d3-geo/math"},
+            ]
+          },
           {
             text: "d3-hierarchy",
             link: "/d3-hierarchy",
