@@ -259,7 +259,7 @@ TypeScript declarations are available via DefinitelyTyped.
 
 ## D3 in React
 
-Most D3 modules (like d3-scale, d3-array, d3-color, d3-format, and d3-random) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX to do purely declarative visualization, like this dot plot of a normal distribution:
+Most D3 modules (like d3-scale, d3-array, d3-color, d3-format, and d3-random) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX to do purely declarative visualization, like this dot plot of one-dimensional numeric data:
 
 ```jsx
 import {scaleLinear, extent} from "d3";
@@ -276,7 +276,7 @@ function DotPlot({data, width}) {
 }
 ```
 
-Some D3 modules (d3-selection, d3-transition, d3-axis, d3-brush, d3-zoom) do manipulate the DOM, which competes with React’s management of the DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. For example, to add a D3 axis to the example above:
+Some D3 modules (d3-selection, d3-transition, d3-axis, d3-brush, d3-zoom) do manipulate the DOM, which competes with React’s management of the DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. For example, to add an axis to the example above:
 
 ```jsx
 import {scaleLinear, extent, select, axisBottom} from "d3";
