@@ -14,7 +14,7 @@ export default function quadtree_findVisited(x, y, radius) {
       q,
       i;
 
-  if (node) quads.push(new Quad(node, x0, y0, x3, y3, 0, 0, 0, 0));
+  if (node) quads.push(new Quad(node, x0, y0, x3, y3, 1, 1, -1, -1));
   if (radius == null) radius = Infinity;
   else {
     x0 = x - radius, y0 = y - radius;
@@ -38,11 +38,13 @@ export default function quadtree_findVisited(x, y, radius) {
       var xm = (x1 + x2) / 2,
           ym = (y1 + y2) / 2;
 
+      // 0 1
+      // 2 3
       quads.push(
-        new Quad(node[3], xm, ym, x2, y2, 0, 0, q.dx1 - 1, q.dy1 - 1),
-        new Quad(node[2], x1, ym, xm, y2, q.dx0 + 1, 0, 0, q.dy1 - 1),
-        new Quad(node[1], xm, y1, x2, ym, 0, q.dy0 + 1, q.dx1 - 1, 0),
-        new Quad(node[0], x1, y1, xm, ym, q.dx0 + 1, q.dy0 + 1, 0, 0)
+        new Quad(node[3], xm, ym, x2, y2, 1, 1, q.dx1 - 1, q.dy1 - 1),
+        new Quad(node[2], x1, ym, xm, y2, q.dx0 + 1, 1, -1, q.dy1 - 1),
+        new Quad(node[1], xm, y1, x2, ym, 1, q.dy0 + 1, q.dx1 - 1, -1),
+        new Quad(node[0], x1, y1, xm, ym, q.dx0 + 1, q.dy0 + 1, -1, -1)
       );
 
       // Visit the closest quadrant first.
