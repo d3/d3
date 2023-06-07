@@ -29,7 +29,6 @@ export default defineConfig({
           {text: "What is D3?", link: "/what-is-d3"},
           {text: "Why D3?", link: "/why-d3"},
           {text: "Getting started", link: "/getting-started"},
-          {text: "Table of contents", link: "/modules"},
         ]
       },
       {
@@ -236,7 +235,8 @@ export default defineConfig({
           {text: "d3-drag", link: "/d3-drag"},
           {text: "d3-zoom", link: "/d3-zoom"}
         ]
-      }
+      },
+      {text: "API index", link: "/api"}
     ],
     search: {
       provider: "local"

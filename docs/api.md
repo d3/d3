@@ -2,7 +2,7 @@
 outline: 2
 ---
 
-# D3 modules
+# API index
 
 D3 is a collection of modules that are designed to work together; you can use the modules independently, or you can use them together as part of the default build.
 
