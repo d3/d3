@@ -66,14 +66,6 @@ Array.from(selection)
 
 See also [*selection*[Symbol.iterator]](#selection_iterator).
 
-## *selection*.node() {#selection_node}
-
-[Source](https://github.com/d3/d3-selection/blob/main/src/selection/node.js) · Returns the first (non-null) element in this selection. If the selection is empty, returns null.
-
-## *selection*.size() {#selection_size}
-
-[Source](https://github.com/d3/d3-selection/blob/main/src/selection/size.js) · Returns the total number of (non-null) elements in this selection.
-
 ## *selection*[Symbol.iterator]\(\)
 
 [Source](https://github.com/d3/d3-selection/blob/main/src/selection/iterator.js) · Returns an iterator over the selected (non-null) elements. For example, to iterate over the selected elements:
@@ -88,4 +80,12 @@ To flatten the selection to an array:
 
 ```js
 const elements = [...selection];
-````
+```
+
+## *selection*.node() {#selection_node}
+
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/node.js) · Returns the first (non-null) element in this selection. If the selection is empty, returns null.
+
+## *selection*.size() {#selection_size}
+
+[Source](https://github.com/d3/d3-selection/blob/main/src/selection/size.js) · Returns the total number of (non-null) elements in this selection.

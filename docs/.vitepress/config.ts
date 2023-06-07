@@ -189,7 +189,17 @@ export default defineConfig({
         items: [
           {text: "d3-ease", link: "/d3-ease"},
           {text: "d3-timer", link: "/d3-timer"},
-          {text: "d3-transition", link: "/d3-transition"},
+          {
+            text: "d3-transition",
+            link: "/d3-transition",
+            collapsed: true,
+            items: [
+              {text: "Selecting elements", link: "/d3-transition/selecting"},
+              {text: "Modifying elements", link: "/d3-transition/modifying"},
+              {text: "Timing", link: "/d3-transition/timing"},
+              {text: "Control flow", link: "/d3-transition/control-flow"}
+            ]
+          },
         ]
       },
       {

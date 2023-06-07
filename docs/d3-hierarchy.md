@@ -166,7 +166,7 @@ Unlike [*node*.sum](#node_sum), the *compare* function is passed two [nodes](#hi
 root
     .sum(function(d) { return d.value; })
     .sort(function(a, b) { return b.value - a.value; });
-``````
+```
 
 Similarly, to sort nodes by descending height (greatest distance from any descendant leaf) and then descending value, as is recommended for [treemaps](#treemap) and [icicles](#partition):
 

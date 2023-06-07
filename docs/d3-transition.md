@@ -16,7 +16,7 @@ To compute intermediate state, transitions leverage a variety of [built-in inter
 
 See one of:
 
-* [Selecting Elements](./d3-transition/selecting.md)
-* [Modifying Elements](./d3-transition/modifying.md)
+* [Selecting elements](./d3-transition/selecting.md)
+* [Modifying elements](./d3-transition/modifying.md)
 * [Timing](./d3-transition/timing.md)
-* [Control Flow](./d3-transition/control-flow.md)
+* [Control flow](./d3-transition/control-flow.md)

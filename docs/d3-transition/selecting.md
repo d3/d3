@@ -139,7 +139,7 @@ The delay for each transition is relative to its previous transition. Thus, in t
 
 ```js
 d3.selectAll("circle").transition()
-    .delay(function(d, i) { return i * 50; })
+    .delay((d, i) => i * 50)
     .on("start", function repeat() {
         d3.active(this)
             .style("fill", "red")
