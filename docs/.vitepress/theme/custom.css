@@ -63,3 +63,7 @@
   position: relative;
   z-index: 1;
 }
+
+.vp-doc sub {
+  line-height: 1;
+}

@@ -209,7 +209,15 @@ export default defineConfig({
           {text: "d3-brush", link: "/d3-brush"},
           {text: "d3-dispatch", link: "/d3-dispatch"},
           {text: "d3-drag", link: "/d3-drag"},
-          {text: "d3-zoom", link: "/d3-zoom"},
+          {
+            text: "d3-zoom",
+            link: "/d3-zoom",
+            collapsed: true,
+            items: [
+              {text: "Zoom behavior", link: "/d3-zoom/zoom"},
+              {text: "Zoom transforms", link: "/d3-zoom/transform"}
+            ]
+          },
         ]
       }
     ],
