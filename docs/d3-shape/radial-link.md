@@ -4,7 +4,7 @@ A radial link generator is like the Cartesian [link generator](./link.md) except
 
 ## linkRadial() {#linkRadial}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Returns a new [link generator](./link.md#_link) with radial tangents. For example, to visualize [links](../d3-hierarchy.md#node_links) in a [tree diagram](../d3-hierarchy.md#tree) rooted in the center of the display, you might say:
+[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Returns a new [link generator](./link.md#_link) with radial tangents. For example, to visualize [links](../d3-hierarchy/hierarchy.md#node_links) in a [tree diagram](../d3-hierarchy/tree.md) rooted in the center of the display, you might say:
 
 ```js
 const link = d3.linkRadial()

@@ -171,7 +171,20 @@ export default defineConfig({
             ]
           },
           {text: "d3-geo", link: "/d3-geo"},
-          {text: "d3-hierarchy", link: "/d3-hierarchy"},
+          {
+            text: "d3-hierarchy",
+            link: "/d3-hierarchy",
+            collapsed: true,
+            items: [
+              {text: "Hierarchies", link: "/d3-hierarchy/hierarchy"},
+              {text: "Stratify", link: "/d3-hierarchy/stratify"},
+              {text: "Tree", link: "/d3-hierarchy/tree"},
+              {text: "Cluster", link: "/d3-hierarchy/cluster"},
+              {text: "Partition", link: "/d3-hierarchy/partition"},
+              {text: "Pack", link: "/d3-hierarchy/pack"},
+              {text: "Treemap", link: "/d3-hierarchy/treemap"},
+            ]
+          },
           {text: "d3-path", link: "/d3-path"},
           {text: "d3-polygon", link: "/d3-polygon"},
           {text: "d3-quadtree", link: "/d3-quadtree"},

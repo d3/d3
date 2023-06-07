@@ -617,67 +617,67 @@ Geographic projections, shapes and math.
 
 Layout algorithms for visualizing hierarchical data.
 
-* [d3.hierarchy](./d3-hierarchy.md#hierarchy) - constructs a root node from hierarchical data.
-* [*node*.ancestors](./d3-hierarchy.md#node_ancestors) - generate an array of ancestors.
-* [*node*.descendants](./d3-hierarchy.md#node_descendants) - generate an array of descendants.
-* [*node*.leaves](./d3-hierarchy.md#node_leaves) - generate an array of leaves.
-* [*node*.find](./d3-hierarchy.md#node_find) - find a node in the hierarchy.
-* [*node*.path](./d3-hierarchy.md#node_path) - generate the shortest path to another node.
-* [*node*.links](./d3-hierarchy.md#node_links) - generate an array of links.
-* [*node*.sum](./d3-hierarchy.md#node_sum) - evaluate and aggregate quantitative values.
-* [*node*.count](./d3-hierarchy.md#node_count) - count the number of leaves.
-* [*node*.sort](./d3-hierarchy.md#node_sort) - sort all descendant siblings.
-* [*node*[Symbol.iterator]](./d3-hierarchy.md#node_iterator) - iterate on a hierarchy.
-* [*node*.each](./d3-hierarchy.md#node_each) - breadth-first traversal.
-* [*node*.eachAfter](./d3-hierarchy.md#node_eachAfter) - post-order traversal.
-* [*node*.eachBefore](./d3-hierarchy.md#node_eachBefore) - pre-order traversal.
-* [*node*.copy](./d3-hierarchy.md#node_copy) - copy a hierarchy.
-* [d3.stratify](./d3-hierarchy.md#stratify) - create a new stratify operator.
-* [*stratify*](./d3-hierarchy.md#_stratify) - construct a root node from tabular data.
-* [*stratify*.id](./d3-hierarchy.md#stratify_id) - set the node id accessor.
-* [*stratify*.parentId](./d3-hierarchy.md#stratify_parentId) - set the parent node id accessor.
-* [*stratify*.path](./d3-hierarchy.md#stratify_path) - set the path accessor.
-* [d3.cluster](./d3-hierarchy.md#cluster) - create a new cluster (dendrogram) layout.
-* [*cluster*](./d3-hierarchy.md#_cluster) - layout the specified hierarchy in a dendrogram.
-* [*cluster*.size](./d3-hierarchy.md#cluster_size) - set the layout size.
-* [*cluster*.nodeSize](./d3-hierarchy.md#cluster_nodeSize) - set the node size.
-* [*cluster*.separation](./d3-hierarchy.md#cluster_separation) - set the separation between leaves.
-* [d3.tree](./d3-hierarchy.md#tree) - create a new tidy tree layout.
-* [*tree*](./d3-hierarchy.md#_tree) - layout the specified hierarchy in a tidy tree.
-* [*tree*.size](./d3-hierarchy.md#tree_size) - set the layout size.
-* [*tree*.nodeSize](./d3-hierarchy.md#tree_nodeSize) - set the node size.
-* [*tree*.separation](./d3-hierarchy.md#tree_separation) - set the separation between nodes.
-* [d3.treemap](./d3-hierarchy.md#treemap) - create a new treemap layout.
-* [*treemap*](./d3-hierarchy.md#_treemap) - layout the specified hierarchy as a treemap.
-* [*treemap*.tile](./d3-hierarchy.md#treemap_tile) - set the tiling method.
-* [*treemap*.size](./d3-hierarchy.md#treemap_size) - set the layout size.
-* [*treemap*.round](./d3-hierarchy.md#treemap_round) - set whether the output coordinates are rounded.
-* [*treemap*.padding](./d3-hierarchy.md#treemap_padding) - set the padding.
-* [*treemap*.paddingInner](./d3-hierarchy.md#treemap_paddingInner) - set the padding between siblings.
-* [*treemap*.paddingOuter](./d3-hierarchy.md#treemap_paddingOuter) - set the padding between parent and children.
-* [*treemap*.paddingTop](./d3-hierarchy.md#treemap_paddingTop) - set the padding between the parent’s top edge and children.
-* [*treemap*.paddingRight](./d3-hierarchy.md#treemap_paddingRight) - set the padding between the parent’s right edge and children.
-* [*treemap*.paddingBottom](./d3-hierarchy.md#treemap_paddingBottom) - set the padding between the parent’s bottom edge and children.
-* [*treemap*.paddingLeft](./d3-hierarchy.md#treemap_paddingLeft) - set the padding between the parent’s left edge and children.
-* [d3.treemapBinary](./d3-hierarchy.md#treemapBinary) - tile using a balanced binary tree.
-* [d3.treemapDice](./d3-hierarchy.md#treemapDice) - tile into a horizontal row.
-* [d3.treemapSlice](./d3-hierarchy.md#treemapSlice) - tile into a vertical column.
-* [d3.treemapSliceDice](./d3-hierarchy.md#treemapSliceDice) - alternate between slicing and dicing.
-* [d3.treemapSquarify](./d3-hierarchy.md#treemapSquarify) - tile using squarified rows per Bruls *et. al.*
-* [d3.treemapResquarify](./d3-hierarchy.md#treemapResquarify) - like d3.treemapSquarify, but performs stable updates.
-* [*squarify*.ratio](./d3-hierarchy.md#squarify_ratio) - set the desired rectangle aspect ratio.
-* [d3.partition](./d3-hierarchy.md#partition) - create a new partition (icicle or sunburst) layout.
-* [*partition*](./d3-hierarchy.md#_partition) - layout the specified hierarchy as a partition diagram.
-* [*partition*.size](./d3-hierarchy.md#partition_size) - set the layout size.
-* [*partition*.round](./d3-hierarchy.md#partition_round) - set whether the output coordinates are rounded.
-* [*partition*.padding](./d3-hierarchy.md#partition_padding) - set the padding.
-* [d3.pack](./d3-hierarchy.md#pack) - create a new circle-packing layout.
-* [*pack*](./d3-hierarchy.md#_pack) - layout the specified hierarchy using circle-packing.
-* [*pack*.radius](./d3-hierarchy.md#pack_radius) - set the radius accessor.
-* [*pack*.size](./d3-hierarchy.md#pack_size) - set the layout size.
-* [*pack*.padding](./d3-hierarchy.md#pack_padding) - set the padding.
-* [d3.packSiblings](./d3-hierarchy.md#packSiblings) - pack the specified array of circles.
-* [d3.packEnclose](./d3-hierarchy.md#packEnclose) - enclose the specified array of circles.
+* [d3.hierarchy](./d3-hierarchy/hierarchy.md#hierarchy) - constructs a root node from hierarchical data.
+* [*node*.ancestors](./d3-hierarchy/hierarchy.md#node_ancestors) - generate an array of ancestors.
+* [*node*.descendants](./d3-hierarchy/hierarchy.md#node_descendants) - generate an array of descendants.
+* [*node*.leaves](./d3-hierarchy/hierarchy.md#node_leaves) - generate an array of leaves.
+* [*node*.find](./d3-hierarchy/hierarchy.md#node_find) - find a node in the hierarchy.
+* [*node*.path](./d3-hierarchy/hierarchy.md#node_path) - generate the shortest path to another node.
+* [*node*.links](./d3-hierarchy/hierarchy.md#node_links) - generate an array of links.
+* [*node*.sum](./d3-hierarchy/hierarchy.md#node_sum) - evaluate and aggregate quantitative values.
+* [*node*.count](./d3-hierarchy/hierarchy.md#node_count) - count the number of leaves.
+* [*node*.sort](./d3-hierarchy/hierarchy.md#node_sort) - sort all descendant siblings.
+* [*node*[Symbol.iterator]](./d3-hierarchy/hierarchy.md#node_iterator) - iterate on a hierarchy.
+* [*node*.each](./d3-hierarchy/hierarchy.md#node_each) - breadth-first traversal.
+* [*node*.eachAfter](./d3-hierarchy/hierarchy.md#node_eachAfter) - post-order traversal.
+* [*node*.eachBefore](./d3-hierarchy/hierarchy.md#node_eachBefore) - pre-order traversal.
+* [*node*.copy](./d3-hierarchy/hierarchy.md#node_copy) - copy a hierarchy.
+* [d3.stratify](./d3-hierarchy/stratify.md#stratify) - create a new stratify operator.
+* [*stratify*](./d3-hierarchy/stratify.md#_stratify) - construct a root node from tabular data.
+* [*stratify*.id](./d3-hierarchy/stratify.md#stratify_id) - set the node id accessor.
+* [*stratify*.parentId](./d3-hierarchy/stratify.md#stratify_parentId) - set the parent node id accessor.
+* [*stratify*.path](./d3-hierarchy/stratify.md#stratify_path) - set the path accessor.
+* [d3.cluster](./d3-hierarchy/cluster.md#cluster) - create a new cluster (dendrogram) layout.
+* [*cluster*](./d3-hierarchy/cluster.md#_cluster) - layout the specified hierarchy in a dendrogram.
+* [*cluster*.size](./d3-hierarchy/cluster.md#cluster_size) - set the layout size.
+* [*cluster*.nodeSize](./d3-hierarchy/cluster.md#cluster_nodeSize) - set the node size.
+* [*cluster*.separation](./d3-hierarchy/cluster.md#cluster_separation) - set the separation between leaves.
+* [d3.tree](./d3-hierarchy/tree.md#tree) - create a new tidy tree layout.
+* [*tree*](./d3-hierarchy/tree.md#_tree) - layout the specified hierarchy in a tidy tree.
+* [*tree*.size](./d3-hierarchy/tree.md#tree_size) - set the layout size.
+* [*tree*.nodeSize](./d3-hierarchy/tree.md#tree_nodeSize) - set the node size.
+* [*tree*.separation](./d3-hierarchy/tree.md#tree_separation) - set the separation between nodes.
+* [d3.treemap](./d3-hierarchy/treemap.md#treemap) - create a new treemap layout.
+* [*treemap*](./d3-hierarchy/treemap.md#_treemap) - layout the specified hierarchy as a treemap.
+* [*treemap*.tile](./d3-hierarchy/treemap.md#treemap_tile) - set the tiling method.
+* [*treemap*.size](./d3-hierarchy/treemap.md#treemap_size) - set the layout size.
+* [*treemap*.round](./d3-hierarchy/treemap.md#treemap_round) - set whether the output coordinates are rounded.
+* [*treemap*.padding](./d3-hierarchy/treemap.md#treemap_padding) - set the padding.
+* [*treemap*.paddingInner](./d3-hierarchy/treemap.md#treemap_paddingInner) - set the padding between siblings.
+* [*treemap*.paddingOuter](./d3-hierarchy/treemap.md#treemap_paddingOuter) - set the padding between parent and children.
+* [*treemap*.paddingTop](./d3-hierarchy/treemap.md#treemap_paddingTop) - set the padding between the parent’s top edge and children.
+* [*treemap*.paddingRight](./d3-hierarchy/treemap.md#treemap_paddingRight) - set the padding between the parent’s right edge and children.
+* [*treemap*.paddingBottom](./d3-hierarchy/treemap.md#treemap_paddingBottom) - set the padding between the parent’s bottom edge and children.
+* [*treemap*.paddingLeft](./d3-hierarchy/treemap.md#treemap_paddingLeft) - set the padding between the parent’s left edge and children.
+* [d3.treemapBinary](./d3-hierarchy/treemap.md#treemapBinary) - tile using a balanced binary tree.
+* [d3.treemapDice](./d3-hierarchy/treemap.md#treemapDice) - tile into a horizontal row.
+* [d3.treemapSlice](./d3-hierarchy/treemap.md#treemapSlice) - tile into a vertical column.
+* [d3.treemapSliceDice](./d3-hierarchy/treemap.md#treemapSliceDice) - alternate between slicing and dicing.
+* [d3.treemapSquarify](./d3-hierarchy/treemap.md#treemapSquarify) - tile using squarified rows per Bruls *et. al.*
+* [d3.treemapResquarify](./d3-hierarchy/treemap.md#treemapResquarify) - like d3.treemapSquarify, but performs stable updates.
+* [*squarify*.ratio](./d3-hierarchy/treemap.md#squarify_ratio) - set the desired rectangle aspect ratio.
+* [d3.partition](./d3-hierarchy/partition.md#partition) - create a new partition (icicle or sunburst) layout.
+* [*partition*](./d3-hierarchy/partition.md#_partition) - layout the specified hierarchy as a partition diagram.
+* [*partition*.size](./d3-hierarchy/partition.md#partition_size) - set the layout size.
+* [*partition*.round](./d3-hierarchy/partition.md#partition_round) - set whether the output coordinates are rounded.
+* [*partition*.padding](./d3-hierarchy/partition.md#partition_padding) - set the padding.
+* [d3.pack](./d3-hierarchy/pack.md#pack) - create a new circle-packing layout.
+* [*pack*](./d3-hierarchy/pack.md#_pack) - layout the specified hierarchy using circle-packing.
+* [*pack*.radius](./d3-hierarchy/pack.md#pack_radius) - set the radius accessor.
+* [*pack*.size](./d3-hierarchy/pack.md#pack_size) - set the layout size.
+* [*pack*.padding](./d3-hierarchy/pack.md#pack_padding) - set the padding.
+* [d3.packSiblings](./d3-hierarchy/pack.md#packSiblings) - pack the specified array of circles.
+* [d3.packEnclose](./d3-hierarchy/pack.md#packEnclose) - enclose the specified array of circles.
 
 ## [d3-interpolate](./d3-interpolate.md)
 

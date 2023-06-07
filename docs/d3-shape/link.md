@@ -4,7 +4,7 @@
 
 ## link(*curve*) {#link}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Returns a new [link generator](#_link) using the specified <i>curve</i>. For example, to visualize [links](../d3-hierarchy.md#node_links) in a [tree diagram](../d3-hierarchy.md#tree) rooted on the top edge of the display, you might say:
+[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Returns a new [link generator](#_link) using the specified <i>curve</i>. For example, to visualize [links](../d3-hierarchy/hierarchy.md#node_links) in a [tree diagram](../d3-hierarchy/tree.md) rooted on the top edge of the display, you might say:
 
 ```js
 const link = d3.link(d3.curveBumpY)
@@ -14,7 +14,7 @@ const link = d3.link(d3.curveBumpY)
 
 ## linkVertical() {#linkVertical}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Shorthand for [link](#link) with [curveBumpY](./curve.md#curveBumpY); suitable for visualizing [links](../d3-hierarchy.md#node_links) in a [tree diagram](../d3-hierarchy.md#tree) rooted on the top edge of the display. Equivalent to:
+[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Shorthand for [link](#link) with [curveBumpY](./curve.md#curveBumpY); suitable for visualizing [links](../d3-hierarchy/hierarchy.md#node_links) in a [tree diagram](../d3-hierarchy/tree.md) rooted on the top edge of the display. Equivalent to:
 
 ```js
 const link = d3.link(d3.curveBumpY);
@@ -22,7 +22,7 @@ const link = d3.link(d3.curveBumpY);
 
 ## linkHorizontal() {#linkHorizontal}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Shorthand for [link](#link) with [curveBumpX](./curve.md#curveBumpX); suitable for visualizing [links](../d3-hierarchy.md#node_links) in a [tree diagram](../d3-hierarchy.md#tree) rooted on the left edge of the display. Equivalent to:
+[Source](https://github.com/d3/d3-shape/blob/main/src/link.js) · Shorthand for [link](#link) with [curveBumpX](./curve.md#curveBumpX); suitable for visualizing [links](../d3-hierarchy/hierarchy.md#node_links) in a [tree diagram](../d3-hierarchy/tree.md) rooted on the left edge of the display. Equivalent to:
 
 ```js
 const link = d3.link(d3.curveBumpX);
