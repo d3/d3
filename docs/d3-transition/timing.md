@@ -24,7 +24,7 @@ Setting the delay to a multiple of the index `i` is a convenient way to stagger 
 transition.delay((d, i) => i * 10);
 ```
 
-Of course, you can also compute the delay as a function of the data, or [sort the selection](../d3-selection/selecting.md#selection_sort) before computed an index-based delay.
+Of course, you can also compute the delay as a function of the data, or [sort the selection](../d3-selection/modifying.md#selection_sort) before computed an index-based delay.
 
 ## *transition*.duration(*value*) {#transition_duration}
 

@@ -20,7 +20,7 @@ d3.selectAll(".orange").transition(t)
     .style("fill", "orange");
 ```
 
-If the specified *transition* is not found on a selected node or its ancestors (such as if the transition [already ended](#the-life-of-a-transition)), the default timing parameters are used; however, in a future release, this will likely be changed to throw an error. See [#59](https://github.com/d3/d3-transition/issues/59).
+If the specified *transition* is not found on a selected node or its ancestors (such as if the transition [already ended](./control-flow.md#the-life-of-a-transition)), the default timing parameters are used; however, in a future release, this will likely be changed to throw an error. See [#59](https://github.com/d3/d3-transition/issues/59).
 
 ## transition(*name*) {#transition}
 
@@ -102,7 +102,7 @@ transition
 
 [Source](https://github.com/d3/d3-transition/blob/main/src/transition/merge.js) · Returns a new transition merging this transition with the specified *other* transition, which must have the same id as this transition. The returned transition has the same number of groups, the same parents, the same name and the same id as this transition. Any missing (null) elements in this transition are filled with the corresponding element, if present (not null), from the *other* transition.
 
-This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), merging with the selection likewise derived from the *other* transition via [*selection*.merge](../d3-selection/selecting.md#selection_merge), and then creating a new transition via [*selection*.transition](#selection_transition):
+This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), merging with the selection likewise derived from the *other* transition via [*selection*.merge](../d3-selection/joining.md#selection_merge), and then creating a new transition via [*selection*.transition](#selection_transition):
 
 ```js
 transition

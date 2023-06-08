@@ -64,7 +64,7 @@ Equivalent to:
 Array.from(selection)
 ```
 
-See also [*selection*[Symbol.iterator]](#selection_iterator).
+See also [*selection*[Symbol.iterator]](#selection-symbol-iterator).
 
 ## *selection*[Symbol.iterator]\(\)
 

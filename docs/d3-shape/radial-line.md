@@ -44,7 +44,7 @@ const line = d3.lineRadial().defined((d) => !isNaN(d.temperature));
 
 ## *lineRadial*.curve(*curve*) {#lineRadial_curve}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Equivalent to [*line*.curve](./line.md#line_curve). Note that [curveMonotoneX](#curveMonotoneX) or [curveMonotoneY](#curveMonotoneY) are not recommended for radial lines because they assume that the data is monotonic in *x* or *y*, which is typically untrue of radial lines.
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js) · Equivalent to [*line*.curve](./line.md#line_curve). Note that [curveMonotoneX](../d3-shape/curve.md#curveMonotoneX) or [curveMonotoneY](../d3-shape/curve.md#curveMonotoneY) are not recommended for radial lines because they assume that the data is monotonic in *x* or *y*, which is typically untrue of radial lines.
 
 ```js
 const line = d3.lineRadial().curve(d3.curveBasis);

@@ -180,7 +180,7 @@ If *order* is not specified, returns the current order accessor.
 stack.order() // d3.stackOrderNone
 ```
 
-The order accessor defaults to [stackOrderNone](#stackOrderNone); this uses the order given by the [key accessor](#stack_key). See [stack orders](#stack-orders) for the built-in orders.
+The order accessor defaults to [stackOrderNone](#stackOrderNone); this uses the order given by the [key accessor](#stack_keys). See [stack orders](#stack-orders) for the built-in orders.
 
 ## *stack*.offset(*offset*) {#stack_offset}
 

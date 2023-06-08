@@ -49,7 +49,7 @@ selection.interrupt().selectAll("*").interrupt();
 * `interrupt` - when the transition is interrupted.
 * `cancel` - when the transition is cancelled.
 
-See [The Life of a Transition](#the-life-of-a-transition) for more. Note that these are *not* native DOM events as implemented by [*selection*.on](../d3-selection/control-flow.md#selection_on) and [*selection*.dispatch](../d3-selection/control-flow.md#selection_dispatch), but transition events!
+See [The Life of a Transition](#the-life-of-a-transition) for more. Note that these are *not* native DOM events as implemented by [*selection*.on](../d3-selection/events.md#selection_on) and [*selection*.dispatch](../d3-selection/events.md#selection_dispatch), but transition events!
 
 The type may be optionally followed by a period (`.`) and a name; the optional name allows multiple callbacks to be registered to receive events of the same type, such as `start.foo` and `start.bar`. To specify multiple typenames, separate typenames with spaces, such as `interrupt end` or `start.foo start.bar`.
 
