@@ -19,7 +19,7 @@ const points = Array.from({length: 1000}, () => [random(), random()]);
   x: {domain: [-4, 3.5]},
   y: {domain: [-3, 3.5]},
   marks: [
-    Plot.delaunayMesh(points, {stroke: "#ddd", strokeOpacity: 1}),
+    Plot.delaunayMesh(points, {stroke: "currentColor", strokeOpacity: 0.3}),
     Plot.voronoiMesh(points, {stroke: "var(--vp-c-brand)", strokeOpacity: 1}),
     Plot.dot(points, {r: 2, fill: "currentColor"}),
   ]
