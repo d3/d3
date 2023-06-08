@@ -1,7 +1,7 @@
 import {readFileSync} from "fs";
 import json from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
-import {terser} from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import meta from "./package.json" assert {type: "json"};
 
 // Extract copyrights from the LICENSE.
@@ -33,6 +33,14 @@ const config = {
 
 export default [
   config,
+  {
+    ...config,
+    output: {
+      ...config.output,
+      file: `dist/${meta.name}.mjs`,
+      format: "esm"
+    }
+  },
   {
     ...config,
     output: {

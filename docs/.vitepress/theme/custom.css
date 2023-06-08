@@ -1,0 +1,69 @@
+:root {
+  --vp-c-brand: hsl(20 85% 57%);
+  --vp-c-brand-light: hsl(20 85% 70%);
+  --vp-c-brand-lighter: hsl(20 85% 80%);
+  --vp-c-brand-dark: hsl(20 85% 57%);
+  --vp-c-brand-darker: hsl(20 85% 40%);
+  --vp-font-family-base: -apple-system, BlinkMacSystemFont, "avenir next", avenir, helvetica, "helvetica neue", ubuntu, roboto, noto, "segoe ui", arial, sans-serif;
+}
+
+.vp-doc figcaption {
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+}
+
+.VPMenuGroup .title {
+  line-height: 28px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+}
+
+.vp-doc :not(pre) > code {
+  line-height: 1.5;
+}
+
+.label-input {
+  font-size: smaller;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 1em;
+}
+
+.label-input > label {
+  display: inline-flex;
+}
+
+.label-input > input,
+.label-input > select {
+  all: revert;
+  margin: 0 0.5em !important;
+  accent-color: var(--vp-c-brand);
+}
+
+.vp-doc td {
+  white-space: nowrap;
+}
+
+.vp-doc p:hover .header-anchor {
+  opacity: 1;
+}
+
+.vp-doc .plot {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.vp-doc .plot,
+.vp-doc .plot-ramp {
+  background: none;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
+
+.vp-doc sub {
+  line-height: 1;
+}

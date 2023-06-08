@@ -1,5 +1,7 @@
 *.sublime-workspace
 .DS_Store
 dist/
+docs/.vitepress/cache
+docs/.vitepress/dist
 node_modules
 npm-debug.log

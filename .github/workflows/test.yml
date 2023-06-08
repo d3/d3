@@ -1,0 +1,24 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+      - run: yarn --frozen-lockfile
+      - run: |
+          echo ::add-matcher::.github/eslint.json
+          yarn run eslint src test --format=compact
+      - run: yarn test
+      - run: yarn prepublishOnly
+      - run: yarn docs:build
