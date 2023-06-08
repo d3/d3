@@ -1,3 +1,3 @@
 # Why D3?
 
-TODO
+Coming soon.

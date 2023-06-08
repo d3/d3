@@ -34,17 +34,26 @@ hero:
 
 features:
   - title: Selections and transitions
-    details: Performant DOM manipulation; declarative animations.
+    details: Create, update, and animate the DOM based on data, without the overhead of a virtual DOM.
+    link: /d3-selection
+  - title: Scales and axes
+    details: Transform and encode abstract data as visual values using scales, and then document the encodings with axes.
+    link: /d3-scale
+  - title: Shapes
+    details: Arcs, areas, curves, lines, links, pies, stacks, symbols…
+    link: /d3-shape
   - title: Interactions
-    details: Panning, zooming, brushing, dragging, event handling.
-  - title: Scales
-    details: Encoding abstract data as visual values, and back again, and documenting it.
+    details: Panning, zooming, brushing, dragging, event handling…
+    link: /d3-brush
   - title: Layouts
-    details: Treemaps, trees, force-directed graphs, Voronoi, contours, point-cloud density estimation, chord diagrams, circle-packing…
+    details: Treemaps, trees, force-directed graphs, Voronoi, contours, density estimation, chord diagrams, circle-packing…
+    link: /d3-hierarchy
   - title: Geographic maps
-    details: Over TK spherical projections with arbitrary perspectives and clipping. GeoJSON.
+    details: More projections than you can shake a stick at, with arbitrary aspects, adaptive sampling, and flexible clipping.
+    link: /d3-geo
   - title: … and more!
-    details: Parsing, colors, dates, data, math, and many other things you might need.
+    details: Parsing, colors, dates, data, math, and whatever else you might need to visualize data.
+    link: /d3-array
   - title: Powering Observable Plot
     details: The D3 team also builds Observable Plot, a high-level API for quick charts built on top of D3.
     link: https://observablehq.com/plot
