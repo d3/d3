@@ -933,17 +933,9 @@ Map a continuous, quantitative domain to a continuous range.
 ### [Time scales](./d3-scale/time.md)
 
 * [d3.scaleTime](./d3-scale/time.md#scaleTime) - create a linear scale for time.
-* [*time*](./d3-scale/time.md#_time) - compute the range value corresponding to a given domain value.
-* [*time*.invert](./d3-scale/time.md#time_invert) - compute the domain value corresponding to a given range value.
-* [*time*.domain](./d3-scale/time.md#time_domain) - set the input domain.
-* [*time*.range](./d3-scale/time.md#time_range) - set the output range.
-* [*time*.rangeRound](./d3-scale/time.md#time_rangeRound) - set the output range and enable rounding.
-* [*time*.clamp](./d3-scale/time.md#time_clamp) - enable clamping to the domain or range.
-* [*time*.interpolate](./d3-scale/time.md#time_interpolate) - set the output interpolator.
 * [*time*.ticks](./d3-scale/time.md#time_ticks) - compute representative values from the domain.
 * [*time*.tickFormat](./d3-scale/time.md#time_tickFormat) - format ticks for human consumption.
 * [*time*.nice](./d3-scale/time.md#time_nice) - extend the domain to nice round times.
-* [*time*.copy](./d3-scale/time.md#time_copy) - create a copy of this scale.
 * [d3.scaleUtc](./d3-scale/time.md#scaleUtc) - create a linear scale for UTC.
 
 ### [Sequential scales](./d3-scale/sequential.md)
@@ -951,13 +943,9 @@ Map a continuous, quantitative domain to a continuous range.
 Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleSequential](./d3-scale/sequential.md#scaleSequential) - create a sequential scale.
-* [*sequential*](./d3-scale/sequential.md#_sequential) - compute the range value corresponding to an input value.
-* [*sequential*.domain](./d3-scale/sequential.md#sequential_domain) - set the input domain.
-* [*sequential*.clamp](./d3-scale/sequential.md#sequential_clamp) - enable clamping to the domain.
 * [*sequential*.interpolator](./d3-scale/sequential.md#sequential_interpolator) - set the scale’s output interpolator.
 * [*sequential*.range](./d3-scale/sequential.md#sequential_range) - set the output range.
 * [*sequential*.rangeRound](./d3-scale/sequential.md#sequential_rangeRound) - set the output range and enable rounding.
-* [*sequential*.copy](./d3-scale/sequential.md#sequential_copy) -  create a copy of this scale.
 * [d3.scaleSequentialLog](./d3-scale/sequential.md#scaleSequentialLog) - create a logarithmic sequential scale.
 * [d3.scaleSequentialPow](./d3-scale/sequential.md#scaleSequentialPow) - create a power sequential scale.
 * [d3.scaleSequentialSqrt](./d3-scale/sequential.md#scaleSequentialSqrt) - create a power sequential scale with exponent 0.5.
@@ -970,14 +958,9 @@ Map a continuous, quantitative domain to a continuous, fixed interpolator.
 Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleDiverging](./d3-scale/diverging.md#scaleDiverging) - create a diverging scale.
-* [*diverging*](./d3-scale/diverging.md#_diverging) - compute the range value corresponding to an input value.
-* [*diverging*.domain](./d3-scale/diverging.md#diverging_domain) - set the input domain.
-* [*diverging*.clamp](./d3-scale/diverging.md#diverging_clamp) - enable clamping to the domain or range.
 * [*diverging*.interpolator](./d3-scale/diverging.md#diverging_interpolator) - set the scale’s output interpolator.
 * [*diverging*.range](./d3-scale/diverging.md#diverging_range) - set the output range.
 * [*diverging*.rangeRound](./d3-scale/diverging.md#diverging_rangeRound) - set the output range and enable rounding.
-* [*diverging*.copy](./d3-scale/diverging.md#diverging_copy) -  create a copy of this scale.
-* [*diverging*.unknown](./d3-scale/diverging.md#diverging_unknown) - set the output value for unknown inputs.
 * [d3.scaleDivergingLog](./d3-scale/diverging.md#scaleDivergingLog) - create a diverging logarithmic scale.
 * [d3.scaleDivergingPow](./d3-scale/diverging.md#scaleDivergingPow) - create a diverging power scale.
 * [d3.scaleDivergingSqrt](./d3-scale/diverging.md#scaleDivergingSqrt) - create a diverging power scale with exponent 0.5.
@@ -992,9 +975,6 @@ Map a continuous, quantitative domain to a discrete range.
 * [*quantize*.invertExtent](./d3-scale/quantize.md#quantize_invertExtent) - compute the domain values corresponding to a given range value.
 * [*quantize*.domain](./d3-scale/quantize.md#quantize_domain) - set the input domain.
 * [*quantize*.range](./d3-scale/quantize.md#quantize_range) - set the output range.
-* [*quantize*.ticks](./d3-scale/quantize.md#quantize_ticks) - compute representative values from the domain.
-* [*quantize*.tickFormat](./d3-scale/quantize.md#quantize_tickFormat) - format ticks for human consumption.
-* [*quantize*.nice](./d3-scale/quantize.md#quantize_nice) - extend the domain to nice round numbers.
 * [*quantize*.thresholds](./d3-scale/quantize.md#quantize_thresholds) - return the array of computed thresholds within the domain.
 * [*quantize*.copy](./d3-scale/quantize.md#quantize_copy) - create a copy of this scale.
 
@@ -1071,7 +1051,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.select](./d3-selection/selecting.md#selection_select) - select a descendant element for each selected element.
 * [*selection*.selectAll](./d3-selection/selecting.md#selection_selectAll) - select multiple descendants for each selected element.
 * [*selection*.filter](./d3-selection/selecting.md#selection_filter) - filter elements based on data.
-* [*selection*.merge](./d3-selection/selecting.md#selection_merge) - merge this selection with another.
+* [*selection*.merge](./d3-selection/joining.md#selection_merge) - merge this selection with another.
 * [*selection*.selectChild](./d3-selection/selecting.md#selection_selectChild) - select a child element for each selected element.
 * [*selection*.selectChildren](./d3-selection/selecting.md#selection_selectChildren) - select the children elements for each selected element.
 * [*selection*.selection](./d3-selection/selecting.md#selection_selection) - return the selection.
@@ -1123,7 +1103,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.nodes](./d3-selection/control-flow.md#selection_nodes) - returns an array of all selected elements.
 * [*selection*.node](./d3-selection/control-flow.md#selection_node) - returns the first (non-null) element.
 * [*selection*.size](./d3-selection/control-flow.md#selection_size) - returns the count of elements.
-* [*selection*[Symbol.iterator]](./d3-selection/control-flow.md#selection_iterator) - iterate over the selection’s nodes.
+* [*selection*[Symbol.iterator]](./d3-selection/control-flow.md#selection-symbol-iterator) - iterate over the selection’s nodes.
 
 ### [Local variables](./d3-selection/locals.md)
 
@@ -1184,14 +1164,14 @@ A spline or polyline, as in a line chart.
 * [*line*.curve](./d3-shape/line.md#line_curve) - set the curve interpolator.
 * [*line*.context](./d3-shape/line.md#line_context) - set the rendering context.
 * [*line*.digits](./d3-shape/line.md#line_digits) - set the output precision.
-* [d3.lineRadial](./d3-shape/line.md#lineRadial) - create a new radial line generator.
-* [*lineRadial*](./d3-shape/line.md#_lineRadial) - generate a line for the given dataset.
-* [*lineRadial*.angle](./d3-shape/line.md#lineRadial_angle) - set the angle accessor.
-* [*lineRadial*.radius](./d3-shape/line.md#lineRadial_radius) - set the radius accessor.
-* [*lineRadial*.defined](./d3-shape/line.md#lineRadial_defined) - set the defined accessor.
-* [*lineRadial*.curve](./d3-shape/line.md#lineRadial_curve) - set the curve interpolator.
-* [*lineRadial*.context](./d3-shape/line.md#lineRadial_context) - set the rendering context.
-* [*lineRadial*.digits](./d3-shape/line.md#lineRadial_digits) - set the output precision.
+* [d3.lineRadial](./d3-shape/radial-line.md#lineRadial) - create a new radial line generator.
+* [*lineRadial*](./d3-shape/radial-line.md#_lineRadial) - generate a line for the given dataset.
+* [*lineRadial*.angle](./d3-shape/radial-line.md#lineRadial_angle) - set the angle accessor.
+* [*lineRadial*.radius](./d3-shape/radial-line.md#lineRadial_radius) - set the radius accessor.
+* [*lineRadial*.defined](./d3-shape/radial-line.md#lineRadial_defined) - set the defined accessor.
+* [*lineRadial*.curve](./d3-shape/radial-line.md#lineRadial_curve) - set the curve interpolator.
+* [*lineRadial*.context](./d3-shape/radial-line.md#lineRadial_context) - set the rendering context.
+* [*lineRadial*.digits](./d3-shape/radial-line.md#lineRadial_digits) - set the output precision.
 
 ### [Areas](./d3-shape/area.md)
 
@@ -1213,22 +1193,22 @@ An area, defined by a bounding topline and baseline, as in an area chart.
 * [*area*.lineY0](./d3-shape/area.md#area_lineY0) - derive a line for the top edge of an area.
 * [*area*.lineX1](./d3-shape/area.md#area_lineX1) - derive a line for the right edge of an area.
 * [*area*.lineY1](./d3-shape/area.md#area_lineY1) - derive a line for the bottom edge of an area.
-* [d3.areaRadial](./d3-shape/area.md#areaRadial) - create a new radial area generator.
-* [*areaRadial*](./d3-shape/area.md#_areaRadial) - generate an area for the given dataset.
-* [*areaRadial*.angle](./d3-shape/area.md#areaRadial_angle) - set the start and end angle accessors.
-* [*areaRadial*.startAngle](./d3-shape/area.md#areaRadial_startAngle) - set the start angle accessor.
-* [*areaRadial*.endAngle](./d3-shape/area.md#areaRadial_endAngle) - set the end angle accessor.
-* [*areaRadial*.radius](./d3-shape/area.md#areaRadial_radius) - set the inner and outer radius accessors.
-* [*areaRadial*.innerRadius](./d3-shape/area.md#areaRadial_innerRadius) - set the inner radius accessor.
-* [*areaRadial*.outerRadius](./d3-shape/area.md#areaRadial_outerRadius) - set the outer radius accessor.
-* [*areaRadial*.defined](./d3-shape/area.md#areaRadial_defined) - set the defined accessor.
-* [*areaRadial*.curve](./d3-shape/area.md#areaRadial_curve) - set the curve interpolator.
-* [*areaRadial*.context](./d3-shape/area.md#areaRadial_context) - set the rendering context.
-* [*areaRadial*.digits](./d3-shape/area.md#areaRadial_digits) - set the output precision.
-* [*areaRadial*.lineStartAngle](./d3-shape/area.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
-* [*areaRadial*.lineInnerRadius](./d3-shape/area.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
-* [*areaRadial*.lineEndAngle](./d3-shape/area.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
-* [*areaRadial*.lineOuterRadius](./d3-shape/area.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
+* [d3.areaRadial](./d3-shape/radial-area.md#areaRadial) - create a new radial area generator.
+* [*areaRadial*](./d3-shape/radial-area.md#_areaRadial) - generate an area for the given dataset.
+* [*areaRadial*.angle](./d3-shape/radial-area.md#areaRadial_angle) - set the start and end angle accessors.
+* [*areaRadial*.startAngle](./d3-shape/radial-area.md#areaRadial_startAngle) - set the start angle accessor.
+* [*areaRadial*.endAngle](./d3-shape/radial-area.md#areaRadial_endAngle) - set the end angle accessor.
+* [*areaRadial*.radius](./d3-shape/radial-area.md#areaRadial_radius) - set the inner and outer radius accessors.
+* [*areaRadial*.innerRadius](./d3-shape/radial-area.md#areaRadial_innerRadius) - set the inner radius accessor.
+* [*areaRadial*.outerRadius](./d3-shape/radial-area.md#areaRadial_outerRadius) - set the outer radius accessor.
+* [*areaRadial*.defined](./d3-shape/radial-area.md#areaRadial_defined) - set the defined accessor.
+* [*areaRadial*.curve](./d3-shape/radial-area.md#areaRadial_curve) - set the curve interpolator.
+* [*areaRadial*.context](./d3-shape/radial-area.md#areaRadial_context) - set the rendering context.
+* [*areaRadial*.digits](./d3-shape/radial-area.md#areaRadial_digits) - set the output precision.
+* [*areaRadial*.lineStartAngle](./d3-shape/radial-area.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
+* [*areaRadial*.lineInnerRadius](./d3-shape/radial-area.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
+* [*areaRadial*.lineEndAngle](./d3-shape/radial-area.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
+* [*areaRadial*.lineOuterRadius](./d3-shape/radial-area.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
 
 ### [Curves](./d3-shape/curve.md)
 
@@ -1277,9 +1257,9 @@ A smooth cubic Bézier curve from a source to a target.
 * [*link*.y](./d3-shape/link.md#link_y) - set the point *y*-accessor.
 * [*link*.context](./d3-shape/link.md#link_context) - set the rendering context.
 * [*link*.digits](./d3-shape/link.md#link_digits) - set the output precision.
-* [d3.linkRadial](./d3-shape/link.md#linkRadial) - create a new radial link generator.
-* [*linkRadial*.angle](./d3-shape/link.md#linkRadial_angle) - set the point *angle* accessor.
-* [*linkRadial*.radius](./d3-shape/link.md#linkRadial_radius) - set the point *radius* accessor.
+* [d3.linkRadial](./d3-shape/radial-link.md#linkRadial) - create a new radial link generator.
+* [*linkRadial*.angle](./d3-shape/radial-link.md#linkRadial_angle) - set the point *angle* accessor.
+* [*linkRadial*.radius](./d3-shape/radial-link.md#linkRadial_radius) - set the point *radius* accessor.
 
 ### [Symbols](./d3-shape/symbol.md)
 
@@ -1305,7 +1285,6 @@ A categorical shape encoding, as in a scatterplot.
 * [d3.symbolTriangle](./d3-shape/symbol.md#symbolTriangle) - an up-pointing triangle; for fill.
 * [d3.symbolTriangle2](./d3-shape/symbol.md#symbolTriangle2) - an up-pointing triangle; for stroke.
 * [d3.symbolWye](./d3-shape/symbol.md#symbolWye) - a Y shape; for fill.
-* [d3.symbolX](./d3-shape/symbol.md#symbolX) - an X shape; for stroke.
 * [d3.pointRadial](./d3-shape/symbol.md#pointRadial) - relative coordinates of a point given an angle and radius.
 * [*symbolType*.draw](./d3-shape/symbol.md#symbolType_draw) - draw this symbol to the given context.
 
