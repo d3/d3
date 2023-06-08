@@ -265,7 +265,7 @@ Compute contour polygons using marching squares.
 Compute the Voronoi diagram of a set of two-dimensional points.
 
 * [new Delaunay](./d3-delaunay/delaunay.md#Delaunay) - create a delaunay triangulation for an array of point coordinates.
-* [Delaunay.from](./d3-delaunay/delaunay.md#delaunay_from) - create a delaunay triangulation for an iterable of points.
+* [Delaunay.from](./d3-delaunay/delaunay.md#Delaunay_from) - create a delaunay triangulation for an iterable of points.
 * [*delaunay*.points](./d3-delaunay/delaunay.md#delaunay_points) - the coordinates of the points.
 * [*delaunay*.halfedges](./d3-delaunay/delaunay.md#delaunay_halfedges) - the delaunay halfedges.
 * [*delaunay*.hull](./d3-delaunay/delaunay.md#delaunay_hull) - the convex hull as point indices.
@@ -282,13 +282,13 @@ Compute the Voronoi diagram of a set of two-dimensional points.
 * [*delaunay*.trianglePolygon](./d3-delaunay/delaunay.md#delaunay_trianglePolygon) - return a triangle as a polygon.
 * [*delaunay*.update](./d3-delaunay/delaunay.md#delaunay_update) - update a delaunay triangulation in place.
 * [*delaunay*.voronoi](./d3-delaunay/voronoi.md#delaunay_voronoi) - compute the voronoi diagram associated with a delaunay triangulation.
-* [*voronoi*.delaunay](./d3-delaunay/voronoi.md#voronoi_delaunay) - the voronoi diagram’s source delaunay triangulation.
-* [*voronoi*.circumcenters](./d3-delaunay/voronoi.md#voronoi_circumcenters) - the triangles’ circumcenters.
-* [*voronoi*.vectors](./d3-delaunay/voronoi.md#voronoi_vectors) - directions for the outer (infinite) cells of the voronoi diagram.
-* [*voronoi*.xmin](./d3-delaunay/voronoi.md#voronoi_xmin) - set the *xmin* bound of the extent.
-* [*voronoi*.ymin](./d3-delaunay/voronoi.md#voronoi_ymin) - set the *ymin* bound of the extent.
-* [*voronoi*.xmax](./d3-delaunay/voronoi.md#voronoi_xmax) - set the *xmax* bound of the extent.
-* [*voronoi*.ymax](./d3-delaunay/voronoi.md#voronoi_ymax) - set the *ymax* bound of the extent.
+* [*voronoi*.delaunay](./d3-delaunay/voronoi.md#voronoi-delaunay) - the voronoi diagram’s source delaunay triangulation.
+* [*voronoi*.circumcenters](./d3-delaunay/voronoi.md#voronoi-circumcenters) - the triangles’ circumcenters.
+* [*voronoi*.vectors](./d3-delaunay/voronoi.md#voronoi-vectors) - directions for the outer (infinite) cells of the voronoi diagram.
+* [*voronoi*.xmin](./d3-delaunay/voronoi.md#voronoi_bounds) - set the *xmin* bound of the extent.
+* [*voronoi*.ymin](./d3-delaunay/voronoi.md#voronoi_bounds) - set the *ymin* bound of the extent.
+* [*voronoi*.xmax](./d3-delaunay/voronoi.md#voronoi_bounds) - set the *xmax* bound of the extent.
+* [*voronoi*.ymax](./d3-delaunay/voronoi.md#voronoi_bounds) - set the *ymax* bound of the extent.
 * [*voronoi*.contains](./d3-delaunay/voronoi.md#voronoi_contains) - test whether a point is inside a voronoi cell.
 * [*voronoi*.neighbors](./d3-delaunay/voronoi.md#voronoi_neighbors) - the neighbors of a point in the voronoi diagram.
 * [*voronoi*.render](./d3-delaunay/voronoi.md#voronoi_render) - render the mesh of voronoi cells.
@@ -362,7 +362,7 @@ Easing functions for smooth animation.
 * [d3.easePolyOut](./d3-ease.md#easePolyOut) - reverse polynomial easing.
 * [d3.easePoly](./d3-ease.md#easePoly) - an alias for easePolyInOut.
 * [d3.easePolyInOut](./d3-ease.md#easePolyInOut) - symmetric polynomial easing.
-* [*poly*.exponent](./d3-ease.md#poly_exponent) - specify the polynomial exponent.
+* [*poly*.exponent](./d3-ease.md#easePoly_exponent) - specify the polynomial exponent.
 * [d3.easeQuadIn](./d3-ease.md#easeQuadIn) - quadratic easing; squares time.
 * [d3.easeQuadOut](./d3-ease.md#easeQuadOut) - reverse quadratic easing.
 * [d3.easeQuad](./d3-ease.md#easeQuad) - an alias for easeQuadInOut.
@@ -387,13 +387,13 @@ Easing functions for smooth animation.
 * [d3.easeElastic](./d3-ease.md#easeElastic) - an alias for easeElasticOut.
 * [d3.easeElasticOut](./d3-ease.md#easeElasticOut) - reverse elastic easing.
 * [d3.easeElasticInOut](./d3-ease.md#easeElasticInOut) - symmetric elastic easing.
-* [*elastic*.amplitude](./d3-ease.md#elastic_amplitude) - specify the elastic amplitude.
-* [*elastic*.period](./d3-ease.md#elastic_period) - specify the elastic period.
+* [*elastic*.amplitude](./d3-ease.md#easeElastic_amplitude) - specify the elastic amplitude.
+* [*elastic*.period](./d3-ease.md#easeElastic_period) - specify the elastic period.
 * [d3.easeBackIn](./d3-ease.md#easeBackIn) - anticipatory easing, like a dancer bending his knees before jumping.
 * [d3.easeBackOut](./d3-ease.md#easeBackOut) - reverse anticipatory easing.
 * [d3.easeBack](./d3-ease.md#easeBack) - an alias for easeBackInOut.
 * [d3.easeBackInOut](./d3-ease.md#easeBackInOut) - symmetric anticipatory easing.
-* [*back*.overshoot](./d3-ease.md#back_overshoot) - specify the amount of overshoot.
+* [*back*.overshoot](./d3-ease.md#easeBack_overshoot) - specify the amount of overshoot.
 * [d3.easeBounceIn](./d3-ease.md#easeBounceIn) - bounce easing, like a rubber ball.
 * [d3.easeBounce](./d3-ease.md#easeBounce) - an alias for easeBounceOut.
 * [d3.easeBounceOut](./d3-ease.md#easeBounceOut) - reverse bounce easing.
@@ -486,132 +486,132 @@ Format numbers for human consumption.
 
 Geographic projections, shapes and math.
 
-### [Paths](./d3-geo.md#paths)
+### [Paths](./d3-geo/path.md)
 
-* [d3.geoPath](./d3-geo.md#geoPath) - create a new geographic path generator.
-* [*path*](./d3-geo.md#_path) - project and render the specified feature.
-* [*path*.area](./d3-geo.md#path_area) - compute the projected planar area of a given feature.
-* [*path*.bounds](./d3-geo.md#path_bounds) - compute the projected planar bounding box of a given feature.
-* [*path*.centroid](./d3-geo.md#path_centroid) - compute the projected planar centroid of a given feature.
-* [*path*.measure](./d3-geo.md#path_measure) - compute the projected planar length of a given feature.
-* [*path*.projection](./d3-geo.md#path_projection) - set the geographic projection.
-* [*path*.context](./d3-geo.md#path_context) - set the render context.
-* [*path*.digits](./d3-geo.md#path_digits) - set the output precision.
-* [*path*.pointRadius](./d3-geo.md#path_pointRadius) - set the radius to display point features.
+* [d3.geoPath](./d3-geo/path.md#geoPath) - create a new geographic path generator.
+* [*path*](./d3-geo/path.md#_path) - project and render the specified feature.
+* [*path*.area](./d3-geo/path.md#path_area) - compute the projected planar area of a given feature.
+* [*path*.bounds](./d3-geo/path.md#path_bounds) - compute the projected planar bounding box of a given feature.
+* [*path*.centroid](./d3-geo/path.md#path_centroid) - compute the projected planar centroid of a given feature.
+* [*path*.measure](./d3-geo/path.md#path_measure) - compute the projected planar length of a given feature.
+* [*path*.projection](./d3-geo/path.md#path_projection) - set the geographic projection.
+* [*path*.context](./d3-geo/path.md#path_context) - set the render context.
+* [*path*.digits](./d3-geo/path.md#path_digits) - set the output precision.
+* [*path*.pointRadius](./d3-geo/path.md#path_pointRadius) - set the radius to display point features.
 
-### [Projections](./d3-geo.md#projections)
+### [Projections](./d3-geo/projection.md)
 
-* [*projection*](./d3-geo.md#_projection) - project the specified point from the sphere to the plane.
-* [*projection*.invert](./d3-geo.md#projection_invert) - unproject the specified point from the plane to the sphere.
-* [*projection*.stream](./d3-geo.md#projection_stream) - wrap the specified stream to project geometry.
-* [*projection*.preclip](./d3-geo.md#projection_preclip) - set the projection’s spherical clipping function.
-* [*projection*.postclip](./d3-geo.md#projection_postclip) - set the projection’s cartesian clipping function.
-* [*projection*.clipAngle](./d3-geo.md#projection_clipAngle) - set the radius of the clip circle.
-* [*projection*.clipExtent](./d3-geo.md#projection_clipExtent) - set the viewport clip extent, in pixels.
-* [*projection*.scale](./d3-geo.md#projection_scale) - set the scale factor.
-* [*projection*.translate](./d3-geo.md#projection_translate) - set the translation offset.
-* [*projection*.center](./d3-geo.md#projection_center) - set the center point.
-* [*projection*.angle](./d3-geo.md#projection_angle) - set the post-projection rotation.
-* [*projection*.reflectX](./d3-geo.md#projection_reflectX) - reflect the *x*-dimension.
-* [*projection*.reflectY](./d3-geo.md#projection_reflectY) - reflect the *y*-dimension.
-* [*projection*.rotate](./d3-geo.md#projection_rotate) - set the three-axis spherical rotation angles.
-* [*projection*.precision](./d3-geo.md#projection_precision) - set the precision threshold for adaptive sampling.
-* [*projection*.fitExtent](./d3-geo.md#projection_fitExtent) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitSize](./d3-geo.md#projection_fitSize) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitWidth](./d3-geo.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitHeight](./d3-geo.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
-* [d3.geoAzimuthalEqualArea](./d3-geo.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
-* [d3.geoAzimuthalEqualAreaRaw](./d3-geo.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
-* [d3.geoAzimuthalEquidistant](./d3-geo.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
-* [d3.geoAzimuthalEquidistantRaw](./d3-geo.md#geoAzimuthalEquidistantRaw) - the raw azimuthal equidistant projection.
-* [d3.geoGnomonic](./d3-geo.md#geoGnomonic) - the gnomonic projection.
-* [d3.geoGnomonicRaw](./d3-geo.md#geoGnomonicRaw) - the raw gnomonic projection.
-* [d3.geoOrthographic](./d3-geo.md#geoOrthographic) - the azimuthal orthographic projection.
-* [d3.geoOrthographicRaw](./d3-geo.md#geoOrthographicRaw) - the raw azimuthal orthographic projection.
-* [d3.geoStereographic](./d3-geo.md#geoStereographic) - the azimuthal stereographic projection.
-* [d3.geoStereographicRaw](./d3-geo.md#geoStereographicRaw) - the raw azimuthal stereographic projection.
-* [d3.geoEqualEarth](./d3-geo.md#geoEqualEarth) - the Equal Earth projection.
-* [d3.geoEqualEarthRaw](./d3-geo.md#geoEqualEarthRaw) - the raw Equal Earth projection.
-* [d3.geoAlbersUsa](./d3-geo.md#geoAlbersUsa) - a composite Albers projection for the United States.
-* [*conic*.parallels](./d3-geo.md#conic_parallels) - set the two standard parallels.
-* [d3.geoAlbers](./d3-geo.md#geoAlbers) - the Albers equal-area conic projection.
-* [d3.geoConicConformal](./d3-geo.md#geoConicConformal) - the conic conformal projection.
-* [d3.geoConicConformalRaw](./d3-geo.md#geoConicConformalRaw) - the raw conic conformal projection.
-* [d3.geoConicEqualArea](./d3-geo.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
-* [d3.geoConicEqualAreaRaw](./d3-geo.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
-* [d3.geoConicEquidistant](./d3-geo.md#geoConicEquidistant) - the conic equidistant projection.
-* [d3.geoConicEquidistantRaw](./d3-geo.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
-* [d3.geoEquirectangular](./d3-geo.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
-* [d3.geoEquirectangularRaw](./d3-geo.md#geoEquirectangularRaw) - the raw equirectangular (plate carreé) projection.
-* [d3.geoMercator](./d3-geo.md#geoMercator) - the spherical Mercator projection.
-* [d3.geoMercatorRaw](./d3-geo.md#geoMercatorRaw) - the raw Mercator projection.
-* [d3.geoTransverseMercator](./d3-geo.md#geoTransverseMercator) - the transverse spherical Mercator projection.
-* [d3.geoTransverseMercatorRaw](./d3-geo.md#geoTransverseMercatorRaw) - the raw transverse spherical Mercator projection.
-* [d3.geoNaturalEarth1](./d3-geo.md#geoNaturalEarth1) - the Equal Earth projection, version 1.
-* [d3.geoNaturalEarth1Raw](./d3-geo.md#geoNaturalEarth1Raw) - the raw Equal Earth projection, version 1
+* [*projection*](./d3-geo/projection.md#_projection) - project the specified point from the sphere to the plane.
+* [*projection*.invert](./d3-geo/projection.md#projection_invert) - unproject the specified point from the plane to the sphere.
+* [*projection*.stream](./d3-geo/projection.md#projection_stream) - wrap the specified stream to project geometry.
+* [*projection*.preclip](./d3-geo/projection.md#projection_preclip) - set the projection’s spherical clipping function.
+* [*projection*.postclip](./d3-geo/projection.md#projection_postclip) - set the projection’s cartesian clipping function.
+* [*projection*.clipAngle](./d3-geo/projection.md#projection_clipAngle) - set the radius of the clip circle.
+* [*projection*.clipExtent](./d3-geo/projection.md#projection_clipExtent) - set the viewport clip extent, in pixels.
+* [*projection*.scale](./d3-geo/projection.md#projection_scale) - set the scale factor.
+* [*projection*.translate](./d3-geo/projection.md#projection_translate) - set the translation offset.
+* [*projection*.center](./d3-geo/projection.md#projection_center) - set the center point.
+* [*projection*.angle](./d3-geo/projection.md#projection_angle) - set the post-projection rotation.
+* [*projection*.reflectX](./d3-geo/projection.md#projection_reflectX) - reflect the *x*-dimension.
+* [*projection*.reflectY](./d3-geo/projection.md#projection_reflectY) - reflect the *y*-dimension.
+* [*projection*.rotate](./d3-geo/projection.md#projection_rotate) - set the three-axis spherical rotation angles.
+* [*projection*.precision](./d3-geo/projection.md#projection_precision) - set the precision threshold for adaptive sampling.
+* [*projection*.fitExtent](./d3-geo/projection.md#projection_fitExtent) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitSize](./d3-geo/projection.md#projection_fitSize) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitWidth](./d3-geo/projection.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitHeight](./d3-geo/projection.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
+* [d3.geoAzimuthalEqualArea](./d3-geo/azimuthal.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
+* [d3.geoAzimuthalEqualAreaRaw](./d3-geo/azimuthal.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
+* [d3.geoAzimuthalEquidistant](./d3-geo/azimuthal.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
+* [d3.geoAzimuthalEquidistantRaw](./d3-geo/azimuthal.md#geoAzimuthalEquidistantRaw) - the raw azimuthal equidistant projection.
+* [d3.geoGnomonic](./d3-geo/azimuthal.md#geoGnomonic) - the gnomonic projection.
+* [d3.geoGnomonicRaw](./d3-geo/azimuthal.md#geoGnomonicRaw) - the raw gnomonic projection.
+* [d3.geoOrthographic](./d3-geo/azimuthal.md#geoOrthographic) - the azimuthal orthographic projection.
+* [d3.geoOrthographicRaw](./d3-geo/azimuthal.md#geoOrthographicRaw) - the raw azimuthal orthographic projection.
+* [d3.geoStereographic](./d3-geo/azimuthal.md#geoStereographic) - the azimuthal stereographic projection.
+* [d3.geoStereographicRaw](./d3-geo/azimuthal.md#geoStereographicRaw) - the raw azimuthal stereographic projection.
+* [d3.geoEqualEarth](./d3-geo/cylindrical.md#geoEqualEarth) - the Equal Earth projection.
+* [d3.geoEqualEarthRaw](./d3-geo/cylindrical.md#geoEqualEarthRaw) - the raw Equal Earth projection.
+* [d3.geoAlbersUsa](./d3-geo/conic.md#geoAlbersUsa) - a composite Albers projection for the United States.
+* [*conic*.parallels](./d3-geo/conic.md#conic_parallels) - set the two standard parallels.
+* [d3.geoAlbers](./d3-geo/conic.md#geoAlbers) - the Albers equal-area conic projection.
+* [d3.geoConicConformal](./d3-geo/conic.md#geoConicConformal) - the conic conformal projection.
+* [d3.geoConicConformalRaw](./d3-geo/conic.md#geoConicConformalRaw) - the raw conic conformal projection.
+* [d3.geoConicEqualArea](./d3-geo/conic.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
+* [d3.geoConicEqualAreaRaw](./d3-geo/conic.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
+* [d3.geoConicEquidistant](./d3-geo/conic.md#geoConicEquidistant) - the conic equidistant projection.
+* [d3.geoConicEquidistantRaw](./d3-geo/conic.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
+* [d3.geoEquirectangular](./d3-geo/cylindrical.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
+* [d3.geoEquirectangularRaw](./d3-geo/cylindrical.md#geoEquirectangularRaw) - the raw equirectangular (plate carreé) projection.
+* [d3.geoMercator](./d3-geo/cylindrical.md#geoMercator) - the spherical Mercator projection.
+* [d3.geoMercatorRaw](./d3-geo/cylindrical.md#geoMercatorRaw) - the raw Mercator projection.
+* [d3.geoTransverseMercator](./d3-geo/cylindrical.md#geoTransverseMercator) - the transverse spherical Mercator projection.
+* [d3.geoTransverseMercatorRaw](./d3-geo/cylindrical.md#geoTransverseMercatorRaw) - the raw transverse spherical Mercator projection.
+* [d3.geoNaturalEarth1](./d3-geo/cylindrical.md#geoNaturalEarth1) - the Equal Earth projection, version 1.
+* [d3.geoNaturalEarth1Raw](./d3-geo/cylindrical.md#geoNaturalEarth1Raw) - the raw Equal Earth projection, version 1
 
-### [Raw projections](./d3-geo.md#raw-projections)
+### [Raw projections](./d3-geo/projection.md#raw-projections)
 
-* [*project*](./d3-geo.md#_project) - project the specified point from the sphere to the plane.
-* [*project*.invert](./d3-geo.md#project_invert) - unproject the specified point from the plane to the sphere.
-* [d3.geoProjection](./d3-geo.md#geoProjection) - create a custom projection.
-* [d3.geoProjectionMutator](./d3-geo.md#geoProjectionMutator) - create a custom configurable projection.
+* [*project*](./d3-geo/projection.md#_project) - project the specified point from the sphere to the plane.
+* [*project*.invert](./d3-geo/projection.md#project_invert) - unproject the specified point from the plane to the sphere.
+* [d3.geoProjection](./d3-geo/projection.md#geoProjection) - create a custom projection.
+* [d3.geoProjectionMutator](./d3-geo/projection.md#geoProjectionMutator) - create a custom configurable projection.
 
-### [Spherical Math](./d3-geo.md#spherical-math)
+### [Spherical Math](./d3-geo/math.md)
 
-* [d3.geoArea](./d3-geo.md#geoArea) - compute the spherical area of a given feature.
-* [d3.geoBounds](./d3-geo.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
-* [d3.geoCentroid](./d3-geo.md#geoCentroid) - compute the spherical centroid of a given feature.
-* [d3.geoDistance](./d3-geo.md#geoDistance) - compute the great-arc distance between two points.
-* [d3.geoLength](./d3-geo.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
-* [d3.geoInterpolate](./d3-geo.md#geoInterpolate) - interpolate between two points along a great arc.
-* [d3.geoContains](./d3-geo.md#geoContains) - test whether a point is inside a given feature.
-* [d3.geoRotation](./d3-geo.md#geoRotation) - create a rotation function for the specified angles.
-* [*rotation*](./d3-geo.md#_rotation) - rotate the given point around the sphere.
-* [*rotation*.invert](./d3-geo.md#rotation_invert) - unrotate the given point around the sphere.
+* [d3.geoArea](./d3-geo/math.md#geoArea) - compute the spherical area of a given feature.
+* [d3.geoBounds](./d3-geo/math.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
+* [d3.geoCentroid](./d3-geo/math.md#geoCentroid) - compute the spherical centroid of a given feature.
+* [d3.geoDistance](./d3-geo/math.md#geoDistance) - compute the great-arc distance between two points.
+* [d3.geoLength](./d3-geo/math.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
+* [d3.geoInterpolate](./d3-geo/math.md#geoInterpolate) - interpolate between two points along a great arc.
+* [d3.geoContains](./d3-geo/math.md#geoContains) - test whether a point is inside a given feature.
+* [d3.geoRotation](./d3-geo/math.md#geoRotation) - create a rotation function for the specified angles.
+* [*rotation*](./d3-geo/math.md#_rotation) - rotate the given point around the sphere.
+* [*rotation*.invert](./d3-geo/math.md#rotation_invert) - unrotate the given point around the sphere.
 
-### [Spherical Shapes](./d3-geo.md#spherical-shapes)
+### [Spherical Shapes](./d3-geo/shape.md)
 
-* [d3.geoCircle](./d3-geo.md#geoCircle) - create a circle generator.
-* [*circle*](./d3-geo.md#_circle) - generate a piecewise circle as a Polygon.
-* [*circle*.center](./d3-geo.md#circle_center) - specify the circle center in latitude and longitude.
-* [*circle*.radius](./d3-geo.md#circle_radius) - specify the angular radius in degrees.
-* [*circle*.precision](./d3-geo.md#circle_precision) - specify the precision of the piecewise circle.
-* [d3.geoGraticule](./d3-geo.md#geoGraticule) - create a graticule generator.
-* [*graticule*](./d3-geo.md#_graticule) - generate a MultiLineString of meridians and parallels.
-* [*graticule*.lines](./d3-geo.md#graticule_lines) - generate an array of LineStrings of meridians and parallels.
-* [*graticule*.outline](./d3-geo.md#graticule_outline) - generate a Polygon of the graticule’s extent.
-* [*graticule*.extent](./d3-geo.md#graticule_extent) - get or set the major & minor extents.
-* [*graticule*.extentMajor](./d3-geo.md#graticule_extentMajor) - get or set the major extent.
-* [*graticule*.extentMinor](./d3-geo.md#graticule_extentMinor) - get or set the minor extent.
-* [*graticule*.step](./d3-geo.md#graticule_step) - get or set the major & minor step intervals.
-* [*graticule*.stepMajor](./d3-geo.md#graticule_stepMajor) - get or set the major step intervals.
-* [*graticule*.stepMinor](./d3-geo.md#graticule_stepMinor) - get or set the minor step intervals.
-* [*graticule*.precision](./d3-geo.md#graticule_precision) - get or set the latitudinal precision.
-* [d3.geoGraticule10](./d3-geo.md#geoGraticule10) - generate the default 10° global graticule.
+* [d3.geoCircle](./d3-geo/shape.md#geoCircle) - create a circle generator.
+* [*circle*](./d3-geo/shape.md#_circle) - generate a piecewise circle as a Polygon.
+* [*circle*.center](./d3-geo/shape.md#circle_center) - specify the circle center in latitude and longitude.
+* [*circle*.radius](./d3-geo/shape.md#circle_radius) - specify the angular radius in degrees.
+* [*circle*.precision](./d3-geo/shape.md#circle_precision) - specify the precision of the piecewise circle.
+* [d3.geoGraticule](./d3-geo/shape.md#geoGraticule) - create a graticule generator.
+* [*graticule*](./d3-geo/shape.md#_graticule) - generate a MultiLineString of meridians and parallels.
+* [*graticule*.lines](./d3-geo/shape.md#graticule_lines) - generate an array of LineStrings of meridians and parallels.
+* [*graticule*.outline](./d3-geo/shape.md#graticule_outline) - generate a Polygon of the graticule’s extent.
+* [*graticule*.extent](./d3-geo/shape.md#graticule_extent) - get or set the major & minor extents.
+* [*graticule*.extentMajor](./d3-geo/shape.md#graticule_extentMajor) - get or set the major extent.
+* [*graticule*.extentMinor](./d3-geo/shape.md#graticule_extentMinor) - get or set the minor extent.
+* [*graticule*.step](./d3-geo/shape.md#graticule_step) - get or set the major & minor step intervals.
+* [*graticule*.stepMajor](./d3-geo/shape.md#graticule_stepMajor) - get or set the major step intervals.
+* [*graticule*.stepMinor](./d3-geo/shape.md#graticule_stepMinor) - get or set the minor step intervals.
+* [*graticule*.precision](./d3-geo/shape.md#graticule_precision) - get or set the latitudinal precision.
+* [d3.geoGraticule10](./d3-geo/shape.md#geoGraticule10) - generate the default 10° global graticule.
 
-### [Streams](./d3-geo.md#streams)
+### [Streams](./d3-geo/stream.md)
 
-* [d3.geoStream](./d3-geo.md#geoStream) - convert a GeoJSON object to a geometry stream.
-* [*stream*.point](./d3-geo.md#stream_point) - indicates a point with the specified coordinates.
-* [*stream*.lineStart](./d3-geo.md#stream_lineStart) - indicates the start of a line or ring.
-* [*stream*.lineEnd](./d3-geo.md#stream_lineEnd) - indicates the end of a line or ring.
-* [*stream*.polygonStart](./d3-geo.md#stream_polygonStart) - indicates the start of a polygon.
-* [*stream*.polygonEnd](./d3-geo.md#stream_polygonEnd) - indicates the end of a polygon.
-* [*stream*.sphere](./d3-geo.md#stream_sphere) - indicates the sphere.
+* [d3.geoStream](./d3-geo/stream.md#geoStream) - convert a GeoJSON object to a geometry stream.
+* [*stream*.point](./d3-geo/stream.md#stream_point) - indicates a point with the specified coordinates.
+* [*stream*.lineStart](./d3-geo/stream.md#stream_lineStart) - indicates the start of a line or ring.
+* [*stream*.lineEnd](./d3-geo/stream.md#stream_lineEnd) - indicates the end of a line or ring.
+* [*stream*.polygonStart](./d3-geo/stream.md#stream_polygonStart) - indicates the start of a polygon.
+* [*stream*.polygonEnd](./d3-geo/stream.md#stream_polygonEnd) - indicates the end of a polygon.
+* [*stream*.sphere](./d3-geo/stream.md#stream_sphere) - indicates the sphere.
 
-### [Transforms](./d3-geo.md#transforms)
+### [Transforms](./d3-geo/projection.md#geoTransform)
 
-* [d3.geoTransform](./d3-geo.md#geoTransform) - define a custom geometry transform.
-* [d3.geoIdentity](./d3-geo.md#geoIdentity) - scale, translate or clip planar geometry.
+* [d3.geoTransform](./d3-geo/projection.md#geoTransform) - define a custom geometry transform.
+* [d3.geoIdentity](./d3-geo/projection.md#geoIdentity) - scale, translate or clip planar geometry.
 
-### [Clipping](./d3-geo.md#clipping)
+### [Clipping](./d3-geo/projection.md#geoClipAntimeridian)
 
-* [*preclip*](./d3-geo.md#preclip) - pre-clipping in geographic coordinates.
-* [*postclip*](./d3-geo.md#postclip) - post-clipping in planar coordinates.
-* [d3.geoClipAntimeridian](./d3-geo.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
-* [d3.geoClipCircle](./d3-geo.md#geoClipCircle) - clips spherical geometries to a small circle.
-* [d3.geoClipRectangle](./d3-geo.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
+* [*preclip*](./d3-geo/projection.md#preclip) - pre-clipping in geographic coordinates.
+* [*postclip*](./d3-geo/projection.md#postclip) - post-clipping in planar coordinates.
+* [d3.geoClipAntimeridian](./d3-geo/projection.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
+* [d3.geoClipCircle](./d3-geo/projection.md#geoClipCircle) - clips spherical geometries to a small circle.
+* [d3.geoClipRectangle](./d3-geo/projection.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
 
 ## [d3-hierarchy](./d3-hierarchy.md)
 
@@ -711,7 +711,7 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateHclLong](./d3-interpolate/color.md#interpolateHclLong) - interpolate HCL colors, the long way.
 * [d3.interpolateCubehelix](./d3-interpolate/color.md#interpolateCubehelix) - interpolate Cubehelix colors.
 * [d3.interpolateCubehelixLong](./d3-interpolate/color.md#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
-* [*interpolateColor*.gamma](./d3-interpolate/color.md#interpolate_gamma) - apply gamma correction during interpolation.
+* [*interpolateColor*.gamma](./d3-interpolate/color.md#interpolateColor_gamma) - apply gamma correction during interpolation.
 * [d3.interpolateHue](./d3-interpolate/color.md#interpolateHue) - interpolate a hue angle.
 
 ### [Transform interpolation](./d3-interpolate/transform.md)
@@ -722,7 +722,7 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 ### [Zoom interpolation](./d3-interpolate/zoom.md)
 
 * [d3.interpolateZoom](./d3-interpolate/zoom.md#interpolateZoom) - zoom and pan between two views.
-* [*interpolateZoom*.rho](./d3-interpolate/zoom.md#interpolate_rho) - set the curvature *rho* of the zoom interpolator.
+* [*interpolateZoom*.rho](./d3-interpolate/zoom.md#interpolateZoom_rho) - set the curvature *rho* of the zoom interpolator.
 
 ## [d3-path](./d3-path.md)
 
@@ -737,8 +737,8 @@ Serialize Canvas path commands to SVG.
 * [*path*.arcTo](./d3-path.md#path_arcTo) - draw a circular arc segment.
 * [*path*.arc](./d3-path.md#path_arc) - draw a circular arc segment.
 * [*path*.rect](./d3-path.md#path_rect) - draw a rectangle.
-* [*path*.digits](./d3-path.md#path_digits) - set the output precision.
 * [*path*.toString](./d3-path.md#path_toString) - serialize to an SVG path data string.
+* [d3.pathRound](./d3-path.md#pathRound) - create a new path serializer with fixed output precision.
 
 ## [d3-polygon](./d3-polygon.md)
 
@@ -914,35 +914,16 @@ Map a continuous, quantitative domain to a continuous range.
 ### [Pow scales](./d3-scale/pow.md)
 
 * [d3.scalePow](./d3-scale/pow.md#scalePow) - create a quantitative power scale.
-* [*pow*](./d3-scale/pow.md#_pow) - compute the range value corresponding to a given domain value.
-* [*pow*.invert](./d3-scale/pow.md#pow_invert) - compute the domain value corresponding to a given range value.
-* [*pow*.exponent](./d3-scale/pow.md#pow_exponent) - set the power exponent.
-* [*pow*.domain](./d3-scale/pow.md#pow_domain) - set the input domain.
-* [*pow*.range](./d3-scale/pow.md#pow_range) - set the output range.
-* [*pow*.rangeRound](./d3-scale/pow.md#pow_rangeRound) - set the output range and enable rounding.
-* [*pow*.clamp](./d3-scale/pow.md#pow_clamp) - enable clamping to the domain or range.
-* [*pow*.interpolate](./d3-scale/pow.md#pow_interpolate) - set the output interpolator.
-* [*pow*.ticks](./d3-scale/pow.md#pow_ticks) - compute representative values from the domain.
-* [*pow*.tickFormat](./d3-scale/pow.md#pow_tickFormat) - format ticks for human consumption.
-* [*pow*.nice](./d3-scale/pow.md#pow_nice) - extend the domain to nice round numbers.
-* [*pow*.copy](./d3-scale/pow.md#pow_copy) - create a copy of this scale.
 * [d3.scaleSqrt](./d3-scale/pow.md#scaleSqrt) - create a quantitative power scale with exponent 0.5.
+* [*pow*.exponent](./d3-scale/pow.md#pow_exponent) - set the power exponent.
 
 ### [Log scales](./d3-scale/log.md)
 
 * [d3.scaleLog](./d3-scale/log.md#scaleLog) - create a quantitative logarithmic scale.
-* [*log*](./d3-scale/log.md#_log) - compute the range value corresponding to a given domain value.
-* [*log*.invert](./d3-scale/log.md#log_invert) - compute the domain value corresponding to a given range value.
 * [*log*.base](./d3-scale/log.md#log_base) - set the logarithm base.
-* [*log*.domain](./d3-scale/log.md#log_domain) - set the input domain.
-* [*log*.range](./d3-scale/log.md#log_range) - set the output range.
-* [*log*.rangeRound](./d3-scale/log.md#log_rangeRound) - set the output range and enable rounding.
-* [*log*.clamp](./d3-scale/log.md#log_clamp) - enable clamping to the domain or range.
-* [*log*.interpolate](./d3-scale/log.md#log_interpolate) - set the output interpolator.
 * [*log*.ticks](./d3-scale/log.md#log_ticks) - compute representative values from the domain.
 * [*log*.tickFormat](./d3-scale/log.md#log_tickFormat) - format ticks for human consumption.
 * [*log*.nice](./d3-scale/log.md#log_nice) - extend the domain to nice round numbers.
-* [*log*.copy](./d3-scale/log.md#log_copy) - create a copy of this scale.
 
 ### [Symlog scales](./d3-scale/symlog.md)
 
