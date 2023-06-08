@@ -261,10 +261,11 @@ TypeScript declarations are available via DefinitelyTyped.
 
 Most D3 modules (including d3-scale, d3-array, d3-interpolate, and d3-format) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization, such as this one-dimensional dot plot of numbers:
 
-```jsx
+:::code-group
+```jsx [DotPlot.jsx]
 import {scaleLinear, extent} from "d3";
 
-function DotPlot({data, width}) {
+export default function DotPlot({data, width}) {
   const x = scaleLinear(extent(data), [5, width - 5]).nice(true);
   return (
     <svg width={width} height="4">
@@ -275,32 +276,108 @@ function DotPlot({data, width}) {
   );
 }
 ```
+:::
 
 Some D3 modules (d3-selection, d3-transition, d3-axis, d3-brush, d3-zoom) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. For example, to add an axis to the example above:
 
-```jsx
-import {scaleLinear, extent, select, axisBottom} from "d3";
+:::code-group
+```jsx [DotPlot.jsx]
+import * as d3 from "d3";
 import {useRef, useEffect} from "react";
 
-function DotPlot({data, width}) {
-  const x = scaleLinear(extent(data), [5, width - 5]).nice(true);
+export default function DotPlot({data, width}) {
   const ref = useRef();
 
   useEffect(() => {
-    const g = select(ref.current).append("g")
-        .attr("transform", "translate(0,4)")
-        .call(axisBottom(x).ticks(5));
-    return () => g.remove();
-  }, [x]);
+    const x = d3.scaleLinear()
+        .domain(d3.extent(data)).nice(true)
+        .range([5, width - 5]);
 
-  return (
-    <svg width={width} height="20" ref={ref}>
-      {data.map((d, i) => (
-        <circle key={i} cx={x(d)} cy="2" r="2" />
-      ))}
-    </svg>
-  );
+    const svg = d3.select(ref.current).append("svg")
+        .attr("width", width)
+        .attr("height", 4);
+
+    svg.selectAll()
+      .data(data)
+      .join("circle")
+        .attr("cx", (d) => x(d))
+        .attr("cy", 2)
+        .attr("r", 2);
+
+    return () => svg.remove();
+  }, [data, width]);
+
+  return <div ref={ref} />;
 }
 ```
+:::
 
 For more guidance using D3 in React, see [Amelia Wattenberger’s post](https://2019.wattenberger.com/blog/react-and-d3).
+
+## D3 in Svelte
+
+As [with React](#d3-in-react), you can use Svelte exclusively for rendering if you like, and only use D3 modules that don’t manipulate the DOM. Here is a line plot of an array of numbers that uses [d3-shape](./d3-shape.md) and [d3-scale](./d3-scale-chromatic.md). (See [repl](https://svelte.dev/repl/ece91c0d8b204d5ea970dbbc0d6783aa?version=3.59.1).)
+
+:::code-group
+```svelte [LinePlot.svelte]
+<script>
+  import * as d3 from 'd3';
+
+  export let data;
+  export let width = 640;
+  export let height = 400;
+  export let marginTop = 20;
+  export let marginRight = 20;
+  export let marginBottom = 20;
+  export let marginLeft = 20;
+
+  $: x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
+  $: y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
+  $: line = d3.line((d, i) => x(i), y);
+</script>
+<svg width={width} height={height}>
+  <path fill="none" stroke="currentColor" stroke-width="1.5" d={line(data)} />
+  <g fill="white" stroke="currentColor" stroke-width="1.5">
+    {#each data as d, i}
+      <circle key={i} cx={x(i)} cy={y(d)} r="2.5" />
+    {/each}
+  </g>
+</svg>
+```
+:::
+
+Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-selection/joining.md) for efficient updates. Below, we use them to render dynamic axes as the data changes. (See [repl](https://svelte.dev/repl/ff3bf3c7ca454d53913c0c33af0c1250?version=3.59.1).)
+
+:::code-group
+```svelte [LinePlot.svelte]
+<script>
+  import * as d3 from 'd3';
+
+  export let data;
+  export let width = 640;
+  export let height = 400;
+  export let marginTop = 20;
+  export let marginRight = 20;
+  export let marginBottom = 30;
+  export let marginLeft = 40;
+
+  let gx;
+  let gy;
+
+  $: x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
+  $: y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
+  $: line = d3.line((d, i) => x(i), y);
+  $: d3.select(gy).call(d3.axisLeft(y));
+  $: d3.select(gx).call(d3.axisBottom(x));
+</script>
+<svg width={width} height={height}>
+  <g bind:this={gx} transform="translate(0,{height - marginBottom})" />
+  <g bind:this={gy} transform="translate({marginLeft},0)" />
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d={line(data)} />
+    {#each data as d, i}
+      <circle key={i} cx={x(i)} cy={y(d)} r="2.5" fill="white" />
+    {/each}
+  </g>
+</svg>
+:::
