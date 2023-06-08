@@ -85,6 +85,10 @@ onUnmounted(() => {
 
 <style>
 
+.VPHome {
+  overflow-x: hidden; /* iOS */
+}
+
 .VPHome .VPFeature {
   background-color: rgba(246, 246, 247, 0.5);
   -webkit-backdrop-filter: blur(10px); /* Safari */
