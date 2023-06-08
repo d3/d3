@@ -380,6 +380,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@observablehq/inspector@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@observablehq/inspector/-/inspector-5.0.0.tgz#7dec08d4fa20dfb79977ce62f7cc4a814b44e595"
+  integrity sha512-Vvg/TQdsZTUaeYbH0IKxYEz37FbRO6kdowoz2PrHLQif54NC1CjEihEjg+ZMSBn587GQxTFABu0CGkFZgtR1UQ==
+  dependencies:
+    isoformat "^0.2.0"
+
 "@observablehq/plot@^0.6.7":
   version "0.6.8"
   resolved "https://registry.yarnpkg.com/@observablehq/plot/-/plot-0.6.8.tgz#cb4a1f744a087e00119e68bb9a84d24c12294cde"
@@ -388,6 +395,23 @@
     d3 "^7.8.0"
     interval-tree-1d "^1.0.0"
     isoformat "^0.2.0"
+
+"@observablehq/runtime@^5.7.3":
+  version "5.7.3"
+  resolved "https://registry.yarnpkg.com/@observablehq/runtime/-/runtime-5.7.3.tgz#7fe7ecf5acfe6bfcca7390e4b6c108dce661dcda"
+  integrity sha512-9EDcW+zMBSgH8Sep9UdeMA3AQHWVYvoutJSlLyXO84gpzsCDbyE3WUmMZ9TxPI/sE9YBj6tFHPIOul5cZxDXwg==
+  dependencies:
+    "@observablehq/inspector" "^5.0.0"
+    "@observablehq/stdlib" "^5.0.0"
+
+"@observablehq/stdlib@^5.0.0":
+  version "5.7.3"
+  resolved "https://registry.yarnpkg.com/@observablehq/stdlib/-/stdlib-5.7.3.tgz#660878d262ae5aa068533e4615ceb2eca4a7ec4f"
+  integrity sha512-xL6KrjUfuWZsZtvnKWJ3Fg0SXyFwubQd1K/2SfU8QvuYxOyVPrGEdLekhaCjI7NiD5Wd9ZnDB7ZMLtI11n07ow==
+  dependencies:
+    d3-array "^3.2.0"
+    d3-dsv "^3.0.1"
+    d3-require "^1.3.0"
 
 "@rollup/plugin-json@6":
   version "6.0.0"
@@ -849,7 +873,7 @@ d3-delaunay@6:
     d3-dispatch "1 - 3"
     d3-selection "3"
 
-"d3-dsv@1 - 3", d3-dsv@3:
+"d3-dsv@1 - 3", d3-dsv@3, d3-dsv@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/d3-dsv/-/d3-dsv-3.0.1.tgz#c63af978f4d6a0d084a52a673922be2160789b73"
   integrity sha512-UG6OvdI5afDIFP9w4G0mNq50dSOsXHJaRE8arAS5o9ApWnIElp8GZw1Dun8vP8OyHOZ/QJUKUJwxiiCCnUwm+Q==
@@ -922,6 +946,11 @@ d3-random@3:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/d3-random/-/d3-random-3.0.1.tgz#d4926378d333d9c0bfd1e6fa0194d30aebaa20f4"
   integrity sha512-FXMe9GfxTxqd5D6jFsQ+DJ8BJS4E/fT5mqqdjovykEB2oFbTMDVdg1MGFxfQW+FBOGoB++k8swBrgwSHT1cUXQ==
+
+d3-require@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/d3-require/-/d3-require-1.3.0.tgz#2b97f5e2ebcb64ac0c63c11f30056aea1c74f0ec"
+  integrity sha512-XaNc2azaAwXhGjmCMtxlD+AowpMfLimVsAoTMpqrvb8CWoA4QqyV12mc4Ue6KSoDvfuS831tsumfhDYxGd4FGA==
 
 d3-scale-chromatic@3:
   version "3.0.0"

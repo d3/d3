@@ -68,6 +68,7 @@
   },
   "devDependencies": {
     "@observablehq/plot": "^0.6.7",
+    "@observablehq/runtime": "^5.7.3",
     "@rollup/plugin-json": "6",
     "@rollup/plugin-node-resolve": "15",
     "@rollup/plugin-terser": "^0.4.0",
@@ -80,8 +81,8 @@
     "test": "mocha 'test/**/*-test.js' && eslint src test",
     "prepublishOnly": "rm -rf dist && rollup -c",
     "postpublish": "git push && git push --tags",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "./prebuild.sh && vitepress build docs",
+    "docs:dev": "node --experimental-network-imports node_modules/vitepress/dist/node/cli.js dev docs",
+    "docs:build": "./prebuild.sh && node --experimental-network-imports node_modules/vitepress/dist/node/cli.js build docs",
     "docs:preview": "vitepress preview docs"
   },
   "engines": {
