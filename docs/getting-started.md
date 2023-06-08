@@ -259,55 +259,69 @@ TypeScript declarations are available via DefinitelyTyped.
 
 ## D3 in React
 
-Most D3 modules (including d3-scale, d3-array, d3-interpolate, and d3-format) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization, such as this one-dimensional dot plot of numbers:
+Most D3 modules (including d3-scale, d3-array, d3-interpolate, and d3-format) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization, such as the line plot below. (See [sandbox](https://codesandbox.io/s/d3-react-ssr-5g1bm0?file=/src/LinePlot.jsx).)
 
 :::code-group
-```jsx [DotPlot.jsx]
-import {scaleLinear, extent} from "d3";
+```jsx [LinePlot.jsx]
+import * as d3 from "d3";
 
-export default function DotPlot({data, width}) {
-  const x = scaleLinear(extent(data), [5, width - 5]).nice(true);
+export default function LinePlot({
+  data,
+  width = 640,
+  height = 400,
+  marginTop = 20,
+  marginRight = 20,
+  marginBottom = 20,
+  marginLeft = 20
+}) {
+  const x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
+  const y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
+  const line = d3.line((d, i) => x(i), y);
   return (
-    <svg width={width} height="4">
-      {data.map((d, i) => (
-        <circle key={i} cx={x(d)} cy="2" r="2" />
-      ))}
+    <svg width={width} height={height}>
+      <path fill="none" stroke="currentColor" stroke-width="1.5" d={line(data)} />
+      <g fill="white" stroke="currentColor" stroke-width="1.5">
+        {data.map((d, i) => (<circle key={i} cx={x(i)} cy={y(d)} r="2.5" />))}
+      </g>
     </svg>
   );
 }
 ```
 :::
 
-Some D3 modules (d3-selection, d3-transition, d3-axis, d3-brush, d3-zoom) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. For example, to add an axis to the example above:
+Some D3 modules (d3-selection, d3-transition, d3-axis, d3-brush, d3-zoom) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. (See [sandbox](https://codesandbox.io/s/d3-react-useeffect-5lp0x6?file=/src/LinePlot.jsx).)
 
 :::code-group
 ```jsx [DotPlot.jsx]
 import * as d3 from "d3";
 import {useRef, useEffect} from "react";
 
-export default function DotPlot({data, width}) {
-  const ref = useRef();
-
-  useEffect(() => {
-    const x = d3.scaleLinear()
-        .domain(d3.extent(data)).nice(true)
-        .range([5, width - 5]);
-
-    const svg = d3.select(ref.current).append("svg")
-        .attr("width", width)
-        .attr("height", 4);
-
-    svg.selectAll()
-      .data(data)
-      .join("circle")
-        .attr("cx", (d) => x(d))
-        .attr("cy", 2)
-        .attr("r", 2);
-
-    return () => svg.remove();
-  }, [data, width]);
-
-  return <div ref={ref} />;
+export default function LinePlot({
+  data,
+  width = 640,
+  height = 400,
+  marginTop = 20,
+  marginRight = 20,
+  marginBottom = 30,
+  marginLeft = 40
+}) {
+  const gx = useRef();
+  const gy = useRef();
+  const x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
+  const y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
+  const line = d3.line((d, i) => x(i), y);
+  useEffect(() => void d3.select(gx.current).call(d3.axisBottom(x)), [gx, x]);
+  useEffect(() => void d3.select(gy.current).call(d3.axisLeft(y)), [gy, y]);
+  return (
+    <svg width={width} height={height}>
+      <g ref={gx} transform={`translate(0,${height - marginBottom})`} />
+      <g ref={gy} transform={`translate(${marginLeft},0)`} />
+      <path fill="none" stroke="currentColor" stroke-width="1.5" d={line(data)} />
+      <g fill="white" stroke="currentColor" stroke-width="1.5">
+        {data.map((d, i) => (<circle key={i} cx={x(i)} cy={y(d)} r="2.5" />))}
+      </g>
+    </svg>
+  );
 }
 ```
 :::
