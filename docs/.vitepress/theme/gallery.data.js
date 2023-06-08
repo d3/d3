@@ -15,6 +15,6 @@ export default {
       }
     }
     await Promise.all(values);
-    return d3.shuffler(d3.randomLcg(Math.floor(Date.now() / 864e5)))(data).slice(0, 60);
+    return data;
   }
 };
