@@ -6,7 +6,7 @@ Learning D3? Love data visualization? Don’t go it alone! Join our community to
 
 If you like D3, please star ⭐️ our [GitHub repo](https://github.com/d3/d3) to show appreciation and to see updates on your GitHub dashboard.
 
-For email updates, sign up for the [Observable Plot Twist](https://observablehq.com/@observablehq/plot-twist-newsletter-signup) newsletter. (See our [back issues](https://observablehq.com/collection/@observablehq/newsletters/2) and [blog](https://observablehq.com/blog), too.) This monthly newsletter will let you know about new features in D3 and Observable Plot, inspiring work by the community, upcoming workshops and community events, and more.
+For email updates, sign up for the [Observable Plot Twist](https://observablehq.com/@observablehq/plot-twist-newsletter-signup) newsletter. (See our [back issues](https://observablehq.com/collection/@observablehq/newsletters/2) and [blog](https://observablehq.com/blog), too.) This monthly newsletter will let you know about new features in D3 and [Observable Plot](https://observablehq.com/plot), inspiring work by the community, upcoming workshops and community events, and more.
 
 And of course, follow us on [Observable](https://observablehq.com/@observablehq?tab=profile), [Mastodon](https://vis.social/@observablehq), [Twitter](https://twitter.com/observablehq), and [LinkedIn](https://www.linkedin.com/company/observable)!
 
