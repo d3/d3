@@ -60,8 +60,8 @@ onUnmounted(() => {
   grid-gap: 4px;
   position: relative;
   background: #e3e3e5;
-  border-top: solid 1px currentColor;
-  border-bottom: solid 1px currentColor;
+  border: solid 1px currentColor;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   will-change: transform;
   transition: transform 150ms ease-out;
 }
@@ -75,29 +75,10 @@ onUnmounted(() => {
 
 .examples a:hover {
   border: solid 1px black;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   position: relative;
-  transform: scale(1.1);
+  transform: perspective(75em) translateZ(100px);
   z-index: 2;
-}
-
-.examples:after,
-.examples:before {
-  content: "";
-  width: 100%;
-  position: absolute;
-  height: 16px;
-  z-index: 1;
-}
-
-.examples:before {
-  bottom: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
-}
-
-.examples:after {
-  top: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent);
 }
 
 </style>
