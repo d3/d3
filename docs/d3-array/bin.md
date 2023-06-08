@@ -55,7 +55,7 @@ bin.domain() // [0, 1]
 
 If *domain* is not specified, returns the current domain accessor, which defaults to [extent](./summarize.md#extent). The bin domain is defined as an array [*min*, *max*], where *min* is the minimum observable value and *max* is the maximum observable value; both values are inclusive. Any value outside of this domain will be ignored when the bins are [generated](#_bin).
 
-For example, to use a bin generator with a [linear scale](../d3-scale.md#linear-scales) `x`, you might say:
+For example, to use a bin generator with a [linear scale](../d3-scale/linear.md) `x`, you might say:
 
 ```js
 const bin = d3.bin().domain(x.domain()).thresholds(x.ticks(20));
@@ -77,7 +77,7 @@ Note that the domain accessor is invoked on the materialized array of [values](#
 const bin = d3.bin().thresholds([0, 0.5, 1]);
 ```
 
-If *thresholds* is specified, sets the [threshold generator](#bin-thresholds) to the specified function or array and returns this bin generator.
+If *thresholds* is specified, sets the [threshold generator](#bin_thresholds) to the specified function or array and returns this bin generator.
 
 ```js
 bin.thresholds() // () => [0, 0.5, 1]
@@ -91,7 +91,7 @@ Any threshold values outside the [domain](#bin_domain) are ignored. The first *b
 const bin = d3.bin().thresholds(20);
 ```
 
-If a *count* is specified instead of an array of *thresholds*, then the [domain](#bin_domain) will be uniformly divided into approximately *count* bins; see [ticks](#ticks).
+If a *count* is specified instead of an array of *thresholds*, then the [domain](#bin_domain) will be uniformly divided into approximately *count* bins; see [ticks](./ticks.md).
 
 ```js
 const bin = d3.bin().thresholds((values) => [d3.median(values)]);
