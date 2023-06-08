@@ -53,7 +53,7 @@ Each object in the returned array has the following properties:
 * `endAngle` - the [end angle](#pie_endAngle) of the arc.
 * `padAngle` - the [pad angle](#pie_padAngle) of the arc.
 
-This representation is designed to work with the arc generator’s default [startAngle](#pie_startAngle), [endAngle](#pie_endAngle) and [padAngle](#pie_padAngle) accessors. Angles are in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise.
+This representation is designed to work with the arc generator’s default [startAngle](./arc.md#arc_startAngle), [endAngle](./arc.md#arc_endAngle) and [padAngle](./arc.md#arc_padAngle) accessors. Angles are in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise.
 
 The length of the returned array is the same as *data*, and each element *i* in the returned array corresponds to the element *i* in the input data. The returned array of arcs is in the same order as the data, even when the pie chart is [sorted](#pie_sortValues).
 
