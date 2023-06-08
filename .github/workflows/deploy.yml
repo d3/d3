@@ -16,6 +16,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          repository: d3/d3.github.com
+          path: build/d3.github.com
       - uses: actions/setup-node@v3
         with:
           node-version: 16
