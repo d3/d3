@@ -13,8 +13,8 @@ const n = 60; // maximum number of examples to show
 const slice = d3.shuffler(d3.randomLcg(d3.utcDay()))(data.slice()).slice(0, n);
 const sample = shallowRef([])
 const container = ref();
-const x = ref(0);
-const width = ref(640);
+const x = ref(720);
+const width = ref(1440);
 
 function onpointermove(event) {
   x.value = event.clientX;
