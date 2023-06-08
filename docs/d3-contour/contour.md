@@ -55,7 +55,7 @@ function goldsteinPrice(x, y) {
 }
 ```
 
-The returned geometry objects are typically passed to [geoPath](../d3-geo.md#geoPath) to display, using null or [geoIdentity](../d3-geo.md#geoIdentity) as the associated projection.
+The returned geometry objects are typically passed to [geoPath](../d3-geo/path.md) to display, using null or [geoIdentity](../d3-geo/projection.md#geoIdentity) as the associated projection.
 
 ## *contours*.contour(*values*, *threshold*) {#contours_contour}
 
@@ -65,7 +65,7 @@ The input *values* must be an array of length <i>n</i>×<i>m</i> where [<i>n</i>
 
 ## *contours*.size(*size*) {#contours_size}
 
-[Source](https://github.com/d3/d3-contour/blob/main/src/contours.js) · If *size* is specified, sets the expected size of the input *values* grid to the [contour generator](#_contour) and returns the contour generator. The *size* is specified as an array \[<i>n</i>, <i>m</i>\] where <i>n</i> is the number of columns in the grid and <i>m</i> is the number of rows; *n* and *m* must be positive integers. If *size* is not specified, returns the current size which defaults to [1, 1].
+[Source](https://github.com/d3/d3-contour/blob/main/src/contours.js) · If *size* is specified, sets the expected size of the input *values* grid to the [contour generator](#_contours) and returns the contour generator. The *size* is specified as an array \[<i>n</i>, <i>m</i>\] where <i>n</i> is the number of columns in the grid and <i>m</i> is the number of rows; *n* and *m* must be positive integers. If *size* is not specified, returns the current size which defaults to [1, 1].
 
 ## *contours*.smooth(*smooth*) {#contours_smooth}
 

@@ -12,7 +12,7 @@ const ribbon = d3.ribbon();
 
 ## *ribbon*(...*arguments*) {#_ribbon}
 
-[Source](https://github.com/d3/d3-chord/blob/main/src/ribbon.js) · Generates a ribbon for the given *arguments*. The *arguments* are arbitrary; they are propagated to the ribbon generator’s accessor functions along with the `this` object. For example, with the default settings, a [chord object](#_chord) expected:
+[Source](https://github.com/d3/d3-chord/blob/main/src/ribbon.js) · Generates a ribbon for the given *arguments*. The *arguments* are arbitrary; they are propagated to the ribbon generator’s accessor functions along with the `this` object. For example, with the default settings, a [chord object](./chord.md) is expected:
 
 ```js
 ribbon({
