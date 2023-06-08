@@ -1,10 +1,10 @@
 # Streams
 
-Rather than materializing intermediate representations, streams transform geometry through function calls to minimize overhead. Streams must implement several methods to receive input geometry. Streams are inherently stateful; the meaning of a [point](#point) depends on whether the point is inside of a [line](#lineStart), and likewise a line is distinguished from a ring by a [polygon](#polygonStart). Despite the name “stream”, these method calls are currently synchronous.
+Rather than materializing intermediate representations, streams transform geometry through function calls to minimize overhead. Streams must implement several methods to receive input geometry. Streams are inherently stateful; the meaning of a [point](#stream_point) depends on whether the point is inside of a [line](#stream_lineStart), and likewise a line is distinguished from a ring by a [polygon](#stream_polygonStart). Despite the name “stream”, these method calls are currently synchronous.
 
 ## geoStream(*object*, *stream*) {#geoStream}
 
-[Source](https://github.com/d3/d3-geo/blob/main/src/stream.js) · Streams the specified [GeoJSON](http://geojson.org) *object* to the specified [projection *stream*](#projection-streams). While both features and geometry objects are supported as input, the stream interface only describes the geometry, and thus additional feature properties are not visible to streams.
+[Source](https://github.com/d3/d3-geo/blob/main/src/stream.js) · Streams the specified [GeoJSON](http://geojson.org) *object* to the specified [projection *stream*](#streams). While both features and geometry objects are supported as input, the stream interface only describes the geometry, and thus additional feature properties are not visible to streams.
 
 ## *stream*.point(*x*, *y*, *z*) {#stream_point}
 

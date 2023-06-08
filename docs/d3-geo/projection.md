@@ -105,7 +105,7 @@ projection.fitSize([width, height], object);
 
 Raw projections are point transformation functions that are used to implement custom projections; they typically passed to [geoProjection](#geoProjection) or [geoProjectionMutator](#geoProjectionMutator). They are exposed here to facilitate the derivation of related projections. Raw projections take spherical coordinates [*lambda*, *phi*] in radians (not degrees!) and return a point [*x*, *y*], typically in the unit square centered around the origin.
 
-### *project*(*lambda*, *phi*)
+### *project*(*lambda*, *phi*) {#_project}
 
 Projects the specified point [<i>lambda</i>, <i>phi</i>] in radians, returning a new point [*x*, *y*] in unitless coordinates.
 
