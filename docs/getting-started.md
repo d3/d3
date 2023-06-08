@@ -259,7 +259,7 @@ TypeScript declarations are available via DefinitelyTyped.
 
 ## D3 in React
 
-Most D3 modules (including d3-scale, d3-array, d3-interpolate, and d3-format) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization, such as the line plot below. (See [sandbox](https://codesandbox.io/s/d3-react-ssr-5g1bm0?file=/src/LinePlot.jsx).)
+Most D3 modules (including [d3-scale](./d3-scale.md), [d3-array](./d3-array.md), [d3-interpolate](./d3-interpolate.md), and [d3-format](./d3-format.md)) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization, such as the line plot below. (See [sandbox](https://codesandbox.io/s/d3-react-ssr-5g1bm0?file=/src/LinePlot.jsx).)
 
 :::code-group
 ```jsx [LinePlot.jsx]
@@ -289,10 +289,10 @@ export default function LinePlot({
 ```
 :::
 
-Some D3 modules (d3-selection, d3-transition, d3-axis, d3-brush, d3-zoom) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. (See [sandbox](https://codesandbox.io/s/d3-react-useeffect-5lp0x6?file=/src/LinePlot.jsx).)
+Some D3 modules (including [d3-selection](./d3-selection.md), [d3-transition](./d3-transition.md), and [d3-axis](./d3-axis.md)) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. (See [sandbox](https://codesandbox.io/s/d3-react-useeffect-5lp0x6?file=/src/LinePlot.jsx).)
 
 :::code-group
-```jsx [DotPlot.jsx]
+```jsx [LinePlot.jsx]
 import * as d3 from "d3";
 import {useRef, useEffect} from "react";
 
@@ -387,10 +387,10 @@ Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-sele
 <svg width={width} height={height}>
   <g bind:this={gx} transform="translate(0,{height - marginBottom})" />
   <g bind:this={gy} transform="translate({marginLeft},0)" />
-  <g fill="none" stroke="currentColor" stroke-width="1.5">
-    <path d={line(data)} />
+  <path fill="none" stroke="currentColor" stroke-width="1.5" d={line(data)} />
+  <g fill="white" stroke="currentColor" stroke-width="1.5">
     {#each data as d, i}
-      <circle key={i} cx={x(i)} cy={y(d)} r="2.5" fill="white" />
+      <circle key={i} cx={x(i)} cy={y(d)} r="2.5" />
     {/each}
   </g>
 </svg>
