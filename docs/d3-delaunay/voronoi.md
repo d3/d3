@@ -40,7 +40,7 @@ If *bounds* is not specified, it defaults to [0, 0, 960, 500]. The Voronoi diagr
 
 ### *voronoi*.delaunay
 
-The Voronoi diagram’s associated [Delaunay triangulation](#delaunay).
+The Voronoi diagram’s associated [Delaunay triangulation](./delaunay.md).
 
 ### *voronoi*.circumcenters
 
