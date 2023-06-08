@@ -286,10 +286,10 @@ function DotPlot({data, width}) {
   const x = scaleLinear(extent(data), [5, width - 5]).nice(true);
   const ref = useRef();
   useEffect(() => {
-    if (!ref.current) return;
-    select(ref.current).append("g")
+    const g = select(ref.current).append("g")
         .attr("transform", "translate(0, 4)")
         .call(axisBottom(x).ticks(5));
+    return () => g.remove();
   }, [x]);
   return (
     <svg width={width} height="20" ref={ref}>
