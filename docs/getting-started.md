@@ -256,3 +256,51 @@ import {mean, median} from "d3-array";
 ```
 
 TypeScript declarations are available via DefinitelyTyped.
+
+## D3 in React
+
+Most D3 modules (including d3-scale, d3-array, d3-interpolate, and d3-format) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization, such as this one-dimensional dot plot of numbers:
+
+```jsx
+import {scaleLinear, extent} from "d3";
+
+function DotPlot({data, width}) {
+  const x = scaleLinear(extent(data), [5, width - 5]).nice(true);
+  return (
+    <svg width={width} height="4">
+      {data.map((d, i) => (
+        <circle key={i} cx={x(d)} cy="2" r="2" />
+      ))}
+    </svg>
+  );
+}
+```
+
+Some D3 modules (d3-selection, d3-transition, d3-axis, d3-brush, d3-zoom) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. For example, to add an axis to the example above:
+
+```jsx
+import {scaleLinear, extent, select, axisBottom} from "d3";
+import {useRef, useEffect} from "react";
+
+function DotPlot({data, width}) {
+  const x = scaleLinear(extent(data), [5, width - 5]).nice(true);
+  const ref = useRef();
+
+  useEffect(() => {
+    const g = select(ref.current).append("g")
+        .attr("transform", "translate(0,4)")
+        .call(axisBottom(x).ticks(5));
+    return () => g.remove();
+  }, [x]);
+
+  return (
+    <svg width={width} height="20" ref={ref}>
+      {data.map((d, i) => (
+        <circle key={i} cx={x(d)} cy="2" r="2" />
+      ))}
+    </svg>
+  );
+}
+```
+
+For more guidance using D3 in React, see [Amelia Wattenberger’s post](https://2019.wattenberger.com/blog/react-and-d3).
