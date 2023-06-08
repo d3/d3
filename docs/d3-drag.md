@@ -131,7 +131,7 @@ function subject(event) {
 ```
 
 :::tip
-If necessary, the above can be accelerated using [*quadtree*.find](./d3-quadtree.md#quadtree_find), [*simulation*.find](./d3-force.md#simulation_find) or [*delaunay*.find](./d3-delaunay/delaunay.md#delaunay_find).
+If necessary, the above can be accelerated using [*quadtree*.find](./d3-quadtree.md#quadtree_find), [*simulation*.find](./d3-force/simulation.md#simulation_find) or [*delaunay*.find](./d3-delaunay/delaunay.md#delaunay_find).
 :::
 
 The returned subject should be an object that exposes `x` and `y` properties, so that the relative position of the subject and the pointer can be preserved during the drag gesture. If the subject is null or undefined, no drag gesture is started for this pointer; however, other starting touches may yet start drag gestures. See also [*drag*.filter](#drag_filter).
