@@ -1,10 +1,10 @@
 # Time scales
 
-Time scales are a variant of [linear scales](./linear.md) that have a temporal domain: domain values are coerced to [dates](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date) rather than numbers, and [invert](#time_invert) likewise returns a date. Time scales implement [ticks](#time_ticks) based on [calendar intervals](../d3-time.md), taking the pain out of generating axes for temporal domains.
+Time scales are a variant of [linear scales](./linear.md) that have a temporal domain: domain values are coerced to [dates](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date) rather than numbers, and invert likewise returns a date. Time scales implement [ticks](#time_ticks) based on [calendar intervals](../d3-time.md), taking the pain out of generating axes for temporal domains.
 
 ## scaleTime(*domain*, *range*) {#scaleTime}
 
-[Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Constructs a new time scale with the specified [domain](#time_domain) and [range](#time_range), the [default](../d3-interpolate/value.md#interpolate) [interpolator](#time_interpolate) and [clamping](#time_clamp) disabled. For example, to create a position encoding:
+[Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Constructs a new time scale with the specified [domain](./linear.md#linear_domain) and [range](./linear.md#linear_range), the [default](../d3-interpolate/value.md#interpolate) [interpolator](./linear.md#linear_interpolate) and [clamping](./linear.md#_clamp) disabled. For example, to create a position encoding:
 
 ```js
 const x = d3.scaleUtc([new Date(2000, 0, 1), new Date(2000, 0, 2)], [0, 960]);
