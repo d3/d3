@@ -69,12 +69,12 @@ onUnmounted(() => {
 .examples a {
   will-change: transform;
   transition: transform 250ms ease;
-  border: solid transparent;
+  border: solid 1px transparent;
   margin: -2px;
 }
 
 .examples a:hover {
-  border: solid black;
+  border: solid 1px black;
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.4);
   position: relative;
   transform: scale(1.1);
