@@ -5,6 +5,7 @@ import {defineConfig} from "vitepress";
 export default defineConfig({
   title: "D3 by Observable",
   description: "The JavaScript library for bespoke data visualization",
+  base: "/d3/", // temporary
   cleanUrls: true,
   vite: {
     resolve: {
