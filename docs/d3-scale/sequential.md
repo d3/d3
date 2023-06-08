@@ -4,7 +4,7 @@ Sequential scales are similar to [linear scales](./linear.md) in that they map a
 
 ## scaleSequential(*domain*, *interpolator*) {#scaleSequential}
 
-[Examples](https://observablehq.com/@d3/sequential-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js) · Constructs a new sequential scale with the specified [*domain*](#sequential_domain) and [*interpolator*](#sequential_interpolator) function or array.
+[Examples](https://observablehq.com/@d3/sequential-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/sequential.js) · Constructs a new sequential scale with the specified *domain* and [*interpolator*](#sequential_interpolator) function or array.
 
 ```js
 const color = d3.scaleSequential([0, 100], d3.interpolateBlues);
@@ -22,7 +22,7 @@ If *interpolator* is not specified, it defaults to the identity function.
 const identity = d3.scaleSequential();
 ```
 
-When the scale is [applied](#_sequential), the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the minimum value and 1 represents the maximum value. For example, to implement the ill-advised angry rainbow scale (please use [interpolateRainbow](../d3-scale-chromatic/cyclical.md#interpolateRainbow) instead):
+When the scale is applied, the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the minimum value and 1 represents the maximum value. For example, to implement the ill-advised angry rainbow scale (please use [interpolateRainbow](../d3-scale-chromatic/cyclical.md#interpolateRainbow) instead):
 
 ```js
 const rainbow = d3.scaleSequential((t) => d3.hsl(t * 360, 1, 0.5) + "");

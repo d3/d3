@@ -161,7 +161,7 @@ If *padding* is not specified, returns the current outer padding which defaults 
 x.padding() // {{padding}}
 ```
 
-The outer padding specifies the amount of blank space, in terms of multiples of the [step](#band_step), to reserve before the first point and after the last point. Equivalent to [*band*.paddingOuter](#band_paddingOuter).
+The outer padding specifies the amount of blank space, in terms of multiples of the [step](./band.md#band_step), to reserve before the first point and after the last point. Equivalent to [*band*.paddingOuter](./band.md#band_paddingOuter).
 
 ## *point*.align(*align*) {#point_align}
 
