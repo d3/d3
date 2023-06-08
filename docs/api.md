@@ -46,7 +46,7 @@ Quickly find a value in a sorted array.
 * [bisectLeft](./d3-array/bisect.md#bisectLeft) - binary search for a value in a sorted array.
 * [bisectCenter](./d3-array/bisect.md#bisectCenter) - binary search for a value in a sorted array.
 
-### [Blur](./d3-array.md/blur.md)
+### [Blur](./d3-array/blur.md)
 
 Blur quantitative values in one or two dimensions.
 

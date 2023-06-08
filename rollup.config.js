@@ -37,6 +37,14 @@ export default [
     ...config,
     output: {
       ...config.output,
+      file: `dist/${meta.name}.mjs`,
+      format: "esm"
+    }
+  },
+  {
+    ...config,
+    output: {
+      ...config.output,
       file: `dist/${meta.name}.min.js`
     },
     plugins: [

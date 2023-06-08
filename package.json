@@ -22,7 +22,8 @@
   },
   "type": "module",
   "files": [
-    "dist/**/*.js",
+    "dist/d3.js",
+    "dist/d3.min.js",
     "src/**/*.js"
   ],
   "module": "src/index.js",

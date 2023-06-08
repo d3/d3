@@ -9,7 +9,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        d3: path.resolve("./src/index.js")
+        d3: path.resolve("./dist/d3.mjs")
       }
     }
   },

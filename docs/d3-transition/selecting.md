@@ -37,7 +37,7 @@ This function can also be used to test for transitions (`instanceof d3.transitio
 
 [Source](https://github.com/d3/d3-transition/blob/main/src/transition/select.js) · For each selected element, selects the first descendant element that matches the specified *selector* string, if any, and returns a transition on the resulting selection. The *selector* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
-This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.select](./d3-selection.md#selection_select), and then creating a new transition via [*selection*.transition](#selection_transition):
+This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.select](../d3-selection/selecting.md#selection_select), and then creating a new transition via [*selection*.transition](#selection_transition):
 
 ```js
 transition
@@ -50,7 +50,7 @@ transition
 
 [Source](https://github.com/d3/d3-transition/blob/main/src/transition/selectAll.js) · For each selected element, selects all descendant elements that match the specified *selector* string, if any, and returns a transition on the resulting selection. The *selector* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
-This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.selectAll](./d3-selection.md#selection_selectAll), and then creating a new transition via [*selection*.transition](#selection_transition):
+This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.selectAll](../d3-selection/selecting.md#selection_selectAll), and then creating a new transition via [*selection*.transition](#selection_transition):
 
 ```js
 transition
@@ -63,7 +63,7 @@ transition
 
 [Source](https://github.com/d3/d3-transition/blob/main/src/transition/select.js) · For each selected element, selects the first child element that matches the specified *selector* string, if any, and returns a transition on the resulting selection. The *selector* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
-This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.selectChild](./d3-selection.md#selection_selectChild), and then creating a new transition via [*selection*.transition](#selection_transition):
+This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.selectChild](../d3-selection/selecting.md#selection_selectChild), and then creating a new transition via [*selection*.transition](#selection_transition):
 
 ```js
 transition
@@ -76,7 +76,7 @@ transition
 
 [Source](https://github.com/d3/d3-transition/blob/main/src/transition/selectAll.js) · For each selected element, selects all children that match the specified *selector* string, if any, and returns a transition on the resulting selection. The *selector* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
-This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.selectChildren](./d3-selection.md#selection_selectChildren), and then creating a new transition via [*selection*.transition](#selection_transition):
+This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.selectChildren](../d3-selection/selecting.md#selection_selectChildren), and then creating a new transition via [*selection*.transition](#selection_transition):
 
 ```js
 transition
@@ -89,7 +89,7 @@ transition
 
 [Source](https://github.com/d3/d3-transition/blob/main/src/transition/filter.js) · For each selected element, selects only the elements that match the specified *filter*, and returns a transition on the resulting selection. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element. The new transition has the same id, name and timing as this transition; however, if a transition with the same id already exists on a selected element, the existing transition is returned for that element.
 
-This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.filter](./d3-selection.md#selection_filter), and then creating a new transition via [*selection*.transition](#selection_transition):
+This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), creating a subselection via [*selection*.filter](../d3-selection/selecting.md#selection_filter), and then creating a new transition via [*selection*.transition](#selection_transition):
 
 ```js
 transition
@@ -102,7 +102,7 @@ transition
 
 [Source](https://github.com/d3/d3-transition/blob/main/src/transition/merge.js) · Returns a new transition merging this transition with the specified *other* transition, which must have the same id as this transition. The returned transition has the same number of groups, the same parents, the same name and the same id as this transition. Any missing (null) elements in this transition are filled with the corresponding element, if present (not null), from the *other* transition.
 
-This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), merging with the selection likewise derived from the *other* transition via [*selection*.merge](./d3-selection.md#selection_merge), and then creating a new transition via [*selection*.transition](#selection_transition):
+This method is equivalent to deriving the selection for this transition via [*transition*.selection](#transition_selection), merging with the selection likewise derived from the *other* transition via [*selection*.merge](../d3-selection/selecting.md#selection_merge), and then creating a new transition via [*selection*.transition](#selection_transition):
 
 ```js
 transition
@@ -131,7 +131,7 @@ The delay for each transition is relative to its previous transition. Thus, in t
 
 ## *transition*.selection() {#transition_selection}
 
-[Source](https://github.com/d3/d3-transition/blob/main/src/transition/selection.js) · Returns the [selection](./d3-selection.md#selection) corresponding to this transition.
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/selection.js) · Returns the [selection](../d3-selection/selecting.md#selection) corresponding to this transition.
 
 ## active(node, name) {#active}
 

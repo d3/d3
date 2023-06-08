@@ -2,7 +2,7 @@
 
 [Examples](https://observablehq.com/collection/@d3/d3-zoom) · [Panning and zooming](https://observablehq.com/@d3/zoomable-scatterplot) let the user focus on a region of interest by restricting the view. It uses direct manipulation: click-and-drag to pan (translate), spin the wheel to zoom (scale), or pinch with touch. Panning and zooming are widely used in web-based mapping, but can also be used in visualization such as dense time series and scatterplots.
 
-The zoom behavior is a flexible abstraction, handling a surprising variety of input modalities and browser quirks. The zoom behavior is agnostic about the DOM, so you can use it with HTML, [SVG](https://observablehq.com/@d3/zoom), or [Canvas](https://observablehq.com/@d3/zoom-canvas). You can use d3-zoom with [d3-scale](./d3-scale.md) and [d3-axis](./d3-axis.md) to [zoom axes](https://observablehq.com/@d3/pan-zoom-axes). You can restrict zooming using [*zoom*.scaleExtent](./d3-zoom/zoom.md#zoom_scaleExtent) and panning using [*zoom*.translateExtent](./d3-zoom/zoom.md#zoom_translateExtent). You can combine d3-zoom with other behaviors such as [d3-drag](./d3-drag.md) for [dragging](https://observablehq.com/@d3/drag-zoom) and [d3-brush](./d3-brush.md) for [focus + context](https://observablehq.com/@d3/focus-context).
+The zoom behavior is a flexible abstraction, handling a surprising variety of input modalities and browser quirks. The zoom behavior is agnostic about the DOM, so you can use it with HTML, [SVG](https://observablehq.com/@d3/zoom), or [Canvas](https://observablehq.com/@d3/zoom-canvas). You can use d3-zoom with [d3-scale](./d3-scale.md) and [d3-axis](./d3-axis.md) to [zoom axes](https://observablehq.com/@d3/pan-zoom-axes). You can restrict zooming using [*zoom*.scaleExtent](#zoom_scaleExtent) and panning using [*zoom*.translateExtent](#zoom_translateExtent). You can combine d3-zoom with other behaviors such as [d3-drag](./d3-drag.md) for [dragging](https://observablehq.com/@d3/drag-zoom) and [d3-brush](./d3-brush.md) for [focus + context](https://observablehq.com/@d3/focus-context).
 
 The zoom behavior can be controlled programmatically using [*zoom*.transform](#zoom_transform), allowing you to implement user interface controls which drive the display or to stage [animated tours](https://observablehq.com/@d3/scatterplot-tour) through your data. [Smooth zoom transitions](https://observablehq.com/@d3/programmatic-zoom) are based on [“Smooth and efficient zooming and panning”](http://www.win.tue.nl/~vanwijk/zoompan.pdf) by Jarke J. van Wijk and Wim A.A. Nuij.
 
@@ -10,19 +10,19 @@ See also [d3-tile](https://github.com/d3/d3-tile) for examples panning and zoomi
 
 ## zoom() {#zoom}
 
-[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · Creates a new zoom behavior. The returned behavior, [*zoom*](#_zoom), is both an object and a function, and is typically applied to selected elements via [*selection*.call](../d3-selection/control-flow.md#selection_call).
+[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · Creates a new zoom behavior. The returned behavior, [*zoom*](#_zoom), is both an object and a function, and is typically applied to selected elements via [*selection*.call](./d3-selection/control-flow.md#selection_call).
 
 ## *zoom*(*selection*) {#_zoom}
 
-[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · Applies this zoom behavior to the specified [*selection*](../d3-selection.md), binding the necessary event listeners to allow panning and zooming, and initializing the [zoom transform](#zoomTransform) on each selected element to the identity transform if not already defined.
+[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · Applies this zoom behavior to the specified [*selection*](./d3-selection.md), binding the necessary event listeners to allow panning and zooming, and initializing the [zoom transform](#zoomTransform) on each selected element to the identity transform if not already defined.
 
-This function is typically not invoked directly, and is instead invoked via [*selection*.call](../d3-selection/control-flow.md#selection_call). For example, to instantiate a zoom behavior and apply it to a selection:
+This function is typically not invoked directly, and is instead invoked via [*selection*.call](./d3-selection/control-flow.md#selection_call). For example, to instantiate a zoom behavior and apply it to a selection:
 
 ```js
 selection.call(d3.zoom().on("zoom", zoomed));
 ```
 
-Internally, the zoom behavior uses [*selection*.on](../d3-selection/events.md#selection_on) to bind the necessary event listeners for zooming. The listeners use the name `.zoom`, so you can subsequently unbind the zoom behavior as follows:
+Internally, the zoom behavior uses [*selection*.on](./d3-selection/events.md#selection_on) to bind the necessary event listeners for zooming. The listeners use the name `.zoom`, so you can subsequently unbind the zoom behavior as follows:
 
 ```js
 selection.on(".zoom", null);
@@ -48,11 +48,11 @@ To retrieve the zoom state, use *event*.transform on the current [zoom event](#z
 
 [Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · If *selection* is a selection, sets the [current zoom transform](#zoomTransform) of the selected elements to the specified *transform*, instantaneously emitting start, zoom and end [events](#zoom-events).
 
-If *selection* is a transition, defines a “zoom” tween to the specified *transform* using [interpolateZoom](../d3-interpolate/zoom.md#interpolateZoom), emitting a start event when the transition starts, zoom events for each tick of the transition, and then an end event when the transition ends (or is interrupted). The transition will attempt to minimize the visual movement around the specified *point*; if the *point* is not specified, it defaults to the center of the viewport [extent](#zoom_extent).
+If *selection* is a transition, defines a “zoom” tween to the specified *transform* using [interpolateZoom](./d3-interpolate/zoom.md#interpolateZoom), emitting a start event when the transition starts, zoom events for each tick of the transition, and then an end event when the transition ends (or is interrupted). The transition will attempt to minimize the visual movement around the specified *point*; if the *point* is not specified, it defaults to the center of the viewport [extent](#zoom_extent).
 
 The *transform* may be specified either as a [zoom transform](#zoomTransform) or as a function that returns a zoom transform; similarly, the *point* may be specified either as a two-element array [*x*, *y*] or a function that returns such an array. If a function, it is invoked for each selected element, being passed the current event (`event`) and datum `d`, with the `this` context as the current DOM element.
 
-This function is typically not invoked directly, and is instead invoked via [*selection*.call](../d3-selection/control-flow.md#selection_call) or [*transition*.call](../d3-transition/control-flow.md#transition_call). For example, to reset the zoom transform to the [identity transform](#zoomIdentity) instantaneously:
+This function is typically not invoked directly, and is instead invoked via [*selection*.call](./d3-selection/control-flow.md#selection_call) or [*transition*.call](./d3-transition/control-flow.md#transition_call). For example, to reset the zoom transform to the [identity transform](#zoomIdentity) instantaneously:
 
 ```js
 selection.call(zoom.transform, d3.zoomIdentity);
@@ -143,7 +143,7 @@ The value *Δ* returned by the wheel delta function determines the amount of sca
 
 If *extent* is not specified, returns the current extent accessor, which defaults to [[0, 0], [*width*, *height*]] where *width* is the [client width](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientWidth) of the element and *height* is its [client height](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight); for SVG elements, the nearest ancestor SVG element’s viewBox, or [width](https://www.w3.org/TR/SVG/struct.html#SVGElementWidthAttribute) and [height](https://www.w3.org/TR/SVG/struct.html#SVGElementHeightAttribute) attributes, are used. Alternatively, consider using [*element*.getBoundingClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect).
 
-The viewport extent affects several functions: the center of the viewport remains fixed during changes by [*zoom*.scaleBy](#zoom_scaleBy) and [*zoom*.scaleTo](#zoom_scaleTo); the viewport center and dimensions affect the path chosen by [interpolateZoom](../d3-interpolate/zoom.md#interpolateZoom); and the viewport extent is needed to enforce the optional [translate extent](#zoom_translateExtent).
+The viewport extent affects several functions: the center of the viewport remains fixed during changes by [*zoom*.scaleBy](#zoom_scaleBy) and [*zoom*.scaleTo](#zoom_scaleTo); the viewport center and dimensions affect the path chosen by [interpolateZoom](./d3-interpolate/zoom.md#interpolateZoom); and the viewport extent is needed to enforce the optional [translate extent](#zoom_translateExtent).
 
 ## *zoom*.scaleExtent(*extent*) {#zoom_scaleExtent}
 
@@ -183,11 +183,11 @@ selection
 
 ## *zoom*.interpolate(*interpolate*) {#zoom_interpolate}
 
-[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · If *interpolate* is specified, sets the interpolation factory for zoom transitions to the specified function. If *interpolate* is not specified, returns the current interpolation factory, which defaults to [interpolateZoom](../d3-interpolate/zoom.md#interpolateZoom) to implement smooth zooming. To apply direct interpolation between two views, try [interpolate](../d3-interpolate/value.md#interpolate) instead.
+[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · If *interpolate* is specified, sets the interpolation factory for zoom transitions to the specified function. If *interpolate* is not specified, returns the current interpolation factory, which defaults to [interpolateZoom](./d3-interpolate/zoom.md#interpolateZoom) to implement smooth zooming. To apply direct interpolation between two views, try [interpolate](./d3-interpolate/value.md#interpolate) instead.
 
 ## *zoom*.on(*typenames*, *listener*) {#zoom_on}
 
-[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · If *listener* is specified, sets the event *listener* for the specified *typenames* and returns the zoom behavior. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the same context and arguments as [*selection*.on](../d3-selection/control-flow.md#selection_on) listeners: the current event (`event`) and datum `d`, with the `this` context as the current DOM element.
+[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · If *listener* is specified, sets the event *listener* for the specified *typenames* and returns the zoom behavior. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the same context and arguments as [*selection*.on](./d3-selection/control-flow.md#selection_on) listeners: the current event (`event`) and datum `d`, with the `this` context as the current DOM element.
 
 The *typenames* is a string containing one or more *typename* separated by whitespace. Each *typename* is a *type*, optionally followed by a period (`.`) and a *name*, such as `zoom.foo` and `zoom.bar`; the name allows multiple listeners to be registered for the same *type*. The *type* must be one of the following:
 
@@ -195,7 +195,7 @@ The *typenames* is a string containing one or more *typename* separated by white
 * `zoom` - after a change to the zoom transform (such as on mousemove).
 * `end` - after zooming ends (such as on mouseup ).
 
-See [*dispatch*.on](../d3-dispatch.md#dispatch_on) for more.
+See [*dispatch*.on](./d3-dispatch.md#dispatch_on) for more.
 
 ## Zoom events
 
@@ -236,13 +236,13 @@ The propagation of all consumed events is [immediately stopped](https://dom.spec
 
 ## zoomTransform(*node*) {#zoomTransform}
 
-[Source](https://github.com/d3/d3-zoom/blob/main/src/transform.js) · Returns the current transform for the specified *node*. Note that *node* should typically be a DOM element, not a *selection*. (A selection may consist of multiple nodes, in different states, and this function only returns a single transform.) If you have a selection, call [*selection*.node](../d3-selection/control-flow.md#selection_node) first:
+[Source](https://github.com/d3/d3-zoom/blob/main/src/transform.js) · Returns the current transform for the specified *node*. Note that *node* should typically be a DOM element, not a *selection*. (A selection may consist of multiple nodes, in different states, and this function only returns a single transform.) If you have a selection, call [*selection*.node](./d3-selection/control-flow.md#selection_node) first:
 
 ```js
 var transform = d3.zoomTransform(selection.node());
 ```
 
-In the context of an [event listener](../d3-selection/events.md#selection_on), the *node* is typically the element that received the input event (which should be equal to [*event*.transform](#zoom-events)), *this*:
+In the context of an [event listener](./d3-selection/events.md#selection_on), the *node* is typically the element that received the input event (which should be equal to [*event*.transform](#zoom-events)), *this*:
 
 ```js
 var transform = d3.zoomTransform(this);

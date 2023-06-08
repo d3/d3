@@ -17,7 +17,7 @@ Interpolators for colors in various color spaces.
 d3.interpolateRgb("purple", "orange")
 ```
 
-[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/rgb.js) · Returns an RGB color space interpolator between the two colors *a* and *b* with a configurable [gamma](#interpolate_gamma). If the gamma is not specified, it defaults to 1.0. The colors *a* and *b* need not be in RGB; they will be converted to RGB using [d3.rgb](./d3-color.md#rgb). The return value of the interpolator is an RGB string.
+[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/rgb.js) · Returns an RGB color space interpolator between the two colors *a* and *b* with a configurable [gamma](#interpolate_gamma). If the gamma is not specified, it defaults to 1.0. The colors *a* and *b* need not be in RGB; they will be converted to RGB using [d3.rgb](../d3-color.md#rgb). The return value of the interpolator is an RGB string.
 
 ## interpolateRgbBasis(*colors*) {#interpolateRgbBasis}
 
@@ -27,7 +27,7 @@ d3.interpolateRgb("purple", "orange")
 d3.interpolateRgbBasis(["purple", "green", "orange"])
 ```
 
-[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/rgb.js) · Returns a uniform nonrational B-spline interpolator through the specified array of *colors*, which are converted to [RGB color space](./d3-color.md#rgb). Implicit control points are generated such that the interpolator returns *colors*[0] at *t* = 0 and *colors*[*colors*.length - 1] at *t* = 1. Opacity interpolation is not currently supported. See also [d3.interpolateBasis](#interpolateBasis), and see [d3-scale-chromatic](./d3-scale-chromatic.md) for examples.
+[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/rgb.js) · Returns a uniform nonrational B-spline interpolator through the specified array of *colors*, which are converted to [RGB color space](../d3-color.md#rgb). Implicit control points are generated such that the interpolator returns *colors*[0] at *t* = 0 and *colors*[*colors*.length - 1] at *t* = 1. Opacity interpolation is not currently supported. See also [d3.interpolateBasis](#interpolateBasis), and see [d3-scale-chromatic](../d3-scale-chromatic.md) for examples.
 
 ## interpolateRgbBasisClosed(*colors*) {#interpolateRgbBasisClosed}
 
@@ -37,7 +37,7 @@ d3.interpolateRgbBasis(["purple", "green", "orange"])
 d3.interpolateRgbBasisClosed(["purple", "green", "orange"])
 ```
 
-[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/rgb.js) · Returns a uniform nonrational B-spline interpolator through the specified array of *colors*, which are converted to [RGB color space](./d3-color.md#rgb). The control points are implicitly repeated such that the resulting spline has cyclical C² continuity when repeated around *t* in [0,1]; this is useful, for example, to create cyclical color scales. Opacity interpolation is not currently supported. See also [d3.interpolateBasisClosed](#interpolateBasisClosed), and see [d3-scale-chromatic](./d3-scale-chromatic.md) for examples.
+[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/rgb.js) · Returns a uniform nonrational B-spline interpolator through the specified array of *colors*, which are converted to [RGB color space](../d3-color.md#rgb). The control points are implicitly repeated such that the resulting spline has cyclical C² continuity when repeated around *t* in [0,1]; this is useful, for example, to create cyclical color scales. Opacity interpolation is not currently supported. See also [d3.interpolateBasisClosed](#interpolateBasisClosed), and see [d3-scale-chromatic](../d3-scale-chromatic.md) for examples.
 
 ## interpolateHsl(*a*, *b*) {#interpolateHsl}
 
@@ -47,7 +47,7 @@ d3.interpolateRgbBasisClosed(["purple", "green", "orange"])
 d3.interpolateHsl("purple", "orange")
 ```
 
-[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/hsl.js) · Returns an HSL color space interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in HSL; they will be converted to HSL using [d3.hsl](./d3-color.md#hsl). If either color’s hue or saturation is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
+[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/hsl.js) · Returns an HSL color space interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in HSL; they will be converted to HSL using [d3.hsl](../d3-color.md#hsl). If either color’s hue or saturation is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
 
 ## interpolateHslLong(*a*, *b*) {#interpolateHslLong}
 
@@ -67,7 +67,7 @@ d3.interpolateHslLong("purple", "orange")
 d3.interpolateLab("purple", "orange")
 ```
 
-[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/lab.js) · Returns a [CIELAB color space](https://en.wikipedia.org/wiki/Lab_color_space#CIELAB) interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in CIELAB; they will be converted to CIELAB using [d3.lab](./d3-color.md#lab). The return value of the interpolator is an RGB string.
+[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/lab.js) · Returns a [CIELAB color space](https://en.wikipedia.org/wiki/Lab_color_space#CIELAB) interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in CIELAB; they will be converted to CIELAB using [d3.lab](../d3-color.md#lab). The return value of the interpolator is an RGB string.
 
 ## interpolateHcl(*a*, *b*) {#interpolateHcl}
 
@@ -77,7 +77,7 @@ d3.interpolateLab("purple", "orange")
 d3.interpolateHcl("purple", "orange")
 ```
 
-[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/hcl.js) · Returns a [CIELCh<sub>ab</sub> color space](https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC) interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in CIELCh<sub>ab</sub>; they will be converted to CIELCh<sub>ab</sub> using [d3.hcl](./d3-color.md#hcl). If either color’s hue or chroma is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
+[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/hcl.js) · Returns a [CIELCh<sub>ab</sub> color space](https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC) interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in CIELCh<sub>ab</sub>; they will be converted to CIELCh<sub>ab</sub> using [d3.hcl](../d3-color.md#hcl). If either color’s hue or chroma is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
 
 ## interpolateHclLong(*a*, *b*) {#interpolateHclLong}
 
@@ -103,7 +103,7 @@ d3.interpolateCubehelix("purple", "orange")
 d3.interpolateCubehelix.gamma(3)("purple", "orange")
 ```
 
-[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/cubehelix.js) · Returns a Cubehelix color space interpolator between the two colors *a* and *b* using a configurable [gamma](#interpolate_gamma). If the gamma is not specified, it defaults to 1.0. The colors *a* and *b* need not be in Cubehelix; they will be converted to Cubehelix using [d3.cubehelix](./d3-color.md#cubehelix). If either color’s hue or saturation is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
+[Examples](https://observablehq.com/@d3/working-with-color) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/cubehelix.js) · Returns a Cubehelix color space interpolator between the two colors *a* and *b* using a configurable [gamma](#interpolate_gamma). If the gamma is not specified, it defaults to 1.0. The colors *a* and *b* need not be in Cubehelix; they will be converted to Cubehelix using [d3.cubehelix](../d3-color.md#cubehelix). If either color’s hue or saturation is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
 
 ## interpolateCubehelixLong(*a*, *b*) {#interpolateCubehelixLong}
 
