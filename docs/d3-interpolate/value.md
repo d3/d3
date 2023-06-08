@@ -22,7 +22,7 @@ The interpolator implementation is based on the type of the end value *b*, using
 
 1. If *b* is null, undefined or a boolean, use the constant *b*.
 2. If *b* is a number, use [interpolateNumber](#interpolateNumber).
-3. If *b* is a [color](../d3-color.md#color) or a string coercible to a color, use [interpolateRgb](#interpolateRgb).
+3. If *b* is a [color](../d3-color.md#color) or a string coercible to a color, use [interpolateRgb](./color.md#interpolateRgb).
 4. If *b* is a [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), use [interpolateDate](#interpolateDate).
 5. If *b* is a string, use [interpolateString](#interpolateString).
 6. If *b* is a [typed array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) of numbers, use [interpolateNumberArray](#interpolateNumberArray).
@@ -167,7 +167,7 @@ The control points are implicitly repeated such that the resulting one-dimension
 d3.interpolateDiscrete(["red", "blue", "green"])(0.5) // "blue"
 ```
 
-The returned interpolator maps *t* in [0, 1 / *n*) to *values*[0], *t* in [1 / *n*, 2 / *n*) to *values*[1], and so on, where *n* = *values*.length. In effect, this is a lightweight [quantize scale](../d3-scale.md#quantize-scales) with a fixed domain of [0, 1].
+The returned interpolator maps *t* in [0, 1 / *n*) to *values*[0], *t* in [1 / *n*, 2 / *n*) to *values*[1], and so on, where *n* = *values*.length. In effect, this is a lightweight [quantize scale](../d3-scale/quantize.md) with a fixed domain of [0, 1].
 
 ## quantize(*interpolator*, *n*) {#quantize}
 
@@ -179,7 +179,7 @@ The returned interpolator maps *t* in [0, 1 / *n*) to *values*[0], *t* in [1 / *
 d3.quantize(d3.interpolate("red", "blue"), 4) // ["rgb(255, 0, 0)", "rgb(170, 0, 85)", "rgb(85, 0, 170)", "rgb(0, 0, 255)"]
 ```
 
-The first sample is always at *t* = 0, and the last sample is always at *t* = 1. This can be useful in generating a fixed number of samples from a given interpolator, such as to derive the range of a [quantize scale](../d3-scale.md#quantize-scales) from a [continuous interpolator](../d3-scale-chromatic.md#interpolateWarm).
+The first sample is always at *t* = 0, and the last sample is always at *t* = 1. This can be useful in generating a fixed number of samples from a given interpolator, such as to derive the range of a [quantize scale](../d3-scale.md#quantize-scales) from a [continuous interpolator](../d3-scale-chromatic/sequential.md#interpolateWarm).
 
 :::warning CAUTION
 This method will not work with interpolators that do not return defensive copies of their output, such as [interpolateArray](#interpolateArray), [interpolateDate](#interpolateDate) and [interpolateObject](#interpolateObject). For those interpolators, you must wrap the interpolator and create a copy for each returned value.
@@ -203,4 +203,4 @@ If *interpolate* is not specified, defaults to [interpolate](#interpolate).
 d3.piecewise(["red", "green", "blue"])
 ```
 
-The returned interpolator maps *t* in [0, 1 / (*n* - 1)] to *interpolate*(*values*[0], *values*[1]), *t* in [1 / (*n* - 1), 2 / (*n* - 1)] to *interpolate*(*values*[1], *values*[2]), and so on, where *n* = *values*.length. In effect, this is a lightweight [linear scale](../d3-scale.md#linear-scales).
+The returned interpolator maps *t* in [0, 1 / (*n* - 1)] to *interpolate*(*values*[0], *values*[1]), *t* in [1 / (*n* - 1), 2 / (*n* - 1)] to *interpolate*(*values*[1], *values*[2]), and so on, where *n* = *values*.length. In effect, this is a lightweight [linear scale](../d3-scale/linear.md).
