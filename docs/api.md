@@ -282,9 +282,9 @@ Compute the Voronoi diagram of a set of two-dimensional points.
 * [*delaunay*.trianglePolygon](./d3-delaunay/delaunay.md#delaunay_trianglePolygon) - return a triangle as a polygon.
 * [*delaunay*.update](./d3-delaunay/delaunay.md#delaunay_update) - update a delaunay triangulation in place.
 * [*delaunay*.voronoi](./d3-delaunay/voronoi.md#delaunay_voronoi) - compute the voronoi diagram associated with a delaunay triangulation.
-* [*voronoi*.delaunay](./d3-delaunay/voronoi.md#voronoi-delaunay) - the voronoi diagram’s source delaunay triangulation.
-* [*voronoi*.circumcenters](./d3-delaunay/voronoi.md#voronoi-circumcenters) - the triangles’ circumcenters.
-* [*voronoi*.vectors](./d3-delaunay/voronoi.md#voronoi-vectors) - directions for the outer (infinite) cells of the voronoi diagram.
+* [*voronoi*.delaunay](./d3-delaunay/voronoi.md#voronoi_delaunay) - the voronoi diagram’s source delaunay triangulation.
+* [*voronoi*.circumcenters](./d3-delaunay/voronoi.md#voronoi_circumcenters) - the triangles’ circumcenters.
+* [*voronoi*.vectors](./d3-delaunay/voronoi.md#voronoi_vectors) - directions for the outer (infinite) cells of the voronoi diagram.
 * [*voronoi*.xmin](./d3-delaunay/voronoi.md#voronoi_bounds) - set the *xmin* bound of the extent.
 * [*voronoi*.ymin](./d3-delaunay/voronoi.md#voronoi_bounds) - set the *ymin* bound of the extent.
 * [*voronoi*.xmax](./d3-delaunay/voronoi.md#voronoi_bounds) - set the *xmax* bound of the extent.
