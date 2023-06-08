@@ -4,7 +4,7 @@ Diverging scales are similar to [linear scales](./linear.md) in that they map a 
 
 ## scaleDiverging(*domain*, *interpolator*) {#scaleDiverging}
 
-[Examples](https://observablehq.com/@d3/diverging-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js) · Constructs a new diverging scale with the specified [*domain*](#diverging_domain) and [*interpolator*](#diverging_interpolator) function or array.
+[Examples](https://observablehq.com/@d3/diverging-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/diverging.js) · Constructs a new diverging scale with the specified [*domain*](./linear.md#linear_domain) and [*interpolator*](#diverging_interpolator) function or array.
 
 ```js
 const color = d3.scaleDiverging([-1, 0, 1], d3.interpolateRdBu);
@@ -22,7 +22,7 @@ If *interpolator* is not specified, it defaults to the identity function.
 const identity = d3.scaleDiverging();
 ```
 
-When the scale is [applied](#_diverging), the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the extreme negative value, 0.5 represents the neutral value, and 1 represents the extreme positive value.
+When the scale is applied, the interpolator will be invoked with a value typically in the range [0, 1], where 0 represents the extreme negative value, 0.5 represents the neutral value, and 1 represents the extreme positive value.
 
 If *interpolator* is an array, it represents the scale’s three-element output range and is converted to an interpolator function using [d3.interpolate](../d3-interpolate/value.md#interpolate) and [d3.piecewise](../d3-interpolate/value.md#piecewise).
 
