@@ -30,7 +30,7 @@ This method can be used in conjunction with [*simulation*.stop](#simulation_stop
 
 ## *simulation*.nodes(*nodes*) {#simulation_nodes}
 
-[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · If *nodes* is specified, sets the simulation’s nodes to the specified array of objects, initializing their positions and velocities if necessary, and then [re-initializes](#force_initialize) any bound [forces](#simulation_force); returns the simulation. If *nodes* is not specified, returns the simulation’s array of nodes as specified to the [constructor](#forceSimulation).
+[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · If *nodes* is specified, sets the simulation’s nodes to the specified array of objects, initializing their positions and velocities if necessary, and then [re-initializes](../d3-force.md#force_initialize) any bound [forces](#simulation_force); returns the simulation. If *nodes* is not specified, returns the simulation’s array of nodes as specified to the [constructor](#forceSimulation).
 
 Each *node* must be an object. The following properties are assigned by the simulation:
 
