@@ -43,7 +43,7 @@ onUnmounted(() => {
       <div style="margin-left: -100px; margin-right: -100px;">
         <div :class="$style.examples" ref="container" :style="`transform: perspective(75em) rotateX(35deg) rotateZ(-7deg) translateX(${width / 6 - x / 10}px) translateY(-100px) scale(1.4);`">
           <a v-for="d in sample" :href="`https://observablehq.com/${d.path}`" :title="[d.title, d.author].join('\n')" target="_blank">
-            <img :src="`https://static.observableusercontent.com/thumbnail/${d.thumbnail}.jpg`" style="object-fit: cover;" />
+            <img :src="`https://static.observableusercontent.com/thumbnail/${d.thumbnail}.jpg`" style="object-fit: cover;" width="640" height="400" />
           </a>
         </div>
       </div>
