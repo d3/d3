@@ -51,4 +51,5 @@ onUnmounted(() => {
 </script>
 <template>
   <div style="margin: 1em 0;" ref="container"></div>
+  <a href="https://observablehq.com/@d3/collision-detection/2?intent=fork" style="font-size: smaller;">Fork ↗︎</a>
 </template>
