@@ -33,5 +33,5 @@ To convert shapefiles to GeoJSON, use [shp2json](https://github.com/mbostock/sha
 :::
 
 :::warning CAUTION
-D3’s winding order convention is also used by [TopoJSON](https://github.com/topojson) and [ESRI shapefiles](https://github.com/mbostock/shapefile); however, it is the opposite convention of GeoJSON’s [RFC 7946](https://tools.ietf.org/html/rfc7946#section-3.1.6). Also note that standard GeoJSON WGS84 uses planar equirectangular coordinates, not spherical coordinates, and thus may require [stitching](https://github.com/d3/d3-geo-projection/blob/main/README.md#geostitch) to remove antimeridian cuts.
+D3’s winding order convention is also used by [TopoJSON](https://github.com/topojson) and [ESRI shapefiles](https://github.com/mbostock/shapefile); however, it is the opposite convention of GeoJSON’s [RFC 7946](https://tools.ietf.org/html/rfc7946#section-3.1.6). Also note that standard GeoJSON WGS84 uses planar equirectangular coordinates, not spherical coordinates, and thus may require [stitching](./d3-geo/extended.md#geoStitch) to remove antimeridian cuts.
 :::

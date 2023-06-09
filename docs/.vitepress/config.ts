@@ -184,6 +184,7 @@ export default defineConfig({
                   {text: "Azimuthal projections", link: "/d3-geo/azimuthal"},
                   {text: "Conic projections", link: "/d3-geo/conic"},
                   {text: "Cylindrical projections", link: "/d3-geo/cylindrical"},
+                  {text: "Extended projections", link: "/d3-geo/extended"},
                 ]
               },
               {text: "Streams", link: "/d3-geo/stream"},
