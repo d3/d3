@@ -533,7 +533,7 @@ Geographic projections, shapes and math.
 * [d3.geoClipCircle](./d3-geo/projection.md#geoClipCircle) - clips spherical geometries to a small circle.
 * [d3.geoClipRectangle](./d3-geo/projection.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
 
-#### [Azimuthal projections](./d3-geo/projection/azimuthal.md)
+#### [Azimuthal projections](./d3-geo/azimuthal.md)
 
 * [d3.geoAzimuthalEqualArea](./d3-geo/azimuthal.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
 * [d3.geoAzimuthalEquidistant](./d3-geo/azimuthal.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
@@ -541,7 +541,7 @@ Geographic projections, shapes and math.
 * [d3.geoOrthographic](./d3-geo/azimuthal.md#geoOrthographic) - the azimuthal orthographic projection.
 * [d3.geoStereographic](./d3-geo/azimuthal.md#geoStereographic) - the azimuthal stereographic projection.
 
-#### [Conic projections](./d3-geo/projection/conic.md)
+#### [Conic projections](./d3-geo/conic.md)
 
 * [*conic*.parallels](./d3-geo/conic.md#conic_parallels) - set the two standard parallels.
 * [d3.geoConicConformal](./d3-geo/conic.md#geoConicConformal) - the conic conformal projection.
@@ -550,7 +550,7 @@ Geographic projections, shapes and math.
 * [d3.geoAlbers](./d3-geo/conic.md#geoAlbers) - the Albers equal-area conic projection.
 * [d3.geoAlbersUsa](./d3-geo/conic.md#geoAlbersUsa) - a composite Albers projection for the United States.
 
-#### [Cylindrical projections](./d3-geo/projection/cylindrical.md)
+#### [Cylindrical projections](./d3-geo/cylindrical.md)
 
 * [d3.geoEquirectangular](./d3-geo/cylindrical.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
 * [d3.geoMercator](./d3-geo/cylindrical.md#geoMercator) - the spherical Mercator projection.
