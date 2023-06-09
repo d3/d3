@@ -75,6 +75,7 @@
     "eslint": "8",
     "mocha": "10",
     "rollup": "3",
+    "topojson-client": "^3.1.0",
     "vitepress": "^1.0.0-alpha.65"
   },
   "scripts": {

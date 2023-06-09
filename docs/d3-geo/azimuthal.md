@@ -1,18 +1,28 @@
+<script setup>
+
+import * as d3 from "d3";
+import WorldMap from "../components/WorldMap.vue";
+
+const width = 688;
+const height = 400;
+
+</script>
+
 # Azimuthal projections
 
 Azimuthal projections project the sphere directly onto a plane.
 
 ## geoAzimuthalEqualArea() {#geoAzimuthalEqualArea}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/azimuthalEqualArea.png" width="480" height="250">](https://observablehq.com/@d3/azimuthal-equal-area)
+<a href="https://observablehq.com/@d3/azimuthal-equal-area?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoAzimuthalEqualArea().rotate([110, -40]).fitExtent([[1, 1], [width - 1, height - 1]], {type: "Sphere"}).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/azimuthalEqualArea.js) · The azimuthal equal-area projection.
 
-<!-- <br><a href="#geoAzimuthalEqualAreaRaw" name="geoAzimuthalEqualAreaRaw">#</a> d3.<b>geoAzimuthalEqualAreaRaw</b> -->
+<!-- <br><a href="#geoAzimuthalEqualArea" name="geoAzimuthalEqualArea">#</a> d3.<b>geoAzimuthalEqualArea</b> -->
 
 ## geoAzimuthalEquidistant() {#geoAzimuthalEquidistant}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/azimuthalEquidistant.png" width="480" height="250">](https://observablehq.com/@d3/azimuthal-equidistant)
+<a href="https://observablehq.com/@d3/azimuthal-equidistant?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoAzimuthalEquidistant().rotate([110, -40]).fitExtent([[1, 1], [width - 1, height - 1]], {type: "Sphere"}).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/azimuthalEquidistant.js) · The azimuthal equidistant projection.
 
@@ -20,7 +30,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoGnomonic() {#geoGnomonic}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/gnomonic.png" width="480" height="250">](https://observablehq.com/@d3/gnomonic)
+<a href="https://observablehq.com/@d3/gnomonic?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoGnomonic().scale(width / 6).translate([width / 2, height / 2]).clipAngle(90 - 1e-4).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/gnomonic.js) · The gnomonic projection.
 
@@ -28,7 +38,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoOrthographic() {#geoOrthographic}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/orthographic.png" width="480" height="250">](https://observablehq.com/@d3/orthographic)
+<a href="https://observablehq.com/@d3/orthographic?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoOrthographic().rotate([110, -40]).fitExtent([[1, 1], [width - 1, height - 1]], {type: "Sphere"}).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/orthographic.js) · The orthographic projection.
 
@@ -36,7 +46,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoStereographic() {#geoStereographic}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/stereographic.png" width="480" height="250">](https://observablehq.com/@d3/stereographic)
+<a href="https://observablehq.com/@d3/stereographic?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoStereographic().scale(width / 4).translate([width / 2, height / 2]).rotate([-27, 0]).clipAngle(180 - 1e-4).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/stereographic.js) · The stereographic projection.
 
