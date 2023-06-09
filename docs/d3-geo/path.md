@@ -120,7 +120,7 @@ path.projection() // a d3.geoAlbers instance
 
 The projection defaults to null, which represents the identity transformation: the input geometry is not projected and is instead rendered directly in raw coordinates. This can be useful for fast rendering of [pre-projected geometry](https://observablehq.com/@d3/u-s-map), or for fast rendering of the equirectangular projection.
 
-The given *projection* is typically one of D3’s built-in [geographic projections](./projection.md); however, any object that exposes a [*projection*.stream](./projection.md#projection_stream) function can be used, enabling the use of [custom projections](https://bl.ocks.org/mbostock/5663666). See D3’s [transforms](./projection.md#transforms) for more examples of arbitrary geometric transformations.
+The given *projection* is typically one of D3’s built-in [geographic projections](./projection.md); however, any object that exposes a [*projection*.stream](./projection.md#projection_stream) function can be used, enabling the use of [custom projections](https://bl.ocks.org/mbostock/5663666). See D3’s [transforms](./projection.md#geoTransform) for more examples of arbitrary geometric transformations.
 
 ## *path*.context(*context*) {#path_context}
 

@@ -8,7 +8,7 @@ Rather than materializing intermediate representations, streams transform geomet
 
 ## *stream*.point(*x*, *y*, *z*) {#stream_point}
 
-Indicates a point with the specified coordinates *x* and *y* (and optionally *z*). The coordinate system is unspecified and implementation-dependent; for example, [projection streams](./projection.md#projection_stream) require spherical coordinates in degrees as input. Outside the context of a polygon or line, a point indicates a point geometry object ([Point](http://www.geojson.org/geojson-spec.html#point) or [MultiPoint](http://www.geojson.org/geojson-spec.html#multipoint)). Within a line or polygon ring, the point indicates a control point.
+Indicates a point with the specified coordinates *x* and *y* (and optionally *z*). The coordinate system is unspecified and implementation-dependent; for example, [projection streams](./projection.md#projection_stream) require spherical coordinates in degrees as input. Outside the context of a polygon or line, a point indicates a point geometry object ([Point](http://www.geojson.org/geojson-spec.html#stream_point) or [MultiPoint](http://www.geojson.org/geojson-spec.html#multipoint)). Within a line or polygon ring, the point indicates a control point.
 
 ## *stream*.lineStart() {#stream_lineStart}
 
@@ -16,7 +16,7 @@ Indicates the start of a line or ring. Within a polygon, indicates the start of 
 
 ## *stream*.lineEnd() {#stream_lineEnd}
 
-Indicates the end of a line or ring. Within a polygon, indicates the end of a ring. Unlike GeoJSON, the redundant closing coordinate of a ring is *not* indicated via [point](#point), and instead is implied via lineEnd within a polygon. Thus, the given polygon input:
+Indicates the end of a line or ring. Within a polygon, indicates the end of a ring. Unlike GeoJSON, the redundant closing coordinate of a ring is *not* indicated via [point](#stream_point), and instead is implied via lineEnd within a polygon. Thus, the given polygon input:
 
 ```json
 {
