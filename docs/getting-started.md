@@ -6,7 +6,7 @@ import ExampleBlankChart from "./components/ExampleBlankChart.vue";
 
 # Getting started
 
-D3 supports a variety of environments.
+D3 works in any JavaScript environment.
 
 ## Try D3 online
 

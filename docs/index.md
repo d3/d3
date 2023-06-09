@@ -34,25 +34,25 @@ hero:
 
 features:
   - title: Selections and transitions
-    details: Create, update, and animate the DOM based on data, without the overhead of a virtual DOM.
+    details: Create, update, and animate the DOM based on data without the overhead of a virtual DOM.
     link: /d3-selection
   - title: Scales and axes
-    details: Transform and encode abstract data as visual values using scales, and then document the encodings with axes.
+    details: Encode abstract data into visual values such as position, size, and color. Explain position encodings with axes.
     link: /d3-scale
   - title: Shapes
-    details: Arcs, areas, curves, lines, links, pies, stacks, symbols…
+    details: Render arcs, areas, curves, lines, links, pies, stacks, symbols… and any geometric primitive you might need to visualize data.
     link: /d3-shape
   - title: Interactions
-    details: Panning, zooming, brushing, dragging, event handling…
+    details: Facilitate exploration with reusable interactive behaviors, including panning, zooming, brushing, and dragging.
     link: /d3-brush
   - title: Layouts
-    details: Treemaps, trees, force-directed graphs, Voronoi, contours, density estimation, chord diagrams, circle-packing…
+    details: Treemaps, trees, force-directed graphs, Voronoi, contours, chords, circle-packing… a library of layout algorithms at the ready.
     link: /d3-hierarchy
   - title: Geographic maps
-    details: More projections than you can shake a stick at, with arbitrary aspects, adaptive sampling, and flexible clipping.
+    details: More spherical projections than you can shake a stick at, with arbitrary aspects, adaptive sampling, and flexible clipping.
     link: /d3-geo
-  - title: … and more!
-    details: Parsing, colors, dates, data, math, and whatever else you might need to visualize data.
+  - title: … and much more!
+    details: CSV parsing, localized date parsing and formatting, color spaces, calendar math, statistics, and can I stop listing features now?
     link: /d3-array
   - title: Powering Observable Plot
     details: The D3 team also builds Observable Plot, a high-level API for quick charts built on top of D3.
