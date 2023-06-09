@@ -11,7 +11,6 @@ const outline = {type: "Sphere"};
 const graticule = d3.geoGraticule10();
 
 let landPromises = {};
-let disconnect;
 
 async function render(node, {projection, landPromise}) {
   const land = await landPromise;
@@ -33,13 +32,13 @@ export default {
     this.landPromise = landPromises[this.resolution] ??= d3
       .json(`https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-${this.resolution}.json`)
       .then((world) => topojson.feature(world, world.objects.land));
-    disconnect = deferRender(this.$el, async () => render(this.$el, this));
+    this.disconnect = deferRender(this.$el, async () => render(this.$el, this));
   },
   updated() {
     render(this.$el, this);
   },
   unmounted() {
-    if (disconnect) disconnect();
+    if (this.disconnect) this.disconnect();
   }
 }
 

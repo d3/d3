@@ -8,7 +8,6 @@ import deferRender from "./deferRender.js";
 <script>
 
 let objectsPromise;
-let disconnect;
 
 async function render(node, {projection}) {
   const {statemesh, countymesh, nation} = await objectsPromise;
@@ -33,13 +32,13 @@ export default {
         statemesh: topojson.mesh(us, us.objects.states, (a, b) => a !== b),
         countymesh: topojson.mesh(us, us.objects.counties, (a, b) => a !== b && (a.id / 1000 | 0) === (b.id / 1000 | 0)),
       }));
-    disconnect = deferRender(this.$el, async () => render(this.$el, this));
+    this.disconnect = deferRender(this.$el, async () => render(this.$el, this));
   },
   updated() {
     render(this.$el, this);
   },
   unmounted() {
-    if (disconnect) disconnect();
+    if (this.disconnect) this.disconnect();
   }
 }
 
