@@ -12,18 +12,34 @@ const graticule = d3.geoGraticule10();
 
 let landPromises = {};
 
-async function render(node, {projection, landPromise}) {
+async function render(node, {projection, rotate, resolution, width, landPromise}) {
   const land = await landPromise;
+  rotate = rotate && projection.rotate();
   const path = d3.geoPath(projection);
   const svg = d3.select(node);
-  svg.selectAll("[name='outline']").attr("d", path(outline));
-  svg.selectAll("[name='graticule']").attr("d", path(graticule));
-  svg.selectAll("[name='feature']").attr("d", path(land));
+  let frame;
+  let x;
+  function update() {
+    svg.selectAll("[name='outline']").attr("d", path(outline));
+    svg.selectAll("[name='graticule']").attr("d", path(graticule));
+    svg.selectAll("[name='feature']").attr("d", path(land));
+  }
+  svg.on("pointermove", rotate && (resolution === "110m") && ((event) => {
+    if (!frame) frame = requestAnimationFrame(rerender);
+    ([x] = d3.pointer(event));
+  }));
+  function rerender() {
+    frame = null;
+    projection.rotate([rotate[0] + x / width * 20, rotate[1], rotate[2]]);
+    update();
+  }
+  update();
 }
 
 export default {
   props: {
     projection: {type: Function},
+    rotate: {type: Boolean, default: false},
     resolution: {type: String, default: "110m"},
     width: {type: Number, default: 688},
     height: {type: Number, default: 400},
