@@ -4,7 +4,7 @@ Time scales are a variant of [linear scales](./linear.md) that have a temporal d
 
 ## scaleTime(*domain*, *range*) {#scaleTime}
 
-[Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Constructs a new time scale with the specified [domain](./linear.md#linear_domain) and [range](./linear.md#linear_range), the [default](../d3-interpolate/value.md#interpolate) [interpolator](./linear.md#linear_interpolate) and [clamping](./linear.md#_clamp) disabled. For example, to create a position encoding:
+[Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Constructs a new time scale with the specified [domain](./linear.md#linear_domain) and [range](./linear.md#linear_range), the [default](../d3-interpolate/value.md#interpolate) [interpolator](./linear.md#linear_interpolate) and [clamping](./linear.md#linear_clamp) disabled. For example, to create a position encoding:
 
 ```js
 const x = d3.scaleUtc([new Date(2000, 0, 1), new Date(2000, 0, 2)], [0, 960]);
@@ -36,7 +36,7 @@ A UTC scale should be preferred when possible as it behaves more predictably: da
 
 ## *time*.ticks(*count*) {#time_ticks}
 
-[Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Returns representative dates from the scale’s [domain](#time_domain).
+[Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Returns representative dates from the scale’s domain.
 
 ```js
 const x = d3.scaleTime();
@@ -66,7 +66,7 @@ The following time intervals are considered for automatic ticks:
 * 1- and 3-month.
 * 1-year.
 
-In lieu of a *count*, a [time *interval*](../d3-time.md#intervals) may be explicitly specified. To prune the generated ticks for a given time *interval*, use [*interval*.every](../d3-time.md#interval_every). For example, to generate ticks at 15-minute intervals:
+In lieu of a *count*, a [time *interval*](../d3-time.md#_interval) may be explicitly specified. To prune the generated ticks for a given time *interval*, use [*interval*.every](../d3-time.md#interval_every). For example, to generate ticks at 15-minute intervals:
 
 ```js
 const x = d3.scaleUtc().domain([new Date("2000-01-01T00:00Z"), new Date("2000-01-01T02:00Z")]);
@@ -95,7 +95,7 @@ const f = x.tickFormat();
 T.map(f); // ["2000", "12:15", "12:30", "12:45", "01 AM", "01:15", "01:30", "01:45", "02 AM"]
 ```
 
-The specified *count* is currently ignored, but is accepted for consistency with other scales such as [*linear*.tickFormat](./linear.md#linear_tickFormat). If a format *specifier* is specified, this method is equivalent to [format](../d3-time-format.md#format). If *specifier* is not specified, the default time format is returned. The default multi-scale time format chooses a human-readable representation based on the specified date as follows:
+The specified *count* is currently ignored, but is accepted for consistency with other scales such as [*linear*.tickFormat](./linear.md#linear_tickFormat). If a format *specifier* is specified, this method is equivalent to [format](../d3-time-format.md#timeFormat). If *specifier* is not specified, the default time format is returned. The default multi-scale time format chooses a human-readable representation based on the specified date as follows:
 
 * `%Y` - for year boundaries, such as `2011`.
 * `%B` - for month boundaries, such as `February`.
@@ -110,7 +110,7 @@ Although somewhat unusual, this default behavior has the benefit of providing bo
 
 ## *time*.nice(*count*) {#time_nice}
 
-[Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Extends the [domain](#time_domain) so that it starts and ends on nice round values.
+[Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Extends the domain so that it starts and ends on nice round values.
 
 ```js
 const x = d3.scaleUtc().domain([new Date("2000-01-01T12:34Z"), new Date("2000-01-01T12:59Z")]).nice();

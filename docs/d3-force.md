@@ -14,7 +14,7 @@ You can even use it as a rudimentary physics engine, say to simulate cloth:
 
 [<img alt="Force-Directed Lattice" src="https://raw.githubusercontent.com/d3/d3-force/master/img/lattice.png" width="480" height="250">](https://observablehq.com/@d3/force-directed-lattice)
 
-To use this module, create a [simulation](#simulation) for an array of [nodes](./d3-force/simulation.md#simulation_nodes), and compose the desired [forces](./d3-force/simulation.md#simulation_force). Then [listen](./d3-force/simulation.md#simulation_on) for tick events to render the nodes as they update in your preferred graphics system, such as Canvas or SVG.
+To use this module, create a [simulation](./d3-force/simulation.md) for an array of [nodes](./d3-force/simulation.md#simulation_nodes), and compose the desired [forces](./d3-force/simulation.md#simulation_force). Then [listen](./d3-force/simulation.md#simulation_on) for tick events to render the nodes as they update in your preferred graphics system, such as Canvas or SVG.
 
 See one of:
 

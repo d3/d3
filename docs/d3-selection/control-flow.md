@@ -64,8 +64,6 @@ Equivalent to:
 Array.from(selection)
 ```
 
-See also [*selection*[Symbol.iterator]](#selection-symbol-iterator).
-
 ## *selection*[Symbol.iterator]\(\) {#selection_iterator}
 
 [Source](https://github.com/d3/d3-selection/blob/main/src/selection/iterator.js) · Returns an iterator over the selected (non-null) elements. For example, to iterate over the selected elements:
