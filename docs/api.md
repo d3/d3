@@ -521,39 +521,24 @@ Geographic projections, shapes and math.
 * [*projection*.fitWidth](./d3-geo/projection.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
 * [*projection*.fitHeight](./d3-geo/projection.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
 * [d3.geoAzimuthalEqualArea](./d3-geo/azimuthal.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
-* [d3.geoAzimuthalEqualAreaRaw](./d3-geo/azimuthal.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
 * [d3.geoAzimuthalEquidistant](./d3-geo/azimuthal.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
-* [d3.geoAzimuthalEquidistantRaw](./d3-geo/azimuthal.md#geoAzimuthalEquidistantRaw) - the raw azimuthal equidistant projection.
 * [d3.geoGnomonic](./d3-geo/azimuthal.md#geoGnomonic) - the gnomonic projection.
-* [d3.geoGnomonicRaw](./d3-geo/azimuthal.md#geoGnomonicRaw) - the raw gnomonic projection.
 * [d3.geoOrthographic](./d3-geo/azimuthal.md#geoOrthographic) - the azimuthal orthographic projection.
-* [d3.geoOrthographicRaw](./d3-geo/azimuthal.md#geoOrthographicRaw) - the raw azimuthal orthographic projection.
 * [d3.geoStereographic](./d3-geo/azimuthal.md#geoStereographic) - the azimuthal stereographic projection.
-* [d3.geoStereographicRaw](./d3-geo/azimuthal.md#geoStereographicRaw) - the raw azimuthal stereographic projection.
 * [d3.geoEqualEarth](./d3-geo/cylindrical.md#geoEqualEarth) - the Equal Earth projection.
-* [d3.geoEqualEarthRaw](./d3-geo/cylindrical.md#geoEqualEarthRaw) - the raw Equal Earth projection.
 * [d3.geoAlbersUsa](./d3-geo/conic.md#geoAlbersUsa) - a composite Albers projection for the United States.
 * [*conic*.parallels](./d3-geo/conic.md#conic_parallels) - set the two standard parallels.
 * [d3.geoAlbers](./d3-geo/conic.md#geoAlbers) - the Albers equal-area conic projection.
 * [d3.geoConicConformal](./d3-geo/conic.md#geoConicConformal) - the conic conformal projection.
-* [d3.geoConicConformalRaw](./d3-geo/conic.md#geoConicConformalRaw) - the raw conic conformal projection.
 * [d3.geoConicEqualArea](./d3-geo/conic.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
-* [d3.geoConicEqualAreaRaw](./d3-geo/conic.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
 * [d3.geoConicEquidistant](./d3-geo/conic.md#geoConicEquidistant) - the conic equidistant projection.
-* [d3.geoConicEquidistantRaw](./d3-geo/conic.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
 * [d3.geoEquirectangular](./d3-geo/cylindrical.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
-* [d3.geoEquirectangularRaw](./d3-geo/cylindrical.md#geoEquirectangularRaw) - the raw equirectangular (plate carreé) projection.
 * [d3.geoMercator](./d3-geo/cylindrical.md#geoMercator) - the spherical Mercator projection.
-* [d3.geoMercatorRaw](./d3-geo/cylindrical.md#geoMercatorRaw) - the raw Mercator projection.
 * [d3.geoTransverseMercator](./d3-geo/cylindrical.md#geoTransverseMercator) - the transverse spherical Mercator projection.
-* [d3.geoTransverseMercatorRaw](./d3-geo/cylindrical.md#geoTransverseMercatorRaw) - the raw transverse spherical Mercator projection.
 * [d3.geoNaturalEarth1](./d3-geo/cylindrical.md#geoNaturalEarth1) - the Equal Earth projection, version 1.
-* [d3.geoNaturalEarth1Raw](./d3-geo/cylindrical.md#geoNaturalEarth1Raw) - the raw Equal Earth projection, version 1
 
 ### [Raw projections](./d3-geo/projection.md#raw-projections)
 
-* [*project*](./d3-geo/projection.md#_project) - project the specified point from the sphere to the plane.
-* [*project*.invert](./d3-geo/projection.md#project_invert) - unproject the specified point from the plane to the sphere.
 * [d3.geoProjection](./d3-geo/projection.md#geoProjection) - create a custom projection.
 * [d3.geoProjectionMutator](./d3-geo/projection.md#geoProjectionMutator) - create a custom configurable projection.
 
@@ -607,8 +592,6 @@ Geographic projections, shapes and math.
 
 ### [Clipping](./d3-geo/projection.md#geoClipAntimeridian)
 
-* [*preclip*](./d3-geo/projection.md#preclip) - pre-clipping in geographic coordinates.
-* [*postclip*](./d3-geo/projection.md#postclip) - post-clipping in planar coordinates.
 * [d3.geoClipAntimeridian](./d3-geo/projection.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
 * [d3.geoClipCircle](./d3-geo/projection.md#geoClipCircle) - clips spherical geometries to a small circle.
 * [d3.geoClipRectangle](./d3-geo/projection.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
@@ -1171,7 +1154,6 @@ A spline or polyline, as in a line chart.
 * [*lineRadial*.defined](./d3-shape/radial-line.md#lineRadial_defined) - set the defined accessor.
 * [*lineRadial*.curve](./d3-shape/radial-line.md#lineRadial_curve) - set the curve interpolator.
 * [*lineRadial*.context](./d3-shape/radial-line.md#lineRadial_context) - set the rendering context.
-* [*lineRadial*.digits](./d3-shape/radial-line.md#lineRadial_digits) - set the output precision.
 
 ### [Areas](./d3-shape/area.md)
 
@@ -1204,7 +1186,6 @@ An area, defined by a bounding topline and baseline, as in an area chart.
 * [*areaRadial*.defined](./d3-shape/radial-area.md#areaRadial_defined) - set the defined accessor.
 * [*areaRadial*.curve](./d3-shape/radial-area.md#areaRadial_curve) - set the curve interpolator.
 * [*areaRadial*.context](./d3-shape/radial-area.md#areaRadial_context) - set the rendering context.
-* [*areaRadial*.digits](./d3-shape/radial-area.md#areaRadial_digits) - set the output precision.
 * [*areaRadial*.lineStartAngle](./d3-shape/radial-area.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
 * [*areaRadial*.lineInnerRadius](./d3-shape/radial-area.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
 * [*areaRadial*.lineEndAngle](./d3-shape/radial-area.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
