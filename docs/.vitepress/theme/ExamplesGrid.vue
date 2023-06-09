@@ -55,13 +55,11 @@ onUnmounted(() => {
   background: #e3e3e5;
   border: solid 1px currentColor;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  will-change: transform;
   transition: transform 150ms ease-out;
 }
 
 .examples a {
-  will-change: transform;
-  transition: transform 250ms ease;
+  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
   border: solid 1px transparent;
   margin: -2px;
 }
