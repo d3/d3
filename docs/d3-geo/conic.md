@@ -19,7 +19,7 @@ Conic projections project the sphere onto a cone, and then unroll the cone onto 
 
 ## geoConicConformal() {#geoConicConformal}
 
-<a href="https://observablehq.com/@d3/conic-conformal?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicConformal().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
+<a href="https://observablehq.com/@d3/conic-conformal?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicConformal().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[-1, -1], [width + 1, height + 1]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/conicConformal.js) · The conic conformal projection. The parallels default to [30°, 30°] resulting in flat top.
 
@@ -27,7 +27,7 @@ Conic projections project the sphere onto a cone, and then unroll the cone onto 
 
 ## geoConicEqualArea() {#geoConicEqualArea}
 
-<a href="https://observablehq.com/@d3/conic-conformal?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicEqualArea().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
+<a href="https://observablehq.com/@d3/conic-conformal?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicEqualArea().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[-1, -1], [width + 1, height + 1]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/conicEqualArea.js) · The Albers’ equal-area conic projection.
 
@@ -35,7 +35,7 @@ Conic projections project the sphere onto a cone, and then unroll the cone onto 
 
 ## geoConicEquidistant() {#geoConicEquidistant}
 
-<a href="https://observablehq.com/@d3/conic-equidistant?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicEquidistant().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
+<a href="https://observablehq.com/@d3/conic-equidistant?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicEquidistant().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[-1, -1], [width + 1, height + 1]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/conicEquidistant.js) · The conic equidistant projection.
 

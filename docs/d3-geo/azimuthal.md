@@ -30,7 +30,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoGnomonic() {#geoGnomonic}
 
-<a href="https://observablehq.com/@d3/gnomonic?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoGnomonic().scale(width / 6).translate([width / 2, height / 2]).clipAngle(90 - 1e-4).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
+<a href="https://observablehq.com/@d3/gnomonic?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoGnomonic().scale(width / 6).translate([width / 2, height / 2]).clipAngle(90 - 1e-4).clipExtent([[-1, -1], [width + 1, height + 1]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/gnomonic.js) · The gnomonic projection.
 
@@ -46,7 +46,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoStereographic() {#geoStereographic}
 
-<a href="https://observablehq.com/@d3/stereographic?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoStereographic().scale(width / 4).translate([width / 2, height / 2]).rotate([-27, 0]).clipAngle(180 - 1e-4).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
+<a href="https://observablehq.com/@d3/stereographic?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :projection='d3.geoStereographic().scale(width / 4).translate([width / 2, height / 2]).rotate([-27, 0]).clipAngle(180 - 1e-4).clipExtent([[-1, -1], [width + 1, height + 1]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/stereographic.js) · The stereographic projection.
 

@@ -45,7 +45,7 @@ export default {
 
 </script>
 <template>
-  <svg :width="width" :height="height">
+  <svg :width="width" :height="height" :viewBox="[0, 0, width, height]" style="max-width: 100%; height: auto;">
     <path name="nation" stroke="currentColor" fill="var(--vp-c-bg-alt)" />
     <path name="statemesh" fill="none" stroke="currentColor" stroke-width="0.5" />
     <path name="countymesh" fill="none" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.5" />

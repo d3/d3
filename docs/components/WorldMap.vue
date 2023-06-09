@@ -45,7 +45,7 @@ export default {
 
 </script>
 <template>
-  <svg :width="width" :height="height">
+  <svg :width="width" :height="height" :viewBox="[0, 0, width, height]" style="max-width: 100%; height: auto;">
     <path name="outline" fill="var(--vp-c-bg-alt)" />
     <path name="graticule" stroke="currentColor" stroke-opacity="0.2" fill="none" />
     <path name="feature" fill="currentColor" />
