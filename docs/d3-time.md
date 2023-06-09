@@ -451,7 +451,7 @@ Alias for [d3.utcYear](#utcYear).[range](#interval_range).
 * 3 months
 * 1 year
 
-Multiples of milliseconds (for small ranges) and years (for large ranges) are also considered, following the rules of [d3.ticks](https://github.com/d3/d3-array/blob/main/README.md#ticks). The interval producing the number of dates that is closest to *count* is used. For example:
+Multiples of milliseconds (for small ranges) and years (for large ranges) are also considered, following the rules of [d3.ticks](./d3-array/ticks.md#ticks). The interval producing the number of dates that is closest to *count* is used. For example:
 
 ```js
 const start = new Date("1970-03-01");

@@ -18,7 +18,7 @@ And here is a density contour plot showing the relationship between the weight a
 
 [Source](https://github.com/d3/d3-contour/blob/main/src/density.js) · Estimates the density contours for the given array of *data*, returning an array of [GeoJSON](http://geojson.org/geojson-spec.html) [MultiPolygon](http://geojson.org/geojson-spec.html#multipolygon) [geometry objects](http://geojson.org/geojson-spec.html#geometry-objects).
 
-Each geometry object represents the area where the estimated number of points per square pixel is greater than or equal to the corresponding [threshold value](#density_thresholds); the threshold value for each geometry object is exposed as <i>geometry</i>.value. The returned geometry objects are typically passed to [geoPath](https://github.com/d3/d3-geo/blob/main/README.md#geoPath) to display, using null or [geoIdentity](https://github.com/d3/d3-geo/blob/main/README.md#geoIdentity) as the associated projection. See also [contours](./contour.md).
+Each geometry object represents the area where the estimated number of points per square pixel is greater than or equal to the corresponding [threshold value](#density_thresholds); the threshold value for each geometry object is exposed as <i>geometry</i>.value. The returned geometry objects are typically passed to [geoPath](../d3-geo/path.md) to display, using null or [geoIdentity](../d3-geo/projection.md#geoIdentity) as the associated projection. See also [contours](./contour.md).
 
 The x and y coordinate for each data point are computed using [*density*.x](#density_x) and [*density*.y](#density_y). In addition, [*density*.weight](#density_weight) indicates the relative contribution of each data point (default 1). The generated contours are only accurate within the estimator’s [defined size](#density_size).
 
@@ -66,7 +66,7 @@ function weight() {
 
 Thresholds are defined as an array of values [*x0*, *x1*, …]. The first [generated density contour](#_density) corresponds to the area where the estimated density is greater than or equal to *x0*; the second contour corresponds to the area where the estimated density is greater than or equal to *x1*, and so on. Thus, there is exactly one generated MultiPolygon geometry object for each specified threshold value; the threshold value is exposed as <i>geometry</i>.value. The first value *x0* should typically be greater than zero.
 
-If a *count* is specified instead of an array of *thresholds*, then approximately *count* uniformly-spaced nicely-rounded thresholds will be generated; see [ticks](https://github.com/d3/d3-array/blob/main/README.md#ticks).
+If a *count* is specified instead of an array of *thresholds*, then approximately *count* uniformly-spaced nicely-rounded thresholds will be generated; see [ticks](../d3-array/ticks.md#ticks).
 
 ## *density*.bandwidth(*bandwidth*) {#density_bandwidth}
 

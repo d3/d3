@@ -210,7 +210,7 @@ If *count* is not specified, it defaults to 10. The returned tick values are uni
 
 ## *linear*.tickFormat(*count*, *specifier*) {#linear_tickFormat}
 
-[Examples](https://observablehq.com/@d3/scale-ticks) · [Source](https://github.com/d3/d3-scale/blob/main/src/tickFormat.js) · Returns a [number format](https://github.com/d3/d3-format) function suitable for displaying a tick value, automatically computing the appropriate precision based on the fixed interval between tick values. The specified *count* should have the same value as the count that is used to generate the [tick values](#linear_ticks).
+[Examples](https://observablehq.com/@d3/scale-ticks) · [Source](https://github.com/d3/d3-scale/blob/main/src/tickFormat.js) · Returns a [number format](../d3-format.md) function suitable for displaying a tick value, automatically computing the appropriate precision based on the fixed interval between tick values. The specified *count* should have the same value as the count that is used to generate the [tick values](#linear_ticks).
 
 ```js
 const x = d3.scaleLinear([0.1, 1], ["red", "blue"]);
@@ -265,7 +265,7 @@ Changes to this scale will not affect the returned scale, and vice versa.
 
 ## tickFormat(*start*, *stop*, *count*, *specifier*) {#tickFormat}
 
-[Examples](https://observablehq.com/@d3/scale-ticks) · [Source](https://github.com/d3/d3-scale/blob/main/src/tickFormat.js) · Returns a [number format](https://github.com/d3/d3-format) function suitable for displaying a tick value, automatically computing the appropriate precision based on the fixed interval between tick values, as determined by [d3.tickStep](../d3-array/ticks.md#tickStep).
+[Examples](https://observablehq.com/@d3/scale-ticks) · [Source](https://github.com/d3/d3-scale/blob/main/src/tickFormat.js) · Returns a [number format](../d3-format.md) function suitable for displaying a tick value, automatically computing the appropriate precision based on the fixed interval between tick values, as determined by [d3.tickStep](../d3-array/ticks.md#tickStep).
 
 ```js
 const f = d3.tickFormat(0, 1, 20);

@@ -557,7 +557,7 @@ Geographic projections, shapes and math.
 * [d3.geoProjection](./d3-geo/projection.md#geoProjection) - create a custom projection.
 * [d3.geoProjectionMutator](./d3-geo/projection.md#geoProjectionMutator) - create a custom configurable projection.
 
-### [Spherical Math](./d3-geo/math.md)
+### [Spherical math](./d3-geo/math.md)
 
 * [d3.geoArea](./d3-geo/math.md#geoArea) - compute the spherical area of a given feature.
 * [d3.geoBounds](./d3-geo/math.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
@@ -570,7 +570,7 @@ Geographic projections, shapes and math.
 * [*rotation*](./d3-geo/math.md#_rotation) - rotate the given point around the sphere.
 * [*rotation*.invert](./d3-geo/math.md#rotation_invert) - unrotate the given point around the sphere.
 
-### [Spherical Shapes](./d3-geo/shape.md)
+### [Spherical shapes](./d3-geo/shape.md)
 
 * [d3.geoCircle](./d3-geo/shape.md#geoCircle) - create a circle generator.
 * [*circle*](./d3-geo/shape.md#_circle) - generate a piecewise circle as a Polygon.
@@ -1103,7 +1103,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.nodes](./d3-selection/control-flow.md#selection_nodes) - returns an array of all selected elements.
 * [*selection*.node](./d3-selection/control-flow.md#selection_node) - returns the first (non-null) element.
 * [*selection*.size](./d3-selection/control-flow.md#selection_size) - returns the count of elements.
-* [*selection*[Symbol.iterator]](./d3-selection/control-flow.md#selection-symbol-iterator) - iterate over the selection’s nodes.
+* [*selection*[Symbol.iterator]](./d3-selection/control-flow.md#selection_iterator) - iterate over the selection’s nodes.
 
 ### [Local variables](./d3-selection/locals.md)
 

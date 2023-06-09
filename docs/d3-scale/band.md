@@ -70,7 +70,7 @@ If the given *value* is not in the scale’s domain, returns undefined.
 const x = d3.scaleBand([0, 960]).domain([{{d3.csvParseRows(domain).flat().map(JSON.stringify).join(", ")}}]);
 ```
 
-The first element in *domain* will be mapped to the first band, the second domain value to the second band, and so on. Domain values are stored internally in an [InternMap](https://github.com/mbostock/internmap) from primitive value to index; the resulting index is then used to determine the band. Thus, a band scale’s values must be coercible to a primitive value, and the primitive domain value uniquely identifies the corresponding band. If *domain* is not specified, this method returns the current domain.
+The first element in *domain* will be mapped to the first band, the second domain value to the second band, and so on. Domain values are stored internally in an [InternMap](../d3-array/intern.md) from primitive value to index; the resulting index is then used to determine the band. Thus, a band scale’s values must be coercible to a primitive value, and the primitive domain value uniquely identifies the corresponding band. If *domain* is not specified, this method returns the current domain.
 
 ## *band*.range(*range*) {#band_range}
 

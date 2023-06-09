@@ -20,7 +20,7 @@ When a transition ends, it invokes its tweens a final time with a (non-eased) *t
 
 [Source](https://github.com/d3/d3-transition/blob/main/src/selection/interrupt.js) · Interrupts the active transition of the specified *name* on the selected elements, and cancels any pending transitions with the specified *name*, if any. If a name is not specified, null is used.
 
-Interrupting a transition on an element has no effect on any transitions on any descendant elements. For example, an [axis transition](https://github.com/d3/d3-axis) consists of multiple independent, synchronized transitions on the descendants of the axis [G element](https://www.w3.org/TR/SVG/struct.html#Groups) (the tick lines, the tick labels, the domain path, *etc.*). To interrupt the axis transition, you must therefore interrupt the descendants:
+Interrupting a transition on an element has no effect on any transitions on any descendant elements. For example, an [axis transition](../d3-axis.md) consists of multiple independent, synchronized transitions on the descendants of the axis [G element](https://www.w3.org/TR/SVG/struct.html#Groups) (the tick lines, the tick labels, the domain path, *etc.*). To interrupt the axis transition, you must therefore interrupt the descendants:
 
 ```js
 selection.selectAll("*").interrupt();
