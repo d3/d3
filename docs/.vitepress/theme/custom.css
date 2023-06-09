@@ -67,3 +67,5 @@
 .vp-doc sub {
   line-height: 1;
 }
+
+:root.dark .dark-invert { filter: invert(0.883); }

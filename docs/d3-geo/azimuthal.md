@@ -4,7 +4,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoAzimuthalEqualArea() {#geoAzimuthalEqualArea}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/azimuthalEqualArea.png" width="480" height="250">](https://observablehq.com/@d3/azimuthal-equal-area)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/azimuthalEqualArea.png" width="480" height="250" class="dark-invert">](https://observablehq.com/@d3/azimuthal-equal-area)
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/azimuthalEqualArea.js) · The azimuthal equal-area projection.
 
@@ -12,7 +12,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoAzimuthalEquidistant() {#geoAzimuthalEquidistant}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/azimuthalEquidistant.png" width="480" height="250">](https://observablehq.com/@d3/azimuthal-equidistant)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/azimuthalEquidistant.png" width="480" height="250" class="dark-invert">](https://observablehq.com/@d3/azimuthal-equidistant)
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/azimuthalEquidistant.js) · The azimuthal equidistant projection.
 
@@ -20,7 +20,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoGnomonic() {#geoGnomonic}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/gnomonic.png" width="480" height="250">](https://observablehq.com/@d3/gnomonic)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/gnomonic.png" width="480" height="250" class="dark-invert">](https://observablehq.com/@d3/gnomonic)
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/gnomonic.js) · The gnomonic projection.
 
@@ -28,7 +28,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoOrthographic() {#geoOrthographic}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/orthographic.png" width="480" height="250">](https://observablehq.com/@d3/orthographic)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/orthographic.png" width="480" height="250" class="dark-invert">](https://observablehq.com/@d3/orthographic)
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/orthographic.js) · The orthographic projection.
 
@@ -36,7 +36,7 @@ Azimuthal projections project the sphere directly onto a plane.
 
 ## geoStereographic() {#geoStereographic}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/stereographic.png" width="480" height="250">](https://observablehq.com/@d3/stereographic)
+[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/stereographic.png" width="480" height="250" class="dark-invert">](https://observablehq.com/@d3/stereographic)
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/stereographic.js) · The stereographic projection.
 

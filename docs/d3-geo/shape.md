@@ -8,7 +8,7 @@ To generate a [great arc](https://en.wikipedia.org/wiki/Great-circle_distance) (
 
 ## geoGraticule() {#geoGraticule}
 
-<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/graticule.png" width="480" height="360">
+<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/graticule.png" width="480" height="360" class="dark-invert">
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/graticule.js) · Constructs a geometry generator for creating graticules: a uniform grid of [meridians](https://en.wikipedia.org/wiki/Meridian_\(geography\)) and [parallels](https://en.wikipedia.org/wiki/Circle_of_latitude) for showing projection distortion. The default graticule has meridians and parallels every 10° between ±80° latitude; for the polar regions, there are meridians every 90°.
 
