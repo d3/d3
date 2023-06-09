@@ -5,8 +5,9 @@ Projections transform spherical polygonal geometry to planar polygonal geometry.
 * [Azimuthal projections](./azimuthal.md)
 * [Conic projections](./conic.md)
 * [Cylindrical projections](./cylindrical.md)
+* [Extended projections](./extended.md)
 
-For more projections, see [d3-geo-projection](https://github.com/d3/d3-geo-projection) and [d3-geo-polygon](https://github.com/d3/d3-geo-polygon). You can implement [custom projections](#raw-projections) using [geoProjection](#geoProjection) or [geoProjectionMutator](#geoProjectionMutator).
+You can implement [custom projections](#raw-projections) using [geoProjection](#geoProjection) or [geoProjectionMutator](#geoProjectionMutator).
 
 ## *projection*(*point*) {#_projection}
 
