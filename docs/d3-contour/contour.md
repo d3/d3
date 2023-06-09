@@ -8,7 +8,7 @@ Here is an example that loads a GeoTIFF of surface temperatures, and another tha
 
 [<img alt="Cloud Contours" src="https://raw.githubusercontent.com/d3/d3-contour/main/img/clouds.png" width="420" height="219">](https://observablehq.com/@d3/cloud-contours)
 
-Since the contour polygons are GeoJSON, you can transform and display them using standard tools; see [geoPath](../d3-geo.md#geoPath), [geoProject](https://github.com/d3/d3-geo-projection/blob/main/README.md#geoProject) and [geoStitch](https://github.com/d3/d3-geo-projection/blob/main/README.md#geoStitch), for example. Here the above contours of surface temperature are displayed in the Natural Earth projection:
+Since the contour polygons are GeoJSON, you can transform and display them using standard tools; see [geoPath](../d3-geo/path.md#geoPath), [geoProject](https://github.com/d3/d3-geo-projection/blob/main/README.md#geoProject) and [geoStitch](https://github.com/d3/d3-geo-projection/blob/main/README.md#geoStitch), for example. Here the above contours of surface temperature are displayed in the Natural Earth projection:
 
 [<img alt="GeoTiff Contours II" src="https://raw.githubusercontent.com/d3/d3-contour/main/img/reprojection.png" width="420" height="219">](https://observablehq.com/@d3/geotiff-contours-ii)
 
@@ -75,6 +75,6 @@ The input *values* must be an array of length <i>n</i>×<i>m</i> where [<i>n</i>
 
 [Source](https://github.com/d3/d3-contour/blob/main/src/contours.js) · If *thresholds* is specified, sets the threshold generator to the specified function or array and returns this contour generator. If *thresholds* is not specified, returns the current threshold generator, which by default implements [Sturges’ formula](../d3-array/bin.md#thresholdSturges).
 
-Thresholds are defined as an array of values [*x0*, *x1*, …]. The first [generated contour](#_contour) corresponds to the area where the input values are greater than or equal to *x0*; the second contour corresponds to the area where the input values are greater than or equal to *x1*, and so on. Thus, there is exactly one generated MultiPolygon geometry object for each specified threshold value; the threshold value is exposed as <i>geometry</i>.value.
+Thresholds are defined as an array of values [*x0*, *x1*, …]. The first generated contour corresponds to the area where the input values are greater than or equal to *x0*; the second contour corresponds to the area where the input values are greater than or equal to *x1*, and so on. Thus, there is exactly one generated MultiPolygon geometry object for each specified threshold value; the threshold value is exposed as <i>geometry</i>.value.
 
 If a *count* is specified instead of an array of *thresholds*, then the input values’ [extent](../d3-array/summarize.md#extent) will be uniformly divided into approximately *count* bins; see [ticks](../d3-array/ticks.md#ticks).

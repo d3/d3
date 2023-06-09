@@ -179,7 +179,7 @@ The returned interpolator maps *t* in [0, 1 / *n*) to *values*[0], *t* in [1 / *
 d3.quantize(d3.interpolate("red", "blue"), 4) // ["rgb(255, 0, 0)", "rgb(170, 0, 85)", "rgb(85, 0, 170)", "rgb(0, 0, 255)"]
 ```
 
-The first sample is always at *t* = 0, and the last sample is always at *t* = 1. This can be useful in generating a fixed number of samples from a given interpolator, such as to derive the range of a [quantize scale](../d3-scale.md#quantize-scales) from a [continuous interpolator](../d3-scale-chromatic/sequential.md#interpolateWarm).
+The first sample is always at *t* = 0, and the last sample is always at *t* = 1. This can be useful in generating a fixed number of samples from a given interpolator, such as to derive the range of a [quantize scale](../d3-scale/quantize.md) from a [continuous interpolator](../d3-scale-chromatic/sequential.md#interpolateWarm).
 
 :::warning CAUTION
 This method will not work with interpolators that do not return defensive copies of their output, such as [interpolateArray](#interpolateArray), [interpolateDate](#interpolateDate) and [interpolateObject](#interpolateObject). For those interpolators, you must wrap the interpolator and create a copy for each returned value.
