@@ -5,6 +5,8 @@ import {ref, shallowRef, onMounted, onUnmounted} from "vue";
 import {data} from "./gallery.data.js";
 
 let observer;
+let pointerframe;
+let clientX;
 
 const n = 60; // maximum number of examples to show
 const slice = d3.shuffler(d3.randomLcg(d3.utcDay()))(data.slice()).slice(0, n);
@@ -13,8 +15,16 @@ const container = ref();
 const x = ref(720);
 const width = ref(1440);
 
+// Some browsers trigger pointermove more frequently than desirable, so we
+// debounce events for a smooth transitions.
 function onpointermove(event) {
-  x.value = event.clientX;
+  if (!pointerframe) pointerframe = requestAnimationFrame(afterpointermove);
+  clientX = event.clientX;
+}
+
+function afterpointermove() {
+  pointerframe = null;
+  x.value = clientX;
 }
 
 onMounted(() => {
