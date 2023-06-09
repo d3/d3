@@ -1,3 +1,14 @@
+<script setup>
+
+import * as d3 from "d3";
+import UsMap from "../components/UsMap.vue";
+import WorldMap from "../components/WorldMap.vue";
+
+const width = 688;
+const height = 400;
+
+</script>
+
 # Conic projections
 
 Conic projections project the sphere onto a cone, and then unroll the cone onto the plane. Conic projections have [two standard parallels](#conic_parallels).
@@ -8,7 +19,7 @@ Conic projections project the sphere onto a cone, and then unroll the cone onto 
 
 ## geoConicConformal() {#geoConicConformal}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/conicConformal.png" width="480" height="250">](https://observablehq.com/@d3/conic-conformal)
+<a href="https://observablehq.com/@d3/conic-conformal?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicConformal().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/conicConformal.js) · The conic conformal projection. The parallels default to [30°, 30°] resulting in flat top.
 
@@ -16,7 +27,7 @@ Conic projections project the sphere onto a cone, and then unroll the cone onto 
 
 ## geoConicEqualArea() {#geoConicEqualArea}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/conicEqualArea.png" width="480" height="250">](https://observablehq.com/@d3/conic-equal-area)
+<a href="https://observablehq.com/@d3/conic-conformal?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicEqualArea().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/conicEqualArea.js) · The Albers’ equal-area conic projection.
 
@@ -24,7 +35,7 @@ Conic projections project the sphere onto a cone, and then unroll the cone onto 
 
 ## geoConicEquidistant() {#geoConicEquidistant}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/conicEquidistant.png" width="480" height="250">](https://observablehq.com/@d3/conic-equidistant)
+<a href="https://observablehq.com/@d3/conic-equidistant?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :projection='d3.geoConicEquidistant().parallels([35, 65]).rotate([-20, 0]).scale(width * 0.55).center([0, 52]).translate([width / 2, height / 2]).clipExtent([[0, 0], [width, height]]).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/conicEquidistant.js) · The conic equidistant projection.
 
@@ -32,13 +43,13 @@ Conic projections project the sphere onto a cone, and then unroll the cone onto 
 
 ## geoAlbers() {#geoAlbers}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/albers.png" width="480" height="250">](https://observablehq.com/@d3/u-s-map)
+<a href="https://observablehq.com/@d3/u-s-map?intent=fork" target="_blank" style="color: currentColor;"><UsMap :projection='d3.geoAlbers().scale(1300 / 975 * width * 0.8).translate([width / 2, height / 2])' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/albers.js) · The Albers’ equal area-conic projection. This is a U.S.-centric configuration of [geoConicEqualArea](#geoConicEqualArea).
 
 ## geoAlbersUsa() {#geoAlbersUsa}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/albersUsa.png" width="480" height="250">](https://observablehq.com/@d3/u-s-map)
+<a href="https://observablehq.com/@d3/u-s-map?intent=fork" target="_blank" style="color: currentColor;"><UsMap :projection='d3.geoAlbersUsa().scale(1300 / 975 * width * 0.8).translate([width / 2, height / 2])' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/albersUsa.js) · This is a U.S.-centric composite projection of three [geoConicEqualArea](#geoConicEqualArea) projections: [geoAlbers](#geoAlbers) is used for the lower forty-eight states, and separate conic equal-area projections are used for Alaska and Hawaii. The scale for Alaska is diminished: it is projected at 0.35× its true relative area. See [Albers USA with Territories](https://www.npmjs.com/package/geo-albers-usa-territories) for an extension to all US territories, and [d3-composite-projections](http://geoexamples.com/d3-composite-projections/) for more examples.
 

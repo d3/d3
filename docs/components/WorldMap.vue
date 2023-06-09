@@ -10,10 +10,10 @@ import deferRender from "./deferRender.js";
 const outline = {type: "Sphere"};
 const graticule = d3.geoGraticule10();
 
-let landPromise;
+let landPromises = {};
 let disconnect;
 
-async function render(node, {projection}) {
+async function render(node, {projection, landPromise}) {
   const land = await landPromise;
   const path = d3.geoPath(projection);
   const svg = d3.select(node);
@@ -25,14 +25,15 @@ async function render(node, {projection}) {
 export default {
   props: {
     projection: {type: Function},
+    resolution: {type: String, default: "110m"},
     width: {type: Number, default: 688},
     height: {type: Number, default: 400},
   },
   mounted() {
-    landPromise ??= d3
-      .json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-110m.json")
+    this.landPromise = landPromises[this.resolution] ??= d3
+      .json(`https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-${this.resolution}.json`)
       .then((world) => topojson.feature(world, world.objects.land));
-    disconnect = deferRender(this.$el, () => render(this.$el, this));
+    disconnect = deferRender(this.$el, async () => render(this.$el, this));
   },
   updated() {
     render(this.$el, this);

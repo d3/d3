@@ -1,10 +1,20 @@
+<script setup>
+
+import * as d3 from "d3";
+import WorldMap from "../components/WorldMap.vue";
+
+const width = 688;
+const height = 400;
+
+</script>
+
 # Cylindrical projections
 
 Cylindrical projections project the sphere onto a containing cylinder, and then unroll the cylinder onto the plane. [Pseudocylindrical projections](https://web.archive.org/web/20150928042327/http://www.progonos.com/furuti/MapProj/Normal/ProjPCyl/projPCyl.html) are a generalization of cylindrical projections.
 
 ## geoEquirectangular() {#geoEquirectangular}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/equirectangular.png" width="480" height="250">](https://observablehq.com/@d3/equirectangular)
+<a href="https://observablehq.com/@d3/equirectangular?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :height="width / 2" :projection='d3.geoEquirectangular().rotate([0, 0]).fitExtent([[1, 1], [width - 1, width / 2 - 1]], {type: "Sphere"}).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/equirectangular.js) · The equirectangular (plate carrée) projection.
 
@@ -12,7 +22,7 @@ Cylindrical projections project the sphere onto a containing cylinder, and then 
 
 ## geoMercator() {#geoMercator}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/mercator.png" width="480" height="250">](https://observablehq.com/@d3/mercator)
+<a href="https://observablehq.com/@d3/mercator?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :height="width" :projection='d3.geoMercator().rotate([0, 0]).fitExtent([[1, 1], [width - 1, width - 1]], {type: "Sphere"}).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/mercator.js) · The spherical Mercator projection. Defines a default [*projection*.clipExtent](./projection.md#projection_clipExtent) such that the world is projected to a square, clipped to approximately ±85° latitude.
 
@@ -20,7 +30,7 @@ Cylindrical projections project the sphere onto a containing cylinder, and then 
 
 ## geoTransverseMercator() {#geoTransverseMercator}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/transverseMercator.png" width="480" height="250">](https://observablehq.com/@d3/transverse-mercator)
+<a href="https://observablehq.com/@d3/transverse-mercator?intent=fork" target="_blank" style="color: currentColor;"><WorldMap resolution="50m" :height="width" :projection='d3.geoTransverseMercator().rotate([0, 0]).fitExtent([[1, 1], [width - 1, width - 1]], {type: "Sphere"}).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/transverseMercator.js) · The transverse spherical Mercator projection. Defines a default [*projection*.clipExtent](./projection.md#projection_clipExtent) such that the world is projected to a square, clipped to approximately ±85° latitude.
 
@@ -28,7 +38,7 @@ Cylindrical projections project the sphere onto a containing cylinder, and then 
 
 ## geoEqualEarth() {#geoEqualEarth}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/equalEarth.png" width="480" height="250">](https://observablehq.com/@d3/equal-earth)
+<a href="https://observablehq.com/@d3/equal-earth?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :height="width * 0.49" :projection='d3.geoEqualEarth().rotate([0, 0]).fitExtent([[1, 1], [width - 1, width * 0.49 - 1]], {type: "Sphere"}).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/equalEarth.js) · The Equal Earth projection, an equal-area projection, by Bojan Šavrič _et al._, 2018.
 
@@ -36,7 +46,7 @@ Cylindrical projections project the sphere onto a containing cylinder, and then 
 
 ## geoNaturalEarth1() {#geoNaturalEarth1}
 
-[<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/naturalEarth1.png" width="480" height="250">](https://observablehq.com/@d3/natural-earth)
+<a href="https://observablehq.com/@d3/natural-earth?intent=fork" target="_blank" style="color: currentColor;"><WorldMap :height="width * 0.5" :projection='d3.geoNaturalEarth1().rotate([0, 0]).fitExtent([[1, 1], [width - 1, width * 0.5 - 1]], {type: "Sphere"}).precision(0.2)' /></a>
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/naturalEarth1.js) · The [Natural Earth projection](http://www.shadedrelief.com/NE_proj/) is a pseudocylindrical projection designed by Tom Patterson. It is neither conformal nor equal-area, but appealing to the eye for small-scale maps of the whole world.
 
