@@ -2,7 +2,7 @@
 
 Visualizations can be represented by discrete graphical marks such as [symbols](./d3-shape/symbol.md), [arcs](./d3-shape/arc.md), [lines](./d3-shape/line.md), and [areas](./d3-shape/area.md). While the rectangles of a bar chart may sometimes be simple, other shapes are complex, such as rounded annular sectors and Catmull–Rom splines. The d3-shape module provides a variety of shape generators for your convenience.
 
-As with other aspects of D3, these shapes are driven by data: each shape generator exposes accessors that control how the input data are mapped to a visual representation. For example, you might define a line generator for a time series by [scaling](https://github.com/d3/d3-scale) fields of your data to fit the chart:
+As with other aspects of D3, these shapes are driven by data: each shape generator exposes accessors that control how the input data are mapped to a visual representation. For example, you might define a line generator for a time series by [scaling](./d3-scale.md) fields of your data to fit the chart:
 
 ```js
 const line = d3.line()

@@ -44,7 +44,7 @@ const data = await d3.csv("example.csv");
 const data = await d3.dsv(",", "example.csv");
 ```
 
-[Source](https://github.com/d3/d3-fetch/blob/main/src/dsv.js) · Fetches the [DSV](https://github.com/d3/d3-dsv) file at the specified *input* URL. If *init* is specified, it is passed along to the underlying call to [fetch](https://fetch.spec.whatwg.org/#fetch-method); see [RequestInit](https://fetch.spec.whatwg.org/#requestinit) for allowed fields. An optional *row* conversion function may be specified to map and filter row objects to a more-specific representation; see [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) for details. For example:
+[Source](https://github.com/d3/d3-fetch/blob/main/src/dsv.js) · Fetches the [DSV](./d3-dsv.md) file at the specified *input* URL. If *init* is specified, it is passed along to the underlying call to [fetch](https://fetch.spec.whatwg.org/#fetch-method); see [RequestInit](https://fetch.spec.whatwg.org/#requestinit) for allowed fields. An optional *row* conversion function may be specified to map and filter row objects to a more-specific representation; see [*dsv*.parse](./d3-dsv.md#dsv_parse) for details. For example:
 
 ```js
 const data = await d3.dsv(",", "example.csv", (d) => {

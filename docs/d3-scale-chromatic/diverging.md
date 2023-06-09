@@ -8,7 +8,7 @@ import ColorSwatches from "../components/ColorSwatches.vue";
 
 # Diverging schemes
 
-Diverging color schemes are available as continuous interpolators (often used with [d3.scaleSequential](https://github.com/d3/d3-scale/blob/main/README.md#sequential-scales)) and as discrete schemes (often used with [d3.scaleOrdinal](https://github.com/d3/d3-scale/blob/main/README.md#ordinal-scales)).
+Diverging color schemes are available as continuous interpolators (often used with [d3.scaleSequential](../d3-scale/sequential.md)) and as discrete schemes (often used with [d3.scaleOrdinal](../d3-scale/ordinal.md)).
 
 Each discrete scheme, such as [d3.schemeBrBG](#schemeBrBG), is represented as an array of arrays of hexadecimal color strings. The *k*th element of this array contains the color scheme of size *k*; for example, `d3.schemeBrBG[9]` contains an array of nine strings representing the nine colors of the brown-blue-green diverging color scheme. Diverging color schemes support a size *k* ranging from 3 to 11.
 

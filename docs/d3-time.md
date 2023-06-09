@@ -16,7 +16,7 @@ You can, however, use [d3.timeDay](#timeDay).[count](#interval_count):
 d3.timeDay.count(start, end) // 31 😌
 ```
 
-The [day](#day) [interval](#api-reference) is one of several provided by d3-time. Each interval represents a conventional unit of time—[hours](#timeHour), [weeks](#timeWeek), [months](#timeMonth), *etc.*—and has methods to calculate boundary dates. For example, [d3.timeDay](#timeDay) computes midnight (typically 12:00 AM local time) of the corresponding day. In addition to [rounding](#interval_round) and [counting](#interval_count), intervals can also be used to generate arrays of boundary dates. For example, to compute each Sunday in the current month:
+The [day](#timeDay) [interval](#timeInterval) is one of several provided by d3-time. Each interval represents a conventional unit of time—[hours](#timeHour), [weeks](#timeWeek), [months](#timeMonth), *etc.*—and has methods to calculate boundary dates. For example, [d3.timeDay](#timeDay) computes midnight (typically 12:00 AM local time) of the corresponding day. In addition to [rounding](#interval_round) and [counting](#interval_count), intervals can also be used to generate arrays of boundary dates. For example, to compute each Sunday in the current month:
 
 ```js
 const start = d3.timeMonth.floor(); // 2015-01-01T00:00
@@ -451,7 +451,7 @@ Alias for [d3.utcYear](#utcYear).[range](#interval_range).
 * 3 months
 * 1 year
 
-Multiples of milliseconds (for small ranges) and years (for large ranges) are also considered, following the rules of [d3.ticks](https://github.com/d3/d3-array/blob/main/README.md#ticks). The interval producing the number of dates that is closest to *count* is used. For example:
+Multiples of milliseconds (for small ranges) and years (for large ranges) are also considered, following the rules of [d3.ticks](./d3-array/ticks.md#ticks). The interval producing the number of dates that is closest to *count* is used. For example:
 
 ```js
 const start = new Date("1970-03-01");

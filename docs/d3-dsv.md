@@ -274,7 +274,7 @@ Equivalent to [`d3.dsvFormat("\t").formatValue`](#dsv_formatValue).
 
 ## autoType(*object*) {#autoType}
 
-[Source](https://github.com/d3/d3-dsv/blob/main/src/autoType.js) · Given an *object* (or array) representing a parsed row, infers the types of values on the *object* and coerces them accordingly, returning the mutated *object*. This function is intended to be used as a *row* accessor function in conjunction with [*dsv*.parse](#dsv_parse) and [*dsv*.parseRows](#dsv_parseRow). For example, consider the following CSV file:
+[Source](https://github.com/d3/d3-dsv/blob/main/src/autoType.js) · Given an *object* (or array) representing a parsed row, infers the types of values on the *object* and coerces them accordingly, returning the mutated *object*. This function is intended to be used as a *row* accessor function in conjunction with [*dsv*.parse](#dsv_parse) and [*dsv*.parseRows](#dsv_parseRows). For example, consider the following CSV file:
 
 ```
 Year,Make,Model,Length

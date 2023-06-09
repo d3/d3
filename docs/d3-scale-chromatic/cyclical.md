@@ -17,7 +17,7 @@ const color = d3.scaleSequential(d3.interpolateRainbow);
 
 <ColorRamp :color="d3.interpolateRainbow" />
 
-[Source](https://github.com/d3/d3-scale-chromatic/blob/main/src/sequential-multi/rainbow.js) · Given a number *t* in the range [0,1], returns the corresponding color from [d3.interpolateWarm](#interpolateWarm) scale from [0.0, 0.5] followed by the [d3.interpolateCool](#interpolateCool) scale from [0.5, 1.0], thus implementing the cyclical [less-angry rainbow](http://bl.ocks.org/mbostock/310c99e53880faec2434) color scheme.
+[Source](https://github.com/d3/d3-scale-chromatic/blob/main/src/sequential-multi/rainbow.js) · Given a number *t* in the range [0,1], returns the corresponding color from [d3.interpolateWarm](./sequential.md#interpolateWarm) scale from [0.0, 0.5] followed by the [d3.interpolateCool](./sequential.md#interpolateCool) scale from [0.5, 1.0], thus implementing the cyclical [less-angry rainbow](http://bl.ocks.org/mbostock/310c99e53880faec2434) color scheme.
 
 ## interpolateSinebow(*t*) {#interpolateSinebow}
 

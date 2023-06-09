@@ -8,7 +8,7 @@ import ColorSwatches from "../components/ColorSwatches.vue";
 
 # Sequential schemes
 
-Sequential color schemes are available as continuous interpolators (often used with [d3.scaleSequential](https://github.com/d3/d3-scale/blob/main/README.md#sequential-scales)) and as discrete schemes (often used with [d3.scaleOrdinal](https://github.com/d3/d3-scale/blob/main/README.md#ordinal-scales)).
+Sequential color schemes are available as continuous interpolators (often used with [d3.scaleSequential](../d3-scale/sequential.md)) and as discrete schemes (often used with [d3.scaleOrdinal](../d3-scale/ordinal.md)).
 
 Each discrete scheme, such as [d3.schemeBlues](#schemeBlues), is represented as an array of arrays of hexadecimal color strings. The *k*th element of this array contains the color scheme of size *k*; for example, `d3.schemeBlues[9]` contains an array of nine strings representing the nine colors of the blue sequential color scheme. Sequential color schemes support a size *k* ranging from 3 to 9.
 

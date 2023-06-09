@@ -53,7 +53,7 @@ Each object in the returned array has the following properties:
 * `endAngle` - the [end angle](#pie_endAngle) of the arc.
 * `padAngle` - the [pad angle](#pie_padAngle) of the arc.
 
-This representation is designed to work with the arc generator’s default [startAngle](#arc_startAngle), [endAngle](#arc_endAngle) and [padAngle](#arc_padAngle) accessors. Angles are in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise.
+This representation is designed to work with the arc generator’s default [startAngle](./arc.md#arc_startAngle), [endAngle](./arc.md#arc_endAngle) and [padAngle](./arc.md#arc_padAngle) accessors. Angles are in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise.
 
 The length of the returned array is the same as *data*, and each element *i* in the returned array corresponds to the element *i* in the input data. The returned array of arcs is in the same order as the data, even when the pie chart is [sorted](#pie_sortValues).
 
@@ -127,7 +127,7 @@ If *compare* is not specified, returns the current data comparator.
 pie.sort() // (a, b) => d3.ascending(a.name, b.name))
 ```
 
-The data comparator defaults to null. If both the data comparator and the [value comparator](#pie_sortValue) are null, then arcs are positioned in the original input order. Setting the data comparator implicitly sets the value comparator to null.
+The data comparator defaults to null. If both the data comparator and the [value comparator](#pie_sortValues) are null, then arcs are positioned in the original input order. Setting the data comparator implicitly sets the value comparator to null.
 
 Sorting does not affect the order of the [generated arc array](#_pie) which is always in the same order as the input data array; it only affects the computed angles of each arc. The first arc starts at the [start angle](#pie_startAngle) and the last arc ends at the [end angle](#pie_endAngle).
 

@@ -104,7 +104,7 @@ If the specified *factory* is null, removes the previously-assigned text tween, 
 
 ## *transition*.remove() {#transition_remove}
 
-[Source](https://github.com/d3/d3-transition/blob/main/src/transition/remove.js) · For each selected element, [removes](./selecting.md#selection_remove) the element when the transition ends, as long as the element has no other active or pending transitions. If the element has other active or pending transitions, does nothing.
+[Source](https://github.com/d3/d3-transition/blob/main/src/transition/remove.js) · For each selected element, [removes](../d3-selection/modifying.md#selection_remove) the element when the transition ends, as long as the element has no other active or pending transitions. If the element has other active or pending transitions, does nothing.
 
 ## *transition*.tween(name, value) {#transition_tween}
 

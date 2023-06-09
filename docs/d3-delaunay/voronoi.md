@@ -38,15 +38,15 @@ const voronoi = delaunay.voronoi([0, 0, 640, 480]);
 
 If *bounds* is not specified, it defaults to [0, 0, 960, 500]. The Voronoi diagram is returned even in degenerate cases where no triangulation exists — namely 0, 1 or 2 points, and collinear points.
 
-### *voronoi*.delaunay
+### *voronoi*.delaunay {#voronoi_delaunay}
 
-The Voronoi diagram’s associated [Delaunay triangulation](#delaunay).
+The Voronoi diagram’s associated [Delaunay triangulation](./delaunay.md).
 
-### *voronoi*.circumcenters
+### *voronoi*.circumcenters {#voronoi_circumcenters}
 
 The [circumcenters](http://mathworld.wolfram.com/Circumcenter.html) of the Delaunay triangles as a Float64Array [*cx0*, *cy0*, *cx1*, *cy1*, …]. Each contiguous pair of coordinates *cx*, *cy* is the circumcenter for the corresponding triangle. These circumcenters form the coordinates of the Voronoi cell polygons.
 
-### *voronoi*.vectors
+### *voronoi*.vectors {#voronoi_vectors}
 
 A Float64Array [*vx0*, *vy0*, *wx0*, *wy0*, …] where each non-zero quadruple describes an open (infinite) cell on the outer hull, giving the directions of two open half-lines.
 

@@ -62,7 +62,7 @@ const x = d3.scaleLinear().domain([10, 130]);
 
 The array must contain two or more elements. If the elements in the given array are not numbers, they will be coerced to numbers.
 
-Although continuous scales typically have two values each in their domain and range, specifying more than two values produces a piecewise scale. For example, to create a [diverging color scale](#diverging-scales) that interpolates between white and red for negative values, and white and green for positive values, say:
+Although continuous scales typically have two values each in their domain and range, specifying more than two values produces a piecewise scale. For example, to create a [diverging color scale](./diverging.md) that interpolates between white and red for negative values, and white and green for positive values, say:
 
 ```js
 const color = d3.scaleLinear([-1, 0, 1], ["red", "white", "green"]);
@@ -210,7 +210,7 @@ If *count* is not specified, it defaults to 10. The returned tick values are uni
 
 ## *linear*.tickFormat(*count*, *specifier*) {#linear_tickFormat}
 
-[Examples](https://observablehq.com/@d3/scale-ticks) · [Source](https://github.com/d3/d3-scale/blob/main/src/tickFormat.js) · Returns a [number format](https://github.com/d3/d3-format) function suitable for displaying a tick value, automatically computing the appropriate precision based on the fixed interval between tick values. The specified *count* should have the same value as the count that is used to generate the [tick values](#linear_ticks).
+[Examples](https://observablehq.com/@d3/scale-ticks) · [Source](https://github.com/d3/d3-scale/blob/main/src/tickFormat.js) · Returns a [number format](../d3-format.md) function suitable for displaying a tick value, automatically computing the appropriate precision based on the fixed interval between tick values. The specified *count* should have the same value as the count that is used to generate the [tick values](#linear_ticks).
 
 ```js
 const x = d3.scaleLinear([0.1, 1], ["red", "blue"]);
@@ -230,7 +230,7 @@ T.map(f); // ["−100%", "−50%", "+0%", "+50%", "+100%"]
 
 If *specifier* uses the format type `s`, the scale will return a [SI-prefix format](../d3-format.md#locale_formatPrefix) based on the largest value in the domain. If the *specifier* already specifies a precision, this method is equivalent to [*locale*.format](../d3-format.md#locale_format).
 
-See also [d3.tickFormat](../d3-array/ticks.md#tickFormat).
+See also [d3.tickFormat](#tickFormat).
 
 ## *linear*.nice(count) {#linear_nice}
 
@@ -265,7 +265,7 @@ Changes to this scale will not affect the returned scale, and vice versa.
 
 ## tickFormat(*start*, *stop*, *count*, *specifier*) {#tickFormat}
 
-[Examples](https://observablehq.com/@d3/scale-ticks) · [Source](https://github.com/d3/d3-scale/blob/main/src/tickFormat.js) · Returns a [number format](https://github.com/d3/d3-format) function suitable for displaying a tick value, automatically computing the appropriate precision based on the fixed interval between tick values, as determined by [d3.tickStep](../d3-array/ticks.md#tickStep).
+[Examples](https://observablehq.com/@d3/scale-ticks) · [Source](https://github.com/d3/d3-scale/blob/main/src/tickFormat.js) · Returns a [number format](../d3-format.md) function suitable for displaying a tick value, automatically computing the appropriate precision based on the fixed interval between tick values, as determined by [d3.tickStep](../d3-array/ticks.md#tickStep).
 
 ```js
 const f = d3.tickFormat(0, 1, 20);

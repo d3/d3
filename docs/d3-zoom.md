@@ -187,7 +187,7 @@ selection
 
 ## *zoom*.on(*typenames*, *listener*) {#zoom_on}
 
-[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · If *listener* is specified, sets the event *listener* for the specified *typenames* and returns the zoom behavior. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the same context and arguments as [*selection*.on](./d3-selection/control-flow.md#selection_on) listeners: the current event (`event`) and datum `d`, with the `this` context as the current DOM element.
+[Source](https://github.com/d3/d3-zoom/blob/main/src/zoom.js) · If *listener* is specified, sets the event *listener* for the specified *typenames* and returns the zoom behavior. If an event listener was already registered for the same type and name, the existing listener is removed before the new listener is added. If *listener* is null, removes the current event listeners for the specified *typenames*, if any. If *listener* is not specified, returns the first currently-assigned listener matching the specified *typenames*, if any. When a specified event is dispatched, each *listener* will be invoked with the same context and arguments as [*selection*.on](./d3-selection/events.md#selection_on) listeners: the current event (`event`) and datum `d`, with the `this` context as the current DOM element.
 
 The *typenames* is a string containing one or more *typename* separated by whitespace. Each *typename* is a *type*, optionally followed by a period (`.`) and a *name*, such as `zoom.foo` and `zoom.bar`; the name allows multiple listeners to be registered for the same *type*. The *type* must be one of the following:
 
@@ -336,7 +336,7 @@ Note that the order of transformations matters! The translate must be applied be
 
 ## *transform*.rescaleX(*x*) {#transform_rescaleX}
 
-[Source](https://github.com/d3/d3-zoom/blob/main/src/transform.js) · Returns a [copy](https://github.com/d3/d3-scale#continuous_copy) of the [continuous scale](https://github.com/d3/d3-scale#continuous-scales) *x* whose [domain](https://github.com/d3/d3-scale#continuous_domain) is transformed. This is implemented by first applying the [inverse *x*-transform](#transform_invertX) on the scale’s [range](https://github.com/d3/d3-scale#continuous_range), and then applying the [inverse scale](https://github.com/d3/d3-scale#continuous_invert) to compute the corresponding domain:
+[Source](https://github.com/d3/d3-zoom/blob/main/src/transform.js) · Returns a [copy](./d3-scale/linear.md#linear_copy) of the [continuous scale](./d3-scale/linear.md) *x* whose [domain](./d3-scale/linear.md#linear_domain) is transformed. This is implemented by first applying the [inverse *x*-transform](#transform_invertX) on the scale’s [range](./d3-scale/linear.md#linear_range), and then applying the [inverse scale](./d3-scale/linear.md#linear_invert) to compute the corresponding domain:
 
 ```js
 function rescaleX(x) {
@@ -346,11 +346,11 @@ function rescaleX(x) {
 }
 ```
 
-The scale *x* must use [interpolateNumber](https://github.com/d3/d3-interpolate#interpolateNumber); do not use [*continuous*.rangeRound](https://github.com/d3/d3-scale#continuous_rangeRound) as this reduces the accuracy of [*continuous*.invert](https://github.com/d3/d3-scale#continuous_invert) and can lead to an inaccurate rescaled domain. This method does not modify the input scale *x*; *x* thus represents the untransformed scale, while the returned scale represents its transformed view.
+The scale *x* must use [interpolateNumber](./d3-interpolate/value.md#interpolateNumber); do not use [*continuous*.rangeRound](./d3-scale/linear.md#linear_rangeRound) as this reduces the accuracy of [*continuous*.invert](./d3-scale/linear.md#linear_invert) and can lead to an inaccurate rescaled domain. This method does not modify the input scale *x*; *x* thus represents the untransformed scale, while the returned scale represents its transformed view.
 
 ## *transform*.rescaleY(*y*) {#transform_rescaleY}
 
-[Source](https://github.com/d3/d3-zoom/blob/main/src/transform.js) · Returns a [copy](https://github.com/d3/d3-scale#continuous_copy) of the [continuous scale](https://github.com/d3/d3-scale#continuous-scales) *y* whose [domain](https://github.com/d3/d3-scale#continuous_domain) is transformed. This is implemented by first applying the [inverse *y*-transform](#transform_invertY) on the scale’s [range](https://github.com/d3/d3-scale#continuous_range), and then applying the [inverse scale](https://github.com/d3/d3-scale#continuous_invert) to compute the corresponding domain:
+[Source](https://github.com/d3/d3-zoom/blob/main/src/transform.js) · Returns a [copy](./d3-scale/linear.md#linear_copy) of the [continuous scale](./d3-scale/linear.md) *y* whose [domain](./d3-scale/linear.md#linear_domain) is transformed. This is implemented by first applying the [inverse *y*-transform](#transform_invertY) on the scale’s [range](./d3-scale/linear.md#linear_range), and then applying the [inverse scale](./d3-scale/linear.md#linear_invert) to compute the corresponding domain:
 
 ```js
 function rescaleY(y) {
@@ -360,7 +360,7 @@ function rescaleY(y) {
 }
 ```
 
-The scale *y* must use [interpolateNumber](https://github.com/d3/d3-interpolate#interpolateNumber); do not use [*continuous*.rangeRound](https://github.com/d3/d3-scale#continuous_rangeRound) as this reduces the accuracy of [*continuous*.invert](https://github.com/d3/d3-scale#continuous_invert) and can lead to an inaccurate rescaled domain. This method does not modify the input scale *y*; *y* thus represents the untransformed scale, while the returned scale represents its transformed view.
+The scale *y* must use [interpolateNumber](./d3-interpolate/value.md#interpolateNumber); do not use [*continuous*.rangeRound](./d3-scale/linear.md#linear_rangeRound) as this reduces the accuracy of [*continuous*.invert](./d3-scale/linear.md#linear_invert) and can lead to an inaccurate rescaled domain. This method does not modify the input scale *y*; *y* thus represents the untransformed scale, while the returned scale represents its transformed view.
 
 ## *transform*.toString() {#transform_toString}
 

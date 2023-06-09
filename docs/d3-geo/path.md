@@ -1,6 +1,6 @@
 # Paths
 
-The geographic path generator, [geoPath](#geoPath), takes a given GeoJSON geometry or feature object and generates SVG path data string or [renders to a Canvas](https://observablehq.com/@d3/u-s-map-canvas). Paths can be used with [projections](./projection.md) or [transforms](./projection.md#transforms), or they can be used to render planar geometry directly to Canvas or SVG.
+The geographic path generator, [geoPath](#geoPath), takes a given GeoJSON geometry or feature object and generates SVG path data string or [renders to a Canvas](https://observablehq.com/@d3/u-s-map-canvas). Paths can be used with [projections](./projection.md) or [transforms](./projection.md#geoTransform), or they can be used to render planar geometry directly to Canvas or SVG.
 
 ## geoPath(*projection*, *context*) {#geoPath}
 

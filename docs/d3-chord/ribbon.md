@@ -12,7 +12,7 @@ const ribbon = d3.ribbon();
 
 ## *ribbon*(...*arguments*) {#_ribbon}
 
-[Source](https://github.com/d3/d3-chord/blob/main/src/ribbon.js) · Generates a ribbon for the given *arguments*. The *arguments* are arbitrary; they are propagated to the ribbon generator’s accessor functions along with the `this` object. For example, with the default settings, a [chord object](#_chord) expected:
+[Source](https://github.com/d3/d3-chord/blob/main/src/ribbon.js) · Generates a ribbon for the given *arguments*. The *arguments* are arbitrary; they are propagated to the ribbon generator’s accessor functions along with the `this` object. For example, with the default settings, a [chord object](./chord.md) is expected:
 
 ```js
 ribbon({
@@ -128,7 +128,7 @@ The pad angle specifies the angular gap between adjacent ribbons.
 
 ## *ribbon*.context(*context*) {#ribbon_context}
 
-[Source](https://github.com/d3/d3-chord/blob/main/src/ribbon.js) · If *context* is specified, sets the context and returns this ribbon generator. If *context* is not specified, returns the current context, which defaults to null. If the context is not null, then the [generated ribbon](#_ribbon) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated ribbon is returned. See also [d3-path](https://github.com/d3/d3-path).
+[Source](https://github.com/d3/d3-chord/blob/main/src/ribbon.js) · If *context* is specified, sets the context and returns this ribbon generator. If *context* is not specified, returns the current context, which defaults to null. If the context is not null, then the [generated ribbon](#_ribbon) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated ribbon is returned. See also [d3-path](../d3-path.md).
 
 ## ribbonArrow() {#ribbonArrow}
 

@@ -114,13 +114,13 @@ Note that if a line segment consists of only a single point, it may appear invis
 
 ## *line*.curve(*curve*) {#line_curve}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *curve* is specified, sets the [curve factory](#curves) and returns this line generator.
+[Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *curve* is specified, sets the [curve factory](./curve.md) and returns this line generator.
 
 ```js
 const line = d3.line().curve(d3.curveStep);
 ```
 
-If *curve* is not specified, returns the current curve factory, which defaults to [curveLinear](#curveLinear).
+If *curve* is not specified, returns the current curve factory, which defaults to [curveLinear](./curve.md#curveLinear).
 
 ```js
 line.curve() // d3.curveStep

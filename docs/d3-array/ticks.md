@@ -80,7 +80,7 @@ The arguments are not required to be integers; however, the results are more pre
 d3.range(0, 1, 0.2) // [0, 0.2, 0.4, 0.6000000000000001, 0.8]
 ```
 
-This behavior is due to IEEE 754 double-precision floating point, which defines 0.2 * 3 = 0.6000000000000001. Use [d3-format](https://github.com/d3/d3-format) to format numbers for human consumption with appropriate rounding; see also [linear.tickFormat](https://github.com/d3/d3-scale/blob/main/README.md#linear_tickFormat) in [d3-scale](https://github.com/d3/d3-scale). Likewise, if the returned array should have a specific length, consider using [array.map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/map) on an integer range.
+This behavior is due to IEEE 754 double-precision floating point, which defines 0.2 * 3 = 0.6000000000000001. Use [d3-format](../d3-format.md) to format numbers for human consumption with appropriate rounding; see also [*linear*.tickFormat](../d3-scale/linear.md#linear_tickFormat) in [d3-scale](../d3-scale.md). Likewise, if the returned array should have a specific length, consider using [*array*.map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/map) on an integer range.
 
 ```js
 d3.range(0, 1, 1 / 49) // 👎 returns 50 elements!

@@ -33,7 +33,7 @@ color("b"); // "green"
 color("c"); // "blue"
 ```
 
-The first element in *domain* will be mapped to the first element in the range, the second domain value to the second range value, and so on. Domain values are stored internally in an [InternMap](https://github.com/mbostock/internmap) from primitive value to index; the resulting index is then used to retrieve a value from the range. Thus, an ordinal scale’s values must be coercible to a primitive value, and the primitive domain value uniquely identifies the corresponding range value.
+The first element in *domain* will be mapped to the first element in the range, the second domain value to the second range value, and so on. Domain values are stored internally in an [InternMap](../d3-array/intern.md) from primitive value to index; the resulting index is then used to retrieve a value from the range. Thus, an ordinal scale’s values must be coercible to a primitive value, and the primitive domain value uniquely identifies the corresponding range value.
 
 ```js
 color.domain() // ["a", "b", "c"]
