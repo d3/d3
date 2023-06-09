@@ -493,10 +493,10 @@ Geographic projections, shapes and math.
 * [*path*.area](./d3-geo/path.md#path_area) - compute the projected planar area of a given feature.
 * [*path*.bounds](./d3-geo/path.md#path_bounds) - compute the projected planar bounding box of a given feature.
 * [*path*.centroid](./d3-geo/path.md#path_centroid) - compute the projected planar centroid of a given feature.
+* [*path*.digits](./d3-geo/path.md#path_digits) - set the output precision.
 * [*path*.measure](./d3-geo/path.md#path_measure) - compute the projected planar length of a given feature.
 * [*path*.projection](./d3-geo/path.md#path_projection) - set the geographic projection.
 * [*path*.context](./d3-geo/path.md#path_context) - set the render context.
-* [*path*.digits](./d3-geo/path.md#path_digits) - set the output precision.
 * [*path*.pointRadius](./d3-geo/path.md#path_pointRadius) - set the radius to display point features.
 
 ### [Projections](./d3-geo/projection.md)
@@ -520,48 +520,56 @@ Geographic projections, shapes and math.
 * [*projection*.fitSize](./d3-geo/projection.md#projection_fitSize) - set the scale and translate to fit a GeoJSON object.
 * [*projection*.fitWidth](./d3-geo/projection.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
 * [*projection*.fitHeight](./d3-geo/projection.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
+
+#### [Raw projections](./d3-geo/projection.md#raw-projections)
+
+* [*project*](./d3-geo/projection.md#_project) - project the specified point from the sphere to the plane.
+* [*project*.invert](./d3-geo/projection.md#project_invert) - unproject the specified point from the plane to the sphere.
+* [d3.geoProjection](./d3-geo/projection.md#geoProjection) - create a custom projection.
+* [d3.geoProjectionMutator](./d3-geo/projection.md#geoProjectionMutator) - create a custom configurable projection.
+* [d3.geoTransform](./d3-geo/projection.md#geoTransform) - define a custom geometry transform.
+* [d3.geoIdentity](./d3-geo/projection.md#geoIdentity) - scale, translate or clip planar geometry.
+* [d3.geoClipAntimeridian](./d3-geo/projection.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
+* [d3.geoClipCircle](./d3-geo/projection.md#geoClipCircle) - clips spherical geometries to a small circle.
+* [d3.geoClipRectangle](./d3-geo/projection.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
+
+#### [Azimuthal projections](./d3-geo/projection/azimuthal.md)
+
 * [d3.geoAzimuthalEqualArea](./d3-geo/azimuthal.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
 * [d3.geoAzimuthalEquidistant](./d3-geo/azimuthal.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
 * [d3.geoGnomonic](./d3-geo/azimuthal.md#geoGnomonic) - the gnomonic projection.
 * [d3.geoOrthographic](./d3-geo/azimuthal.md#geoOrthographic) - the azimuthal orthographic projection.
 * [d3.geoStereographic](./d3-geo/azimuthal.md#geoStereographic) - the azimuthal stereographic projection.
-* [d3.geoEqualEarth](./d3-geo/cylindrical.md#geoEqualEarth) - the Equal Earth projection.
-* [d3.geoAlbersUsa](./d3-geo/conic.md#geoAlbersUsa) - a composite Albers projection for the United States.
+
+#### [Conic projections](./d3-geo/projection/conic.md)
+
 * [*conic*.parallels](./d3-geo/conic.md#conic_parallels) - set the two standard parallels.
-* [d3.geoAlbers](./d3-geo/conic.md#geoAlbers) - the Albers equal-area conic projection.
 * [d3.geoConicConformal](./d3-geo/conic.md#geoConicConformal) - the conic conformal projection.
 * [d3.geoConicEqualArea](./d3-geo/conic.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
 * [d3.geoConicEquidistant](./d3-geo/conic.md#geoConicEquidistant) - the conic equidistant projection.
+* [d3.geoAlbers](./d3-geo/conic.md#geoAlbers) - the Albers equal-area conic projection.
+* [d3.geoAlbersUsa](./d3-geo/conic.md#geoAlbersUsa) - a composite Albers projection for the United States.
+
+#### [Cylindrical projections](./d3-geo/projection/cylindrical.md)
+
 * [d3.geoEquirectangular](./d3-geo/cylindrical.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
 * [d3.geoMercator](./d3-geo/cylindrical.md#geoMercator) - the spherical Mercator projection.
 * [d3.geoTransverseMercator](./d3-geo/cylindrical.md#geoTransverseMercator) - the transverse spherical Mercator projection.
+* [d3.geoEqualEarth](./d3-geo/cylindrical.md#geoEqualEarth) - the Equal Earth projection.
 * [d3.geoNaturalEarth1](./d3-geo/cylindrical.md#geoNaturalEarth1) - the Equal Earth projection, version 1.
 
-### [Raw projections](./d3-geo/projection.md#raw-projections)
+### [Streams](./d3-geo/stream.md)
 
-* [d3.geoProjection](./d3-geo/projection.md#geoProjection) - create a custom projection.
-* [d3.geoProjectionMutator](./d3-geo/projection.md#geoProjectionMutator) - create a custom configurable projection.
-
-### [Spherical math](./d3-geo/math.md)
-
-* [d3.geoArea](./d3-geo/math.md#geoArea) - compute the spherical area of a given feature.
-* [d3.geoBounds](./d3-geo/math.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
-* [d3.geoCentroid](./d3-geo/math.md#geoCentroid) - compute the spherical centroid of a given feature.
-* [d3.geoDistance](./d3-geo/math.md#geoDistance) - compute the great-arc distance between two points.
-* [d3.geoLength](./d3-geo/math.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
-* [d3.geoInterpolate](./d3-geo/math.md#geoInterpolate) - interpolate between two points along a great arc.
-* [d3.geoContains](./d3-geo/math.md#geoContains) - test whether a point is inside a given feature.
-* [d3.geoRotation](./d3-geo/math.md#geoRotation) - create a rotation function for the specified angles.
-* [*rotation*](./d3-geo/math.md#_rotation) - rotate the given point around the sphere.
-* [*rotation*.invert](./d3-geo/math.md#rotation_invert) - unrotate the given point around the sphere.
+* [d3.geoStream](./d3-geo/stream.md#geoStream) - convert a GeoJSON object to a geometry stream.
+* [*stream*.point](./d3-geo/stream.md#stream_point) - indicates a point with the specified coordinates.
+* [*stream*.lineStart](./d3-geo/stream.md#stream_lineStart) - indicates the start of a line or ring.
+* [*stream*.lineEnd](./d3-geo/stream.md#stream_lineEnd) - indicates the end of a line or ring.
+* [*stream*.polygonStart](./d3-geo/stream.md#stream_polygonStart) - indicates the start of a polygon.
+* [*stream*.polygonEnd](./d3-geo/stream.md#stream_polygonEnd) - indicates the end of a polygon.
+* [*stream*.sphere](./d3-geo/stream.md#stream_sphere) - indicates the sphere.
 
 ### [Spherical shapes](./d3-geo/shape.md)
 
-* [d3.geoCircle](./d3-geo/shape.md#geoCircle) - create a circle generator.
-* [*circle*](./d3-geo/shape.md#_circle) - generate a piecewise circle as a Polygon.
-* [*circle*.center](./d3-geo/shape.md#circle_center) - specify the circle center in latitude and longitude.
-* [*circle*.radius](./d3-geo/shape.md#circle_radius) - specify the angular radius in degrees.
-* [*circle*.precision](./d3-geo/shape.md#circle_precision) - specify the precision of the piecewise circle.
 * [d3.geoGraticule](./d3-geo/shape.md#geoGraticule) - create a graticule generator.
 * [*graticule*](./d3-geo/shape.md#_graticule) - generate a MultiLineString of meridians and parallels.
 * [*graticule*.lines](./d3-geo/shape.md#graticule_lines) - generate an array of LineStrings of meridians and parallels.
@@ -574,27 +582,22 @@ Geographic projections, shapes and math.
 * [*graticule*.stepMinor](./d3-geo/shape.md#graticule_stepMinor) - get or set the minor step intervals.
 * [*graticule*.precision](./d3-geo/shape.md#graticule_precision) - get or set the latitudinal precision.
 * [d3.geoGraticule10](./d3-geo/shape.md#geoGraticule10) - generate the default 10° global graticule.
+* [d3.geoCircle](./d3-geo/shape.md#geoCircle) - create a circle generator.
+* [*circle*](./d3-geo/shape.md#_circle) - generate a piecewise circle as a Polygon.
+* [*circle*.center](./d3-geo/shape.md#circle_center) - specify the circle center in latitude and longitude.
+* [*circle*.radius](./d3-geo/shape.md#circle_radius) - specify the angular radius in degrees.
+* [*circle*.precision](./d3-geo/shape.md#circle_precision) - specify the precision of the piecewise circle.
 
-### [Streams](./d3-geo/stream.md)
+### [Spherical math](./d3-geo/math.md)
 
-* [d3.geoStream](./d3-geo/stream.md#geoStream) - convert a GeoJSON object to a geometry stream.
-* [*stream*.point](./d3-geo/stream.md#stream_point) - indicates a point with the specified coordinates.
-* [*stream*.lineStart](./d3-geo/stream.md#stream_lineStart) - indicates the start of a line or ring.
-* [*stream*.lineEnd](./d3-geo/stream.md#stream_lineEnd) - indicates the end of a line or ring.
-* [*stream*.polygonStart](./d3-geo/stream.md#stream_polygonStart) - indicates the start of a polygon.
-* [*stream*.polygonEnd](./d3-geo/stream.md#stream_polygonEnd) - indicates the end of a polygon.
-* [*stream*.sphere](./d3-geo/stream.md#stream_sphere) - indicates the sphere.
-
-### [Transforms](./d3-geo/projection.md#geoTransform)
-
-* [d3.geoTransform](./d3-geo/projection.md#geoTransform) - define a custom geometry transform.
-* [d3.geoIdentity](./d3-geo/projection.md#geoIdentity) - scale, translate or clip planar geometry.
-
-### [Clipping](./d3-geo/projection.md#geoClipAntimeridian)
-
-* [d3.geoClipAntimeridian](./d3-geo/projection.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
-* [d3.geoClipCircle](./d3-geo/projection.md#geoClipCircle) - clips spherical geometries to a small circle.
-* [d3.geoClipRectangle](./d3-geo/projection.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
+* [d3.geoArea](./d3-geo/math.md#geoArea) - compute the spherical area of a given feature.
+* [d3.geoBounds](./d3-geo/math.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
+* [d3.geoCentroid](./d3-geo/math.md#geoCentroid) - compute the spherical centroid of a given feature.
+* [d3.geoDistance](./d3-geo/math.md#geoDistance) - compute the great-arc distance between two points.
+* [d3.geoLength](./d3-geo/math.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
+* [d3.geoInterpolate](./d3-geo/math.md#geoInterpolate) - interpolate between two points along a great arc.
+* [d3.geoContains](./d3-geo/math.md#geoContains) - test whether a point is inside a given feature.
+* [d3.geoRotation](./d3-geo/math.md#geoRotation) - create a rotation function for the specified angles.
 
 ## [d3-hierarchy](./d3-hierarchy.md)
 
