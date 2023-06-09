@@ -101,7 +101,7 @@ projection.fitSize([width, height], object);
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/index.js) · A convenience method for [*projection*.fitSize](#projection_fitSize) where the width is automatically chosen from the aspect ratio of *object* and the given constraint on *height*.
 
-## Raw projections
+## Raw projections {#raw-projections}
 
 Raw projections are point transformation functions that are used to implement custom projections; they typically passed to [geoProjection](#geoProjection) or [geoProjectionMutator](#geoProjectionMutator). They are exposed here to facilitate the derivation of related projections. Raw projections take spherical coordinates [*lambda*, *phi*] in radians (not degrees!) and return a point [*x*, *y*], typically in the unit square centered around the origin.
 
@@ -109,13 +109,13 @@ Raw projections are point transformation functions that are used to implement cu
 
 Projects the specified point [<i>lambda</i>, <i>phi</i>] in radians, returning a new point [*x*, *y*] in unitless coordinates.
 
-### *project*.invert(*x*, *y*)
+### *project*.invert(*x*, *y*) {#project_invert}
 
 The inverse of [*project*](#_project).
 
 ## geoProjection(*project*) {#geoProjection}
 
-[Source](https://github.com/d3/d3-geo/blob/main/src/projection/index.js) · Constructs a new projection from the specified [raw projection](#_project), *project*. The *project* function takes the *longitude* and *latitude* of a given point in [radians](http://mathworld.wolfram.com/Radian.html), often referred to as *lambda* (λ) and *phi* (φ), and returns a two-element array [*x*, *y*] representing its unit projection. The *project* function does not need to scale or translate the point, as these are applied automatically by [*projection*.scale](#projection_scale), [*projection*.translate](#projection_translate), and [*projection*.center](#projection_center). Likewise, the *project* function does not need to perform any spherical rotation, as [*projection*.rotate](#projection_rotate) is applied prior to projection.
+[Source](https://github.com/d3/d3-geo/blob/main/src/projection/index.js) · Constructs a new projection from the specified [raw projection](#raw-projections), *project*. The *project* function takes the *longitude* and *latitude* of a given point in [radians](http://mathworld.wolfram.com/Radian.html), often referred to as *lambda* (λ) and *phi* (φ), and returns a two-element array [*x*, *y*] representing its unit projection. The *project* function does not need to scale or translate the point, as these are applied automatically by [*projection*.scale](#projection_scale), [*projection*.translate](#projection_translate), and [*projection*.center](#projection_center). Likewise, the *project* function does not need to perform any spherical rotation, as [*projection*.rotate](#projection_rotate) is applied prior to projection.
 
 For example, a spherical Mercator projection can be implemented as:
 
