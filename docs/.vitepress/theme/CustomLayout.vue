@@ -11,7 +11,7 @@ let observer;
 
 const n = 60; // maximum number of examples to show
 const slice = d3.shuffler(d3.randomLcg(d3.utcDay()))(data.slice()).slice(0, n);
-const sample = shallowRef([])
+const sample = shallowRef(slice.slice(0, 55)); // initial guess
 const container = ref();
 const x = ref(720);
 const width = ref(1440);
