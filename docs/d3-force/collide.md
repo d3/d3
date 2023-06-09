@@ -1,4 +1,12 @@
+<script setup>
+
+import CollideForce from "../components/CollideForce.vue";
+
+</script>
+
 # Collide force
+
+<CollideForce />
 
 The collide force treats nodes as circles with a given [radius](#collide_radius), rather than points, and prevents nodes from overlapping. More formally, two nodes *a* and *b* are separated so that the distance between *a* and *b* is at least *radius*(*a*) + *radius*(*b*). To reduce jitter, this is by default a “soft” constraint with a configurable [strength](#collide_strength) and [iteration count](#collide_iterations).
 
