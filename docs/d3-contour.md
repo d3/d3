@@ -1,21 +1,14 @@
 <script setup>
 
 import * as Plot from "@observablehq/plot";
-import * as d3 from "d3";
-import {ref, shallowRef, onMounted} from "vue";
+import {data as volcano} from "./data/volcano.data.js";
 import PlotRender from "./components/PlotRender.js";
-
-const volcano = shallowRef({values: [], width: 0, height: 0});
-
-onMounted(() => {
-  d3.json("./data/volcano.json").then((data) => (volcano.value = data));
-});
 
 </script>
 
 # d3-contour
 
-<PlotRender defer :options='{
+<PlotRender :options='{
   axis: null,
   aspectRatio: 1,
   marks: [
@@ -23,12 +16,6 @@ onMounted(() => {
       width: volcano.width,
       height: volcano.height,
       fill: Plot.identity,
-      interval: 5
-    }),
-    Plot.contour(volcano.values, {
-      width: volcano.width,
-      height: volcano.height,
-      value: Plot.identity,
       stroke: "black",
       interval: 5
     })
