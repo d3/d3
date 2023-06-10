@@ -66,8 +66,8 @@ onUnmounted(() => {
   position: absolute;
   --transform: perspective(75em) rotateX(30deg) rotateZ(-7deg) translate(calc(var(--x) * 100%), calc(var(--y) * 86.67%)) scale(1.145);
   transform: var(--transform);
-  animation: drop-in 500ms ease backwards;
-  transition: transform 250ms ease, filter 250ms ease;
+  animation: drop-in 350ms cubic-bezier(0.215, 0.610, 0.355, 1.000) backwards;
+  transition: transform 250ms ease-out, filter 250ms ease-out;
 }
 
 .examples a:hover {
@@ -85,7 +85,7 @@ onUnmounted(() => {
 
 @keyframes drop-in {
   from {
-    transform: var(--transform) translateZ(1000px);
+    transform: var(--transform) translateZ(500px);
     filter: blur(20px);
     opacity: 0;
   }
