@@ -8,7 +8,7 @@ import PlotRender from "./components/PlotRender.js";
 const volcano = shallowRef({values: [], width: 0, height: 0});
 
 onMounted(() => {
-  d3.json("../data/volcano.json").then((data) => (volcano.value = data));
+  d3.json("./data/volcano.json").then((data) => (volcano.value = data));
 });
 
 </script>
