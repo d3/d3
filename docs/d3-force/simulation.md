@@ -40,7 +40,7 @@ Each *node* must be an object. The following properties are assigned by the simu
 * `vx` - the node’s current *x*-velocity
 * `vy` - the node’s current *y*-velocity
 
-The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modified by [forces](../d3-force.md#custom-forces) and by the simulation. If either *vx* or *vy* is NaN, the velocity is initialized to ⟨0,0⟩. If either *x* or *y* is NaN, the position is initialized in a [phyllotaxis arrangement](https://observablehq.com/@d3/force-layout-phyllotaxis), so chosen to ensure a deterministic, uniform distribution.
+The position ⟨*x*,*y*⟩ and velocity ⟨*vx*,*vy*⟩ may be subsequently modified by [forces](#custom-forces) and by the simulation. If either *vx* or *vy* is NaN, the velocity is initialized to ⟨0,0⟩. If either *x* or *y* is NaN, the position is initialized in a [phyllotaxis arrangement](https://observablehq.com/@d3/force-layout-phyllotaxis), so chosen to ensure a deterministic, uniform distribution.
 
 To fix a node in a given position, you may specify two additional properties:
 
@@ -77,7 +77,7 @@ The alpha decay rate determines how quickly the current alpha interpolates towar
 
 ## *simulation*.force(*name*, *force*) {#simulation_force}
 
-[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · If *force* is specified, assigns the [force](../d3-force.md#custom-forces) for the specified *name* and returns this simulation. If *force* is not specified, returns the force with the specified name, or undefined if there is no such force. (By default, new simulations have no forces.) For example, to create a new simulation to layout a graph, you might say:
+[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · If *force* is specified, assigns the [force](#custom-forces) for the specified *name* and returns this simulation. If *force* is not specified, returns the force with the specified name, or undefined if there is no such force. (By default, new simulations have no forces.) For example, to create a new simulation to layout a graph, you might say:
 
 ```js
 const simulation = d3.forceSimulation(nodes)
@@ -114,3 +114,27 @@ The *typenames* is a string containing one or more *typename* separated by white
 Note that *tick* events are not dispatched when [*simulation*.tick](#simulation_tick) is called manually; events are only dispatched by the internal timer and are intended for interactive rendering of the simulation. To affect the simulation, register [forces](#simulation_force) instead of modifying nodes’ positions or velocities inside a tick event listener.
 
 See [*dispatch*.on](../d3-dispatch.md#dispatch_on) for details.
+
+## Custom forces
+
+A *force* is a function that modifies nodes’ positions or velocities. It can simulate a physical force such as electrical charge or gravity, or it can resolve a geometric constraint such as keeping nodes within a bounding box or keeping linked nodes a fixed distance apart. For example, here is a force that moves nodes towards the origin:
+
+```js
+function force(alpha) {
+  for (let i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
+    node = nodes[i];
+    node.vx -= node.x * k;
+    node.vy -= node.y * k;
+  }
+}
+```
+
+Forces typically read the node’s current position ⟨*x*,*y*⟩ and then mutate the node’s velocity ⟨*vx*,*vy*⟩. Forces may also “peek ahead” to the anticipated next position of the node, ⟨*x* + *vx*,*y* + *vy*⟩; this is necessary for resolving geometric constraints through [iterative relaxation](https://en.wikipedia.org/wiki/Relaxation_\(iterative_method\)). Forces may also modify the position directly, which is sometimes useful to avoid adding energy to the simulation, such as when recentering the simulation in the viewport.
+
+### *force*(*alpha*) {#_force}
+
+Applies this force, optionally observing the specified *alpha*. Typically, the force is applied to the array of nodes previously passed to [*force*.initialize](#force_initialize), however, some forces may apply to a subset of nodes, or behave differently. For example, [forceLink](./link.md) applies to the source and target of each link.
+
+### *force*.initialize(*nodes*) {#force_initialize}
+
+Supplies the array of *nodes* and *random* source to this force. This method is called when a force is bound to a simulation via [*simulation*.force](#simulation_force) and when the simulation’s nodes change via [*simulation*.nodes](#simulation_nodes). A force may perform necessary work during initialization, such as evaluating per-node parameters, to avoid repeatedly performing work during each application of the force.
