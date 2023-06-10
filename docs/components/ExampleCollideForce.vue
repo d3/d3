@@ -4,23 +4,17 @@ import * as d3 from "d3";
 import {ref, onMounted, onUnmounted} from "vue";
 
 const container = ref();
+const width = 688;
+const height = 540;
+const k = width / 200;
+const r = d3.randomUniform(k, k * 4);
+const nodes = Array.from({length: 200}, () => ({r: r()}));
 
 let simulation;
 
 onMounted(() => {
-  const width = 688;
-  const height = 540;
-  const k = width / 200;
-  const r = d3.randomUniform(k, k * 4);
-  const nodes = Array.from({length: 200}, () => ({r: r()}));
-
-  const svg = d3.select(container.value).append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("fill", "currentColor")
-      .attr("style", "overflow: visible; position: relative; z-index: 2;")
-      .on("touchmove", event => event.preventDefault())
+  const svg = d3.select(container.value)
+      .on("touchmove", (event) => event.preventDefault())
       .on("pointerenter", () => simulation.alphaTarget(0.3).restart())
       .on("pointerleave", () => simulation.alphaTarget(0))
       .on("pointermove", (event) => ([nodes[0].fx, nodes[0].fy] = d3.pointer(event)));
@@ -50,6 +44,6 @@ onUnmounted(() => {
 
 </script>
 <template>
-  <div style="margin: 1em 0;" ref="container"></div>
+  <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="margin: 1em 0; overflow: visible; position: relative; z-index: 2; max-width: 100%; height: auto;" ref="container"></svg>
   <a href="https://observablehq.com/@d3/collision-detection/2?intent=fork" style="font-size: smaller;">Fork ↗︎</a>
 </template>

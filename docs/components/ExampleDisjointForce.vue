@@ -3,42 +3,25 @@
 import * as d3 from "d3";
 import {ref, onMounted, onUnmounted} from "vue";
 
-const container = ref();
+const gnode = ref();
+const glink = ref();
+const width = 688;
+const height = 640;
+const scale = d3.scaleOrdinal(["var(--vp-c-brand)", "currentColor"]);
+const color = (d) => scale(d.group);
 
 let simulation;
 
 onMounted(async () => {
   const {links, nodes} = await d3.json("https://static.observableusercontent.com/files/e3680d5f766e85edde560c9c31a6dba2ddfcf2f66e1dced4afa18d8040f1f205e0bde1b8b234d866373f2bfc5806fafc47e244c5c9f48b60aaa1917c1b80fcb7");
 
-  const width = 688;
-  const height = 640;
-  const scale = d3.scaleOrdinal(["var(--vp-c-brand)", "currentColor"]);
-  const color = (d) => scale(d.group);
-
-  simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id((d) => d.id))
-      .force("charge", d3.forceManyBody())
-      .force("x", d3.forceX())
-      .force("y", d3.forceY())
-      .on("tick", ticked);
-
-  const svg = d3.select(container.value).append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("style", "max-width: 100%; height: auto;");
-
-  const link = svg.append("g")
-      .attr("stroke", "currentColor")
-      .attr("stroke-opacity", 0.5)
+  const link = d3.select(glink.value)
     .selectAll("line")
     .data(links)
     .join("line")
       .attr("stroke-width", (d) => Math.sqrt(d.value));
 
-  const node = svg.append("g")
-      .attr("stroke", "var(--vp-c-bg-alt)")
-      .attr("stroke-width", 1.5)
+  const node = d3.select(gnode.value)
     .selectAll("circle")
     .data(nodes)
     .join("circle")
@@ -51,6 +34,13 @@ onMounted(async () => {
 
   node.append("title")
       .text((d) => d.id);
+
+  simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id((d) => d.id))
+      .force("charge", d3.forceManyBody())
+      .force("x", d3.forceX())
+      .force("y", d3.forceY())
+      .on("tick", ticked);
 
   function ticked() {
     link
@@ -88,6 +78,9 @@ onUnmounted(() => {
 
 </script>
 <template>
-  <div style="margin: 1em 0;" ref="container"></div>
+  <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="margin: 1em 0; overflow: visible; position: relative; z-index: 2; max-width: 100%; height: auto;" ref="container">
+    <g ref="glink" stroke="currentColor" stroke-opacity="0.5"></g>
+    <g ref="gnode" stroke="var(--vp-c-bg-alt)" stroke-width="1.5"></g>
+  </svg>
   <a href="https://observablehq.com/@d3/disjoint-force-directed-graph?intent=fork" style="font-size: smaller;">Fork ↗︎</a>
 </template>

@@ -17,7 +17,8 @@ function render(el, {padAngle, padRadius, cornerRadius}) {
     .join("svg")
       .attr("width", width)
       .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height]);
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .attr("style", "max-width: 100%; height: auto;");
 
   svg.selectChildren("[fill='none']")
     .data(cornerRadius ? [null] : [])
