@@ -2,7 +2,7 @@
 
 Even though your browser understands a lot about colors, it doesn’t offer much help in manipulating colors through JavaScript. The d3-color module therefore provides representations for various color spaces, allowing specification, conversion and manipulation. (Also see [d3-interpolate](./d3-interpolate.md) for color interpolation.)
 
-For example, take the color named “<span style="text-decoration: underline steelblue 3px;">steelblue</span>”:
+For example, take the color named “<span style="border-bottom: solid 2px steelblue;">steelblue</span>”:
 
 ```js
 const c = d3.color("steelblue"); // {r: 70, g: 130, b: 180, opacity: 1}
@@ -103,7 +103,7 @@ d3.color("steelblue").copy({opacity: 0.5}) // {r: 70, g: 130, b: 180, opacity: 0
 d3.color("steelblue").brighter(1) // {r: 100, g: 185.71428571428572, b: 257.14285714285717, opacity: 1}
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a <span style="text-decoration: underline rgb(100, 186, 255) 3px;">brighter</span> copy of this color. If *k* is specified, it controls how much brighter the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a <span style="border-bottom: solid 2px rgb(100, 186, 255);">brighter</span> copy of this color. If *k* is specified, it controls how much brighter the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
 
 ## *color*.darker(*k*) {#color_darker}
 
@@ -111,7 +111,7 @@ d3.color("steelblue").brighter(1) // {r: 100, g: 185.71428571428572, b: 257.1428
 d3.color("steelblue").darker(1) // {r: 49, g: 91, b: 126, opacity: 1}
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a <span style="text-decoration: underline rgb(49, 91, 126) 3px;">darker</span> copy of this color. If *k* is specified, it controls how much darker the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a <span style="border-bottom: solid 2px rgb(49, 91, 126);">darker</span> copy of this color. If *k* is specified, it controls how much darker the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
 
 ## *color*.displayable() {#color_displayable}
 
