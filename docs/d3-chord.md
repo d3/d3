@@ -1,10 +1,13 @@
 <script setup>
 
 import ColorSpan from "./components/ColorSpan.vue";
+import ExampleChord from "./components/ExampleChord.vue";
 
 </script>
 
 # d3-chord
+
+<ExampleChord/>
 
 Chord diagrams represent flow between a set of nodes in a graph, such as transition probabilities between finite states, or people moving between rooms in a house.
 
