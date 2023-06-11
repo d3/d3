@@ -1,3 +1,13 @@
+<script setup>
+
+import * as d3 from "d3";
+import WorldMap from "../components/WorldMap.vue";
+
+const width = 688;
+const height = 400;
+
+</script>
+
 # Spherical shapes
 
 These shape generators return spherical GeoJSON for use with [geoPath](./path.md).
@@ -8,7 +18,7 @@ To generate a [great arc](https://en.wikipedia.org/wiki/Great-circle_distance) (
 
 ## geoGraticule() {#geoGraticule}
 
-<img src="https://raw.githubusercontent.com/d3/d3-geo/main/img/graticule.png" width="480" height="360">
+<WorldMap rotate :land="false" :projection='d3.geoOrthographic().rotate([110, -40]).fitExtent([[1, 1], [width - 1, height - 1]], {type: "Sphere"}).precision(0.2)' />
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/graticule.js) · Constructs a geometry generator for creating graticules: a uniform grid of [meridians](https://en.wikipedia.org/wiki/Meridian_\(geography\)) and [parallels](https://en.wikipedia.org/wiki/Circle_of_latitude) for showing projection distortion. The default graticule has meridians and parallels every 10° between ±80° latitude; for the polar regions, there are meridians every 90°.
 

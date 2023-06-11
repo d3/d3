@@ -12,8 +12,8 @@ const graticule = d3.geoGraticule10();
 
 let landPromises = {};
 
-async function render(node, {projection, rotate, resolution, width, landPromise}) {
-  const land = await landPromise;
+async function render(node, {projection, rotate, resolution, width, feature}) {
+  feature = await feature;
   rotate = rotate && projection.rotate();
   const path = d3.geoPath(projection);
   const svg = d3.select(node);
@@ -22,7 +22,7 @@ async function render(node, {projection, rotate, resolution, width, landPromise}
   function update() {
     svg.selectAll("[name='outline']").attr("d", path(outline));
     svg.selectAll("[name='graticule']").attr("d", path(graticule));
-    svg.selectAll("[name='feature']").attr("d", path(land));
+    svg.selectAll("[name='feature']").attr("d", path(feature));
   }
   svg.on("pointermove", rotate && (resolution === "110m") && ((event) => {
     if (!frame) frame = requestAnimationFrame(rerender);
@@ -39,13 +39,14 @@ async function render(node, {projection, rotate, resolution, width, landPromise}
 export default {
   props: {
     projection: {type: Function},
+    land: {type: Boolean, default: true},
     rotate: {type: Boolean, default: false},
     resolution: {type: String, default: "110m"},
     width: {type: Number, default: 688},
     height: {type: Number, default: 400},
   },
   mounted() {
-    this.landPromise = landPromises[this.resolution] ??= d3
+    if (this.land) this.feature = landPromises[this.resolution] ??= d3
       .json(`https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-${this.resolution}.json`)
       .then((world) => topojson.feature(world, world.objects.land));
     this.disconnect = deferRender(this.$el, async () => render(this.$el, this));
