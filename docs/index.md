@@ -17,7 +17,7 @@ head:
 hero:
   name: "D3"
   text: "The JavaScript library for bespoke data visualization"
-  tagline: Bring your data to life with web standards
+  tagline: Create custom dynamic visualizations with unparalleled flexibility
   image:
     src: /logo.svg
     alt: D3
