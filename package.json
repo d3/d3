@@ -76,7 +76,7 @@
     "mocha": "10",
     "rollup": "3",
     "topojson-client": "^3.1.0",
-    "vitepress": "^1.0.0-alpha.65"
+    "vitepress": "^1.0.0-beta.2"
   },
   "scripts": {
     "test": "mocha 'test/**/*-test.js' && eslint src test",
