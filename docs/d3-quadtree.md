@@ -3,6 +3,7 @@
 import * as Plot from "@observablehq/plot";
 import * as d3 from "d3";
 import {computed, shallowRef, onMounted} from "vue";
+import ExampleAnimatedQuadtree from "./components/ExampleAnimatedQuadtree.vue";
 import PlotRender from "./components/PlotRender.js";
 import quadtree_findVisited from "./components/quadtreeFindVisited.js";
 import quadtree_nodes from "./components/quadtreeNodes.js";
@@ -11,63 +12,12 @@ const random = d3.randomNormal.source(d3.randomLcg(42))();
 const points = Array.from({length: 1000}, () => [random(), random()]);
 const tree = d3.quadtree(d3.range(points.length), (i) => points[i][0], (i) => points[i][1]);
 const findState = shallowRef({x: 0, y: 0, i: -1});
-const frame = (callback) => setTimeout(callback, 250);
-
-function dotPartial(index, scales, values, dimensions, context, next) {
-  let i = 1;
-  let dot = next(index.slice(0, i), scales, values, dimensions, context);
-  frame(function tick() {
-    const newdot = next(index.slice(0, ++i), scales, values, dimensions, context);
-    dot.replaceWith(newdot);
-    dot = newdot;
-    if (i < index.length) frame(tick);
-  });
-  return dot;
-}
-
-function rectPartial(index, scales, values, dimensions, context, next) {
-  const {x, y} = scales;
-  const treePartial = d3.quadtree([], (i) => points[i][0], (i) => points[i][1]);
-  treePartial._x0 = tree._x0;
-  treePartial._y0 = tree._y0;
-  treePartial._x1 = tree._x1;
-  treePartial._y1 = tree._y1;
-  treePartial.add(0);
-  let rect = next(index, scales, values, dimensions, context);
-  frame(function tick() {
-    const nodes = [];
-    treePartial.add(treePartial.size());
-    treePartial.visit((node, x1, y1, x2, y2) => void nodes.push({x1, y1, x2, y2}));
-    index = d3.range(nodes.length);
-    values = {
-      x1: nodes.map((d) => x(d.x1)),
-      y1: nodes.map((d) => y(d.y1)),
-      x2: nodes.map((d) => x(d.x2)),
-      y2: nodes.map((d) => y(d.y2)),
-    };
-    const newrect = next(index, scales, values, dimensions, context);
-    rect.replaceWith(newrect);
-    rect = newrect;
-    if (treePartial.size() < tree.size()) frame(tick);
-  });
-  return rect;
-}
 
 </script>
 
 # d3-quadtree
 
-<PlotRender defer v-once :options='{
-  axis: null,
-  aspectRatio: 1,
-  round: true,
-  x: {domain: [tree._x0, tree._x1]},
-  y: {domain: [tree._y0, tree._y1]},
-  marks: [
-    Plot.dot(points, {r: 2, fill: "currentColor", render: dotPartial}),
-    Plot.rect({length: 1}, {stroke: "currentColor", render: rectPartial})
-  ]
-}' />
+<ExampleAnimatedQuadtree :points="points" />
 
 A [quadtree](https://en.wikipedia.org/wiki/Quadtree) recursively partitions two-dimensional space into squares, dividing each square into four equally-sized squares. Each distinct point exists in a unique leaf [node](#quadtree-nodes); coincident points are represented by a linked list. Quadtrees can accelerate various spatial operations, such as the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation) for computing many-body forces, collision detection, and searching for nearby points.
 

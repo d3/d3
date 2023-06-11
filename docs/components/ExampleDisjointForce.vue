@@ -78,9 +78,11 @@ onUnmounted(() => {
 
 </script>
 <template>
-  <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="margin: 1em 0; overflow: visible; position: relative; z-index: 2; max-width: 100%; height: auto;" ref="container">
-    <g ref="glink" stroke="currentColor" stroke-opacity="0.5"></g>
-    <g ref="gnode" stroke="var(--vp-c-bg-alt)" stroke-width="1.5"></g>
-  </svg>
-  <a href="https://observablehq.com/@d3/disjoint-force-directed-graph?intent=fork" style="font-size: smaller;">Fork ↗︎</a>
+  <div style="margin: 1em 0;">
+    <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="overflow: visible; position: relative; z-index: 2; max-width: 100%; height: auto;">
+      <g ref="glink" stroke="currentColor" stroke-opacity="0.5"></g>
+      <g ref="gnode" stroke="var(--vp-c-bg-alt)" stroke-width="1.5"></g>
+    </svg>
+    <a href="https://observablehq.com/@d3/disjoint-force-directed-graph?intent=fork" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
+  </div>
 </template>
