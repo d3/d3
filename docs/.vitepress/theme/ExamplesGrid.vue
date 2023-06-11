@@ -30,8 +30,9 @@ function afterpointermove() {
 
 onMounted(() => {
   observer = new ResizeObserver(() => {
-    xn.value = Math.ceil(document.body.clientWidth / 200) + 3;
-    yn.value = Math.min(5, Math.floor(n / xn.value));
+    const w = parseFloat(getComputedStyle(container.value).getPropertyValue("--grid-width"));
+    xn.value = Math.ceil(document.body.clientWidth / w) + 3; // overflow columns
+    yn.value = Math.min(Math.round(640 / w + 2), Math.floor(n / xn.value)); // 640 is grid height
     sample.value = slice.slice(0, yn.value * xn.value);
   });
   observer.observe(document.body);
@@ -46,7 +47,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="$style.examples" ref="container" :style="`transform: translate(${60 - x / 100}vw, 30%);`">
+  <div :class="$style.examples" ref="container" :style="`transform: translate(${60 - x / 100}vw, 33%);`">
     <a v-for="(d, i) in sample" :href="`https://observablehq.com/${d.path}`" :title="[d.title, d.author].join('\n')" target="_blank" :style="`--x: ${(i % xn) - xn / 2 + (Math.floor(i / xn) % 2) * 0.5}; --y: ${Math.floor(i / xn) - yn / 2}; animation-delay: ${((i % xn) / xn + (d3.randomLcg(1 / i)()) - 0.4) * 1}s;`">
       <img :src="`https://static.observableusercontent.com/thumbnail/${d.thumbnail}.jpg`" width="640" height="400" />
     </a>
@@ -60,6 +61,19 @@ onUnmounted(() => {
   height: 640px;
   transition: transform 150ms ease-out;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  --grid-width: 140px;
+}
+
+@media (min-width: 640px) {
+  .examples {
+    --grid-width: 160px;
+  }
+}
+
+@media (min-width: 960px) {
+  .examples {
+    --grid-width: 200px;
+  }
 }
 
 .examples a {
@@ -80,7 +94,7 @@ onUnmounted(() => {
   aspect-ratio: 1;
   object-fit: cover;
   clip-path: polygon(50.0% 100.0%, 93.3% 75.0%, 93.3% 25.0%, 50.0% 0.0%, 6.7% 25.0%, 6.7% 75.0%);
-  width: 200px;
+  width: var(--grid-width);
 }
 
 @keyframes drop-in {
