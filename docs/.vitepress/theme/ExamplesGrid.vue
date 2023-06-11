@@ -48,9 +48,11 @@ onUnmounted(() => {
 
 <template>
   <div :class="$style.examples" ref="container" :style="`transform: translate(${60 - x / 100}vw, 33%);`">
-    <a v-for="(d, i) in sample" :href="`https://observablehq.com/${d.path}`" :title="[d.title, d.author].join('\n')" target="_blank" :style="`--x: ${(i % xn) - xn / 2 + (Math.floor(i / xn) % 2) * 0.5}; --y: ${Math.floor(i / xn) - yn / 2}; animation-delay: ${((i % xn) / xn + (d3.randomLcg(1 / i)()) - 0.4) * 1}s;`">
-      <img :src="`https://static.observableusercontent.com/thumbnail/${d.thumbnail}.jpg`" width="640" height="400" />
-    </a>
+    <div v-for="(d, i) in sample">
+      <a :href="`https://observablehq.com/${d.path}`" :title="[d.title, d.author].join('\n')" target="_blank" :style="`--x: ${(i % xn) - xn / 2 + (Math.floor(i / xn) % 2) * 0.5}; --y: ${Math.floor(i / xn) - yn / 2}; animation-delay: ${((i % xn) / xn + (d3.randomLcg(1 / i)()) - 0.4) * 1}s;`">
+        <img :src="`https://static.observableusercontent.com/thumbnail/${d.thumbnail}.jpg`" width="640" height="400" />
+      </a>
+    </div>
   </div>
 </template>
 
@@ -76,24 +78,33 @@ onUnmounted(() => {
   }
 }
 
+/* The drop-shadow should not be affected by the hexagon clip-path. */
+.examples div {
+  position: relative;
+  transition: filter 250ms ease-out;
+}
+
+.examples div:hover {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  z-index: 3;
+}
+
 .examples a {
   position: absolute;
   --transform: perspective(75em) rotateX(30deg) rotateZ(-7deg) translate(calc(var(--x) * 100%), calc(var(--y) * 86.67%)) scale(1.145);
   transform: var(--transform);
   animation: drop-in 350ms cubic-bezier(0.215, 0.610, 0.355, 1.000) backwards;
-  transition: transform 250ms ease-out, filter 250ms ease-out;
+  transition: transform 250ms ease-out;
+  clip-path: polygon(50.0% 100.0%, 93.3% 75.0%, 93.3% 25.0%, 50.0% 0.0%, 6.7% 25.0%, 6.7% 75.0%);
 }
 
 .examples a:hover {
   transform: var(--transform) translateZ(10px) scale(1.1);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-  z-index: 3;
 }
 
 .examples img {
   aspect-ratio: 1;
   object-fit: cover;
-  clip-path: polygon(50.0% 100.0%, 93.3% 75.0%, 93.3% 25.0%, 50.0% 0.0%, 6.7% 25.0%, 6.7% 75.0%);
   width: var(--grid-width);
 }
 
