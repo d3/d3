@@ -27,6 +27,7 @@ async function render(node, {points}) {
       const key = [x0, y0, x1, y1].join();
       if (nodes.has(key)) return;
       nodes.add(key);
+      t = t.transition();
       const xm = (x0 + x1) / 2;
       const ym = (y0 + y1) / 2;
       g.append("line").attr("x1", x(xm)).attr("y1", y(ym)).attr("x2", x(xm)).attr("y2", y(ym)).transition(t).attr("x1", x(x0));
@@ -34,7 +35,7 @@ async function render(node, {points}) {
       g.append("line").attr("x1", x(xm)).attr("y1", y(ym)).attr("x2", x(xm)).attr("y2", y(ym)).transition(t).attr("y1", y(y0));
       g.append("line").attr("x1", x(xm)).attr("y1", y(ym)).attr("x2", x(xm)).attr("y2", y(ym)).transition(t).attr("y2", y(y1));
     });
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await t.end();
     if (!node.isConnected) return;
   }
 }
