@@ -433,8 +433,8 @@ Force-directed graph layout using velocity Verlet integration.
 * [*simulation*.find](./d3-force/simulation.md#simulation_find) - find the closest node to the given position.
 * [*simulation*.randomSource](./d3-force/simulation.md#simulation_randomSource) - set the simulation’s random source.
 * [*simulation*.on](./d3-force/simulation.md#simulation_on) - add or remove an event listener.
-* [*force*](./d3-force.md#_force) - apply the force.
-* [*force*.initialize](./d3-force.md#force_initialize) - initialize the force with the given nodes.
+* [*force*](./d3-force/simulation.md#_force) - apply the force.
+* [*force*.initialize](./d3-force/simulation.md#force_initialize) - initialize the force with the given nodes.
 * [d3.forceCenter](./d3-force/center.md#forceCenter) - create a centering force.
 * [*center*.x](./d3-force/center.md#center_x) - set the center *x*-coordinate.
 * [*center*.y](./d3-force/center.md#center_y) - set the center y coordinate.
