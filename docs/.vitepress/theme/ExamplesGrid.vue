@@ -14,7 +14,7 @@ const sample = shallowRef(slice.slice(0, 55)); // initial guess
 const container = ref();
 const xn = ref(10); // number of rows
 const yn = ref(5); // number of columns
-const x = ref(720);
+const x = ref(0.5); // normalized horizontal pointer position
 
 // Some browsers trigger pointermove more frequently than desirable, so we
 // debounce events for a smooth transitions.
@@ -25,7 +25,7 @@ function onpointermove(event) {
 
 function afterpointermove() {
   pointerframe = null;
-  x.value = clientX;
+  x.value = clientX / document.body.clientWidth;
 }
 
 onMounted(() => {
@@ -47,7 +47,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="$style.examples" ref="container" :style="`transform: translate(${60 - x / 100}vw, 33%);`">
+  <div :class="$style.examples" ref="container" :style="`transform: translate(${60 - x * 10}vw, 33%);`">
     <div v-for="(d, i) in sample">
       <a :href="`https://observablehq.com/${d.path}`" :title="[d.title, d.author].join('\n')" target="_blank" :style="`--x: ${(i % xn) - xn / 2 + (Math.floor(i / xn) % 2) * 0.5}; --y: ${Math.floor(i / xn) - yn / 2}; animation-delay: ${((i % xn) / xn + (d3.randomLcg(1 / i)()) - 0.4) * 1}s;`">
         <img :src="`https://static.observableusercontent.com/thumbnail/${d.thumbnail}.jpg`" width="640" height="400" />
