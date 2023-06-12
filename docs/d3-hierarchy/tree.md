@@ -22,7 +22,7 @@ const gods = [
   margin: 20,
   marginRight: 120,
   marks: [
-    Plot.tree(gods, {textStroke: "black"})
+    Plot.tree(gods, {textStroke: "var(--vp-c-bg)"})
   ]
 }' />
 
