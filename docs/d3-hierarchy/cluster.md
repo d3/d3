@@ -22,7 +22,7 @@ const gods = [
   margin: 20,
   marginRight: 120,
   marks: [
-    Plot.cluster(gods, {textStroke: "black"})
+    Plot.cluster(gods, {textStroke: "var(--vp-c-bg)"})
   ]
 }' />
 
