@@ -289,7 +289,7 @@ export default function LinePlot({
 ```
 :::
 
-Some D3 modules (including [d3-selection](./d3-selection.md), [d3-transition](./d3-transition.md), and [d3-axis](./d3-axis.md)) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. (See [sandbox](https://codesandbox.io/s/d3-react-useeffect-5lp0x6?file=/src/LinePlot.jsx).)
+D3 modules that operate on [selections](./d3-selection/selecting.md) (including [d3-selection](./d3-selection.md), [d3-transition](./d3-transition.md), and [d3-axis](./d3-axis.md)) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. (See [sandbox](https://codesandbox.io/s/d3-react-useeffect-5lp0x6?file=/src/LinePlot.jsx).)
 
 :::code-group
 ```jsx [LinePlot.jsx]
