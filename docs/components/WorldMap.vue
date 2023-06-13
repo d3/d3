@@ -14,23 +14,26 @@ let landPromises = {};
 
 async function render(node, {projection, rotate, resolution, width, feature}) {
   feature = await feature;
-  rotate = rotate && projection.rotate();
+  rotate = rotate && resolution === "110m" && projection.rotate();
   const path = d3.geoPath(projection);
   const svg = d3.select(node);
   let frame;
   let x;
+  let dx = 0;
   function update() {
     svg.selectAll("[name='outline']").attr("d", path(outline));
     svg.selectAll("[name='graticule']").attr("d", path(graticule));
     svg.selectAll("[name='feature']").attr("d", path(feature));
   }
-  svg.on("pointermove", rotate && (resolution === "110m") && ((event) => {
-    if (!frame) frame = requestAnimationFrame(rerender);
-    ([x] = d3.pointer(event));
-  }));
+  svg
+    .on("pointerenter", rotate && ((event) => ([x] = d3.pointer(event))))
+    .on("pointermove", rotate && ((event) => {
+      if (!frame) frame = requestAnimationFrame(rerender);
+      dx -= x; ([x] = d3.pointer(event)); dx += x;
+    }));
   function rerender() {
     frame = null;
-    projection.rotate([rotate[0] + x / width * 20, rotate[1], rotate[2]]);
+    projection.rotate([rotate[0] + dx / width * 20, rotate[1], rotate[2]]);
     update();
   }
   update();
