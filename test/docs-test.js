@@ -1,5 +1,5 @@
 import assert from "assert";
-import {readdirSync, readFileSync, statSync} from "fs";
+import {readdir, readFile, stat} from "fs/promises";
 
 it("documentation links point to existing internal anchors", async () => {
   const root = "docs";
@@ -7,10 +7,12 @@ it("documentation links point to existing internal anchors", async () => {
   // Crawl all files, read their links and anchors.
   const anchors = new Map();
   const links = [];
-  for (const file of getMDFiles(root)) {
-    const text = getSource(root + file);
+  for await (const file of readMarkdownFiles(root)) {
+    const text = await readMarkdownSource(root + file);
     anchors.set(file, getAnchors(text));
-    for (const {pathname, hash} of getLinks(file, text)) links.push({source: file, target: pathname, hash});
+    for (const {pathname, hash} of getLinks(file, text)) {
+      links.push({source: file, target: pathname, hash});
+    }
   }
 
   // Check for broken links.
@@ -50,25 +52,23 @@ function getLinks(file, text) {
   const links = [];
   for (const match of text.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)) {
     const [, link] = match;
-    if (link.startsWith("http")) continue;
-    const {pathname, hash} = new URL(link, new URL(file, "https://toplevel.tld/"));
+    if (/^\w+:/.test(link)) continue; // absolute link with protocol
+    const {pathname, hash} = new URL(link, new URL(file, "https://example.com/"));
     links.push({pathname, hash});
   }
   return links;
 }
 
 // In source files, ignore comments.
-function getSource(f) {
-  return readFileSync(f, "utf8").replaceAll(/<!-- .*? -->/gs, "");
+async function readMarkdownSource(f) {
+  return (await readFile(f, "utf8")).replaceAll(/<!-- .*? -->/gs, "");
 }
 
 // Recursively find all md files in the directory.
-function getMDFiles(root, subpath = "/") {
-  const files = [];
-  for (const fname of readdirSync(root + subpath)) {
-    if (fname.startsWith(".") || fname.endsWith(".js")) continue;
-    if (fname.endsWith(".md")) files.push(subpath + fname);
-    else if (statSync(root + subpath + fname).isDirectory()) files.push(...getMDFiles(root, subpath + fname + "/"));
+async function* readMarkdownFiles(root, subpath = "/") {
+  for (const fname of await readdir(root + subpath)) {
+    if (fname.startsWith(".")) continue; // ignore .vitepress etc.
+    if ((await stat(root + subpath + fname)).isDirectory()) yield* readMarkdownFiles(root, subpath + fname + "/");
+    else if (fname.endsWith(".md")) yield subpath + fname;
   }
-  return files;
 }
