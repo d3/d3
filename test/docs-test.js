@@ -22,8 +22,7 @@ it("documentation links point to existing internal anchors", async () => {
       errors.push(`- ${source} points to ${target} instead of ${target}.md.`);
       target += ".md";
     }
-
-    if (!hash || anchors.get(target).includes(hash.slice(1))) continue;
+    if (anchors.get(target)?.includes(hash.slice(1))) continue;
     errors.push(`- ${source} points to missing ${target}${hash}.`);
   }
   assert(errors.length === 0, new Error(`${errors.length} broken links:\n${errors.join("\n")}`));
@@ -31,7 +30,7 @@ it("documentation links point to existing internal anchors", async () => {
 
 // Anchors can be derived from headers, or explicitly written as {#names}.
 function getAnchors(text) {
-  const anchors = [];
+  const anchors = [""]; // empty string for non-fragment links
   for (const [, header] of text.matchAll(/^#+ ([*\w][*().,\w\d -]+)\n/gm)) {
     anchors.push(
       header

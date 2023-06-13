@@ -32,7 +32,6 @@ export default defineConfig({
         text: "Introduction",
         items: [
           {text: "What is D3?", link: "/what-is-d3"},
-          {text: "Why D3?", link: "/why-d3"},
           {text: "Getting started", link: "/getting-started"},
         ]
       },
