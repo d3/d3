@@ -18,22 +18,26 @@ async function render(node, {projection, rotate, resolution, width, feature}) {
   const path = d3.geoPath(projection);
   const svg = d3.select(node);
   let frame;
-  let x;
-  let dx = 0;
+  let x0 = 0;
+  let x1 = 0;
   function update() {
     svg.selectAll("[name='outline']").attr("d", path(outline));
     svg.selectAll("[name='graticule']").attr("d", path(graticule));
     svg.selectAll("[name='feature']").attr("d", path(feature));
   }
   svg
-    .on("pointerenter", rotate && ((event) => ([x] = d3.pointer(event))))
+    .on("pointerenter", rotate && ((event) => {
+      const dx = x1 - x0;
+      ([x1] = d3.pointer(event));
+      x0 = x1 - dx; // don’t jump on pointerenter
+    }))
     .on("pointermove", rotate && ((event) => {
       if (!frame) frame = requestAnimationFrame(rerender);
-      dx -= x; ([x] = d3.pointer(event)); dx += x;
+      ([x1] = d3.pointer(event));
     }));
   function rerender() {
     frame = null;
-    projection.rotate([rotate[0] + dx / width * 20, rotate[1], rotate[2]]);
+    projection.rotate([rotate[0] + (x1 - x0) / width * 20, rotate[1], rotate[2]]);
     update();
   }
   update();
