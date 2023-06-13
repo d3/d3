@@ -433,8 +433,8 @@ Force-directed graph layout using velocity Verlet integration.
 * [*simulation*.find](./d3-force/simulation.md#simulation_find) - find the closest node to the given position.
 * [*simulation*.randomSource](./d3-force/simulation.md#simulation_randomSource) - set the simulation’s random source.
 * [*simulation*.on](./d3-force/simulation.md#simulation_on) - add or remove an event listener.
-* [*force*](./d3-force.md#_force) - apply the force.
-* [*force*.initialize](./d3-force.md#force_initialize) - initialize the force with the given nodes.
+* [*force*](./d3-force/simulation.md#_force) - apply the force.
+* [*force*.initialize](./d3-force/simulation.md#force_initialize) - initialize the force with the given nodes.
 * [d3.forceCenter](./d3-force/center.md#forceCenter) - create a centering force.
 * [*center*.x](./d3-force/center.md#center_x) - set the center *x*-coordinate.
 * [*center*.y](./d3-force/center.md#center_y) - set the center y coordinate.
@@ -940,90 +940,90 @@ Color ramps and palettes for quantitative, ordinal and categorical scales.
 
 ### [Categorical](./d3-scale-chromatic/categorical.md)
 
-* [d3.schemeCategory10](./d3-scale-chromatic/categorical.md.md#schemeCategory10) - an array of ten categorical colors.
-* [d3.schemeAccent](./d3-scale-chromatic/categorical.md.md#schemeAccent) - an array of eight categorical colors.
-* [d3.schemeDark2](./d3-scale-chromatic/categorical.md.md#schemeDark2) - an array of eight categorical colors.
-* [d3.schemePaired](./d3-scale-chromatic/categorical.md.md#schemePaired) - an array of twelve categorical colors.
-* [d3.schemePastel1](./d3-scale-chromatic/categorical.md.md#schemePastel1) - an array of nine categorical colors.
-* [d3.schemePastel2](./d3-scale-chromatic/categorical.md.md#schemePastel2) - an array of eight categorical colors.
-* [d3.schemeSet1](./d3-scale-chromatic/categorical.md.md#schemeSet1) - an array of nine categorical colors.
-* [d3.schemeSet2](./d3-scale-chromatic/categorical.md.md#schemeSet2) - an array of eight categorical colors.
-* [d3.schemeSet3](./d3-scale-chromatic/categorical.md.md#schemeSet3) - an array of twelve categorical colors.
-* [d3.schemeTableau10](./d3-scale-chromatic/categorical.md.md#schemeTableau10) - an array of ten categorical colors.
+* [d3.schemeCategory10](./d3-scale-chromatic/categorical.md#schemeCategory10) - an array of ten categorical colors.
+* [d3.schemeAccent](./d3-scale-chromatic/categorical.md#schemeAccent) - an array of eight categorical colors.
+* [d3.schemeDark2](./d3-scale-chromatic/categorical.md#schemeDark2) - an array of eight categorical colors.
+* [d3.schemePaired](./d3-scale-chromatic/categorical.md#schemePaired) - an array of twelve categorical colors.
+* [d3.schemePastel1](./d3-scale-chromatic/categorical.md#schemePastel1) - an array of nine categorical colors.
+* [d3.schemePastel2](./d3-scale-chromatic/categorical.md#schemePastel2) - an array of eight categorical colors.
+* [d3.schemeSet1](./d3-scale-chromatic/categorical.md#schemeSet1) - an array of nine categorical colors.
+* [d3.schemeSet2](./d3-scale-chromatic/categorical.md#schemeSet2) - an array of eight categorical colors.
+* [d3.schemeSet3](./d3-scale-chromatic/categorical.md#schemeSet3) - an array of twelve categorical colors.
+* [d3.schemeTableau10](./d3-scale-chromatic/categorical.md#schemeTableau10) - an array of ten categorical colors.
 
 ### [Cyclical](./d3-scale-chromatic/cyclical.md)
 
-* [d3.interpolateRainbow](./d3-scale-chromatic/cyclical.md.md#interpolateRainbow) - the “less-angry” rainbow
-* [d3.interpolateSinebow](./d3-scale-chromatic/cyclical.md.md#interpolateSinebow) - the “sinebow” smooth rainbow
+* [d3.interpolateRainbow](./d3-scale-chromatic/cyclical.md#interpolateRainbow) - the “less-angry” rainbow
+* [d3.interpolateSinebow](./d3-scale-chromatic/cyclical.md#interpolateSinebow) - the “sinebow” smooth rainbow
 
 ### [Diverging](./d3-scale-chromatic/diverging.md)
 
-* [d3.interpolateBrBG](./d3-scale-chromatic/diverging.md.md#interpolateBrBG) - ColorBrewer BrBG interpolator.
-* [d3.interpolatePiYG](./d3-scale-chromatic/diverging.md.md#interpolatePiYG) - ColorBrewer PiYG interpolator.
-* [d3.interpolatePRGn](./d3-scale-chromatic/diverging.md.md#interpolatePRGn) - ColorBrewer PRGn interpolator.
-* [d3.interpolatePuOr](./d3-scale-chromatic/diverging.md.md#interpolatePuOr) - ColorBrewer PuOr interpolator.
-* [d3.interpolateRdBu](./d3-scale-chromatic/diverging.md.md#interpolateRdBu) - ColorBrewer RdBu interpolator.
-* [d3.interpolateRdGy](./d3-scale-chromatic/diverging.md.md#interpolateRdGy) - ColorBrewer RdGy interpolator.
-* [d3.interpolateRdYlBu](./d3-scale-chromatic/diverging.md.md#interpolateRdYlBu) - ColorBrewer RdYlBu interpolator.
-* [d3.interpolateRdYlGn](./d3-scale-chromatic/diverging.md.md#interpolateRdYlGn) - ColorBrewer RdYlGn interpolator.
-* [d3.interpolateSpectral](./d3-scale-chromatic/diverging.md.md#interpolateSpectral) - ColorBrewer spectral interpolator.
-* [d3.schemeBrBG](./d3-scale-chromatic/diverging.md.md#schemeBrBG) - ColorBrewer BrBG scheme.
-* [d3.schemePiYG](./d3-scale-chromatic/diverging.md.md#schemePiYG) - ColorBrewer PiYG scheme.
-* [d3.schemePRGn](./d3-scale-chromatic/diverging.md.md#schemePRGn) - ColorBrewer PRGn scheme.
-* [d3.schemePuOr](./d3-scale-chromatic/diverging.md.md#schemePuOr) - ColorBrewer PuOr scheme.
-* [d3.schemeRdBu](./d3-scale-chromatic/diverging.md.md#schemeRdBu) - ColorBrewer RdBu scheme.
-* [d3.schemeRdGy](./d3-scale-chromatic/diverging.md.md#schemeRdGy) - ColorBrewer RdGy scheme.
-* [d3.schemeRdYlBu](./d3-scale-chromatic/diverging.md.md#schemeRdYlBu) - ColorBrewer RdYlBu scheme.
-* [d3.schemeRdYlGn](./d3-scale-chromatic/diverging.md.md#schemeRdYlGn) - ColorBrewer RdYlGn scheme.
-* [d3.schemeSpectral](./d3-scale-chromatic/diverging.md.md#schemeSpectral) - ColorBrewer spectral scheme.
+* [d3.interpolateBrBG](./d3-scale-chromatic/diverging.md#interpolateBrBG) - ColorBrewer BrBG interpolator.
+* [d3.interpolatePiYG](./d3-scale-chromatic/diverging.md#interpolatePiYG) - ColorBrewer PiYG interpolator.
+* [d3.interpolatePRGn](./d3-scale-chromatic/diverging.md#interpolatePRGn) - ColorBrewer PRGn interpolator.
+* [d3.interpolatePuOr](./d3-scale-chromatic/diverging.md#interpolatePuOr) - ColorBrewer PuOr interpolator.
+* [d3.interpolateRdBu](./d3-scale-chromatic/diverging.md#interpolateRdBu) - ColorBrewer RdBu interpolator.
+* [d3.interpolateRdGy](./d3-scale-chromatic/diverging.md#interpolateRdGy) - ColorBrewer RdGy interpolator.
+* [d3.interpolateRdYlBu](./d3-scale-chromatic/diverging.md#interpolateRdYlBu) - ColorBrewer RdYlBu interpolator.
+* [d3.interpolateRdYlGn](./d3-scale-chromatic/diverging.md#interpolateRdYlGn) - ColorBrewer RdYlGn interpolator.
+* [d3.interpolateSpectral](./d3-scale-chromatic/diverging.md#interpolateSpectral) - ColorBrewer spectral interpolator.
+* [d3.schemeBrBG](./d3-scale-chromatic/diverging.md#schemeBrBG) - ColorBrewer BrBG scheme.
+* [d3.schemePiYG](./d3-scale-chromatic/diverging.md#schemePiYG) - ColorBrewer PiYG scheme.
+* [d3.schemePRGn](./d3-scale-chromatic/diverging.md#schemePRGn) - ColorBrewer PRGn scheme.
+* [d3.schemePuOr](./d3-scale-chromatic/diverging.md#schemePuOr) - ColorBrewer PuOr scheme.
+* [d3.schemeRdBu](./d3-scale-chromatic/diverging.md#schemeRdBu) - ColorBrewer RdBu scheme.
+* [d3.schemeRdGy](./d3-scale-chromatic/diverging.md#schemeRdGy) - ColorBrewer RdGy scheme.
+* [d3.schemeRdYlBu](./d3-scale-chromatic/diverging.md#schemeRdYlBu) - ColorBrewer RdYlBu scheme.
+* [d3.schemeRdYlGn](./d3-scale-chromatic/diverging.md#schemeRdYlGn) - ColorBrewer RdYlGn scheme.
+* [d3.schemeSpectral](./d3-scale-chromatic/diverging.md#schemeSpectral) - ColorBrewer spectral scheme.
 
 ### [Sequential](./d3-scale-chromatic/sequential.md)
 
-* [d3.interpolateBlues](./d3-scale-chromatic/sequential.md.md#interpolateBlues) -
-* [d3.interpolateGreens](./d3-scale-chromatic/sequential.md.md#interpolateGreens) -
-* [d3.interpolateGreys](./d3-scale-chromatic/sequential.md.md#interpolateGreys) -
-* [d3.interpolateOranges](./d3-scale-chromatic/sequential.md.md#interpolateOranges) -
-* [d3.interpolatePurples](./d3-scale-chromatic/sequential.md.md#interpolatePurples) -
-* [d3.interpolateReds](./d3-scale-chromatic/sequential.md.md#interpolateReds) -
-* [d3.schemeBlues](./d3-scale-chromatic/sequential.md.md#schemeBlues) -
-* [d3.schemeGreens](./d3-scale-chromatic/sequential.md.md#schemeGreens) -
-* [d3.schemeGreys](./d3-scale-chromatic/sequential.md.md#schemeGreys) -
-* [d3.schemeOranges](./d3-scale-chromatic/sequential.md.md#schemeOranges) -
-* [d3.schemePurples](./d3-scale-chromatic/sequential.md.md#schemePurples) -
-* [d3.schemeReds](./d3-scale-chromatic/sequential.md.md#schemeReds) -
-* [d3.interpolateBuGn](./d3-scale-chromatic/sequential.md.md#interpolateBuGn) - ColorBrewer BuGn interpolator.
-* [d3.interpolateBuPu](./d3-scale-chromatic/sequential.md.md#interpolateBuPu) - ColorBrewer BuPu interpolator.
-* [d3.interpolateCividis](./d3-scale-chromatic/sequential.md.md#interpolateCividis) - cividis interpolator.
-* [d3.interpolateCool](./d3-scale-chromatic/sequential.md.md#interpolateCool) - cool interpolator.
-* [d3.interpolateCubehelixDefault](./d3-scale-chromatic/sequential.md.md#interpolateCubehelixDefault) - cubehelix interpolator.
-* [d3.interpolateGnBu](./d3-scale-chromatic/sequential.md.md#interpolateGnBu) - ColorBrewer GnBu interpolator.
-* [d3.interpolateInferno](./d3-scale-chromatic/sequential.md.md#interpolateInferno) - inferno interpolator.
-* [d3.interpolateMagma](./d3-scale-chromatic/sequential.md.md#interpolateMagma) - magma interpolator.
-* [d3.interpolateOrRd](./d3-scale-chromatic/sequential.md.md#interpolateOrRd) - ColorBrewer OrRd interpolator.
-* [d3.interpolatePlasma](./d3-scale-chromatic/sequential.md.md#interpolatePlasma) - plasma interpolator.
-* [d3.interpolatePuBu](./d3-scale-chromatic/sequential.md.md#interpolatePuBu) - ColorBrewer PuBu interpolator.
-* [d3.interpolatePuBuGn](./d3-scale-chromatic/sequential.md.md#interpolatePuBuGn) - ColorBrewer PuBuGn interpolator.
-* [d3.interpolatePuRd](./d3-scale-chromatic/sequential.md.md#interpolatePuRd) - ColorBrewer PuRd interpolator.
-* [d3.interpolateRdPu](./d3-scale-chromatic/sequential.md.md#interpolateRdPu) - ColorBrewer RdPu interpolator.
-* [d3.interpolateTurbo](./d3-scale-chromatic/sequential.md.md#interpolateTurbo) - turbo interpolator.
-* [d3.interpolateViridis](./d3-scale-chromatic/sequential.md.md#interpolateViridis) - viridis interpolator.
-* [d3.interpolateWarm](./d3-scale-chromatic/sequential.md.md#interpolateWarm) - warm interpolator.
-* [d3.interpolateYlGn](./d3-scale-chromatic/sequential.md.md#interpolateYlGn) - ColorBrewer YlGn interpolator.
-* [d3.interpolateYlGnBu](./d3-scale-chromatic/sequential.md.md#interpolateYlGnBu) - ColorBrewer YlGnBu interpolator.
-* [d3.interpolateYlOrBr](./d3-scale-chromatic/sequential.md.md#interpolateYlOrBr) - ColorBrewer YlOrBr interpolator.
-* [d3.interpolateYlOrRd](./d3-scale-chromatic/sequential.md.md#interpolateYlOrRd) - ColorBrewer YlOrRd interpolator.
-* [d3.schemeBuGn](./d3-scale-chromatic/sequential.md.md#schemeBuGn) - ColorBrewer BuGn scheme.
-* [d3.schemeBuPu](./d3-scale-chromatic/sequential.md.md#schemeBuPu) - ColorBrewer BuPu scheme.
-* [d3.schemeGnBu](./d3-scale-chromatic/sequential.md.md#schemeGnBu) - ColorBrewer GnBu scheme.
-* [d3.schemeOrRd](./d3-scale-chromatic/sequential.md.md#schemeOrRd) - ColorBrewer OrRd scheme.
-* [d3.schemePuBu](./d3-scale-chromatic/sequential.md.md#schemePuBu) - ColorBrewer PuBu scheme.
-* [d3.schemePuBuGn](./d3-scale-chromatic/sequential.md.md#schemePuBuGn) - ColorBrewer PuBuGn scheme.
-* [d3.schemePuRd](./d3-scale-chromatic/sequential.md.md#schemePuRd) - ColorBrewer PuRd scheme.
-* [d3.schemeRdPu](./d3-scale-chromatic/sequential.md.md#schemeRdPu) - ColorBrewer RdPu scheme.
-* [d3.schemeYlGn](./d3-scale-chromatic/sequential.md.md#schemeYlGn) - ColorBrewer YlGn scheme.
-* [d3.schemeYlGnBu](./d3-scale-chromatic/sequential.md.md#schemeYlGnBu) - ColorBrewer YlGnBu scheme.
-* [d3.schemeYlOrBr](./d3-scale-chromatic/sequential.md.md#schemeYlOrBr) - ColorBrewer YlOrBr scheme.
-* [d3.schemeYlOrRd](./d3-scale-chromatic/sequential.md.md#schemeYlOrRd) - ColorBrewer YlOrRd scheme.
+* [d3.interpolateBlues](./d3-scale-chromatic/sequential.md#interpolateBlues) -
+* [d3.interpolateGreens](./d3-scale-chromatic/sequential.md#interpolateGreens) -
+* [d3.interpolateGreys](./d3-scale-chromatic/sequential.md#interpolateGreys) -
+* [d3.interpolateOranges](./d3-scale-chromatic/sequential.md#interpolateOranges) -
+* [d3.interpolatePurples](./d3-scale-chromatic/sequential.md#interpolatePurples) -
+* [d3.interpolateReds](./d3-scale-chromatic/sequential.md#interpolateReds) -
+* [d3.schemeBlues](./d3-scale-chromatic/sequential.md#schemeBlues) -
+* [d3.schemeGreens](./d3-scale-chromatic/sequential.md#schemeGreens) -
+* [d3.schemeGreys](./d3-scale-chromatic/sequential.md#schemeGreys) -
+* [d3.schemeOranges](./d3-scale-chromatic/sequential.md#schemeOranges) -
+* [d3.schemePurples](./d3-scale-chromatic/sequential.md#schemePurples) -
+* [d3.schemeReds](./d3-scale-chromatic/sequential.md#schemeReds) -
+* [d3.interpolateBuGn](./d3-scale-chromatic/sequential.md#interpolateBuGn) - ColorBrewer BuGn interpolator.
+* [d3.interpolateBuPu](./d3-scale-chromatic/sequential.md#interpolateBuPu) - ColorBrewer BuPu interpolator.
+* [d3.interpolateCividis](./d3-scale-chromatic/sequential.md#interpolateCividis) - cividis interpolator.
+* [d3.interpolateCool](./d3-scale-chromatic/sequential.md#interpolateCool) - cool interpolator.
+* [d3.interpolateCubehelixDefault](./d3-scale-chromatic/sequential.md#interpolateCubehelixDefault) - cubehelix interpolator.
+* [d3.interpolateGnBu](./d3-scale-chromatic/sequential.md#interpolateGnBu) - ColorBrewer GnBu interpolator.
+* [d3.interpolateInferno](./d3-scale-chromatic/sequential.md#interpolateInferno) - inferno interpolator.
+* [d3.interpolateMagma](./d3-scale-chromatic/sequential.md#interpolateMagma) - magma interpolator.
+* [d3.interpolateOrRd](./d3-scale-chromatic/sequential.md#interpolateOrRd) - ColorBrewer OrRd interpolator.
+* [d3.interpolatePlasma](./d3-scale-chromatic/sequential.md#interpolatePlasma) - plasma interpolator.
+* [d3.interpolatePuBu](./d3-scale-chromatic/sequential.md#interpolatePuBu) - ColorBrewer PuBu interpolator.
+* [d3.interpolatePuBuGn](./d3-scale-chromatic/sequential.md#interpolatePuBuGn) - ColorBrewer PuBuGn interpolator.
+* [d3.interpolatePuRd](./d3-scale-chromatic/sequential.md#interpolatePuRd) - ColorBrewer PuRd interpolator.
+* [d3.interpolateRdPu](./d3-scale-chromatic/sequential.md#interpolateRdPu) - ColorBrewer RdPu interpolator.
+* [d3.interpolateTurbo](./d3-scale-chromatic/sequential.md#interpolateTurbo) - turbo interpolator.
+* [d3.interpolateViridis](./d3-scale-chromatic/sequential.md#interpolateViridis) - viridis interpolator.
+* [d3.interpolateWarm](./d3-scale-chromatic/sequential.md#interpolateWarm) - warm interpolator.
+* [d3.interpolateYlGn](./d3-scale-chromatic/sequential.md#interpolateYlGn) - ColorBrewer YlGn interpolator.
+* [d3.interpolateYlGnBu](./d3-scale-chromatic/sequential.md#interpolateYlGnBu) - ColorBrewer YlGnBu interpolator.
+* [d3.interpolateYlOrBr](./d3-scale-chromatic/sequential.md#interpolateYlOrBr) - ColorBrewer YlOrBr interpolator.
+* [d3.interpolateYlOrRd](./d3-scale-chromatic/sequential.md#interpolateYlOrRd) - ColorBrewer YlOrRd interpolator.
+* [d3.schemeBuGn](./d3-scale-chromatic/sequential.md#schemeBuGn) - ColorBrewer BuGn scheme.
+* [d3.schemeBuPu](./d3-scale-chromatic/sequential.md#schemeBuPu) - ColorBrewer BuPu scheme.
+* [d3.schemeGnBu](./d3-scale-chromatic/sequential.md#schemeGnBu) - ColorBrewer GnBu scheme.
+* [d3.schemeOrRd](./d3-scale-chromatic/sequential.md#schemeOrRd) - ColorBrewer OrRd scheme.
+* [d3.schemePuBu](./d3-scale-chromatic/sequential.md#schemePuBu) - ColorBrewer PuBu scheme.
+* [d3.schemePuBuGn](./d3-scale-chromatic/sequential.md#schemePuBuGn) - ColorBrewer PuBuGn scheme.
+* [d3.schemePuRd](./d3-scale-chromatic/sequential.md#schemePuRd) - ColorBrewer PuRd scheme.
+* [d3.schemeRdPu](./d3-scale-chromatic/sequential.md#schemeRdPu) - ColorBrewer RdPu scheme.
+* [d3.schemeYlGn](./d3-scale-chromatic/sequential.md#schemeYlGn) - ColorBrewer YlGn scheme.
+* [d3.schemeYlGnBu](./d3-scale-chromatic/sequential.md#schemeYlGnBu) - ColorBrewer YlGnBu scheme.
+* [d3.schemeYlOrBr](./d3-scale-chromatic/sequential.md#schemeYlOrBr) - ColorBrewer YlOrBr scheme.
+* [d3.schemeYlOrRd](./d3-scale-chromatic/sequential.md#schemeYlOrRd) - ColorBrewer YlOrRd scheme.
 
 ## [d3-selection](./d3-selection.md)
 
