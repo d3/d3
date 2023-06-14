@@ -1,4 +1,5 @@
-import path from "path";
+import {fileURLToPath, URL} from "node:url";
+import path from "node:path";
 import {defineConfig} from "vitepress";
 
 // https://vitepress.dev/reference/site-config
@@ -13,9 +14,10 @@ export default defineConfig({
   ],
   vite: {
     resolve: {
-      alias: {
-        d3: path.resolve("./dist/d3.mjs")
-      }
+      alias: [
+        {find: "d3", replacement: path.resolve("./dist/d3.mjs")},
+        {find: /^.*\/VPFooter\.vue$/, replacement: fileURLToPath(new URL("./theme/CustomFooter.vue", import.meta.url))}
+      ]
     }
   },
   themeConfig: {

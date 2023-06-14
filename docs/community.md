@@ -12,7 +12,7 @@ And of course, follow us on [Observable](https://observablehq.com/@observablehq?
 
 ## Getting help
 
-We recommend asking for help on the [Observable forum](https://talk.observablehq.com/c/help/6). Or if you prefer chat, join the [Observable community Slack](https://observable-community.slack.com/ssb/redirect).
+We recommend asking for help on the [Observable forum](https://talk.observablehq.com). Or if you prefer chat, join the [Observable community Slack](https://observable-community.slack.com/ssb/redirect).
 
 We encourage you to share your work, no matter how messy, on [Observable](https://observablehq.com). Sharing live code is the easiest way to let people see what you see, and to debug your problem. Strive for a [minimal, reproducible example](https://stackoverflow.com/help/minimal-reproducible-example)—it helps people hone in on your problem more quickly.
 

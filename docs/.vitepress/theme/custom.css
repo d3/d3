@@ -67,3 +67,53 @@
 .vp-doc sub {
   line-height: 1;
 }
+
+.bg-alt {
+  background: var(--vp-c-bg-alt);
+}
+
+.lh-normal {
+  line-height: normal;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.ma4 {
+  margin: 2rem;
+}
+
+.ml1 {
+  margin-left: 1rem;
+}
+
+.mb2 {
+  margin-bottom: 0.5rem;
+}
+
+.f12 {
+  font-size: 12px;
+}
+
+.f14 {
+  font-size: 14px;
+}
+
+.fw6 {
+  font-weight: 600;
+}
+
+.fb6 {
+  flex-basis: 8rem;
+}
+
+@media screen and (min-width: 960px) {
+  .flex-l {
+    display: flex;
+  }
+}
