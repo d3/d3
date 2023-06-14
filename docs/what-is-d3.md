@@ -24,7 +24,7 @@ That’s a lot to take in, right? But take a deep breath—you don’t have to l
 What all’s in the D3 toolbox? Take a gander at the side bar to your left. We recommend exploring the documentation and examples to get a sense of what’s relevant to you.
 
 :::tip
-Unless you need D3’s low-level control, we recommend our high-level sister library: [Observable Plot](https://observablehq.com/plot). Plot’s concise API lets you focus more on analyzing and visualizing data instead of web development. You can even combine Plot and D3 for the best of both.
+Unless you need D3’s low-level control, we recommend our high-level sister library: [Observable Plot](https://observablehq.com/plot). Whereas a histogram in D3 might require 50 lines of code, Plot can do it in one! Plot’s concise yet expressive API lets you focus more on analyzing and visualizing data instead of web development. You can even combine Plot and D3 for the best of both.
 :::
 
 ## D3 is flexible
