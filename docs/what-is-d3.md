@@ -25,7 +25,7 @@ That’s a lot to take in, right? But take a deep breath—you don’t have to l
 
 What all’s in the D3 toolbox? Take a gander at the side bar to your left. We recommend exploring the documentation and examples to get a sense of what’s relevant to you.
 
-## D3 has extraordinary flexibility
+## D3 is flexible
 
 Because D3 has no overarching “chart” abstraction, even a basic chart may require a few dozen lines of code. On the upside, all the pieces are laid out in front of you and you have complete control over what happens. You can tailor the visualization to achieve exactly what you want. D3 has no default presentation of your data—there’s just the code you write yourself. (Or copy from an example.)
 
