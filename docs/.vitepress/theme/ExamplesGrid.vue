@@ -82,7 +82,7 @@ onUnmounted(() => {
 .examples div {
   position: relative;
   transition: filter 250ms ease-out;
-  animation: fade-in 350ms var(--delay) cubic-bezier(0.215, 0.610, 0.355, 1.000) backwards;
+  animation: fade-in 350ms cubic-bezier(0.215, 0.610, 0.355, 1.000) var(--delay) backwards;
 }
 
 .examples div:hover {
@@ -94,7 +94,7 @@ onUnmounted(() => {
   position: absolute;
   --transform: perspective(75em) rotateX(30deg) rotateZ(-7deg) translate(calc(var(--x) * 100%), calc(var(--y) * 86.67%)) scale(1.145);
   transform: var(--transform);
-  animation: drop-in 350ms var(--delay) cubic-bezier(0.215, 0.610, 0.355, 1.000) backwards;
+  animation: drop-in 350ms cubic-bezier(0.215, 0.610, 0.355, 1.000) var(--delay) backwards;
   transition: transform 250ms ease-out;
   clip-path: polygon(50.0% 100.0%, 93.3% 75.0%, 93.3% 25.0%, 50.0% 0.0%, 6.7% 25.0%, 6.7% 75.0%);
 }
