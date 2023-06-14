@@ -1,16 +1,14 @@
 # What is D3?
 
-**D3** (or **D3.js**) is an open-source JavaScript library for visualizing data.
+**D3** (or **D3.js**) is a free, open-source JavaScript library for visualizing data. Its low-level approach built on web standards offers unparalleled flexibility in authoring dynamic data-driven graphics. For more than a decade D3 has powered groundbreaking and award-winning visualizations, become a foundational building block of higher-level chart libraries, and fostered a vibrant community of data practitioners around the world.
 
-:::tip
-Unless you need D3’s low-level control, we recommend our high-level sister library: [Observable Plot](https://observablehq.com/plot). Plot’s concise API lets you focus more on analyzing and visualizing data instead of web development. You can even combine Plot and D3 for the best of both.
-:::
+The Data Visualization Society [Test of Time Award](https://nightingaledvs.com/information-is-beautiful-awards-test-of-time/) in 2023 remarked, “[D3] changed how millions of data visualizations are created across newsrooms, websites, and personal portfolios.” The IEEE VIS [Test of Time Award](https://ieeevis.org/year/2021/info/awards/test-of-time-awards) in 2021 noted, “By creating a framework that was compelling and easy for web developers to use to author interactive visualizations, the authors have undeniably helped to bring data visualization to the mainstream. [D3] is a cornerstone contribution to this conference specifically and more generally to the success of our field as a whole.”
 
 ## D3 is a low-level toolbox
 
-D3 is not a charting library in the traditional sense. It has no concept of “charts”—or even “marks” (or “geoms”) from the grammar of graphics.
+D3 is not a charting library in the traditional sense. It has no concept of “charts”. When you visualize data with D3, you compose a variety primitives.
 
-When you visualize data with D3, you compose a variety primitives. To make a [stacked area chart](https://observablehq.com/@d3/stacked-area-chart/2), you might use
+To make a [stacked area chart](https://observablehq.com/@d3/stacked-area-chart/2), you might use
 
 - a [CSV parser](./d3-dsv.md) to load data,
 - a [time scale](./d3-scale/time.md) for horizontal position (*x*),
@@ -21,9 +19,13 @@ When you visualize data with D3, you compose a variety primitives. To make a [st
 - [axes](./d3-axis.md) for documenting the position encodings, and
 - [selections](./d3-selection.md) for creating SVG elements.
 
-That’s a lot to take in, right? But take a deep breath—you don’t have to learn everything at once. Each piece can be used independently, so you can learn them individually before you fit them together. D3 is not a single monolith but rather a suite of 30 discrete libraries (or “modules”). We bundle these modules together into “D3” for convenience rather than necessity, so your tools are within reach as you iterate on your design.
+That’s a lot to take in, right? But take a deep breath—you don’t have to learn everything at once. Each piece can be used independently, so you can learn them individually before you fit them together. D3 is not a single monolith but rather a suite of 30 discrete libraries (or “modules”). We bundle these modules together for convenience rather than necessity so your tools are within reach as you iterate on your design.
 
 What all’s in the D3 toolbox? Take a gander at the side bar to your left. We recommend exploring the documentation and examples to get a sense of what’s relevant to you.
+
+:::tip
+Unless you need D3’s low-level control, we recommend our high-level sister library: [Observable Plot](https://observablehq.com/plot). Plot’s concise API lets you focus more on analyzing and visualizing data instead of web development. You can even combine Plot and D3 for the best of both.
+:::
 
 ## D3 is flexible
 
