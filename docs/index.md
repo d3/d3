@@ -75,10 +75,6 @@ features:
   display: none; /* too similar to the logo */
 }
 
-:root.dark .VPHero .VPImage {
-  filter: drop-shadow(0 4px 8px black);
-}
-
 </style>
 
 <script setup>
