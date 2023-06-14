@@ -48,8 +48,8 @@ onUnmounted(() => {
 
 <template>
   <div :class="$style.examples" ref="container" :style="`transform: translate(${60 - x * 10}vw, 33%);`">
-    <div v-for="(d, i) in sample">
-      <a :href="`https://observablehq.com/${d.path}`" :title="[d.title, d.author].join('\n')" target="_blank" :style="`--x: ${(i % xn) - xn / 2 + (Math.floor(i / xn) % 2) * 0.5}; --y: ${Math.floor(i / xn) - yn / 2}; animation-delay: ${((i % xn) / xn + (d3.randomLcg(1 / i)()) - 0.4) * 1}s;`">
+    <div v-for="(d, i) in sample" :style="`--delay: ${((i % xn) / xn + (d3.randomLcg(1 / i)()) - 0.4) * 1}s;`">
+      <a :href="`https://observablehq.com/${d.path}`" :title="[d.title, d.author].join('\n')" target="_blank" :style="`--x: ${(i % xn) - xn / 2 + (Math.floor(i / xn) % 2) * 0.5}; --y: ${Math.floor(i / xn) - yn / 2};`">
         <img :src="`https://static.observableusercontent.com/thumbnail/${d.thumbnail}.jpg`" width="640" height="400" />
       </a>
     </div>
@@ -82,6 +82,7 @@ onUnmounted(() => {
 .examples div {
   position: relative;
   transition: filter 250ms ease-out;
+  animation: fade-in 350ms var(--delay) cubic-bezier(0.215, 0.610, 0.355, 1.000) backwards;
 }
 
 .examples div:hover {
@@ -93,7 +94,7 @@ onUnmounted(() => {
   position: absolute;
   --transform: perspective(75em) rotateX(30deg) rotateZ(-7deg) translate(calc(var(--x) * 100%), calc(var(--y) * 86.67%)) scale(1.145);
   transform: var(--transform);
-  animation: drop-in 350ms cubic-bezier(0.215, 0.610, 0.355, 1.000) backwards;
+  animation: drop-in 350ms var(--delay) cubic-bezier(0.215, 0.610, 0.355, 1.000) backwards;
   transition: transform 250ms ease-out;
   clip-path: polygon(50.0% 100.0%, 93.3% 75.0%, 93.3% 25.0%, 50.0% 0.0%, 6.7% 25.0%, 6.7% 75.0%);
 }
@@ -108,16 +109,23 @@ onUnmounted(() => {
   width: var(--grid-width);
 }
 
-@keyframes drop-in {
+@keyframes fade-in {
   from {
-    transform: var(--transform) translateZ(500px);
     filter: blur(20px);
     opacity: 0;
   }
   to {
-    transform: var(--transform);
     filter: none;
     opacity: 1;
+  }
+}
+
+@keyframes drop-in {
+  from {
+    transform: var(--transform) translateY(-100px) translateZ(400px);
+  }
+  to {
+    transform: var(--transform);
   }
 }
 
