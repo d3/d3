@@ -1,3 +1,28 @@
+<script setup>
+
+import * as Plot from "@observablehq/plot";
+import * as d3 from "d3";
+import {useData} from "vitepress";
+import {computed} from "vue";
+import PlotRender from "./components/PlotRender.js";
+
+const {site: {value: {themeConfig: {sidebar}}}} = useData();
+
+const paths = computed(() => {
+  const paths = [];
+  (function visit(node, path) {
+    paths.push({path, link: node.link && `.${node.link}`});
+    if (node.items) {
+      for (const item of node.items) {
+        visit(item, (path === "/" ? path : path + "/") + item.text);
+      }
+    }
+  })({items: sidebar}, "/D3");
+  return paths;
+});
+
+</script>
+
 # What is D3?
 
 **D3** (or **D3.js**) is a free, open-source JavaScript library for visualizing data. Its low-level approach built on web standards offers unparalleled flexibility in authoring dynamic, data-driven graphics. For more than a decade D3 has powered groundbreaking and award-winning visualizations, become a foundational building block of higher-level chart libraries, and fostered a vibrant community of data practitioners around the world.
@@ -21,7 +46,18 @@ To make a [stacked area chart](https://observablehq.com/@d3/stacked-area-chart/2
 
 That’s a lot to take in, right? But take a deep breath—you don’t have to learn everything at once. Each piece can be used independently, so you can learn them individually before you fit them together. D3 is not a single monolith but rather a suite of 30 discrete libraries (or “modules”). We bundle these modules together for convenience rather than necessity so your tools are within reach as you iterate on your design.
 
-What all’s in the D3 toolbox? Take a gander at the side bar to your left. We recommend exploring the documentation and examples to get a sense of what’s relevant to you.
+What all’s in the D3 toolbox? We recommend exploring the documentation and examples to get a sense of what’s relevant to you.
+
+<PlotRender :options='{
+  axis: null,
+  height: 1000,
+  marginTop: 4,
+  marginBottom: 4,
+  marginRight: 120,
+  marks: [
+    Plot.tree(paths, {path: "path", channels: {href: {value: "link", filter: null}}, treeSort: null})
+  ]
+}' />
 
 :::tip
 Unless you need D3’s low-level control, we recommend our high-level sister library: [Observable Plot](https://observablehq.com/plot). Whereas a histogram in D3 might require 50 lines of code, Plot can do it in one! Plot’s concise yet expressive API lets you focus more on analyzing and visualizing data instead of web development. You can even combine Plot and D3 for the best of both.

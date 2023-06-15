@@ -65,6 +65,10 @@
   z-index: 1;
 }
 
+.vp-doc .plot a:hover {
+  text-decoration: initial;
+}
+
 .vp-doc sub {
   line-height: 1;
 }
