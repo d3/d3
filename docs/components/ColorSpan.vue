@@ -8,6 +8,7 @@ import * as d3 from "d3";
 export default {
   props: {
     color: {type: String},
+    text: {type: String},
     format: {type: String, optional: true}
   }
 };
@@ -25,5 +26,5 @@ function format(color, formatType) {
 
 </script>
 <template>
-  <em :style="{borderBottom: `solid 2px ${String(this.color)}`}">{{format(this.color, this.format)}}</em>
+  <em :style="{borderBottom: `solid 2px ${String(this.color)}`}">{{this.text === undefined ? format(this.color, this.format) : this.text}}</em>
 </template>
