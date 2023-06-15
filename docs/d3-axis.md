@@ -2,12 +2,15 @@
 
 import * as Plot from "@observablehq/plot";
 import PlotRender from "./components/PlotRender.js";
+import ExampleAnimatedAxis from "./components/ExampleAnimatedAxis.vue";
 
 </script>
 
 # d3-axis
 
-The axis component renders human-readable reference marks for [scales](./d3-scale.md). The orientation of an axis is fixed; to change the orientation, remove the old axis and create a new axis.
+<ExampleAnimatedAxis />
+
+The axis component renders human-readable reference marks for [scales](./d3-scale.md). Calling it on a [selection](./d3-selection.md) of SVG containers (usually a single *g* element) populates the axis—and updates it if the scale has changed. For smooth animations, you can also call it on a [transition](./d3-transition.md). The orientation of an axis is fixed; to change the orientation, remove the old axis and create a new axis.
 
 Axes are rendered at the origin. To change the position of the axis with respect to the chart, specify a [transform attribute](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on the containing element.
 
