@@ -6,7 +6,7 @@ The Information is Beautiful [2022 Test of Time Award](https://nightingaledvs.co
 
 ## D3 is a low-level toolbox
 
-D3 is not a charting library in the traditional sense. It has no concept of “charts”. When you visualize data with D3, you compose a variety primitives.
+D3 is not a charting library in the traditional sense. It has no concept of “charts”. When you visualize data with D3, you compose a variety of primitives.
 
 To make a [stacked area chart](https://observablehq.com/@d3/stacked-area-chart/2), you might use
 
