@@ -7,14 +7,14 @@ import * as d3 from "d3";
 
 export default {
   props: {
-    color: {type: String},
+    color: true,
     text: {type: String},
     format: {type: String, optional: true}
   }
 };
 
-function format(color, formatType) {
-  switch (formatType) {
+function formatColor(color, format) {
+  switch (format) {
     case "rgb": color = d3.rgb(color).formatRgb(); break;
     case "hex": color = d3.rgb(color).formatHex(); break;
     case "hex8": color = d3.rgb(color).formatHex8(); break;
@@ -26,5 +26,5 @@ function format(color, formatType) {
 
 </script>
 <template>
-  <em :style="{borderBottom: `solid 2px ${String(this.color)}`}">{{this.text === undefined ? format(this.color, this.format) : this.text}}</em>
+  <em :style="{borderBottom: `solid 2px ${String(color)}`}">{{text === undefined ? formatColor(color, format) : text}}</em>
 </template>
