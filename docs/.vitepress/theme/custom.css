@@ -65,6 +65,20 @@
   z-index: 1;
 }
 
+:root [aria-label="tip"][fill="white"],
+:root [aria-label="tip"] [fill="white"] {
+  fill: var(--vp-c-bg-alt);
+}
+
+:root.dark marker[stroke="white"],
+:root.dark [aria-label^="crosshair"][stroke="white"] {
+  stroke: var(--vp-c-bg);
+}
+
+:root.dark marker[fill="white"] {
+  fill: var(--vp-c-bg);
+}
+
 .vp-doc .plot a:hover {
   text-decoration: initial;
 }

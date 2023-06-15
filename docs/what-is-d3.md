@@ -55,7 +55,7 @@ What all’s in the D3 toolbox? We recommend exploring the documentation and exa
   marginBottom: 4,
   marginRight: 120,
   marks: [
-    Plot.tree(paths, {path: "path", channels: {href: {value: "link", filter: null}}, treeSort: null})
+    Plot.tree(paths, {path: "path", textStroke: "var(--vp-c-bg)", channels: {href: {value: "link", filter: null}}, treeSort: null})
   ]
 }' />
 
