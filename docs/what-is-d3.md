@@ -1,8 +1,8 @@
 # What is D3?
 
-**D3** (or **D3.js**) is a free, open-source JavaScript library for visualizing data. Its low-level approach built on web standards offers unparalleled flexibility in authoring dynamic data-driven graphics. For more than a decade D3 has powered groundbreaking and award-winning visualizations, become a foundational building block of higher-level chart libraries, and fostered a vibrant community of data practitioners around the world.
+**D3** (or **D3.js**) is a free, open-source JavaScript library for visualizing data. Its low-level approach built on web standards offers unparalleled flexibility in authoring dynamic, data-driven graphics. For more than a decade D3 has powered groundbreaking and award-winning visualizations, become a foundational building block of higher-level chart libraries, and fostered a vibrant community of data practitioners around the world.
 
-The Data Visualization Society [Test of Time Award](https://nightingaledvs.com/information-is-beautiful-awards-test-of-time/) in 2023 remarked, “[D3] changed how millions of data visualizations are created across newsrooms, websites, and personal portfolios.” The IEEE VIS [Test of Time Award](https://ieeevis.org/year/2021/info/awards/test-of-time-awards) in 2021 noted, “By creating a framework that was compelling and easy for web developers to use to author interactive visualizations, the authors have undeniably helped to bring data visualization to the mainstream. [D3] is a cornerstone contribution to this conference specifically and more generally to the success of our field as a whole.”
+The Information is Beautiful [2022 Test of Time Award](https://nightingaledvs.com/information-is-beautiful-awards-test-of-time/) remarked, “[D3] changed how millions of data visualizations are created across newsrooms, websites, and personal portfolios.” The IEEE VIS [2021 Test of Time Award](https://ieeevis.org/year/2021/info/awards/test-of-time-awards) noted, “By creating a framework that was compelling and easy for web developers to use to author interactive visualizations, the authors have undeniably helped to bring data visualization to the mainstream. [D3] is a cornerstone contribution to this conference specifically and more generally to the success of our field as a whole.”
 
 ## D3 is a low-level toolbox
 
@@ -13,7 +13,7 @@ To make a [stacked area chart](https://observablehq.com/@d3/stacked-area-chart/2
 - a [CSV parser](./d3-dsv.md) to load data,
 - a [time scale](./d3-scale/time.md) for horizontal position (*x*),
 - a [linear scale](./d3-scale/linear.md) for vertical position (*y*),
-- an [ordinal scale](./d3-scale/ordinal.md) with a [categorical scheme](./d3-scale-chromatic/categorical.md) for color,
+- an [ordinal scale](./d3-scale/ordinal.md) and [categorical scheme](./d3-scale-chromatic/categorical.md) for color,
 - a [stack layout](./d3-shape/stack.md) for arranging values,
 - an [area shape](./d3-shape/area.md) with a [linear curve](./d3-shape/curve.md) for generating SVG path data,
 - [axes](./d3-axis.md) for documenting the position encodings, and
