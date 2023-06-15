@@ -1,14 +1,11 @@
 <script setup>
 
 import * as d3 from "d3";
-import {ref, onMounted} from "vue";
 
-const container = ref();
 const width = 688;
-const height = 540;
-const k = width / 200;
-const r = d3.randomUniform(k, k * 4);
-const nodes = Array.from({length: 200}, () => ({r: r()}));
+const height = 688;
+const outerRadius = Math.min(width, height) * 0.5 - 30;
+const innerRadius = outerRadius - 20;
 
 const matrix = [
   // to black, blond, brown, red
@@ -18,6 +15,10 @@ const matrix = [
   [ 1013,   990,  940, 6907]  // from red
 ];
 
+const sum = d3.sum(matrix.flat());
+const tickStepMinor = d3.tickStep(0, sum, 100);
+const tickStepMajor = d3.tickStep(0, sum, 20);
+
 function groupTicks(d, step) {
   const k = (d.endAngle - d.startAngle) / d.value;
   return d3.range(0, d.value, step).map(value => {
@@ -25,73 +26,51 @@ function groupTicks(d, step) {
   });
 }
 
-const formatValue = d3.formatPrefix(",.0", 1e3);
-const outerRadius = Math.min(width, height) * 0.5 - 30;
-const innerRadius = outerRadius - 20;
+const formatValue = d3.formatPrefix(",.0", tickStepMinor);
+
 const arc = d3.arc()
-  .innerRadius(innerRadius)
-  .outerRadius(outerRadius);
+    .innerRadius(innerRadius)
+    .outerRadius(outerRadius);
+
 const ribbon = d3.ribbon()
-  .radius(innerRadius);
+    .radius(innerRadius);
+
 const color = d3.scaleOrdinal()
-  .domain(d3.range(4))
-  .range(["#000000", "#FFDD89", "#957244", "#F26223"]);
-  
+    .domain(d3.range(matrix.length))
+    .range(["#000000", "#ffdd89", "#957244", "#f26223"]);
 
-onMounted(() => {
-  const svg = d3.select(container.value)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("font-size", 10)
-      .attr("font-family", "sans-serif");
+const name = d3.scaleOrdinal()
+    .domain(d3.range(matrix.length))
+    .range(["black", "blond", "brown", "red"]);
 
-  const chords = d3.chord()
-      .padAngle(0.05)
-      .sortSubgroups(d3.descending)
-    (matrix);
-
-  const group = svg.append("g")
-    .selectAll("g")
-    .data(chords.groups)
-    .enter().append("g");
-
-  group.append("path")
-      .attr("fill", d => color(d.index))
-      .attr("stroke", d => d3.rgb(color(d.index)).brighter())
-      .attr("d", arc);
-
-  const groupTick = group.append("g")
-    .selectAll("g")
-    .data(d => groupTicks(d, 1e3))
-    .enter().append("g")
-      .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${outerRadius},0)`);
-
-  groupTick.append("line")
-      .attr("stroke", "currentColor")
-      .attr("x2", 6);
-
-  groupTick
-    .filter(d => d.value % 5e3 === 0)
-    .append("text")
-      .attr("x", 8)
-      .attr("dy", ".35em")
-      .attr("transform", d => d.angle > Math.PI ? "rotate(180) translate(-16)" : null)
-      .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
-      .text(d => formatValue(d.value));
-
-  svg.append("g")
-      .attr("fill-opacity", 0.67)
-    .selectAll("path")
-    .data(chords)
-    .enter().append("path")
-      .attr("d", ribbon)
-      .attr("fill", d => color(d.target.index))
-      .attr("stroke", d => d3.rgb(color(d.target.index)).darker());
-});
+const chords = d3.chord()
+    .padAngle(0.05)
+    .sortSubgroups(d3.descending)
+  (matrix);
 
 </script>
 <template>
   <div style="margin: 1em 0;">
-    <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="overflow: visible; position: relative; z-index: 2; max-width: 100%; height: auto;" ref="container"></svg>
+    <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="font: 10px sans-serif; max-width: 100%; height: auto;">
+      <g v-for="d in chords.groups">
+        <path :d="arc(d)" :fill="color(d.index)" :stroke="color(d.index)">
+          <title>
+            {{ `${name(d.index)}\n${d.value.toLocaleString("en-US")}` }}
+          </title>
+        </path>
+        <g v-for="d in groupTicks(d, tickStepMinor)" :transform="`rotate(${d.angle * 180 / Math.PI - 90}) translate(${outerRadius},0)`">
+          <line stroke="currentColor" x2="6" />
+          <text v-if="d.value % tickStepMajor === 0" x="8" dy="0.35em" :transform="d.angle > Math.PI ? 'rotate(180) translate(-16)' : null" :text-anchor="d.angle > Math.PI ? 'end' : null">{{ formatValue(d.value) }}</text>
+        </g>
+      </g>
+      <g fill-opacity="0.67" stroke="var(--vp-c-bg)">
+        <path v-for="d in chords" :d="ribbon(d)" :fill="color(d.target.index)">
+          <title>
+            {{ `${name(d.source.index)} → ${name(d.target.index)}: ${d.source.value.toLocaleString("en-US")}${d.source.index !== d.target.index ? `\n${name(d.target.index)} → ${name(d.source.index)}: ${d.target.value.toLocaleString("en-US")}` : ``}` }}
+          </title>
+        </path>
+      </g>
+    </svg>
     <a href="https://observablehq.com/@d3/chord-diagram?intent=fork" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
   </div>
 </template>
