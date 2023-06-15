@@ -1,20 +1,27 @@
+<script setup>
+
+import * as d3 from "d3";
+import ColorSpan from "./components/ColorSpan.vue";
+
+</script>
+
 # d3-color
 
 Even though your browser understands a lot about colors, it doesn’t offer much help in manipulating colors through JavaScript. The d3-color module therefore provides representations for various color spaces, allowing specification, conversion and manipulation. (Also see [d3-interpolate](./d3-interpolate.md) for color interpolation.)
 
-For example, take the color named “steelblue”:
+For example, take the named color <ColorSpan color="steelblue" />, which is <ColorSpan color="steelblue" format="rgb" /> in RGB:
 
 ```js
-const c = d3.color("steelblue"); // {r: 70, g: 130, b: 180, opacity: 1}
+let c = d3.color("steelblue"); // {r: 70, g: 130, b: 180, opacity: 1}
 ```
 
-Let’s try converting it to HSL:
+To convert to HSL <ColorSpan color="steelblue" format="hsl" />:
 
 ```js
-const c = d3.hsl("steelblue"); // {h: 207.27…, s: 0.44, l: 0.4902…, opacity: 1}
+c = d3.hsl(c); // {h: 207.27…, s: 0.44, l: 0.4902…, opacity: 1}
 ```
 
-Now rotate the hue by 90°, bump up the saturation, and format as a string for CSS:
+To then rotate the hue by 90° <ColorSpan :color="(((c) => (c.h += 90, c))(d3.hsl('steelblue')))" format="hsl" />, increase the saturation by 20% <ColorSpan :color="(((c) => (c.h += 90, c.s += 0.2, c))(d3.hsl('steelblue')))" format="hsl" />, and format as an RGB string <ColorSpan :color="(((c) => (c.h += 90, c.s += 0.2, c))(d3.hsl('steelblue')))" />:
 
 ```js
 c.h += 90;
@@ -22,7 +29,7 @@ c.s += 0.2;
 c + ""; // rgb(198, 45, 205)
 ```
 
-To fade the color slightly:
+To fade the color slightly <ColorSpan :color="(((c) => (c.h += 90, c.s += 0.2, c.opacity = 0.8, c))(d3.hsl('steelblue')))" />:
 
 ```js
 c.opacity = 0.8;
@@ -57,17 +64,17 @@ d3.color("steelblue") // {r: 70, g: 130, b: 180, opacity: 1}
 
 [Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Parses the specified [CSS Color Module Level 3](http://www.w3.org/TR/css3-color/#colorunits) *specifier* string, returning an [RGB](#rgb) or [HSL](#hsl) color, along with [CSS Color Module Level 4 hex](https://www.w3.org/TR/css-color-4/#hex-notation) *specifier* strings. If the specifier was not valid, null is returned. Some examples:
 
-* `rgb(255, 255, 255)`
-* `rgb(10%, 20%, 30%)`
-* `rgba(255, 255, 255, 0.4)`
-* `rgba(10%, 20%, 30%, 0.4)`
-* `hsl(120, 50%, 20%)`
-* `hsla(120, 50%, 20%, 0.4)`
-* `#ffeeaa`
-* `#fea`
-* `#ffeeaa22`
-* `#fea2`
-* `steelblue`
+* <ColorSpan color="rgb(255, 255, 255)" />
+* <ColorSpan color="rgb(10%, 20%, 30%)" />
+* <ColorSpan color="rgba(255, 255, 255, 0.4)" />
+* <ColorSpan color="rgba(10%, 20%, 30%, 0.4)" />
+* <ColorSpan color="hsl(120, 50%, 20%)" />
+* <ColorSpan color="hsla(120, 50%, 20%, 0.4)" />
+* <ColorSpan color="#ffeeaa" />
+* <ColorSpan color="#fea" />
+* <ColorSpan color="#ffeeaa22" />
+* <ColorSpan color="#fea2" />
+* <ColorSpan color="steelblue" />
 
 The list of supported [named colors](http://www.w3.org/TR/SVG/types.html#ColorKeywords) is specified by CSS.
 
@@ -103,7 +110,7 @@ d3.color("steelblue").copy({opacity: 0.5}) // {r: 70, g: 130, b: 180, opacity: 0
 d3.color("steelblue").brighter(1) // {r: 100, g: 185.71428571428572, b: 257.14285714285717, opacity: 1}
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a brighter copy of this color. If *k* is specified, it controls how much brighter the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a brighter copy of this color. For example, if *k* is 1, <ColorSpan color="steelblue" /> in RGB color space becomes <ColorSpan :color="d3.rgb('steelblue').brighter()" />. The parameter *k* controls how much brighter the returned color should be (in arbitrary units); if *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
 
 ## *color*.darker(*k*) {#color_darker}
 
@@ -111,7 +118,7 @@ d3.color("steelblue").brighter(1) // {r: 100, g: 185.71428571428572, b: 257.1428
 d3.color("steelblue").darker(1) // {r: 49, g: 91, b: 126, opacity: 1}
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a darker copy of this color. If *k* is specified, it controls how much darker the returned color should be. If *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a darker copy of this color. For example, if *k* is 1, <ColorSpan color="steelblue" /> in RGB color space becomes <ColorSpan :color="d3.rgb('steelblue').darker()" />. The parameter *k* controls how much darker the returned color should be (in arbitrary units); if *k* is not specified, it defaults to 1. The behavior of this method is dependent on the implementing color space.
 
 ## *color*.displayable() {#color_displayable}
 
@@ -127,7 +134,7 @@ d3.color("steelblue").displayable(1) // true
 d3.color("steelblue").formatHex() // "#4682b4"
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a hexadecimal string representing this color in RGB space, such as `#f7eaba`. If this color is not displayable, a suitable displayable color is returned instead. For example, RGB channel values greater than 255 are clamped to 255.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a hexadecimal string representing this color in RGB space, such as <ColorSpan color="steelblue" format="hex" />. If this color is not displayable, a suitable displayable color is returned instead. For example, RGB channel values greater than 255 are clamped to 255.
 
 ## *color*.formatHex8() {#color_formatHex8}
 
@@ -135,7 +142,7 @@ d3.color("steelblue").formatHex() // "#4682b4"
 d3.color("steelblue").formatHex8() // "#4682b4ff"
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a hexadecimal string representing this color in RGBA space, such as `#f7eaba90`. If this color is not displayable, a suitable displayable color is returned instead. For example, RGB channel values greater than 255 are clamped to 255.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a hexadecimal string representing this color in RGBA space, such as <ColorSpan :color="d3.rgb('steelblue').copy({opacity: 0.8})" format="hex8" />. If this color is not displayable, a suitable displayable color is returned instead. For example, RGB channel values greater than 255 are clamped to 255.
 
 ## *color*.formatHsl() {#color_formatHsl}
 
@@ -143,7 +150,7 @@ d3.color("steelblue").formatHex8() // "#4682b4ff"
 d3.color("yellow").formatHsl() // "hsl(60, 100%, 50%)"
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a string representing this color according to the [CSS Color Module Level 3 specification](https://www.w3.org/TR/css-color-3/#hsl-color), such as `hsl(257, 50%, 80%)` or `hsla(257, 50%, 80%, 0.2)`. If this color is not displayable, a suitable displayable color is returned instead by clamping S and L channel values to the interval [0, 100].
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a string representing this color according to the [CSS Color Module Level 3 specification](https://www.w3.org/TR/css-color-3/#hsl-color), such as <ColorSpan color="hsl(257, 50%, 80%)" /> or <ColorSpan color="hsla(257, 50%, 80%, 0.2)" />. If this color is not displayable, a suitable displayable color is returned instead by clamping S and L channel values to the interval [0, 100].
 
 ## *color*.formatRgb() {#color_formatRgb}
 
@@ -151,7 +158,7 @@ d3.color("yellow").formatHsl() // "hsl(60, 100%, 50%)"
 d3.color("yellow").formatRgb() // "rgb(255, 255, 0)"
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a string representing this color according to the [CSS Object Model specification](https://drafts.csswg.org/cssom/#serialize-a-css-component-value), such as `rgb(247, 234, 186)` or `rgba(247, 234, 186, 0.2)`. If this color is not displayable, a suitable displayable color is returned instead by clamping RGB channel values to the interval [0, 255].
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Returns a string representing this color according to the [CSS Object Model specification](https://drafts.csswg.org/cssom/#serialize-a-css-component-value), such as <ColorSpan color="rgb(247, 234, 186)" /> or <ColorSpan color="rgba(247, 234, 186, 0.2)" />. If this color is not displayable, a suitable displayable color is returned instead by clamping RGB channel values to the interval [0, 255].
 
 ## *color*.toString() {#color_toString}
 

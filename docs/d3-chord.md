@@ -1,10 +1,16 @@
+<script setup>
+
+import ColorSpan from "./components/ColorSpan.vue";
+
+</script>
+
 # d3-chord
 
 Chord diagrams represent flow between a set of nodes in a graph, such as transition probabilities between finite states, or people moving between rooms in a house.
 
 This flow is typically represented by a square *matrix* of size *n*×*n*, where *n* is the number of nodes in the graph. Each value *matrix*[*i*][*j*] represents the flow from the *i*th node to the *j*th node. (Each number *matrix*[*i*][*j*] must be nonnegative, though it can be zero if there is no flow from node *i* to node *j*.)
 
-For example, here is a fake dataset from [Circos](http://circos.ca/guide/tables/) which describes a population of people who dyed their hair. Each row and column represents a hair color (<span style="border-bottom: solid 2px black;">*black*</span>, <span style="border-bottom: solid 2px #ffdd89;">*blond*</span>, <span style="border-bottom: solid 2px #957244;">*brown*</span>, <span style="border-bottom: solid 2px #f26223;">*red*</span>); each value represents a number of people who dyed their hair from one color to another color. For example, 5,871 people had <span style="border-bottom: solid 2px black;">*black*</span> hair and dyed it <span style="border-bottom: solid 2px #ffdd89;">*blond*</span>, while 1,951 people had <span style="border-bottom: solid 2px #ffdd89;">*blond*</span> hair and dyed it <span style="border-bottom: solid 2px black;">*black*</span>. The matrix diagonal represents people who kept the same color.
+For example, here is a fake dataset from [Circos](http://circos.ca/guide/tables/) which describes a population of people who dyed their hair. Each row and column represents a hair color (<ColorSpan color="black" />, <ColorSpan color="#ffdd89" text="blond" />, <ColorSpan color="#957244" text="brown" />, <ColorSpan color="#f26223" text="red" />); each value represents a number of people who dyed their hair from one color to another color. For example, 5,871 people had <ColorSpan color="black" /> hair and dyed it <ColorSpan color="#ffdd89" text="blond" />, while 1,951 people had <ColorSpan color="#ffdd89" text="blond" /> hair and dyed it <ColorSpan color="black" />. The matrix diagonal represents people who kept the same color.
 
 ```js
 const matrix = [
