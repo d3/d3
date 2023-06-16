@@ -35,7 +35,7 @@ onUnmounted(() => {
 
 The axis component renders human-readable reference marks for position [scales](./d3-scale.md). It works with most scale types, including linear, log, band, and time scales as shown above.
 
-Calling the axis component on a [selection](./d3-selection.md) of SVG containers (usually a single *g* element) populates the axes. Axes are rendered at the origin. To change the position of the axis with respect to the chart, specify a [transform attribute](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on the containing element.
+Calling the axis component on a [selection](./d3-selection.md) of SVG containers (usually a single G element) populates the axes. Axes are rendered at the origin. To change the position of the axis with respect to the chart, specify a [transform attribute](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on the containing element.
 
 ```js
 const gx = svg.append("g")
