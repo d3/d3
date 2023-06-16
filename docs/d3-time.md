@@ -16,7 +16,7 @@ You can, however, use [d3.timeDay](#timeDay).[count](#interval_count):
 d3.timeDay.count(start, end) // 31 😌
 ```
 
-The [day](#timeDay) [interval](#timeInterval) is one of several provided by d3-time. Each interval represents a conventional unit of time—[hours](#timeHour), [weeks](#timeWeek), [months](#timeMonth), *etc.*—and has methods to calculate boundary dates. For example, [d3.timeDay](#timeDay) computes midnight (typically 12:00 AM local time) of the corresponding day. In addition to [rounding](#interval_round) and [counting](#interval_count), intervals can also be used to generate arrays of boundary dates. For example, to compute each Sunday in the current month:
+The [day](#timeDay) [interval](#timeInterval) is one of several provided by d3-time. Each interval represents a conventional unit of time — [hours](#timeHour), [weeks](#timeWeek), [months](#timeMonth), *etc.* — and has methods to calculate boundary dates. For example, [d3.timeDay](#timeDay) computes midnight (typically 12:00 AM local time) of the corresponding day. In addition to [rounding](#interval_round) and [counting](#interval_count), intervals can also be used to generate arrays of boundary dates. For example, to compute each Sunday in the current month:
 
 ```js
 const start = d3.timeMonth.floor(); // 2015-01-01T00:00

@@ -14,7 +14,7 @@ And of course, follow us on [Observable](https://observablehq.com/@observablehq?
 
 We recommend asking for help on the [Observable forum](https://talk.observablehq.com). Or if you prefer chat, join the [Observable community Slack](https://observable-community.slack.com/ssb/redirect).
 
-We encourage you to share your work, no matter how messy, on [Observable](https://observablehq.com). Sharing live code is the easiest way to let people see what you see, and to debug your problem. Strive for a [minimal, reproducible example](https://stackoverflow.com/help/minimal-reproducible-example)—it helps people hone in on your problem more quickly.
+We encourage you to share your work, no matter how messy, on [Observable](https://observablehq.com). Sharing live code is the easiest way to let people see what you see, and to debug your problem. Strive for a [minimal, reproducible example](https://stackoverflow.com/help/minimal-reproducible-example) — it helps people hone in on your problem more quickly.
 
 When asking for help, don’t just post your code and ask people to fix it. Provide context, and say what you want help with. For example:
 
@@ -23,7 +23,7 @@ When asking for help, don’t just post your code and ask people to fix it. Prov
 - What behavior are you currently seeing?
 - Is the current behavior not what you expect?
 
-If you think you’ve found a bug in D3, please file a [GitHub issue](https://github.com/d3/d3/issues). But don’t use an issue to ask for help—you’ll have better luck on the forum or Slack.
+If you think you’ve found a bug in D3, please file a [GitHub issue](https://github.com/d3/d3/issues). But don’t use an issue to ask for help — you’ll have better luck on the forum or Slack.
 
 ## Getting involved
 

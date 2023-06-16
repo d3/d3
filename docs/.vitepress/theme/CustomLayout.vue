@@ -2,6 +2,7 @@
 
 import DefaultTheme from "vitepress/theme-without-fonts";
 import ExamplesGrid from "./ExamplesGrid.vue";
+import ObservablePromo from "./ObservablePromo.vue";
 
 const {Layout} = DefaultTheme;
 
@@ -18,6 +19,9 @@ const {Layout} = DefaultTheme;
     </template>
     <template #home-features-before>
       <ExamplesGrid />
+    </template>
+    <template #home-features-after>
+      <ObservablePromo />
     </template>
   </Layout>
 </template>

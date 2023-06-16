@@ -285,7 +285,7 @@ const stack = d3.stack().order(d3.stackOrderDescending);
 const stack = d3.stack().order(d3.stackOrderInsideOut);
 ```
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/order/insideOut.js) · Returns a series order such that the earliest series (according to the maximum value) are on the inside and the later series are on the outside. This order is recommended for streamgraphs in conjunction with the [wiggle offset](#stackOffsetWiggle). See [Stacked Graphs—Geometry & Aesthetics](http://leebyron.com/streamgraph/) by Byron & Wattenberg for more information.
+[Source](https://github.com/d3/d3-shape/blob/main/src/order/insideOut.js) · Returns a series order such that the earliest series (according to the maximum value) are on the inside and the later series are on the outside. This order is recommended for streamgraphs in conjunction with the [wiggle offset](#stackOffsetWiggle). See [Stacked Graphs — Geometry & Aesthetics](http://leebyron.com/streamgraph/) by Byron & Wattenberg for more information.
 
 ### stackOrderNone(*series*) {#stackOrderNone}
 
@@ -434,4 +434,4 @@ const stack = d3.stack().offset(d3.stackOffsetSilhouette);
 const stack = d3.stack().offset(d3.stackOffsetWiggle);
 ```
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/offset/wiggle.js) · Shifts the baseline so as to minimize the weighted wiggle of layers. This offset is recommended for streamgraphs in conjunction with the [inside-out order](#stackOrderInsideOut). See [Stacked Graphs—Geometry & Aesthetics](http://leebyron.com/streamgraph/) by Bryon & Wattenberg for more information.
+[Source](https://github.com/d3/d3-shape/blob/main/src/offset/wiggle.js) · Shifts the baseline so as to minimize the weighted wiggle of layers. This offset is recommended for streamgraphs in conjunction with the [inside-out order](#stackOrderInsideOut). See [Stacked Graphs — Geometry & Aesthetics](http://leebyron.com/streamgraph/) by Bryon & Wattenberg for more information.
