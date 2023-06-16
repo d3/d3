@@ -32,7 +32,7 @@
         </span>
       </div>
     </div>
-    <a :class="$style.button" href="https://observablehq.com" target="_blank">Build with D3 on Observable →</a>
+    <a :class="$style.button" href="https://observablehq.com?utm_source=d3js-org&utm_medium=promo&utm_campaign=try-observable" target="_blank">Build with D3 on Observable →</a>
   </div>
 </template>
 
