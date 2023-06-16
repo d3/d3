@@ -25,9 +25,9 @@ export default defineConfig({
     siteTitle: "",
     nav: [
       {text: "Home", link: "/"},
-      {text: "Examples", link: "https://observablehq.com/@d3/gallery"},
+      {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable"},
       {text: "Community", link: "/community"},
-      {text: "Plot", link: "https://observablehq.com/plot"}
+      {text: "Plot", link: "https://observablehq.com/plot?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable"}
     ],
     sidebar: [
       {

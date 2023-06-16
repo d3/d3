@@ -30,7 +30,7 @@ hero:
       link: /what-is-d3
     - theme: alt
       text: Examples
-      link: https://observablehq.com/@d3/gallery
+      link: https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=hero&utm_campaign=try-observable
 
 features:
   - title: Selections and transitions
@@ -56,11 +56,11 @@ features:
     link: /d3-array
   - title: Powering Observable Plot
     details: The D3 team also builds Observable Plot, a high-level API for quick charts built on top of D3.
-    link: https://observablehq.com/plot
+    link: https://observablehq.com/plot?utm_source=d3js-org&utm_medium=features&utm_campaign=try-observable
     linkText: Try Observable Plot
   - title: Built by Observable
     details: D3 is developed by Observable, the platform for collaborative data analysis.
-    link: https://observablehq.com
+    link: https://observablehq.com?utm_source=d3js-org&utm_medium=features&utm_campaign=try-observable
     linkText: Visit Observable
 ---
 
