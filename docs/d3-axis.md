@@ -1,23 +1,56 @@
 <script setup>
 
-import * as Plot from "@observablehq/plot";
-import PlotRender from "./components/PlotRender.js";
+import * as d3 from "d3";
+import {shallowRef, onMounted, onUnmounted} from "vue";
+import ExampleAxis from "./components/ExampleAxis.vue";
+
+const domain = shallowRef([0, 100]);
+const range = [20, 668];
+
+let timer;
+
+onMounted(() => {
+  timer = d3.interval(() => {
+    const x = Math.random() * 100;
+    const l = Math.random() * 100;
+    domain.value = [x, x + l];
+  }, 5000);
+});
+
+onUnmounted(() => {
+  timer?.stop();
+});
 
 </script>
 
 # d3-axis
 
-The axis component renders human-readable reference marks for [scales](./d3-scale.md). The orientation of an axis is fixed; to change the orientation, remove the old axis and create a new axis.
+<ExampleAxis :axis="d3.axisBottom(d3.scaleLinear([0, 100], range))" :y="7" />
 
-Axes are rendered at the origin. To change the position of the axis with respect to the chart, specify a [transform attribute](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on the containing element.
+<ExampleAxis :axis="d3.axisBottom(d3.scaleLog([1, 1000], range))" :y="7" />
+
+<ExampleAxis :axis="d3.axisBottom(d3.scaleBand([...'ABCDEFGHIJKL'], range)).tickSizeOuter(0)" :y="7" />
+
+<ExampleAxis :axis="d3.axisBottom(d3.scaleUtc([new Date('2011-01-01'), new Date('2013-01-01')], range))" :y="7" />
+
+The axis component renders human-readable reference marks for position [scales](./d3-scale.md). It works with most scale types, including linear, log, band, and time scales as shown above.
+
+Calling the axis component on a [selection](./d3-selection.md) of SVG containers (usually a single G element) populates the axes. Axes are rendered at the origin. To change the position of the axis with respect to the chart, specify a [transform attribute](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on the containing element.
 
 ```js
-d3.select("body").append("svg")
-    .attr("width", 1440)
-    .attr("height", 30)
-  .append("g")
-    .attr("transform", "translate(0,30)")
-    .call(axis);
+const gx = svg.append("g")
+    .attr("transform", `translate(0,${height - marginBottom})`)
+    .call(d3.axisBottom(x));
+```
+
+If the scale has changed, call the axis component a second time to update. For smooth animations, you can call it on a [transition](./d3-transition.md).
+
+<ExampleAxis :axis="d3.axisBottom(d3.scaleLinear(domain, range))" :y="7" :duration="1500" />
+
+```js
+gx.transition()
+    .duration(750)
+    .call(d3.axisBottom(x));
 ```
 
 The elements created by the axis are considered part of its public API. You can apply external stylesheets or modify the generated axis elements to [customize the axis appearance](https://observablehq.com/@d3/styled-axes). An axis consists of a [path element](https://www.w3.org/TR/SVG/paths.html#PathElement) of class “domain” representing the extent of the scale’s domain, followed by transformed [g elements](https://www.w3.org/TR/SVG/struct.html#Groups) of class “tick” representing each of the scale’s ticks. Each tick has a [line element](https://www.w3.org/TR/SVG/shapes.html#LineElement) to draw the tick line, and a [text element](https://www.w3.org/TR/SVG/text.html#TextElement) for the tick label. For example, here is a typical bottom-oriented axis:
@@ -52,43 +85,29 @@ The elements created by the axis are considered part of its public API. You can 
 </g>
 ```
 
+The orientation of an axis is fixed; to change the orientation, remove the old axis and create a new axis.
+
 ## axisTop(*scale*) {#axisTop}
 
-<PlotRender :options='{
-  height: 40,
-  x: {axis: "top", type: "linear"},
-  marks: [Plot.frame({anchor: "top"})]
-}' />
+<ExampleAxis :axis="d3.axisTop(d3.scaleLinear([0, 100], range))" :y="23" />
 
 [Source](https://github.com/d3/d3-axis/blob/main/src/axis.js) · Constructs a new top-oriented axis generator for the given [scale](./d3-scale.md), with empty [tick arguments](#axis_ticks), a [tick size](#axis_tickSize) of 6 and [padding](#axis_tickPadding) of 3. In this orientation, ticks are drawn above the horizontal domain path.
 
 ## axisRight(*scale*) {#axisRight}
 
-<PlotRender :options='{
-  width: 60,
-  y: {axis: "right", type: "linear"},
-  marks: [Plot.frame({anchor: "right"})]
-}' />
+<ExampleAxis :axis="d3.axisRight(d3.scaleLinear([0, 100], [10, 190]))" :width="60" :height="200" :x="20" />
 
 [Source](https://github.com/d3/d3-axis/blob/main/src/axis.js) · Constructs a new right-oriented axis generator for the given [scale](./d3-scale.md), with empty [tick arguments](#axis_ticks), a [tick size](#axis_tickSize) of 6 and [padding](#axis_tickPadding) of 3. In this orientation, ticks are drawn to the right of the vertical domain path.
 
 ## axisBottom(*scale*) {#axisBottom}
 
-<PlotRender :options='{
-  height: 40,
-  x: {axis: "bottom", type: "linear"},
-  marks: [Plot.frame({anchor: "bottom"})]
-}' />
+<ExampleAxis :axis="d3.axisBottom(d3.scaleLinear([0, 100], range))" :y="7" />
 
 [Source](https://github.com/d3/d3-axis/blob/main/src/axis.js) · Constructs a new bottom-oriented axis generator for the given [scale](./d3-scale.md), with empty [tick arguments](#axis_ticks), a [tick size](#axis_tickSize) of 6 and [padding](#axis_tickPadding) of 3. In this orientation, ticks are drawn below the horizontal domain path.
 
 ## axisLeft(*scale*) {#axisLeft}
 
-<PlotRender :options='{
-  width: 60,
-  y: {axis: "left", type: "linear"},
-  marks: [Plot.frame({anchor: "left"})]
-}' />
+<ExampleAxis :axis="d3.axisLeft(d3.scaleLinear([0, 100], [10, 190]))" :width="60" :height="200" :x="40" />
 
 [Source](https://github.com/d3/d3-axis/blob/main/src/axis.js) · Constructs a new left-oriented axis generator for the given [scale](./d3-scale.md), with empty [tick arguments](#axis_ticks), a [tick size](#axis_tickSize) of 6 and [padding](#axis_tickPadding) of 3. In this orientation, ticks are drawn to the left of the vertical domain path.
 
