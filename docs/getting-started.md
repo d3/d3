@@ -259,7 +259,7 @@ TypeScript declarations are available via DefinitelyTyped.
 
 ## D3 in React
 
-Most D3 modules (including [d3-scale](./d3-scale.md), [d3-array](./d3-array.md), [d3-interpolate](./d3-interpolate.md), and [d3-format](./d3-format.md)) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization, such as the line plot below. (See [sandbox](https://codesandbox.io/s/d3-react-ssr-5g1bm0?file=/src/LinePlot.jsx).)
+Most D3 modules (including [d3-scale](./d3-scale.md), [d3-array](./d3-array.md), [d3-interpolate](./d3-interpolate.md), and [d3-format](./d3-format.md)) don’t interact with the DOM, so there is no difference when using them in React. You can use them in JSX for purely declarative visualization, such as the line plot below.
 
 :::code-group
 ```jsx [LinePlot.jsx]
@@ -289,7 +289,9 @@ export default function LinePlot({
 ```
 :::
 
-D3 modules that operate on [selections](./d3-selection/selecting.md) (including [d3-selection](./d3-selection.md), [d3-transition](./d3-transition.md), and [d3-axis](./d3-axis.md)) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook. (See [sandbox](https://codesandbox.io/s/d3-react-useeffect-5lp0x6?file=/src/LinePlot.jsx).)
+<p style="margin-top: -1em;"><a href="https://codesandbox.io/s/d3-react-ssr-5g1bm0?file=/src/LinePlot.jsx" style="font-size: smaller;" target="_blank">Sandbox ↗︎</a></p>
+
+D3 modules that operate on [selections](./d3-selection/selecting.md) (including [d3-selection](./d3-selection.md), [d3-transition](./d3-transition.md), and [d3-axis](./d3-axis.md)) do manipulate the DOM, which competes with React’s virtual DOM. In those cases, you can attach a ref to an element and pass it to D3 in a useEffect hook.
 
 :::code-group
 ```jsx [LinePlot.jsx]
@@ -326,11 +328,13 @@ export default function LinePlot({
 ```
 :::
 
+<p style="margin-top: -1em;"><a href="https://codesandbox.io/s/d3-react-useeffect-5lp0x6?file=/src/LinePlot.jsx" style="font-size: smaller;" target="_blank">Sandbox ↗︎</a></p>
+
 For more guidance using D3 in React, see [Amelia Wattenberger’s post](https://2019.wattenberger.com/blog/react-and-d3).
 
 ## D3 in Svelte
 
-As [with React](#d3-in-react), you can use Svelte exclusively for rendering if you like, and only use D3 modules that don’t manipulate the DOM. Here is a line plot of an array of numbers that uses [d3-shape](./d3-shape.md) and [d3-scale](./d3-scale-chromatic.md). (See [repl](https://svelte.dev/repl/ece91c0d8b204d5ea970dbbc0d6783aa?version=3.59.1).)
+As [with React](#d3-in-react), you can use Svelte exclusively for rendering if you like, and only use D3 modules that don’t manipulate the DOM. Here is a line plot of an array of numbers that uses [d3-shape](./d3-shape.md) and [d3-scale](./d3-scale-chromatic.md).
 
 :::code-group
 ```svelte [LinePlot.svelte]
@@ -360,7 +364,9 @@ As [with React](#d3-in-react), you can use Svelte exclusively for rendering if y
 ```
 :::
 
-Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-selection/joining.md) for efficient updates. Below, we use them to render dynamic axes as the data changes. (See [repl](https://svelte.dev/repl/ff3bf3c7ca454d53913c0c33af0c1250?version=3.59.1).)
+<p style="margin-top: -1em;"><a href="https://svelte.dev/repl/ece91c0d8b204d5ea970dbbc0d6783aa?version=3.59.1" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
+
+Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-selection/joining.md) for efficient updates. Below, we use them to render dynamic axes as the data changes.
 
 :::code-group
 ```svelte [LinePlot.svelte]
@@ -394,4 +400,7 @@ Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-sele
     {/each}
   </g>
 </svg>
+```
 :::
+
+<p style="margin-top: -1em;"><a href="https://svelte.dev/repl/ff3bf3c7ca454d53913c0c33af0c1250?version=3.59.1" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
