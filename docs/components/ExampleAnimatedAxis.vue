@@ -34,9 +34,6 @@ async function render(node) {
 }
 
 export default {
-  props: {
-    points: {type: Array, default: []},
-  },
   mounted() {
     render(this.$el.querySelector("svg"), this);
   }
