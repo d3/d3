@@ -2,17 +2,23 @@
 
 import * as Plot from "@observablehq/plot";
 import PlotRender from "./components/PlotRender.js";
-import ExampleAnimatedAxis from "./components/ExampleAnimatedAxis.vue";
+
 
 </script>
 
 # d3-axis
 
-<ExampleAnimatedAxis />
+The axis component renders human-readable reference marks for position [scales](./d3-scale.md). For instance:
 
-The axis component renders human-readable reference marks for [scales](./d3-scale.md). Calling it on a [selection](./d3-selection.md) of SVG containers (usually a single *g* element) populates the axis—and updates it if the scale has changed. For smooth animations, you can also call it on a [transition](./d3-transition.md). The orientation of an axis is fixed; to change the orientation, remove the old axis and create a new axis.
+<PlotRender :options='{x: {domain: [0, 100], line: true, label: "A linear scale", labelOffset: -10, labelAnchor: "center", labelArrow: null}}' />
 
-Axes are rendered at the origin. To change the position of the axis with respect to the chart, specify a [transform attribute](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on the containing element.
+<PlotRender :options='{x: {domain: [1, 1e6], type: "log", line: true, label: "A log scale", labelOffset: -10, labelAnchor: "center", labelArrow: null}}' />
+
+<PlotRender :options='{x: {type: "band", domain: "ABCDEFGHIJKL",  line: true, label: "A band scale (for ordinal values)", labelOffset: -10, labelAnchor: "center"}}' />
+
+<PlotRender :options='{x: {domain: [new Date(Date.UTC(2011, 0, 1)), new Date(Date.UTC(2013, 0, 1))], line: true, label: "A time scale", labelOffset: -10, labelAnchor: "center", labelArrow: null}}' />
+
+Calling the axis component on a [selection](./d3-selection.md) of SVG containers (usually a single *g* element) populates the axes. Axes are rendered at the origin. To change the position of the axis with respect to the chart, specify a [transform attribute](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on the containing element. If the scale has changed, call the axis component a second time to update; for smooth animations, you can also call it on a [transition](./d3-transition.md).
 
 ```js
 d3.select("body").append("svg")
@@ -55,6 +61,8 @@ The elements created by the axis are considered part of its public API. You can 
 </g>
 ```
 
+The orientation of an axis is fixed; to change the orientation, remove the old axis and create a new axis.
+
 ## axisTop(*scale*) {#axisTop}
 
 <PlotRender :options='{
@@ -69,6 +77,7 @@ The elements created by the axis are considered part of its public API. You can 
 
 <PlotRender :options='{
   width: 60,
+  height: 200,
   y: {axis: "right", type: "linear"},
   marks: [Plot.frame({anchor: "right"})]
 }' />
@@ -89,6 +98,7 @@ The elements created by the axis are considered part of its public API. You can 
 
 <PlotRender :options='{
   width: 60,
+  height: 200,
   y: {axis: "left", type: "linear"},
   marks: [Plot.frame({anchor: "left"})]
 }' />
