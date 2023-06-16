@@ -89,6 +89,7 @@ a.button {
   padding: 0 20px;
   line-height: 38px;
   font-size: 14px;
+  margin: 0 24px;
 }
 
 a.button:hover {
@@ -113,6 +114,9 @@ a.button:hover {
   }
   .column-header::after {
     content: "·";
+  }
+  .columns {
+    text-align: initial;
   }
 }
 
