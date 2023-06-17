@@ -1,35 +1,19 @@
 <template>
   <div :class="`vp-doc ${$style.promo}`">
-    <h1 :class="$style.hed">
-      Build your best work with D3 on Observable
-    </h1>
-    <div :class="$style.subhed">
-      The only data workflow platform capable of supporting the full power of D3
-    </div>
+    <h1 :class="$style.hed">Build your best work with D3 on Observable</h1>
+    <div :class="$style.subhed">The only data workflow platform capable of supporting the full power of D3</div>
     <div :class="$style.columns">
       <div :class="$style.column">
-        <span :class="$style['column-header']">
-          Connect to your data instantly
-        </span>
-        <span :class="$style['column-body']">
-          Pull live data from the cloud, files, and databases into one secure place — without installing anything, ever.
-        </span>
+        <span :class="$style['column-header']">Connect to your data instantly</span>
+        <span :class="$style['column-body']">Pull live data from the cloud, files, and databases into one secure place — without installing anything, ever.</span>
       </div>
       <div :class="$style.column">
-        <span :class="$style['column-header']">
-          Code faster than you thought possible
-        </span>
-        <span :class="$style['column-body']">
-          Get everything you need and none of what you don’t with lightweight automatic versioning, instant sharing, and real-time multiplayer editing.
-        </span>
+        <span :class="$style['column-header']">Code faster than you thought possible</span>
+        <span :class="$style['column-body']">Get everything you need and none of what you don’t with lightweight automatic versioning, instant sharing, and real-time multiplayer editing.</span>
       </div>
       <div :class="$style.column">
-        <span :class="$style['column-header']">
-          Accelerate your team’s analysis
-        </span>
-        <span :class="$style['column-body']">
-          Create a home for your team’s data analysis where you can spin up charts, maps, and data apps to explore, analyze, and iterate on together.
-        </span>
+        <span :class="$style['column-header']">Accelerate your team’s analysis</span>
+        <span :class="$style['column-body']">Create a home for your team’s data analysis where you can spin up charts, maps, and data apps to explore, analyze, and iterate on together.</span>
       </div>
     </div>
     <a :class="$style.button" href="https://observablehq.com?utm_source=d3js-org&utm_medium=promo&utm_campaign=try-observable" target="_blank">Build with D3 on Observable →</a>
@@ -68,7 +52,8 @@ h1 {
 }
 
 .hed,
-.subhed {
+.subhed,
+.column-header {
   text-wrap: balance;
 }
 
@@ -113,7 +98,7 @@ a.button:hover {
     max-width: 768px;
   }
   .column-header::after {
-    content: "·";
+    content: " · ";
   }
   .columns {
     text-align: initial;
