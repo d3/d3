@@ -4,6 +4,7 @@ import * as Plot from "@observablehq/plot";
 import * as d3 from "d3";
 import {useData} from "vitepress";
 import {computed} from "vue";
+import LogoDiagram from "./components/LogoDiagram.vue";
 import PlotRender from "./components/PlotRender.js";
 
 const {site: {value: {themeConfig: {sidebar}}}} = useData();
@@ -24,6 +25,8 @@ const paths = computed(() => {
 </script>
 
 # What is D3?
+
+<LogoDiagram />
 
 **D3** (or **D3.js**) is a free, open-source JavaScript library for visualizing data. Its low-level approach built on web standards offers unparalleled flexibility in authoring dynamic, data-driven graphics. For more than a decade D3 has powered groundbreaking and award-winning visualizations, become a foundational building block of higher-level chart libraries, and fostered a vibrant community of data practitioners around the world.
 
