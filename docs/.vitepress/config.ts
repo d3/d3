@@ -39,7 +39,6 @@ export default defineConfig({
       },
       {
         text: "Visualization",
-        collapsed: true,
         items: [
           {text: "d3-axis", link: "/d3-axis"},
           {
@@ -199,7 +198,6 @@ export default defineConfig({
       },
       {
         text: "Animation",
-        collapsed: true,
         items: [
           {text: "d3-ease", link: "/d3-ease"},
           {text: "d3-timer", link: "/d3-timer"},
@@ -218,7 +216,6 @@ export default defineConfig({
       },
       {
         text: "Interaction",
-        collapsed: true,
         items: [
           {text: "d3-brush", link: "/d3-brush"},
           {text: "d3-dispatch", link: "/d3-dispatch"},
@@ -228,7 +225,6 @@ export default defineConfig({
       },
       {
         text: "Data",
-        collapsed: true,
         items: [
           {
             text: "d3-array",
