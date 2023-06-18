@@ -74,6 +74,7 @@
     "@rollup/plugin-terser": "^0.4.0",
     "eslint": "8",
     "mocha": "10",
+    "posthog-js": "^1.68.1",
     "rollup": "3",
     "topojson-client": "^3.1.0",
     "vitepress": "^1.0.0-beta.2"

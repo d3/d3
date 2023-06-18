@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import {useData} from "vitepress";
 import CustomLayout from "./CustomLayout.vue";
 import "./custom.css";
+import enablePosthog from "./posthog.js";
 
 export default {
   extends: DefaultTheme,
@@ -10,5 +11,6 @@ export default {
   enhanceApp({app, router}) {
     globalThis.d3 = d3; // for console testing!
     Object.defineProperty(app.config.globalProperties, "$dark", {get: () => useData().isDark.value});
+    enablePosthog(app, router);
   }
 };
