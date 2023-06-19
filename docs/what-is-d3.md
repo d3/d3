@@ -22,6 +22,13 @@ const paths = computed(() => {
   return paths;
 });
 
+// https://github.com/observablehq/plot/issues/1703
+function computeTreeWidth(paths) {
+  const root = d3.tree().nodeSize([1, 1])(d3.stratify().path((d) => d.path)(paths));
+  const [x1, x2] = d3.extent(root, (d) => d.x);
+  return x2 - x1;
+}
+
 </script>
 
 # What is D3?
@@ -55,7 +62,7 @@ What all’s in the D3 toolbox? We recommend exploring the documentation and exa
 
 <PlotRender :options='{
   axis: null,
-  height: 1000,
+  height: computeTreeWidth(paths) * 12,
   marginTop: 4,
   marginBottom: 4,
   marginRight: 120,
