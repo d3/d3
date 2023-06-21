@@ -82,7 +82,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div style="margin: 1em 0;">
-    <link rel="preload" :href="dataUrl" as="fetch" type="application/octet-stream" crossorigin="anonymous">
+    <link rel="preload" :href="dataUrl" as="fetch" type="application/json" crossorigin>
     <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="overflow: visible; position: relative; z-index: 2; max-width: 100%; height: auto;">
       <g ref="glink" stroke="currentColor" stroke-opacity="0.5"></g>
       <g ref="gnode" stroke="var(--vp-c-bg-alt)" stroke-width="1.5"></g>
