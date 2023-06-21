@@ -8,8 +8,8 @@ export default defineConfig({
   description: "The JavaScript library for bespoke data visualization",
   cleanUrls: true,
   head: [
-    ["link", {rel: "apple-touch-icon", href: "https://static.observableusercontent.com/files/082781eba5e2203c0c63ef9af5ace08ae0faaf8c3e2c251e77a4383f2fffd85ac236a4066f12e838dee5e2f3abb518c27db51b47b5e21a96d094a8f27f89fcd7"}],
-    ["link", {rel: "icon", type: "image/png", href: "https://static.observableusercontent.com/files/082781eba5e2203c0c63ef9af5ace08ae0faaf8c3e2c251e77a4383f2fffd85ac236a4066f12e838dee5e2f3abb518c27db51b47b5e21a96d094a8f27f89fcd7", sizes: "512x512"}]
+    ["link", {rel: "apple-touch-icon", href: "/logo.png"}],
+    ["link", {rel: "icon", type: "image/png", href: "/logo.png"}]
   ],
   vite: {
     resolve: {
