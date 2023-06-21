@@ -3,8 +3,7 @@
 import * as d3 from "d3";
 import {ref, onMounted, onUnmounted} from "vue";
 
-const dataUrl = "https://static.observableusercontent.com/files/e3680d5f766e85edde560c9c31a6dba2ddfcf2f66e1dced4afa18d8040f1f205e0bde1b8b234d866373f2bfc5806fafc47e244c5c9f48b60aaa1917c1b80fcb7";
-const dataPromise = d3.json(dataUrl);
+const dataPromise = d3.json("https://static.observableusercontent.com/files/e3680d5f766e85edde560c9c31a6dba2ddfcf2f66e1dced4afa18d8040f1f205e0bde1b8b234d866373f2bfc5806fafc47e244c5c9f48b60aaa1917c1b80fcb7");
 
 const gnode = ref();
 const glink = ref();
@@ -82,7 +81,6 @@ onUnmounted(() => {
 </script>
 <template>
   <div style="margin: 1em 0;">
-    <link rel="preload" :href="dataUrl" as="fetch" type="application/json" crossorigin>
     <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="overflow: visible; position: relative; z-index: 2; max-width: 100%; height: auto;">
       <g ref="glink" stroke="currentColor" stroke-opacity="0.5"></g>
       <g ref="gnode" stroke="var(--vp-c-bg-alt)" stroke-width="1.5"></g>
