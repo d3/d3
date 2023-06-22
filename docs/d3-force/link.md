@@ -1,4 +1,12 @@
+<script setup>
+
+import ExampleLinkForce from "../components/ExampleLinkForce.vue";
+
+</script>
+
 # Link force
+
+<ExampleLinkForce />
 
 The link force pushes linked nodes together or apart according to the desired [link distance](#link_distance). The strength of the force is proportional to the difference between the linked nodes’ distance and the target distance, similar to a spring force.
 
