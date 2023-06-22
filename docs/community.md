@@ -12,7 +12,7 @@ And of course, follow us on [Observable](https://observablehq.com/@observablehq?
 
 ## Getting help
 
-We recommend asking for help on the [Observable forum](https://talk.observablehq.com). Or if you prefer chat, join the [Observable community Slack](https://observable-community.slack.com/ssb/redirect).
+We recommend asking for help on the [Observable forum](https://talk.observablehq.com). Or if you prefer chat, join the [Observable community Slack](https://join.slack.com/t/observable-community/shared_invite/zt-1x7gs4fck-UHhEFxUXKHVE8Qt3XmJCig).
 
 We encourage you to share your work, no matter how messy, on [Observable](https://observablehq.com). Sharing live code is the easiest way to let people see what you see, and to debug your problem. Strive for a [minimal, reproducible example](https://stackoverflow.com/help/minimal-reproducible-example) — it helps people hone in on your problem more quickly.
 
@@ -33,6 +33,6 @@ We’d love for you to join the community! Here are some ways to participate:
 
 * Upvote 👍 or comment on [GitHub issues](https://github.com/d3/d3/issues). We’d love your input on what to build next. If your desired feature isn’t already there, or if you’ve found a bug, file an issue and tell us about it.
 
-* Answer questions or participate in discussions on the [Observable forum](https://talk.observablehq.com/) and the [Observable community Slack](https://observable-community.slack.com/ssb/redirect). You’ll help others, and might learn something yourself, too.
+* Answer questions or participate in discussions on the [Observable forum](https://talk.observablehq.com/) and the [Observable community Slack](https://join.slack.com/t/observable-community/shared_invite/zt-1x7gs4fck-UHhEFxUXKHVE8Qt3XmJCig). You’ll help others, and might learn something yourself, too.
 
 Please help us maintain a positive environment for all by adhering to our [code of conduct](https://github.com/observablehq/.github/blob/master/CODE_OF_CONDUCT.md). Thank you!

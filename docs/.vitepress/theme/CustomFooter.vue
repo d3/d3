@@ -14,7 +14,7 @@
           <div class="mb2 fw6 f14">Resources</div>
           <ul>
             <li class="mb2"><a target="_blank" href="https://talk.observablehq.com">Forum</a></li>
-            <li class="mb2"><a target="_blank" href="https://observable-community.slack.com/ssb/redirect">Slack</a></li>
+            <li class="mb2"><a target="_blank" href="https://join.slack.com/t/observable-community/shared_invite/zt-1x7gs4fck-UHhEFxUXKHVE8Qt3XmJCig">Slack</a></li>
             <li class="mb2"><a target="_blank" href="https://github.com/d3/d3/releases">Releases</a></li>
             <li class="mb2"><a target="_blank" href="https://observablehq.com/@observablehq/plot-twist-newsletter-signup">Newsletter</a></li>
           </ul>
