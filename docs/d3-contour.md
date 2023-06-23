@@ -12,6 +12,7 @@ import PlotRender from "./components/PlotRender.js";
   <PlotRender :options='{
     axis: null,
     aspectRatio: 1,
+    style: "margin: 0;",
     marks: [
       Plot.contour(volcano.values, {
         width: volcano.width,
