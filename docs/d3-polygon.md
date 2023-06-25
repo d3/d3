@@ -44,7 +44,7 @@ d3.polygonArea([[1, 1], [1.5, 0], [2, 1]]) // [1.5, 0.6666666666666666]
 d3.polygonHull(points) // [[3.0872864263338777, -1.300100095019402], [1.6559368816733773, -2.5092525689499605], …]
 ```
 
-[Source](https://github.com/d3/d3-polygon/blob/main/src/hull.js#L23) · Returns the [convex hull](https://en.wikipedia.org/wiki/Convex_hull) of the specified *points* using [Andrew’s monotone chain algorithm](http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain). The returned hull is represented as an array containing a subset of the input *points* arranged in counterclockwise order. Returns null if *points* has fewer than three elements.
+[Source](https://github.com/d3/d3-polygon/blob/main/src/hull.js) · Returns the [convex hull](https://en.wikipedia.org/wiki/Convex_hull) of the specified *points* using [Andrew’s monotone chain algorithm](http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain). The returned hull is represented as an array containing a subset of the input *points* arranged in counterclockwise order. Returns null if *points* has fewer than three elements.
 
 ## polygonContains(*polygon*, *point*) {#polygonContains}
 
