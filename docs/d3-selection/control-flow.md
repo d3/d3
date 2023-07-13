@@ -14,7 +14,7 @@ parent.each(function(p, j) {
 });
 ```
 
-See [sized donut multiples](https://gist.github.com/mbostock/4c5fad723c87d2fd8273) for an example.
+See [sized donut multiples](https://observablehq.com/@d3/sized-donut-multiples) for an example.
 
 ## *selection*.call(*function*, ...*arguments*) {#selection_call}
 

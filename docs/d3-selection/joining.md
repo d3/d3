@@ -64,7 +64,7 @@ d3.selectAll("div")
 
 This example key function uses the datum *d* if present, and otherwise falls back to the element’s id property. Since these elements were not previously bound to data, the datum *d* is null when the key function is evaluated on selected elements, and non-null when the key function is evaluated on the new data.
 
-The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the selection order prior to the join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](./modifying.md#selection_order) or [*selection*.sort](./modifying.md#selection_sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/) and [Object Constancy](http://bost.ocks.org/mike/constancy/).
+The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the selection order prior to the join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](./modifying.md#selection_order) or [*selection*.sort](./modifying.md#selection_sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](https://observablehq.com/@d3/lets-make-a-bar-chart/2) and [Object Constancy](http://bost.ocks.org/mike/constancy/).
 
 If *data* is not specified, this method returns the array of data for the selected elements.
 
@@ -174,7 +174,7 @@ Now the document body looks like this:
 <div>32</div>
 ```
 
-The order of the DOM elements matches the order of the data because the old data’s order and the new data’s order were consistent. If the new data’s order is different, use [*selection*.order](./modifying.md#selection_order) to reorder the elements in the DOM. See the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) example thread for more on data joins.
+The order of the DOM elements matches the order of the data because the old data’s order and the new data’s order were consistent. If the new data’s order is different, use [*selection*.order](./modifying.md#selection_order) to reorder the elements in the DOM. See the [general update pattern](https://observablehq.com/@d3/general-update-pattern) notebook for more on data joins.
 
 ## *selection*.datum(value) {#selection_datum}
 

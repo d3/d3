@@ -40,7 +40,7 @@ Or to apply a custom rainbow interpolator:
 transition.attrTween("fill", () => (t) => `hsl(${t * 360},100%,50%)`);
 ```
 
-This method is useful to specify a custom interpolator, such as one that understands [SVG paths](https://bl.ocks.org/mbostock/3916621). A useful technique is *data interpolation*, where [interpolateObject](../d3-interpolate/value.md#interpolateObject) is used to interpolate two data values, and the resulting value is then used (say, with a [shape](../d3-shape.md)) to compute the new attribute value.
+This method is useful to specify a custom interpolator, such as one that understands [SVG paths](https://observablehq.com/@d3/path-tween). A useful technique is *data interpolation*, where [interpolateObject](../d3-interpolate/value.md#interpolateObject) is used to interpolate two data values, and the resulting value is then used (say, with a [shape](../d3-shape.md)) to compute the new attribute value.
 
 ## *transition*.style(*name*, *value*, *priority*) {#transition_style}
 
