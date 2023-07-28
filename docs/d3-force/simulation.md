@@ -4,7 +4,7 @@ A force simulation implements a [velocity Verlet](https://en.wikipedia.org/wiki/
 
 ## forceSimulation(*nodes*) {#forceSimulation}
 
-[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · Creates a new simulation with the specified array of [*nodes*](#simulation_nodes) and no [forces](#simulation_force). If *nodes* is not specified, it defaults to the empty array. The simulator [starts](#simulation_restart) automatically; use [*simulation*.on](#simulation_on) to listen for tick events as the simulation runs. If you wish to run the simulation manually instead, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired.
+[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · Creates a new simulation with the specified array of [*nodes*](#simulation_nodes) and no [forces](#simulation_force). If *nodes* is not specified, it defaults to the empty array. The simulator [starts](#simulation_restart) automatically; use [*simulation*.on](#simulation_on) to listen for tick events as the simulation runs. If you wish to run the simulation manually instead, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired. This is an impure function that can modify its input parameter if it receives one.
 
 ```js
 const simulation = d3.forceSimulation(nodes);
