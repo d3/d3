@@ -11,6 +11,11 @@ export default defineConfig({
     ["link", {rel: "apple-touch-icon", href: "/logo.png"}],
     ["link", {rel: "icon", type: "image/png", href: "/logo.png"}]
   ],
+  markdown: {
+    externalLinks: {
+      rel: "external"
+    }
+  },
   vite: {
     resolve: {
       alias: [
@@ -25,9 +30,9 @@ export default defineConfig({
     siteTitle: "",
     nav: [
       {text: "Home", link: "/"},
-      {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable"},
+      {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable", rel: "external"},
       {text: "Community", link: "/community"},
-      {text: "Plot", link: "https://observablehq.com/plot?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable"}
+      {text: "Plot", link: "https://observablehq.com/plot?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable", rel: "external"}
     ],
     sidebar: [
       {
