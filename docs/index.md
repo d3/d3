@@ -58,10 +58,12 @@ features:
     details: The D3 team also builds Observable Plot, a high-level API for quick charts built on top of D3.
     link: https://observablehq.com/plot?utm_source=d3js-org&utm_medium=features&utm_campaign=try-observable
     linkText: Try Observable Plot
+    rel: external
   - title: Built by Observable
     details: D3 is developed by Observable, the platform for collaborative data analysis.
     link: https://observablehq.com?utm_source=d3js-org&utm_medium=features&utm_campaign=try-observable
     linkText: Visit Observable
+    rel: external
 ---
 
 <style>

@@ -7,6 +7,9 @@ export default defineConfig({
   title: "D3 by Observable",
   description: "The JavaScript library for bespoke data visualization",
   cleanUrls: true,
+  sitemap: {
+    hostname: "https://d3js.org"
+  },
   head: [
     ["link", {rel: "apple-touch-icon", href: "/logo.png"}],
     ["link", {rel: "icon", type: "image/png", href: "/logo.png"}]
