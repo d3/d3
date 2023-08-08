@@ -56,7 +56,7 @@ The bounds of the viewport [*xmin*, *ymin*, *xmax*, *ymax*] for rendering the Vo
 
 ## *voronoi*.contains(*i*, *x*, *y*) {#voronoi_contains}
 
-[Source](https://github.com/d3/d3-delaunay/blob/main/src/cell.js) · Returns true if the cell with the specified index *i* contains the specified point ⟨*x*, *y*⟩; *i.e.*, whether the point *i* is the closest point in the diagram to the specified point. (This method is not affected by the associated Voronoi diagram’s viewport [bounds](#voronoi_bounds).)
+[Source](https://github.com/d3/d3-delaunay/blob/main/src/voronoi.js) · Returns true if the cell with the specified index *i* contains the specified point ⟨*x*, *y*⟩; *i.e.*, whether the point *i* is the closest point in the diagram to the specified point. (This method is not affected by the associated Voronoi diagram’s viewport [bounds](#voronoi_bounds).)
 
 ## *voronoi*.neighbors(*i*) {#voronoi_neighbors}
 
