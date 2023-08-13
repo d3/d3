@@ -10,6 +10,8 @@ A force simulation implements a [velocity Verlet](https://en.wikipedia.org/wiki/
 const simulation = d3.forceSimulation(nodes);
 ```
 
+**Note:** The `forceSimulation(nodes)` function operates in an impure manner and can modify its input array of nodes during the simulation.
+
 ## *simulation*.restart() {#simulation_restart}
 
 [Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · Restarts the simulation’s internal timer and returns the simulation. In conjunction with [*simulation*.alphaTarget](#simulation_alphaTarget) or [*simulation*.alpha](#simulation_alpha), this method can be used to “reheat” the simulation during interaction, such as when dragging a node, or to resume the simulation after temporarily pausing it with [*simulation*.stop](#simulation_stop).
