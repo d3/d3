@@ -14,6 +14,10 @@ The link force pushes linked nodes together or apart according to the desired [l
 
 [Source](https://github.com/d3/d3-force/blob/main/src/link.js) · Creates a new link force with the specified *links* and default parameters. If *links* is not specified, it defaults to the empty array.
 
+:::warning WARNING
+This is an impure function that can modify its input parameter if it receives one.
+:::
+
 ```js
 const link = d3.forceLink(links).id((d) => d.id);
 ```
