@@ -19,9 +19,9 @@ d3.timeDay.count(start, end) // 31 😌
 The [day](#timeDay) [interval](#timeInterval) is one of several provided by d3-time. Each interval represents a conventional unit of time — [hours](#timeHour), [weeks](#timeWeek), [months](#timeMonth), *etc.* — and has methods to calculate boundary dates. For example, [d3.timeDay](#timeDay) computes midnight (typically 12:00 AM local time) of the corresponding day. In addition to [rounding](#interval_round) and [counting](#interval_count), intervals can also be used to generate arrays of boundary dates. For example, to compute each Sunday in the current month:
 
 ```js
-const start = d3.timeMonth.floor(); // 2015-01-01T00:00
-const stop = d3.timeMonth.ceil(); // 2015-02-01T00:00
-const weeks = d3.timeWeek.range(start, stop); // [2015-01-07T00:00, 2015-01-14T00:00, 2015-01-21T00:00, 2015-01-28T00:00]
+const start = d3.timeMonth.floor(new Date(2015, 0, 15)); // 2015-01-01T00:00
+const stop = d3.timeMonth.ceil(new Date(2015, 0, 15)); // 2015-02-01T00:00
+const weeks = d3.timeWeek.range(start, stop); // [2015-01-04T00:00, 2015-01-11T00:00, 2015-01-18T00:00, 2015-01-25T00:00]
 ```
 
 The d3-time module does not implement its own calendaring system; it merely implements a convenient API for calendar math on top of ECMAScript [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date). Thus, it ignores leap seconds and can only work with the local time zone and [Coordinated Universal Time](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) (UTC).
