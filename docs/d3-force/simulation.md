@@ -4,11 +4,17 @@ A force simulation implements a [velocity Verlet](https://en.wikipedia.org/wiki/
 
 ## forceSimulation(*nodes*) {#forceSimulation}
 
-[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · Creates a new simulation with the specified array of [*nodes*](#simulation_nodes) and no [forces](#simulation_force). If *nodes* is not specified, it defaults to the empty array. The simulator [starts](#simulation_restart) automatically; use [*simulation*.on](#simulation_on) to listen for tick events as the simulation runs. If you wish to run the simulation manually instead, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired.
+[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · Creates a new simulation with the specified array of [*nodes*](#simulation_nodes) and no [forces](#simulation_force). If *nodes* is not specified, it defaults to the empty array.
+
+:::warning
+This function is impure; it mutates the passed-in *nodes*. See [*simulation*.nodes](#simulation_nodes).
+:::
 
 ```js
 const simulation = d3.forceSimulation(nodes);
 ```
+
+The simulator [starts](#simulation_restart) automatically; use [*simulation*.on](#simulation_on) to listen for tick events as the simulation runs. If you wish to run the simulation manually instead, call [*simulation*.stop](#simulation_stop), and then call [*simulation*.tick](#simulation_tick) as desired.
 
 ## *simulation*.restart() {#simulation_restart}
 
@@ -31,6 +37,10 @@ This method can be used in conjunction with [*simulation*.stop](#simulation_stop
 ## *simulation*.nodes(*nodes*) {#simulation_nodes}
 
 [Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · If *nodes* is specified, sets the simulation’s nodes to the specified array of objects, initializing their positions and velocities if necessary, and then [re-initializes](#force_initialize) any bound [forces](#simulation_force); returns the simulation. If *nodes* is not specified, returns the simulation’s array of nodes as specified to the [constructor](#forceSimulation).
+
+:::warning
+This function is impure; it mutates the passed-in *nodes* to assign the index *node*.index, the position *node*.x & *node*.y, and the velocity *node*.vx & *node*.vy. The position and velocity are further updated as the simulation runs by [*simulation*.tick](#simulation_tick).
+:::
 
 Each *node* must be an object. The following properties are assigned by the simulation:
 
