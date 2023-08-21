@@ -7,7 +7,13 @@ export default {
     const module = runtime.module((await import("https://api.observablehq.com/@d3/gallery.js?v=4")).default);
     const data = [];
     module.define("md", () => String.raw);
-    module.redefine("previews", () => (chunk) => data.push(...chunk));
+    module.redefine("previews", () => (chunk) => {
+      for (const { path, ...d } of chunk)
+        data.push({
+          ...d,
+          path: `${path}${path.includes("?") ? "&" : "?"}intent=fork`,
+        });
+    });
     const values = [];
     for (const output of module._resolve("previews")._outputs) {
       if (output._name) {
