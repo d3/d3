@@ -8,9 +8,9 @@ import ExampleDisjointForce from "./components/ExampleDisjointForce.vue";
 
 <ExampleDisjointForce />
 
-This module implements a [velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration) numerical integrator for simulating physical forces on particles. Force simulations can be used to visualize [networks](https://observablehq.com/@d3/force-directed-graph) and [hierarchies](https://observablehq.com/@d3/force-directed-tree), and to resolve [collisions](./d3-force/collide.md) as in [bubble charts](http://www.nytimes.com/interactive/2012/09/06/us/politics/convention-word-counts.html).
+This module implements a [velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration) numerical integrator for simulating physical forces on particles. Force simulations can be used to visualize [networks](https://observablehq.com/@d3/force-directed-graph/2?intent=fork) and [hierarchies](https://observablehq.com/@d3/force-directed-tree?intent=fork), and to resolve [collisions](./d3-force/collide.md) as in [bubble charts](http://www.nytimes.com/interactive/2012/09/06/us/politics/convention-word-counts.html).
 
-<!-- [<img alt="Force-Directed Graph" src="https://raw.githubusercontent.com/d3/d3-force/master/img/graph.png" width="420" height="219">](https://observablehq.com/@d3/force-directed-graph/2) -->
+<!-- [<img alt="Force-Directed Graph" src="https://raw.githubusercontent.com/d3/d3-force/master/img/graph.png" width="420" height="219">](https://observablehq.com/@d3/force-directed-graph/2?intent=fork) -->
 
 <!-- [<img alt="Force-Directed Tree" src="https://raw.githubusercontent.com/d3/d3-force/master/img/tree.png" width="420" height="219">](https://observablehq.com/@d3/force-directed-tree) -->
 
