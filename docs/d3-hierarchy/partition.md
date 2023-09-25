@@ -1,8 +1,8 @@
 # Partition {#Partition}
 
-[<img alt="Partition" src="https://raw.githubusercontent.com/d3/d3-hierarchy/main/img/partition.png">](https://observablehq.com/@d3/icicle)
+[<img alt="Partition" src="https://raw.githubusercontent.com/d3/d3-hierarchy/main/img/partition.png">](https://observablehq.com/@d3/icicle/2?intent=fork)
 
-[Examples](https://observablehq.com/@d3/icicle) · The partition layout produces adjacency diagrams: a space-filling variant of a [node-link tree diagram](./tree.md). Rather than drawing a link between parent and child in the hierarchy, nodes are drawn as solid areas (either arcs or rectangles), and their placement relative to other nodes reveals their position in the hierarchy. The size of the nodes encodes a quantitative dimension that would be difficult to show in a node-link diagram.
+[Examples](https://observablehq.com/@d3/icicle/2?intent=fork) · The partition layout produces adjacency diagrams: a space-filling variant of a [node-link tree diagram](./tree.md). Rather than drawing a link between parent and child in the hierarchy, nodes are drawn as solid areas (either arcs or rectangles), and their placement relative to other nodes reveals their position in the hierarchy. The size of the nodes encodes a quantitative dimension that would be difficult to show in a node-link diagram.
 
 ## partition() {#partition}
 

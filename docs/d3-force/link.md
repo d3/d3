@@ -1,10 +1,22 @@
+<script setup>
+
+import ExampleLinkForce from "../components/ExampleLinkForce.vue";
+
+</script>
+
 # Link force
+
+<ExampleLinkForce />
 
 The link force pushes linked nodes together or apart according to the desired [link distance](#link_distance). The strength of the force is proportional to the difference between the linked nodes’ distance and the target distance, similar to a spring force.
 
 ## forceLink(*links*) {#forceLink}
 
 [Source](https://github.com/d3/d3-force/blob/main/src/link.js) · Creates a new link force with the specified *links* and default parameters. If *links* is not specified, it defaults to the empty array.
+
+:::warning
+This function is impure; it may mutate the passed-in *links*. See [*link*.links](#link_links).
+:::
 
 ```js
 const link = d3.forceLink(links).id((d) => d.id);
@@ -20,7 +32,11 @@ Each link is an object with the following properties:
 * `target` - the link’s target node; see [*simulation*.nodes](./simulation.md#simulation_nodes)
 * `index` - the zero-based index into *links*, assigned by this method
 
-For convenience, a link’s source and target properties may be initialized using numeric or string identifiers rather than object references; see [*link*.id](#link_id). When the link force is [initialized](./simulation.md#force_initialize) (or re-initialized, as when the nodes or links change), any *link*.source or *link*.target property which is *not* an object is replaced by an object reference to the corresponding *node* with the given identifier.
+For convenience, a link’s source and target properties may be initialized using numeric or string identifiers rather than object references; see [*link*.id](#link_id).
+
+:::warning
+This function is impure; it may mutate the passed-in *links* when the link force is [initialized](./simulation.md#force_initialize) (or re-initialized, as when the nodes or links change). Any *link*.source or *link*.target property which is not an object is replaced by an object reference to the corresponding *node* with the given identifier.
+:::
 
 If the specified array of *links* is modified, such as when links are added to or removed from the simulation, this method must be called again with the new (or changed) array to notify the force of the change; the force does not make a defensive copy of the specified array.
 
@@ -72,7 +88,7 @@ const links = [
 ];
 ```
 
-This is particularly useful when representing graphs in JSON, as JSON does not allow references. See [this example](https://bl.ocks.org/mbostock/f584aa36df54c451c94a9d0798caed35).
+This is particularly useful when representing graphs in JSON, as JSON does not allow references. See [this example](https://observablehq.com/@d3/force-directed-graph/2?intent=fork).
 
 The id accessor is invoked for each node whenever the force is initialized, as when the [nodes](./simulation.md#simulation_nodes) or [links](#link_links) change, being passed the node and its zero-based index.
 

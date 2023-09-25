@@ -74,7 +74,7 @@ If *reflect* is specified, sets whether or not the *y*-dimension is reflected (n
 
 [Source](https://github.com/d3/d3-geo/blob/main/src/projection/index.js) · Sets the projection’s [scale](#projection_scale) and [translate](#projection_translate) to fit the specified GeoJSON *object* in the center of the given *extent*. The extent is specified as an array \[\[x₀, y₀\], \[x₁, y₁\]\], where x₀ is the left side of the bounding box, y₀ is the top, x₁ is the right and y₁ is the bottom. Returns the projection.
 
-For example, to scale and translate the [New Jersey State Plane projection](https://bl.ocks.org/mbostock/5126418) to fit a GeoJSON object *nj* in the center of a 960×500 bounding box with 20 pixels of padding on each side:
+For example, to scale and translate the [New Jersey State Plane projection](https://observablehq.com/@d3/new-jersey-state-plane) to fit a GeoJSON object *nj* in the center of a 960×500 bounding box with 20 pixels of padding on each side:
 
 ```js
 var projection = d3.geoTransverseMercator()

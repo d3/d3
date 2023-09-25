@@ -1,5 +1,4 @@
 import {Runtime} from "@observablehq/runtime";
-import * as d3 from "d3";
 
 export default {
   async load() {

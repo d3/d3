@@ -35,7 +35,7 @@ color(1000); // "green"
 
 ## *threshold*.invertExtent(*value*) {#threshold_invertExtent}
 
-[Examples](https://observablehq.com/@d3/choropleth) · [Source](https://github.com/d3/d3-scale/blob/main/src/threshold.js) · Returns the extent of values in the [domain](#threshold_domain) [<i>x0</i>, <i>x1</i>] for the corresponding *value* in the [range](#threshold_range), representing the inverse mapping from range to domain.
+[Source](https://github.com/d3/d3-scale/blob/main/src/threshold.js) · Returns the extent of values in the [domain](#threshold_domain) [<i>x0</i>, <i>x1</i>] for the corresponding *value* in the [range](#threshold_range), representing the inverse mapping from range to domain.
 
 ```js
 const color = d3.scaleThreshold([0, 1], ["red", "white", "green"]);

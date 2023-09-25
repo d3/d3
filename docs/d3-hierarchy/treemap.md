@@ -1,8 +1,8 @@
 # Treemap {#Treemap}
 
-[<img alt="Treemap" src="https://raw.githubusercontent.com/d3/d3-hierarchy/main/img/treemap.png">](https://observablehq.com/@d3/treemap)
+[<img alt="Treemap" src="https://raw.githubusercontent.com/d3/d3-hierarchy/main/img/treemap.png">](https://observablehq.com/@d3/treemap/2?intent=fork)
 
-[Examples](https://observablehq.com/@d3/treemap) · Introduced by [Ben Shneiderman](http://www.cs.umd.edu/hcil/treemap-history/) in 1991, a **treemap** recursively subdivides area into rectangles according to each node’s associated value. D3’s treemap implementation supports an extensible [tiling method](#treemap_tile): the default [squarified](#treemapSquarify) method seeks to generate rectangles with a [golden](https://en.wikipedia.org/wiki/Golden_ratio) aspect ratio; this offers better readability and size estimation than [slice-and-dice](#treemapSliceDice), which simply alternates between horizontal and vertical subdivision by depth.
+[Examples](https://observablehq.com/@d3/treemap/2?intent=fork) · Introduced by [Ben Shneiderman](http://www.cs.umd.edu/hcil/treemap-history/) in 1991, a **treemap** recursively subdivides area into rectangles according to each node’s associated value. D3’s treemap implementation supports an extensible [tiling method](#treemap_tile): the default [squarified](#treemapSquarify) method seeks to generate rectangles with a [golden](https://en.wikipedia.org/wiki/Golden_ratio) aspect ratio; this offers better readability and size estimation than [slice-and-dice](#treemapSliceDice), which simply alternates between horizontal and vertical subdivision by depth.
 
 ## treemap() {#treemap}
 

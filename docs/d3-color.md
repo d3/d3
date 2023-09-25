@@ -174,7 +174,7 @@ d3.color("yellow").toString() // "rgb(255, 255, 0)"
 d3.rgb("hsl(60, 100%, 50%)") // {r: 255, g: 255, b: 0, opacity: 1}
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Constructs a new [RGB](https://en.wikipedia.org/wiki/RGB_color_model) color. The channel values are exposed as `r`, `g` and `b` properties on the returned instance. Use the [RGB color picker](http://bl.ocks.org/mbostock/78d64ca7ef013b4dcf8f) to explore this color space.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Constructs a new [RGB](https://en.wikipedia.org/wiki/RGB_color_model) color. The channel values are exposed as `r`, `g` and `b` properties on the returned instance. Use the [RGB color picker](https://observablehq.com/@d3/rgb-color-picker) to explore this color space.
 
 If *r*, *g* and *b* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to the RGB color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb). Note that unlike [*color*.rgb](#color_rgb) this method *always* returns a new instance, even if *color* is already an RGB color.
 
@@ -192,7 +192,7 @@ d3.rgb(300, 200, 100).clamp() // {r: 255, g: 200, b: 100, opacity: 1}
 d3.hsl("yellow") // {h: 60, s: 1, l: 0.5, opacity: 1}
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Constructs a new [HSL](https://en.wikipedia.org/wiki/HSL_and_HSV) color. The channel values are exposed as `h`, `s` and `l` properties on the returned instance. Use the [HSL color picker](http://bl.ocks.org/mbostock/debaad4fcce9bcee14cf) to explore this color space.
+[Source](https://github.com/d3/d3-color/blob/main/src/color.js) · Constructs a new [HSL](https://en.wikipedia.org/wiki/HSL_and_HSV) color. The channel values are exposed as `h`, `s` and `l` properties on the returned instance. Use the [HSL color picker](https://observablehq.com/@d3/hsl-color-picker) to explore this color space.
 
 If *h*, *s* and *l* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to the HSL color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb) and then converted to HSL. (Colors already in the HSL color space skip the conversion to RGB.)
 
@@ -210,7 +210,7 @@ d3.hsl(400, 2, 0.5).clamp() // {h: 40, s: 1, l: 0.5, opacity: 1}
 d3.lab("red") // {l: 54.29173376861782, a: 80.8124553179771, b: 69.88504032350531, opacity: 1}
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/lab.js) · Constructs a new [CIELAB](https://en.wikipedia.org/wiki/Lab_color_space#CIELAB) color. The channel values are exposed as `l`, `a` and `b` properties on the returned instance. Use the [CIELAB color picker](http://bl.ocks.org/mbostock/9f37cc207c0cb166921b) to explore this color space. The value of *l* is typically in the range [0, 100], while *a* and *b* are typically in [-160, +160].
+[Source](https://github.com/d3/d3-color/blob/main/src/lab.js) · Constructs a new [CIELAB](https://en.wikipedia.org/wiki/Lab_color_space#CIELAB) color. The channel values are exposed as `l`, `a` and `b` properties on the returned instance. Use the [CIELAB color picker](https://observablehq.com/@d3/lab-color-picker) to explore this color space. The value of *l* is typically in the range [0, 100], while *a* and *b* are typically in [-160, +160].
 
 If *l*, *a* and *b* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to the CIELAB color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb) and then converted to CIELAB. (Colors already in the CIELAB color space skip the conversion to RGB, and colors in the HCL color space are converted directly to CIELAB.)
 
@@ -236,7 +236,7 @@ d3.hcl("yellow") // {h: 99.57458688693687, c: 94.70776566727464, l: 97.607125166
 d3.lch("yellow") // {h: 99.57458688693687, c: 94.70776566727464, l: 97.60712516622824, opacity: 1}
 ```
 
-[Source](https://github.com/d3/d3-color/blob/main/src/lab.js) · Constructs a new [CIELCh<sub>ab</sub>](https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC) color. The channel values are exposed as `l`, `c` and `h` properties on the returned instance. Use the [CIELCh<sub>ab</sub> color picker](http://bl.ocks.org/mbostock/3e115519a1b495e0bd95) to explore this color space. The value of *l* is typically in the range [0, 100], *c* is typically in [0, 230], and *h* is typically in [0, 360).
+[Source](https://github.com/d3/d3-color/blob/main/src/lab.js) · Constructs a new [CIELCh<sub>ab</sub>](https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC) color. The channel values are exposed as `l`, `c` and `h` properties on the returned instance. Use the [CIELCh<sub>ab</sub> color picker](https://observablehq.com/@d3/hcl-color-picker) to explore this color space. The value of *l* is typically in the range [0, 100], *c* is typically in [0, 230], and *h* is typically in [0, 360).
 
 If *l*, *c*, and *h* are specified, these represent the channel values of the returned color; an *opacity* may also be specified. If a CSS Color Module Level 3 *specifier* string is specified, it is parsed and then converted to CIELCh<sub>ab</sub> color space. See [color](#color) for examples. If a [*color*](#color) instance is specified, it is converted to the RGB color space using [*color*.rgb](#color_rgb) and then converted to CIELCh<sub>ab</sub>. (Colors already in CIELCh<sub>ab</sub> color space skip the conversion to RGB, and colors in CIELAB color space are converted directly to CIELCh<sub>ab</sub>.)
 

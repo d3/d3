@@ -2,7 +2,7 @@
 
 [Examples](https://observablehq.com/collection/@d3/d3-drag) · [Drag-and-drop](https://en.wikipedia.org/wiki/Drag_and_drop) is a popular interaction method for manipulating spatial elements: move the pointer to an object, press and hold to grab it, “drag” the object to a new location, and release to “drop”. D3’s drag behavior provides a flexible abstraction for drag-and-drop. For example, you can drag nodes in a [force-directed graph](./d3-force.md):
 
-[<img alt="Force-Directed Graph" src="https://raw.githubusercontent.com/d3/d3-drag/master/img/force-graph.png" width="420" height="219">](https://observablehq.com/@d3/force-directed-graph)
+[<img alt="Force-Directed Graph" src="https://raw.githubusercontent.com/d3/d3-drag/master/img/force-graph.png" width="420" height="219">](https://observablehq.com/@d3/force-directed-graph/2?intent=fork)
 
 Or a simulation of colliding circles:
 

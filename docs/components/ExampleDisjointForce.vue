@@ -3,6 +3,8 @@
 import * as d3 from "d3";
 import {ref, onMounted, onUnmounted} from "vue";
 
+const dataPromise = d3.json("https://static.observableusercontent.com/files/e3680d5f766e85edde560c9c31a6dba2ddfcf2f66e1dced4afa18d8040f1f205e0bde1b8b234d866373f2bfc5806fafc47e244c5c9f48b60aaa1917c1b80fcb7");
+
 const gnode = ref();
 const glink = ref();
 const width = 688;
@@ -13,7 +15,7 @@ const color = (d) => scale(d.group);
 let simulation;
 
 onMounted(async () => {
-  const {links, nodes} = await d3.json("https://static.observableusercontent.com/files/e3680d5f766e85edde560c9c31a6dba2ddfcf2f66e1dced4afa18d8040f1f205e0bde1b8b234d866373f2bfc5806fafc47e244c5c9f48b60aaa1917c1b80fcb7");
+  const {links, nodes} = await dataPromise;
 
   const link = d3.select(glink.value)
     .selectAll("line")
@@ -83,6 +85,6 @@ onUnmounted(() => {
       <g ref="glink" stroke="currentColor" stroke-opacity="0.5"></g>
       <g ref="gnode" stroke="var(--vp-c-bg-alt)" stroke-width="1.5"></g>
     </svg>
-    <a href="https://observablehq.com/@d3/disjoint-force-directed-graph?intent=fork" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
+    <a href="https://observablehq.com/@d3/disjoint-force-directed-graph/2?intent=fork" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
   </div>
 </template>

@@ -7,10 +7,18 @@ export default defineConfig({
   title: "D3 by Observable",
   description: "The JavaScript library for bespoke data visualization",
   cleanUrls: true,
+  sitemap: {
+    hostname: "https://d3js.org"
+  },
   head: [
-    ["link", {rel: "apple-touch-icon", href: "https://static.observableusercontent.com/files/082781eba5e2203c0c63ef9af5ace08ae0faaf8c3e2c251e77a4383f2fffd85ac236a4066f12e838dee5e2f3abb518c27db51b47b5e21a96d094a8f27f89fcd7"}],
-    ["link", {rel: "icon", type: "image/png", href: "https://static.observableusercontent.com/files/082781eba5e2203c0c63ef9af5ace08ae0faaf8c3e2c251e77a4383f2fffd85ac236a4066f12e838dee5e2f3abb518c27db51b47b5e21a96d094a8f27f89fcd7", sizes: "512x512"}]
+    ["link", {rel: "apple-touch-icon", href: "/logo.png"}],
+    ["link", {rel: "icon", type: "image/png", href: "/logo.png"}]
   ],
+  markdown: {
+    externalLinks: {
+      rel: "external"
+    }
+  },
   vite: {
     resolve: {
       alias: [
@@ -25,9 +33,9 @@ export default defineConfig({
     siteTitle: "",
     nav: [
       {text: "Home", link: "/"},
-      {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable"},
+      {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable", rel: "external"},
       {text: "Community", link: "/community"},
-      {text: "Plot", link: "https://observablehq.com/plot?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable"}
+      {text: "Plot", link: "https://observablehq.com/plot?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable", rel: "external"}
     ],
     sidebar: [
       {
@@ -261,7 +269,7 @@ export default defineConfig({
       {icon: "github", link: "https://github.com/d3"},
       {icon: "twitter", link: "https://twitter.com/observablehq"},
       {icon: "mastodon", link: "https://vis.social/@observablehq"},
-      {icon: "slack", link: "https://observable-community.slack.com/ssb/redirect"},
+      {icon: "slack", link: "https://join.slack.com/t/observable-community/shared_invite/zt-1x7gs4fck-UHhEFxUXKHVE8Qt3XmJCig"},
       {icon: "linkedin", link: "https://www.linkedin.com/company/observable"},
       {icon: "youtube", link: "https://www.youtube.com/c/Observablehq"}
     ],
