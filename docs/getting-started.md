@@ -119,6 +119,18 @@ container.append(svg.node());
 </script>
 ```
 
+```html [Single module]
+<script type="module">
+  import {forceSimulation, forceCollide, forceX} from "https://cdn.jsdelivr.net/npm/d3-force/+esm";
+
+  const nodes = [{}, {}];
+  const simulation = forceSimulation(nodes)
+    .force("x", forceX())
+    .force("collide", forceCollide(5))
+    .on("tick", () => console.log(nodes[0].x));
+</script>
+```
+
 ```html [UMD + CDN]
 <!DOCTYPE html>
 <div id="container"></div>
