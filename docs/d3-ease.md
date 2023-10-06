@@ -13,7 +13,7 @@ const overshoot = ref(1.7);
 
 # d3-ease
 
-[Examples](https://observablehq.com/@d3/easing) · *Easing* is a method of distorting time to control apparent motion in animation. It is most commonly used for [slow-in, slow-out](https://en.wikipedia.org/wiki/12_basic_principles_of_animation#Slow_In_and_Slow_Out). By easing time, [animated transitions](./d3-transition.md) are smoother and exhibit more plausible motion.
+[Examples](https://observablehq.com/@d3/easing) · *Easing* is a method of distorting time to control apparent motion in animation. It is most commonly used for [slow-in, slow-out](https://en.wikipedia.org/wiki/Twelve_basic_principles_of_animation#Slow_in_and_slow_out). By easing time, [animated transitions](./d3-transition.md) are smoother and exhibit more plausible motion.
 
 The easing types in this module implement the [ease method](#_ease) which takes a normalized time *t* and returns the corresponding “eased” time *tʹ*. Both the normalized time and the eased time are typically in the range [0,1], where 0 represents the start of the animation and 1 represents the end; some easing types, such as [easeElastic](#easeElastic), may return eased times slightly outside this range. A good easing type should return 0 if *t* = 0 and 1 if *t* = 1.
 
