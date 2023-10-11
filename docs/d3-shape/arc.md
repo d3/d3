@@ -168,7 +168,7 @@ The corner radius may not be larger than ([outerRadius](#arc_outerRadius) - [inn
 
 ## *arc*.startAngle(*angle*) {#arc_startAngle}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/arc.js) · If *angle* is specified, sets the start angle to the specified function or number in radius and returns this arc generator.
+[Source](https://github.com/d3/d3-shape/blob/main/src/arc.js) · If *angle* is specified, sets the start angle to the specified function or number and returns this arc generator.
 
 ```js
 const arc = d3.arc().startAngle(Math.PI / 4);
