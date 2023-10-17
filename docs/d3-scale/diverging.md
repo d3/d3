@@ -1,6 +1,6 @@
 # Diverging scales
 
-Diverging scales are similar to [linear scales](./linear.md) in that they map a continuous, numeric input domain to a continuous output range. Unlike linear scales, the input domain and output range of a diverging scale always has exactly two elements, and the output range is typically specified as an interpolator rather than an array of values. Diverging scales are typically used for a color encoding; see also [d3-scale-chromatic](../d3-scale-chromatic.md). These scales do not expose [invert](./linear.md#linear_invert) and [interpolate](./linear.md#linear_interpolate) methods. There are also [log](#scaleDivergingLog), [pow](#scaleDivergingPow), and [symlog](#scaleDivergingSymlog) variants of diverging scales.
+Diverging scales are similar to [linear scales](./linear.md) in that they map a continuous, numeric input domain to a continuous output range. Unlike linear scales, the input domain and output range of a diverging scale always have exactly three elements, and the output range is typically specified as an interpolator rather than an array of values. Diverging scales are typically used for a color encoding; see also [d3-scale-chromatic](../d3-scale-chromatic.md). These scales do not expose [invert](./linear.md#linear_invert) and [interpolate](./linear.md#linear_interpolate) methods. There are also [log](#scaleDivergingLog), [pow](#scaleDivergingPow), and [symlog](#scaleDivergingSymlog) variants of diverging scales.
 
 ## scaleDiverging(*domain*, *interpolator*) {#scaleDiverging}
 
@@ -30,7 +30,7 @@ If *interpolator* is an array, it represents the scale’s three-element output 
 const color = d3.scaleDiverging(["blue", "white", "red"]);
 ```
 
-A diverging scale’s domain must be numeric and must contain exactly three values. The default domain is [0, 0.5, 1].
+A diverging scale’s domain must be numeric and must contain exactly three values.
 
 ## *diverging*.interpolator(*interpolator*) {#diverging_interpolator}
 
