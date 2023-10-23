@@ -7,7 +7,7 @@ Time scales are a variant of [linear scales](./linear.md) that have a temporal d
 [Examples](https://observablehq.com/@d3/d3-scaletime) · [Source](https://github.com/d3/d3-scale/blob/main/src/time.js) · Constructs a new time scale with the specified [domain](./linear.md#linear_domain) and [range](./linear.md#linear_range), the [default](../d3-interpolate/value.md#interpolate) [interpolator](./linear.md#linear_interpolate) and [clamping](./linear.md#linear_clamp) disabled. For example, to create a position encoding:
 
 ```js
-const x = d3.scaleUtc([new Date(2000, 0, 1), new Date(2000, 0, 2)], [0, 960]);
+const x = d3.scaleTime([new Date(2000, 0, 1), new Date(2000, 0, 2)], [0, 960]);
 x(new Date(2000, 0, 1, 5)); // 200
 x(new Date(2000, 0, 1, 16)); // 640
 x.invert(200); // Sat Jan 01 2000 05:00:00 GMT-0800 (PST)
