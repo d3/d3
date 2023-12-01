@@ -31,6 +31,12 @@ const color = d3.scaleOrdinal(d3.schemeAccent);
 
 [Source](https://github.com/d3/d3-scale-chromatic/blob/main/src/categorical/Dark2.js) · An array of eight categorical colors represented as RGB hexadecimal strings.
 
+## schemeObservable10 {#schemeObservable10}
+
+<ColorSwatches :colors="d3.schemeObservable10" />
+
+[Source](https://github.com/d3/d3-scale-chromatic/blob/main/src/categorical/observable10.js) · An array of ten categorical colors represented as RGB hexadecimal strings.
+
 ## schemePaired {#schemePaired}
 
 <ColorSwatches :colors="d3.schemePaired" />
