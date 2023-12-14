@@ -16,7 +16,6 @@
             <li class="mb2"><a target="_blank" href="https://talk.observablehq.com">Forum</a></li>
             <li class="mb2"><a target="_blank" href="https://observablehq.com/slack/join">Slack</a></li>
             <li class="mb2"><a target="_blank" href="https://github.com/d3/d3/releases">Releases</a></li>
-            <li class="mb2"><a target="_blank" href="https://observablehq.com/@observablehq/plot-twist-newsletter-signup">Newsletter</a></li>
           </ul>
         </div>
         <div class="fb6 flex-grow-1">
