@@ -210,6 +210,22 @@ container.append(svg.node());
 ```
 :::
 
+You can also import and destructure individual D3 modules like so:
+
+```html
+<script type="module">
+
+import {forceSimulation, forceCollide, forceX} from "https://cdn.jsdelivr.net/npm/d3-force@3/+esm";
+
+const nodes = [{}, {}];
+const simulation = forceSimulation(nodes)
+    .force("x", forceX())
+    .force("collide", forceCollide(5))
+    .on("tick", () => console.log(nodes[0].x));
+
+</script>
+```
+
 If you’d prefer to run D3 locally (or offline), you can download the UMD bundles of D3 here:
 
 - <a href="./d3.v7.js" download>d3.v7.js</a>

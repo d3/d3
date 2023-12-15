@@ -164,11 +164,11 @@ function cornerRadius() {
 
 If the corner radius is greater than zero, the corners of the arc are rounded using circles of the given radius. For a circular sector, the two outer corners are rounded; for an annular sector, all four corners are rounded.
 
-The corner radius may not be larger than ([outerRadius](#arc_outerRadius) - [innerRadius](#arc_innerRadius)) / 2. In addition, for arcs whose angular span is less than π, the corner radius may be reduced as two adjacent rounded corners intersect. This is occurs more often with the inner corners. See the [arc corners animation](https://observablehq.com/@d3/arc-corners) for illustration.
+The corner radius may not be larger than ([outerRadius](#arc_outerRadius) - [innerRadius](#arc_innerRadius)) / 2. In addition, for arcs whose angular span is less than π, the corner radius may be reduced as two adjacent rounded corners intersect. This occurs more often with the inner corners. See the [arc corners animation](https://observablehq.com/@d3/arc-corners) for illustration.
 
 ## *arc*.startAngle(*angle*) {#arc_startAngle}
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/arc.js) · If *angle* is specified, sets the start angle to the specified function or number in radius and returns this arc generator.
+[Source](https://github.com/d3/d3-shape/blob/main/src/arc.js) · If *angle* is specified, sets the start angle to the specified function or number and returns this arc generator.
 
 ```js
 const arc = d3.arc().startAngle(Math.PI / 4);

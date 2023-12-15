@@ -57,7 +57,7 @@ Avoid interpolating to or from the number zero when the interpolator is used to 
 [Examples](https://observablehq.com/@d3/d3-interpolatenumber) · [Source](https://github.com/d3/d3-interpolate/blob/main/src/round.js) · Returns an interpolator between the two numbers *a* and *b*.
 
 ```js
-d3.interpolateNumber(20, 620)(0.821) // 513
+d3.interpolateRound(20, 620)(0.821) // 513
 ```
 
 The interpolator is similar to [interpolateNumber](#interpolateNumber) except it will round the resulting value to the nearest integer.
