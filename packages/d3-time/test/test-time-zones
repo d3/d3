@@ -1,0 +1,50 @@
+#!/bin/bash
+
+function test()
+{
+   if [[ $1 -eq 0 ]]
+   then
+      echo -e "\x1B[1;32m✓ $2\x1B[0m"
+   else
+      echo -e "\x1B[1;31m✗ $2\x1B[0m"
+   fi
+}
+
+# [ "$(TZ=UTC+03:15 node -e 'import("./src/index.js").then(d3 => console.log(d3.timeHour.floor(new Date(1456279843199))))')" = "Tue Feb 23 2016 22:00:00 GMT-0315 (UTC)" ]; test $? "timeHour.floor with -:15 UTC offset"
+# [ "$(TZ=UTC+03:15 node -e 'import("./src/index.js").then(d3 => console.log(d3.timeHour.ceil(new Date(1456279843199))))')" = "Tue Feb 23 2016 23:00:00 GMT-0315 (UTC)" ]; test $? "timeHour.ceil with -:15 UTC offset"
+# [ "$(TZ=UTC+03:15 node -e 'import("./src/index.js").then(d3 => console.log(d3.timeHour.range(new Date(2011, 10, 7, 0), new Date(2011, 10, 7, 3)).join(",")))')" = "Mon Nov 07 2011 00:00:00 GMT-0315 (UTC),Mon Nov 07 2011 01:00:00 GMT-0315 (UTC),Mon Nov 07 2011 02:00:00 GMT-0315 (UTC)" ]; test $? "timeHour.range with -:15 UTC offset"
+# [ "$(TZ=UTC-03:15 node -e 'import("./src/index.js").then(d3 => console.log(d3.timeHour.floor(new Date(1456279843199))))')" = "Wed Feb 24 2016 05:00:00 GMT+0315 (UTC)" ]; test $? "timeHour.floor with +:15 UTC offset"
+# [ "$(TZ=UTC-03:15 node -e 'import("./src/index.js").then(d3 => console.log(d3.timeHour.ceil(new Date(1456279843199))))')" = "Wed Feb 24 2016 06:00:00 GMT+0315 (UTC)" ]; test $? "timeHour.ceil with +:15 UTC offset"
+# [ "$(TZ=UTC-03:15 node -e 'import("./src/index.js").then(d3 => console.log(d3.timeHour.range(new Date(2011, 10, 7, 0), new Date(2011, 10, 7, 3)).join(",")))')" = "Mon Nov 07 2011 00:00:00 GMT+0315 (UTC),Mon Nov 07 2011 01:00:00 GMT+0315 (UTC),Mon Nov 07 2011 02:00:00 GMT+0315 (UTC)" ]; test $? "timeHour.range with +:30 UTC offset"
+[ "$(TZ=Asia/Kolkata node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeHour.floor(new Date(1456279843199))))')" = "1456277400000" ]; test $? "timeHour.floor with +:30 UTC offset"
+[ "$(TZ=Asia/Kolkata node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeHour.ceil(new Date(1456279843199))))')" = "1456281000000" ]; test $? "timeHour.ceil with +:30 UTC offset"
+[ "$(TZ=Asia/Kolkata node -e 'import("./src/index.js").then(d3 => console.log(d3.timeHour.range(new Date(2011, 10, 7, 0), new Date(2011, 10, 7, 3)).map(Number).join(",")))')" = "1320604200000,1320607800000,1320611400000" ]; test $? "timeHour.range with +:30 UTC offset"
+[ "$(TZ=Asia/Kathmandu node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeHour.floor(new Date(1456279843199))))')" = "1456276500000" ]; test $? "timeHour.floor with +:45 UTC offset"
+[ "$(TZ=Asia/Kathmandu node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeHour.ceil(new Date(1456279843199))))')" = "1456280100000" ]; test $? "timeHour.ceil with +:45 UTC offset"
+[ "$(TZ=Asia/Kathmandu node -e 'import("./src/index.js").then(d3 => console.log(d3.timeHour.range(new Date(2011, 10, 7, 0), new Date(2011, 10, 7, 3)).map(Number).join(",")))')" = "1320603300000,1320606900000,1320610500000" ]; test $? "timeHour.range with +:45 UTC offset"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.floor(new Date(Date.UTC(2016, 1, 21, 1)))))')" = "1455933600000" ]; test $? "timeDay.floor when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.floor(new Date(Date.UTC(2016, 1, 21, 2)))))')" = "1455933600000" ]; test $? "timeDay.floor when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.floor(new Date(Date.UTC(2016, 1, 21, 3)))))')" = "1456023600000" ]; test $? "timeDay.floor when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.floor(new Date(Date.UTC(2016, 1, 21, 4)))))')" = "1456023600000" ]; test $? "timeDay.floor when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.ceil(new Date(Date.UTC(2016, 1, 21, 1)))))')" = "1456023600000" ]; test $? "timeDay.ceil when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.ceil(new Date(Date.UTC(2016, 1, 21, 2)))))')" = "1456023600000" ]; test $? "timeDay.ceil when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.ceil(new Date(Date.UTC(2016, 1, 21, 3)))))')" = "1456023600000" ]; test $? "timeDay.ceil when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.ceil(new Date(Date.UTC(2016, 1, 21, 4)))))')" = "1456110000000" ]; test $? "timeDay.ceil when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.round(new Date(Date.UTC(2016, 1, 20, 14)))))')" = "1455933600000" ]; test $? "timeDay.round when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.round(new Date(Date.UTC(2016, 1, 20, 15)))))')" = "1456023600000" ]; test $? "timeDay.round when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.round(new Date(Date.UTC(2016, 1, 21, 14)))))')" = "1456023600000" ]; test $? "timeDay.round when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.round(new Date(Date.UTC(2016, 1, 21, 15)))))')" = "1456110000000" ]; test $? "timeDay.round when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(d3.timeDay.range(new Date(2016, 1, 19), new Date(2016, 1, 23)).map(Number).join(",")))')" = "1455847200000,1455933600000,1456023600000,1456110000000" ]; test $? "timeDay.range when daylight saving ends at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.floor(new Date(Date.UTC(2016, 9, 16, 1)))))')" = "1476500400000" ]; test $? "timeDay.floor when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.floor(new Date(Date.UTC(2016, 9, 16, 2)))))')" = "1476500400000" ]; test $? "timeDay.floor when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.floor(new Date(Date.UTC(2016, 9, 16, 3)))))')" = "1476586800000" ]; test $? "timeDay.floor when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.floor(new Date(Date.UTC(2016, 9, 16, 4)))))')" = "1476586800000" ]; test $? "timeDay.floor when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.ceil(new Date(Date.UTC(2016, 9, 16, 1)))))')" = "1476586800000" ]; test $? "timeDay.ceil when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.ceil(new Date(Date.UTC(2016, 9, 16, 2)))))')" = "1476586800000" ]; test $? "timeDay.ceil when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.ceil(new Date(Date.UTC(2016, 9, 16, 3)))))')" = "1476586800000" ]; test $? "timeDay.ceil when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.ceil(new Date(Date.UTC(2016, 9, 16, 4)))))')" = "1476669600000" ]; test $? "timeDay.ceil when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.round(new Date(Date.UTC(2016, 9, 15, 14)))))')" = "1476500400000" ]; test $? "timeDay.round when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.round(new Date(Date.UTC(2016, 9, 15, 15)))))')" = "1476586800000" ]; test $? "timeDay.round when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.round(new Date(Date.UTC(2016, 9, 16, 14)))))')" = "1476586800000" ]; test $? "timeDay.round when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(+d3.timeDay.round(new Date(Date.UTC(2016, 9, 16, 15)))))')" = "1476669600000" ]; test $? "timeDay.round when daylight saving begins at midnight"
+[ "$(TZ=America/Sao_Paulo node -e 'import("./src/index.js").then(d3 => console.log(d3.timeDay.range(new Date(2016, 9, 14), new Date(2016, 9, 18)).map(Number).join(",")))')" = "1476414000000,1476500400000,1476586800000,1476669600000" ]; test $? "timeDay.range when daylight saving begins at midnight"

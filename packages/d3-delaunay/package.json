@@ -1,0 +1,62 @@
+{
+  "name": "d3-delaunay",
+  "version": "6.0.4",
+  "description": "Compute the Voronoi diagram of a set of two-dimensional points.",
+  "homepage": "https://github.com/d3/d3-delaunay",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d3/d3-delaunay.git"
+  },
+  "keywords": [
+    "voronoi",
+    "delaunay",
+    "geometry"
+  ],
+  "license": "ISC",
+  "author": {
+    "name": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike"
+  },
+  "contributors": [
+    {
+      "name": "Vladimir Agafonkin",
+      "url": "https://agafonkin.com"
+    },
+    {
+      "name": "Philippe Rivière",
+      "url": "https://visionscarto.net"
+    }
+  ],
+  "type": "module",
+  "files": [
+    "dist/**/*.js",
+    "src/**/*.js"
+  ],
+  "module": "src/index.js",
+  "main": "src/index.js",
+  "jsdelivr": "dist/d3-delaunay.min.js",
+  "unpkg": "dist/d3-delaunay.min.js",
+  "exports": {
+    "umd": "./dist/d3-delaunay.min.js",
+    "default": "./src/index.js"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "delaunator": "5"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "13",
+    "eslint": "7",
+    "mocha": "8",
+    "rollup": "2",
+    "rollup-plugin-terser": "7"
+  },
+  "scripts": {
+    "test": "mocha 'test/**/*-test.js' && eslint src test",
+    "prepublishOnly": "rm -rf dist && yarn test && rollup -c",
+    "postpublish": "git push && git push --tags"
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}

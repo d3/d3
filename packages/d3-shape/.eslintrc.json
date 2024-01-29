@@ -1,0 +1,13 @@
+{
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 8
+  },
+  "env": {
+    "es6": true
+  },
+  "rules": {
+    "no-cond-assign": 0
+  }
+}
