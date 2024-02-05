@@ -1,0 +1,90 @@
+[submodule "packages/d3-array"]
+	path = packages/d3-array
+	url = https://github.com/d3/d3-array.git
+[submodule "packages/d3-axis"]
+	path = packages/d3-axis
+	url = https://github.com/d3/d3-axis.git
+[submodule "packages/d3-brush"]
+	path = packages/d3-brush
+	url = https://github.com/d3/d3-brush.git
+[submodule "packages/d3-chord"]
+	path = packages/d3-chord
+	url = https://github.com/d3/d3-chord.git
+[submodule "packages/d3-color"]
+	path = packages/d3-color
+	url = https://github.com/d3/d3-color.git
+[submodule "packages/d3-contour"]
+	path = packages/d3-contour
+	url = https://github.com/d3/d3-contour.git
+[submodule "packages/d3-delaunay"]
+	path = packages/d3-delaunay
+	url = https://github.com/d3/d3-delaunay.git
+[submodule "packages/d3-dispatch"]
+	path = packages/d3-dispatch
+	url = https://github.com/d3/d3-dispatch.git
+[submodule "packages/d3-drag"]
+	path = packages/d3-drag
+	url = https://github.com/d3/d3-drag.git
+[submodule "packages/d3-dsv"]
+	path = packages/d3-dsv
+	url = https://github.com/d3/d3-dsv.git
+[submodule "packages/d3-ease"]
+	path = packages/d3-ease
+	url = https://github.com/d3/d3-ease.git
+[submodule "packages/d3-fetch"]
+	path = packages/d3-fetch
+	url = https://github.com/d3/d3-fetch.git
+[submodule "packages/d3-force"]
+	path = packages/d3-force
+	url = https://github.com/d3/d3-force.git
+[submodule "packages/d3-format"]
+	path = packages/d3-format
+	url = https://github.com/d3/d3-format.git
+[submodule "packages/d3-geo"]
+	path = packages/d3-geo
+	url = https://github.com/d3/d3-geo.git
+[submodule "packages/d3-hierarchy"]
+	path = packages/d3-hierarchy
+	url = https://github.com/d3/d3-hierarchy.git
+[submodule "packages/d3-interpolate"]
+	path = packages/d3-interpolate
+	url = https://github.com/d3/d3-interpolate.git
+[submodule "packages/d3-path"]
+	path = packages/d3-path
+	url = https://github.com/d3/d3-path.git
+[submodule "packages/d3-polygon"]
+	path = packages/d3-polygon
+	url = https://github.com/d3/d3-polygon.git
+[submodule "packages/d3-quadtree"]
+	path = packages/d3-quadtree
+	url = https://github.com/d3/d3-quadtree.git
+[submodule "packages/d3-random"]
+	path = packages/d3-random
+	url = https://github.com/d3/d3-random.git
+[submodule "packages/d3-scale"]
+	path = packages/d3-scale
+	url = https://github.com/d3/d3-scale.git
+[submodule "packages/d3-scale-chromatic"]
+	path = packages/d3-scale-chromatic
+	url = https://github.com/d3/d3-scale-chromatic.git
+[submodule "packages/d3-selection"]
+	path = packages/d3-selection
+	url = https://github.com/d3/d3-selection.git
+[submodule "packages/d3-shape"]
+	path = packages/d3-shape
+	url = https://github.com/d3/d3-shape.git
+[submodule "packages/d3-time"]
+	path = packages/d3-time
+	url = https://github.com/d3/d3-time.git
+[submodule "packages/d3-time-format"]
+	path = packages/d3-time-format
+	url = https://github.com/d3/d3-time-format.git
+[submodule "packages/d3-timer"]
+	path = packages/d3-timer
+	url = https://github.com/d3/d3-timer.git
+[submodule "packages/d3-transition"]
+	path = packages/d3-transition
+	url = https://github.com/d3/d3-transition.git
+[submodule "packages/d3-zoom"]
+	path = packages/d3-zoom
+	url = https://github.com/d3/d3-zoom.git
