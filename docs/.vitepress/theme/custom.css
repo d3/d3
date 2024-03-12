@@ -1,10 +1,19 @@
 :root {
-  --vp-c-brand: hsl(20 85% 57%);
-  --vp-c-brand-light: hsl(20 85% 70%);
-  --vp-c-brand-lighter: hsl(20 85% 80%);
-  --vp-c-brand-dark: hsl(20 85% 57%);
-  --vp-c-brand-darker: hsl(20 85% 40%);
+  --vp-c-orange-1: #e04600;
+  --vp-c-orange-2: #e85d14;
+  --vp-c-orange-3: #ef7234;
+  --vp-c-orange-soft: rgba(239, 114, 52, 0.16);
+  --vp-c-brand-1: var(--vp-c-orange-1);
+  --vp-c-brand-2: var(--vp-c-orange-2);
+  --vp-c-brand-3: var(--vp-c-orange-3);
+  --vp-c-brand-soft: var(--vp-c-orange-soft);
+  --vp-c-brand: var(--vp-c-brand-3);
   --vp-font-family-base: -apple-system, BlinkMacSystemFont, "avenir next", avenir, helvetica, "helvetica neue", ubuntu, roboto, noto, "segoe ui", arial, sans-serif;
+}
+
+:root.dark {
+  --vp-c-orange-1: #ff9852;
+  --vp-c-orange-2: #ff823e;
 }
 
 .vp-doc figcaption {
