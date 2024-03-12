@@ -943,6 +943,7 @@ Color ramps and palettes for quantitative, ordinal and categorical scales.
 * [d3.schemeCategory10](./d3-scale-chromatic/categorical.md#schemeCategory10) - an array of ten categorical colors.
 * [d3.schemeAccent](./d3-scale-chromatic/categorical.md#schemeAccent) - an array of eight categorical colors.
 * [d3.schemeDark2](./d3-scale-chromatic/categorical.md#schemeDark2) - an array of eight categorical colors.
+* [d3.schemeObservable10](./d3-scale-chromatic/categorical.md#schemeObservable10) - an array of ten categorical colors.
 * [d3.schemePaired](./d3-scale-chromatic/categorical.md#schemePaired) - an array of twelve categorical colors.
 * [d3.schemePastel1](./d3-scale-chromatic/categorical.md#schemePastel1) - an array of nine categorical colors.
 * [d3.schemePastel2](./d3-scale-chromatic/categorical.md#schemePastel2) - an array of eight categorical colors.
