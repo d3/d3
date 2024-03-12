@@ -106,7 +106,7 @@ function radius() {
 
 ```js
 function precision() {
-  return 6;
+  return 2;
 }
 ```
 
