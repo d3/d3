@@ -71,33 +71,31 @@ If the default [extent](./summarize.md#extent) domain is used and the [threshold
 
 Note that the domain accessor is invoked on the materialized array of [values](#bin_value), not on the input data array.
 
-## *bin*.thresholds(*count*) {#bin_thresholds}
-
-```js
-const bin = d3.bin().thresholds([0, 0.5, 1]);
-```
-
-If *thresholds* is specified, sets the [threshold generator](#bin_thresholds) to the specified function or array and returns this bin generator.
-
-```js
-bin.thresholds() // () => [0, 0.5, 1]
-```
-
-If *thresholds* is not specified, returns the current threshold generator, which by default implements [Sturges’ formula](#thresholdSturges). (Thus by default, the values to be binned must be numbers!) Thresholds are defined as an array of values [*x0*, *x1*, …]. Any value less than *x0* will be placed in the first bin; any value greater than or equal to *x0* but less than *x1* will be placed in the second bin; and so on. Thus, the [generated bins](#_bin) will have *thresholds*.length + 1 bins.
-
-Any threshold values outside the [domain](#bin_domain) are ignored. The first *bin*.x0 is always equal to the minimum domain value, and the last *bin*.x1 is always equal to the maximum domain value.
+## *bin*.thresholds(*thresholds*) {#bin_thresholds}
 
 ```js
 const bin = d3.bin().thresholds(20);
 ```
 
-If a *count* is specified instead of an array of *thresholds*, then the [domain](#bin_domain) will be uniformly divided into approximately *count* bins; see [ticks](./ticks.md).
+If *thresholds* is specified as a number, then the [domain](#bin_domain) will be uniformly divided into approximately that many bins; see [ticks](./ticks.md).
+
+```js
+const bin = d3.bin().thresholds([0.25, 0.5, 0.75]);
+```
+
+If *thresholds* is specified as an array, sets the thresholds to the specified values and returns this bin generator. Thresholds are defined as an array of values [*x0*, *x1*, …]. Any value less than *x0* will be placed in the first bin; any value greater than or equal to *x0* but less than *x1* will be placed in the second bin; and so on. Thus, the [generated bins](#_bin) will have *thresholds*.length + 1 bins. Any threshold values outside the [domain](#bin_domain) are ignored. The first *bin*.x0 is always equal to the minimum domain value, and the last *bin*.x1 is always equal to the maximum domain value.
 
 ```js
 const bin = d3.bin().thresholds((values) => [d3.median(values)]);
 ```
 
-You may also implement your own threshold generator taking three arguments: the array of input [*values*](#bin_value) derived from the data, and the [domain](#bin_domain) represented as *min* and *max*. The generator may then return either the array of numeric thresholds or the *count* of bins; in the latter case the domain is divided uniformly into approximately *count* bins; see [ticks](./ticks.md#ticks). For instance, you might want to use time ticks when binning time-series data; see [example](https://observablehq.com/@d3/d3-bin-time-thresholds).
+If *thresholds* is specified as a function, the function will be passed three arguments: the array of input [*values*](#bin_value) derived from the data, and the [domain](#bin_domain) represented as *min* and *max*. The function may then return either the array of numeric thresholds or the count of bins; in the latter case the domain is divided uniformly into approximately *count* bins; see [ticks](./ticks.md#ticks). For instance, you might want to use time ticks when binning time-series data; see [example](https://observablehq.com/@d3/d3-bin-time-thresholds).
+
+```js
+bin.thresholds() // () => [0, 0.5, 1]
+```
+
+If *thresholds* is not specified, returns the current threshold generator, which by default implements [Sturges’ formula](#thresholdSturges). (Thus by default, the values to be binned must be numbers!)
 
 ## thresholdFreedmanDiaconis(*values*, *min*, *max*) {#thresholdFreedmanDiaconis}
 
