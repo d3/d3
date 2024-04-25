@@ -271,7 +271,7 @@ Alternatively you can install and import from D3 submodules:
 import {mean, median} from "d3-array";
 ```
 
-TypeScript declarations are available via DefinitelyTyped.
+TypeScript declarations are available via [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped).
 
 ## D3 in React
 
