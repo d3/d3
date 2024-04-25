@@ -24,7 +24,7 @@ d3.polygonArea([[1, 1], [1.5, 0], [2, 1]]) // -0.5
 ## polygonCentroid(*polygon*) {#polygonCentroid}
 
 ```js
-d3.polygonArea([[1, 1], [1.5, 0], [2, 1]]) // [1.5, 0.6666666666666666]
+d3.polygonCentroid([[1, 1], [1.5, 0], [2, 1]]) // [1.5, 0.6666666666666666]
 ```
 
 [Source](https://github.com/d3/d3-polygon/blob/main/src/centroid.js) · Returns the [centroid](https://en.wikipedia.org/wiki/Centroid) of the specified *polygon*.
