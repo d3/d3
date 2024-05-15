@@ -45,6 +45,7 @@ const svg = d3.create("svg")
     .attr("viewBox", [0, 0, width, height])
     .attr("width", width)
     .attr("height", height)
+    .attr("fill", "currentColor")
     .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
 
 // Add a cell for each leaf of the hierarchy.
