@@ -130,6 +130,7 @@ g.append("text")
   .attr("x", 4)
   .attr("y", (size + padding) / 2)
   .attr("dy", "0.35em")
+  .attr("fill", "currentColor")
   .text(([name]) => name);
 
 // Add the horizontal axis.

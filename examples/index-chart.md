@@ -82,7 +82,7 @@ svg
   )
   .call((g) => g.select(".domain").remove());
 
-const rule = svg.append("g").append("line").attr("y1", height).attr("y2", 0).attr("stroke", "black");
+const rule = svg.append("g").append("line").attr("y1", height).attr("y2", 0).attr("stroke", "currentColor");
 
 // Create a line and a label for each series.
 const serie = svg.append("g").style("font", "bold 10px sans-serif").selectAll("g").data(series).join("g");
