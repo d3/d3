@@ -1,8 +1,3 @@
----
-source: https://observablehq.com/@d3/nested-treemap
-index: true
----
-
 # Nested treemap
 
 This treemap variant applies padding to label internal nodes, better revealing the hierarchical structure. It is, however, less compact than a [standard treemap](./treemap). Compare to [cascaded treemaps](./cascaded-treemap) and [circle packing](./pack).

@@ -1,8 +1,3 @@
----
-source: https://observablehq.com/@d3/bubble-chart/2
-index: true
----
-
 # Bubble chart
 
 Bubble charts are non-hierarchical [packed circles](./pack). The area of each circle is proportional its value (here, file size). The organic appearance of these diagrams can be intriguing, but also consider a [treemap](./treemap) or a humble [bar chart](./bar-chart).

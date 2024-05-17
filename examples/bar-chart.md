@@ -1,7 +1,3 @@
----
-source: https://observablehq.com/@d3/bar-chart/2
----
-
 # Bar chart
 
 This chart shows the relative frequency of letters in the English language. A vertical bar chart such as this is sometimes called a *column* chart. Data: *Cryptological Mathematics*, Robert Lewand

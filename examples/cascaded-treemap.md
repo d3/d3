@@ -1,7 +1,3 @@
----
-source: https://observablehq.com/@d3/cascaded-treemap
----
-
 # Cascaded treemap
 
 An alternative to [nested treemaps](./nested-treemap) as suggested by [Lü and Fogarty](https://homes.cs.washington.edu/~jfogarty/publications/gi2008.pdf).

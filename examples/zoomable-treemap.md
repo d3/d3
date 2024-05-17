@@ -1,8 +1,3 @@
----
-source: https://observablehq.com/@d3/zoomable-treemap
-index: true
----
-
 # Zoomable treemap
 
 This [treemap](./treemap) supports zooming: click any cell to zoom in, or the top to zoom out.

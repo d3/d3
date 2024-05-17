@@ -1,8 +1,3 @@
----
-source: https://observablehq.com/@d3/animated-treemap
-index: true
----
-
 # Animated treemap
 
 This [treemap](./treemap) of U.S. population uses [d3.treemapResquarify](https://d3js.org/d3-hierarchy/treemap#treemapResquarify) for a stable layout with changing node values. Data: [U.S. Census Bureau](https://www.census.gov/population/www/censusdata/pop1790-1990.html)

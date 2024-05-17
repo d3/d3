@@ -1,8 +1,3 @@
----
-source: https://observablehq.com/@d3/pack/2
-index: true
----
-
 # Circle packing
 
 The area of each leaf circle in a circle-packing diagram is proportional its value (here, file size). Although nested circles do not use space as efficiently as a [treemap](./treemap), the “wasted” space better reveals the hierarchical structure.
