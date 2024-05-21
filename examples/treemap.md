@@ -75,7 +75,7 @@ leaf.append("clipPath")
    .attr("xlink:href", (d, i) => `#leaf-${i}`);
 
 // Append multiline text. The last line shows the value and has a specific formatting.
-leaf.append("text")
+leaf.filter((d) => d.x1 - d.x0 > 7).append("text")
     .attr("clip-path", (d, i) => `url(#leaf-clip-${i})`)
   .selectAll("tspan")
   .data((d) => d.data.name.split(/(?=[A-Z][a-z])|\s+/g).concat(format(d.value)))
