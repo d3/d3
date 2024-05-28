@@ -219,7 +219,7 @@ axis.tickSize() // 0
 If *size* is not specified, returns the current inner tick size, which defaults to 6.
 
 ```js
-const axis = d3.axisBottom(x).tickSize(0);
+const axis = d3.axisBottom(x);
 axis.tickSize() // 6
 ```
 
