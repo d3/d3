@@ -218,7 +218,7 @@ const axis = d3.axisBottom(x).tickSize(0);
 If *size* is not specified, returns the current inner tick size, which defaults to 6.
 
 ```js
-axis.tickSize() // 0
+axis.tickSize() // 0, as specified above
 ```
 
 ## *axis*.tickSizeInner(size) {#axis_tickSizeInner}
@@ -232,7 +232,7 @@ const axis = d3.axisBottom(x).tickSizeInner(0);
 If *size* is not specified, returns the current inner tick size, which defaults to 6.
 
 ```js
-axis.tickSizeInner() // 0
+axis.tickSizeInner() // 0, as specified above
 ```
 
 The inner tick size controls the length of the tick lines, offset from the native position of the axis.
@@ -248,7 +248,7 @@ const axis = d3.axisBottom(x).tickSizeOuter(0);
 If *size* is not specified, returns the current outer tick size, which defaults to 6.
 
 ```js
-axis.tickSizeOuter() // 0
+axis.tickSizeOuter() // 0, as specified above
 ```
 
 The outer tick size controls the length of the square ends of the domain path, offset from the native position of the axis. Thus, the “outer ticks” are not actually ticks but part of the domain path, and their position is determined by the associated scale’s domain extent. Thus, outer ticks may overlap with the first or last inner tick. An outer tick size of 0 suppresses the square ends of the domain path, instead producing a straight line.
@@ -264,7 +264,7 @@ const axis = d3.axisBottom(x).tickPadding(0);
 If *padding* is not specified, returns the current padding which defaults to 3 pixels.
 
 ```js
-axis.tickPadding() // 0
+axis.tickPadding() // 0, as specified above
 ```
 
 ## *axis*.offset(offset) {#axis_offset}
