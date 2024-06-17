@@ -7,9 +7,9 @@ A case where you need to specify them is when appending an element to a parent t
 ```js
 d3.create("svg")
   .append("foreignObject")
-  .attr("width", 300)
-  .attr("height", 100)
-    .append("xhtml:div")
+    .attr("width", 300)
+    .attr("height", 100)
+  .append("xhtml:div")
     .text("Hello, HTML!");
 ```
 
