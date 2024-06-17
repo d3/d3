@@ -2,6 +2,17 @@
 
 XML namespaces are fun! Right? 🤪 Fortunately you can mostly ignore them.
 
+A case where you need to specify them is when appending an element to a parent that belongs to a different namespace; typically, to create a [div](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div) inside a SVG [foreignObject](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/ForeignObject) element:
+
+```js
+d3.create("svg")
+  .append("foreignObject")
+    .attr("width", 300)
+    .attr("height", 100)
+  .append("xhtml:div")
+    .text("Hello, HTML!");
+```
+
 ## namespace(*name*) {#namespace}
 
 [Source](https://github.com/d3/d3-selection/blob/main/src/namespace.js) · Qualifies the specified *name*, which may or may not have a namespace prefix.
