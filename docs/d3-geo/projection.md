@@ -64,7 +64,7 @@ If *reflect* is specified, sets whether or not the *y*-dimension is reflected (n
 
 ## *projection*.rotate(*angles*) {#projection_rotate}
 
-[Source](https://github.com/d3/d3-geo/blob/main/src/projection/index.js) · If *rotation* is specified, sets the projection’s [three-axis spherical rotation](https://observablehq.com/@d3/three-axis-rotation) to the specified *angles*, which must be a two- or three-element array of numbers [*lambda*, *phi*, *gamma*] specifying the rotation angles in degrees about [each spherical axis](https://observablehq.com/@d3/three-axis-rotation). (These correspond to [yaw, pitch and roll](https://en.wikipedia.org/wiki/Aircraft_principal_axes).) If the rotation angle *gamma* is omitted, it defaults to 0. See also [geoRotation](./math.md#geoRotation). If *rotation* is not specified, returns the current rotation which defaults [0, 0, 0].
+[Source](https://github.com/d3/d3-geo/blob/main/src/projection/index.js) · If *angles* is specified, sets the projection’s [three-axis spherical rotation](https://observablehq.com/@d3/three-axis-rotation) to the specified value, which must be a two- or three-element array of numbers [*lambda*, *phi*, *gamma*] specifying the rotation angles in degrees about [each spherical axis](https://observablehq.com/@d3/three-axis-rotation). (These correspond to [yaw, pitch and roll](https://en.wikipedia.org/wiki/Aircraft_principal_axes).) If the rotation angle *gamma* is omitted, it defaults to 0. See also [geoRotation](./math.md#geoRotation). If *angles* is not specified, returns the current rotation which defaults to [0, 0, 0].
 
 ## *projection*.precision(*precision*) {#projection_precision}
 
