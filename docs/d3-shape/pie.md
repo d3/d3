@@ -136,7 +136,7 @@ Sorting does not affect the order of the [generated arc array](#_pie) which is a
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js) · If *compare* is specified, sets the value comparator to the specified function and returns this pie generator.
 
 ```js
-const pie = d3.pie().sortValue(d3.ascending);
+const pie = d3.pie().sortValues(d3.ascending);
 ```
 
 The value comparator is similar to the [data comparator](#pie_sort), except the two arguments *a* and *b* are values derived from the input data array using the [value accessor](#pie_value) rather than the data elements. If the arc for *a* should be before the arc for *b*, then the comparator must return a number less than zero; if the arc for *a* should be after the arc for *b*, then the comparator must return a number greater than zero; returning zero means that the relative order of *a* and *b* is unspecified.
@@ -144,7 +144,7 @@ The value comparator is similar to the [data comparator](#pie_sort), except the 
 If *compare* is not specified, returns the current value comparator.
 
 ```js
-pie.sortValue() // d3.ascending
+pie.sortValues() // d3.ascending
 ```
 
 The value comparator defaults to [descending](../d3-array/sort.md#descending). If both the [data comparator](#pie_sort) and the value comparator are null, then arcs are positioned in the original input order. Setting the value comparator implicitly sets the [data comparator](#pie_sort) to null.
