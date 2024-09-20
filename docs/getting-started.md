@@ -56,11 +56,11 @@ The fastest way to get started (and get help) with D3 is on [Observable](https:/
 
 As a more complete example, try one of these starter templates:
 
-* [Area chart](https://observablehq.com/@d3/area-chart/2?intent=fork)
-* [Bar chart](https://observablehq.com/@d3/bar-chart/2?intent=fork)
-* [Donut chart](https://observablehq.com/@d3/donut-chart/2?intent=fork)
-* [Histogram](https://observablehq.com/@d3/histogram/2?intent=fork)
-* [Line chart](https://observablehq.com/@d3/line-chart/2?intent=fork)
+* [Area chart](https://observablehq.com/@d3/area-chart/2)
+* [Bar chart](https://observablehq.com/@d3/bar-chart/2)
+* [Donut chart](https://observablehq.com/@d3/donut-chart/2)
+* [Histogram](https://observablehq.com/@d3/histogram/2)
+* [Line chart](https://observablehq.com/@d3/line-chart/2)
 
 See the [D3 gallery](https://observablehq.com/@d3/gallery) for more forkable examples.
 
