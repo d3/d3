@@ -85,6 +85,6 @@ onUnmounted(() => {
       <g ref="glink" stroke="currentColor" stroke-opacity="0.5"></g>
       <g ref="gnode" stroke="var(--vp-c-bg-alt)" stroke-width="1.5"></g>
     </svg>
-    <a href="https://observablehq.com/@d3/disjoint-force-directed-graph/2?intent=fork" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
+    <a href="https://observablehq.com/@d3/disjoint-force-directed-graph/2" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
   </div>
 </template>

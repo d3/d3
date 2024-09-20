@@ -46,6 +46,6 @@ onUnmounted(() => {
 <template>
   <div style="margin: 1em 0;">
     <svg :width="width" :height="height" :viewBox="[-width / 2, -height / 2, width, height].join(' ')" fill="currentColor" style="overflow: visible; position: relative; z-index: 2; max-width: 100%; height: auto;" ref="container"></svg>
-    <a href="https://observablehq.com/@d3/collision-detection/2?intent=fork" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
+    <a href="https://observablehq.com/@d3/collision-detection/2" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
   </div>
 </template>

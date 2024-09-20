@@ -3,7 +3,7 @@
 <!-- https://observablehq.com/@d3/stacked-area-chart -->
 <!-- https://observablehq.com/@d3/difference-chart -->
 
-[Examples](https://observablehq.com/@d3/area-chart/2?intent=fork) · The area generator produces an area defined by a *topline* and a *baseline* as in an area chart. Typically, the two lines share the same [*x*-values](#area_x) ([x0](#area_x0) = [x1](#area_x1)), differing only in *y*-value ([y0](#area_y0) and [y1](#area_y1)); most commonly, y0 is defined as a constant representing zero (the y scale’s output for zero). The *topline* is defined by x1 and y1 and is rendered first; the *baseline* is defined by x0 and y0 and is rendered second with the points in reverse order. With a [curveLinear](./curve.md#curveLinear) [curve](#area_curve), this produces a clockwise polygon. See also [radial areas](./radial-area.md).
+[Examples](https://observablehq.com/@d3/area-chart/2) · The area generator produces an area defined by a *topline* and a *baseline* as in an area chart. Typically, the two lines share the same [*x*-values](#area_x) ([x0](#area_x0) = [x1](#area_x1)), differing only in *y*-value ([y0](#area_y0) and [y1](#area_y1)); most commonly, y0 is defined as a constant representing zero (the y scale’s output for zero). The *topline* is defined by x1 and y1 and is rendered first; the *baseline* is defined by x0 and y0 and is rendered second with the points in reverse order. With a [curveLinear](./curve.md#curveLinear) [curve](#area_curve), this produces a clockwise polygon. See also [radial areas](./radial-area.md).
 
 ## area(*x*, *y0*, *y1*) {#area}
 
@@ -173,7 +173,7 @@ The default y1 accessor assumes that the input data are two-element arrays of nu
 
 ## *area*.defined(*defined*) {#area_defined}
 
-[Examples](https://observablehq.com/@d3/area-chart-missing-data/2?intent=fork) · [Source](https://github.com/d3/d3-shape/blob/main/src/area.js) · If *defined* is specified, sets the defined accessor to the specified function or boolean and returns this area generator.
+[Examples](https://observablehq.com/@d3/area-chart-missing-data/2) · [Source](https://github.com/d3/d3-shape/blob/main/src/area.js) · If *defined* is specified, sets the defined accessor to the specified function or boolean and returns this area generator.
 
 ```js
 const area = d3.area().defined((d) => !isNaN(d.Close));

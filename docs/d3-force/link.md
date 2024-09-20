@@ -88,7 +88,7 @@ const links = [
 ];
 ```
 
-This is particularly useful when representing graphs in JSON, as JSON does not allow references. See [this example](https://observablehq.com/@d3/force-directed-graph/2?intent=fork).
+This is particularly useful when representing graphs in JSON, as JSON does not allow references. See [this example](https://observablehq.com/@d3/force-directed-graph/2).
 
 The id accessor is invoked for each node whenever the force is initialized, as when the [nodes](./simulation.md#simulation_nodes) or [links](#link_links) change, being passed the node and its zero-based index.
 

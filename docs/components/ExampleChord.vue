@@ -66,6 +66,6 @@ const chords = d3.chord()
         </path>
       </g>
     </svg>
-    <a href="https://observablehq.com/@d3/chord-diagram/2?intent=fork" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
+    <a href="https://observablehq.com/@d3/chord-diagram/2" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
   </div>
 </template>

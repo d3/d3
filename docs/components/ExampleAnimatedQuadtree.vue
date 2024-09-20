@@ -53,6 +53,6 @@ export default {
 <template>
   <div style="margin: 1em 0;">
     <svg :width="width" :height="height" :viewBox="[0, 0, width, height].join(' ')" style="max-width: 100%; height: auto;"></svg>
-    <a href="https://observablehq.com/@d3/animated-quadtree?intent=fork" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
+    <a href="https://observablehq.com/@d3/animated-quadtree" style="font-size: smaller;" target="_blank">Fork ↗︎</a>
   </div>
 </template>

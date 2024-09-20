@@ -1,6 +1,6 @@
 # Quantize scales
 
-Quantize scales are similar to [linear scales](./linear.md), except they use a discrete rather than continuous range. The continuous input domain is divided into uniform segments based on the number of values in (*i.e.*, the cardinality of) the output range. Each range value *y* can be expressed as a quantized linear function of the domain value *x*: *y* = *m round(x)* + *b*. See [the quantized choropleth](https://observablehq.com/@d3/choropleth/2?intent=fork) for an example.
+Quantize scales are similar to [linear scales](./linear.md), except they use a discrete rather than continuous range. The continuous input domain is divided into uniform segments based on the number of values in (*i.e.*, the cardinality of) the output range. Each range value *y* can be expressed as a quantized linear function of the domain value *x*: *y* = *m round(x)* + *b*. See [the quantized choropleth](https://observablehq.com/@d3/choropleth/2) for an example.
 
 ## scaleQuantize(*domain*, *range*) {#scaleQuantize}
 

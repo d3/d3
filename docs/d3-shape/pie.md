@@ -9,7 +9,7 @@ const padAngle = ref(0.03);
 
 # Pies
 
-[Examples](https://observablehq.com/@d3/donut-chart/2?intent=fork) · The pie generator computes the necessary angles to represent a tabular dataset as a pie or donut chart; these angles can then be passed to an [arc generator](./arc.md). (The pie generator does not produce a shape directly.)
+[Examples](https://observablehq.com/@d3/donut-chart/2) · The pie generator computes the necessary angles to represent a tabular dataset as a pie or donut chart; these angles can then be passed to an [arc generator](./arc.md). (The pie generator does not produce a shape directly.)
 
 ## pie() {#pie}
 

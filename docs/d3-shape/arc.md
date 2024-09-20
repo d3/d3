@@ -11,7 +11,7 @@ const padRadius = ref(200);
 
 # Arcs
 
-The arc generator produces a [circular](https://en.wikipedia.org/wiki/Circular_sector) or [annular](https://en.wikipedia.org/wiki/Annulus_(mathematics)) sector, as in a [pie](https://observablehq.com/@d3/pie-chart/2?intent=fork) or [donut](https://observablehq.com/@d3/donut-chart/2?intent=fork) chart. Arcs are centered at the origin; use a [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) to move the arc to a different position.
+The arc generator produces a [circular](https://en.wikipedia.org/wiki/Circular_sector) or [annular](https://en.wikipedia.org/wiki/Annulus_(mathematics)) sector, as in a [pie](https://observablehq.com/@d3/pie-chart/2) or [donut](https://observablehq.com/@d3/donut-chart/2) chart. Arcs are centered at the origin; use a [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) to move the arc to a different position.
 
 ```js
 svg.append("path")

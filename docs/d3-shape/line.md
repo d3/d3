@@ -2,7 +2,7 @@
 
 <!-- https://observablehq.com/@d3/line-chart -->
 
-[Examples](https://observablehq.com/@d3/line-chart/2?intent=fork) · The line generator produces a [spline](https://en.wikipedia.org/wiki/Spline_(mathematics)) or [polyline](https://en.wikipedia.org/wiki/Polygonal_chain) as in a line chart. Lines also appear in many other visualization types, such as the links in [hierarchical edge bundling](https://observablehq.com/@d3/hierarchical-edge-bundling). See also [radial lines](./radial-line.md).
+[Examples](https://observablehq.com/@d3/line-chart/2) · The line generator produces a [spline](https://en.wikipedia.org/wiki/Spline_(mathematics)) or [polyline](https://en.wikipedia.org/wiki/Polygonal_chain) as in a line chart. Lines also appear in many other visualization types, such as the links in [hierarchical edge bundling](https://observablehq.com/@d3/hierarchical-edge-bundling). See also [radial lines](./radial-line.md).
 
 ## line(*x*, *y*) {#line}
 
@@ -88,7 +88,7 @@ The default y accessor assumes that the input data are two-element arrays of num
 
 ## *line*.defined(*defined*) {#line_defined}
 
-[Examples](https://observablehq.com/@d3/line-chart-missing-data/2?intent=fork) · [Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *defined* is specified, sets the defined accessor to the specified function or boolean and returns this line generator.
+[Examples](https://observablehq.com/@d3/line-chart-missing-data/2) · [Source](https://github.com/d3/d3-shape/blob/main/src/line.js) · If *defined* is specified, sets the defined accessor to the specified function or boolean and returns this line generator.
 
 ```js
 const line = d3.line().defined((d) => !isNaN(d.Close));

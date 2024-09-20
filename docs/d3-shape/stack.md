@@ -17,7 +17,7 @@ onMounted(() => {
 
 <!-- https://observablehq.com/@mbostock/streamgraph-transitions -->
 
-[Examples](https://observablehq.com/@d3/stacked-bar-chart/2?intent=fork) · Stacking converts lengths into contiguous position intervals. For example, a bar chart of monthly sales might be broken down into a multi-series bar chart by category, stacking bars vertically and applying a categorical color encoding. Stacked charts can show overall value and per-category value simultaneously; however, it is typically harder to compare across categories as only the bottom layer of the stack is aligned. So, chose the [stack order](#stack_order) carefully, and consider a [streamgraph](#stackOffsetWiggle). (See also [grouped charts](https://observablehq.com/@d3/grouped-bar-chart/2?intent=fork).)
+[Examples](https://observablehq.com/@d3/stacked-bar-chart/2) · Stacking converts lengths into contiguous position intervals. For example, a bar chart of monthly sales might be broken down into a multi-series bar chart by category, stacking bars vertically and applying a categorical color encoding. Stacked charts can show overall value and per-category value simultaneously; however, it is typically harder to compare across categories as only the bottom layer of the stack is aligned. So, chose the [stack order](#stack_order) carefully, and consider a [streamgraph](#stackOffsetWiggle). (See also [grouped charts](https://observablehq.com/@d3/grouped-bar-chart/2).)
 
 Like the [pie generator](./pie.md), the stack generator does not produce a shape directly. Instead it computes positions which you can then pass to an [area generator](./area.md) or use directly, say to position bars.
 
@@ -373,7 +373,7 @@ const stack = d3.stack().offset(d3.stackOffsetExpand);
 const stack = d3.stack().offset(d3.stackOffsetDiverging);
 ```
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/offset/diverging.js) · Positive values are stacked above zero, negative values are [stacked below zero](https://observablehq.com/@d3/diverging-stacked-bar-chart/2?intent=fork), and zero values are stacked at zero.
+[Source](https://github.com/d3/d3-shape/blob/main/src/offset/diverging.js) · Positive values are stacked above zero, negative values are [stacked below zero](https://observablehq.com/@d3/diverging-stacked-bar-chart/2), and zero values are stacked at zero.
 
 ### stackOffsetNone(*series*, *order*) {#stackOffsetNone}
 
