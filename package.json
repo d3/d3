@@ -67,7 +67,7 @@
     "d3-zoom": "3"
   },
   "devDependencies": {
-    "@observablehq/framework": "^1.7.1",
+    "@observablehq/framework": "^1.10.0",
     "@observablehq/plot": "^0.6.7",
     "@observablehq/runtime": "^5.7.3",
     "@rollup/plugin-json": "6",
