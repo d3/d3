@@ -93,7 +93,7 @@ display(svg.node());
 The data here is provided as a JSON file.
 
 ```js echo
-const data = FileAttachment("flare.json").json();
+const data = FileAttachment("/data/flare.json").json();
 ```
 
 ```js echo

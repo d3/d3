@@ -99,11 +99,11 @@ const area = d3.area()
 ```js echo
 const parseDate = d3.utcParse("%Y-%m-%d");
 const data = Promise.all([
-  FileAttachment("aapl.csv"),
-  FileAttachment("amzn.csv"),
-  FileAttachment("goog.csv"),
-  FileAttachment("ibm.csv"),
-  FileAttachment("msft.csv")
+  FileAttachment("/data/aapl.csv"),
+  FileAttachment("/data/amzn.csv"),
+  FileAttachment("/data/goog.csv"),
+  FileAttachment("/data/ibm.csv"),
+  FileAttachment("/data/msft.csv")
 ].map(async file => {
   const values = d3.csvParse(await file.text(), d => {
     const date = parseDate(d["Date"]);

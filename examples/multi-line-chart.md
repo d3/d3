@@ -150,5 +150,5 @@ function pointerleft() {
 ```
 
 ```js echo
-const unemployment = FileAttachment("bls-metro-unemployment.csv").csv({typed: true});
+const unemployment = FileAttachment("/data/bls-metro-unemployment.csv").csv({typed: true});
 ```

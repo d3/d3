@@ -155,5 +155,5 @@ display(svg.node());
 ```
 
 ```js echo
-const data = FileAttachment("traffic.csv").csv({typed: true});
+const data = FileAttachment("/data/traffic.csv").csv({ typed: true });
 ```

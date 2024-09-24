@@ -94,9 +94,9 @@ display(svg.node());
 ```
 
 ```js echo
-const data = FileAttachment("flare.json").json();
+const data = FileAttachment("/data/flare.json").json();
 ```
 
 ```js echo
-import * as DOM from "./components/DOM.js";
+import * as DOM from "/components/DOM.js";
 ```

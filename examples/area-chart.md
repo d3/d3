@@ -76,5 +76,5 @@ display(svg.node());
 ```
 
 ```js echo
-const aapl = FileAttachment("aapl.csv").csv({typed: true});
+const aapl = FileAttachment("/data/aapl.csv").csv({ typed: true });
 ```

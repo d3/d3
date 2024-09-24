@@ -97,6 +97,6 @@ display(svg.node());
 ```
 
 ```js echo
-const aapl = await FileAttachment("aapl.csv").csv({typed: true});
+const aapl = await FileAttachment("/data/aapl.csv").csv({ typed: true });
 const ticker = aapl.slice(-130);
 ```

@@ -89,5 +89,5 @@ display(svg.node());
 ```
 
 ```js echo
-const data = FileAttachment("flare.json").json();
+const data = FileAttachment("/data/flare.json").json();
 ```

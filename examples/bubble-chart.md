@@ -82,7 +82,7 @@ const chart = display(Object.assign(svg.node(), {scales: {color}}));
 ```
 
 ```js echo
-const data = (await FileAttachment("./flare.csv").csv({typed: true})).filter(({size}) => size !== null);
+const data = (await FileAttachment("/data/flare.csv").csv({typed: true})).filter(({size}) => size !== null);
 
 display(data);
 ```

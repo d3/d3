@@ -62,5 +62,5 @@ display(svg.node());
 ```
 
 ```js echo
-const data = FileAttachment("alphabet.csv").csv({typed: "auto"});
+const data = FileAttachment("/data/alphabet.csv").csv({ typed: "auto" });
 ```

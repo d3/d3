@@ -155,21 +155,21 @@ The cell below merges five CSV files, adding the symbol for each stock as the fi
 ```js echo
 const stocks = (
   await Promise.all([
-    FileAttachment("aapl.csv")
       .csv({typed: true})
+    FileAttachment("/data/aapl.csv")
       .then((values) => ["AAPL", values]),
-    FileAttachment("amzn.csv")
       .csv({typed: true})
+    FileAttachment("/data/amzn.csv")
       .then((values) => ["AMZN", values]),
-    FileAttachment("goog.csv")
       .csv({typed: true})
+    FileAttachment("/data/goog.csv")
       .then((values) => ["GOOG", values]),
-    FileAttachment("ibm.csv")
       .csv({typed: true})
+    FileAttachment("/data/ibm.csv")
       .then((values) => ["IBM", values]),
-    FileAttachment("msft.csv")
       .csv({typed: true})
       .then((values) => ["MSFT", values])
+    FileAttachment("/data/msft.csv")
   ])
 ).flatMap(([Symbol, values]) => values.map((d) => ({Symbol, ...d})));
 ```
