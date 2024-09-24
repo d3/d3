@@ -176,7 +176,7 @@ The `AnimatedTreemap` function consumes a specific `data` structure, that lists 
 display(data);
 ```
 
-The source data is loaded from two [file attachments](https://observablehq.com/framework/files)—one in CSV format and the other in TSV format. For your own chart you’ll want to create a similar data structure—maybe by reading from an API with [`d3.csv`](https://d3js.org/d3-dsv), or by running a [`sql`](https://observablehq.com/framework/sql) query on a database.
+The data is loaded from two [file attachments](https://observablehq.com/framework/files)—one in CSV format and the other in TSV format. For your own chart you’ll want to create a similar data structure—maybe by reading from an API with [`d3.csv`](https://d3js.org/d3-dsv), or by running a [`sql`](https://observablehq.com/framework/sql) query on a database.
 
 ```js echo
 const keys = d3.range(1790, 2000, 10);
