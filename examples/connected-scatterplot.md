@@ -15,7 +15,7 @@ display(ConnectedScatterplot(driving));
 ConnectedScatterplot(driving)
 ```
 
-We create the chart with the `ConnectedScatterplot` function shown below. It takes tabular data as input — one row for each data point. The **side** column indicates where we want the year label to be displayed next to the point in the scatterplot (these values have been hand-picked to limit occlusion). The other columns are the **year**, the average **miles** per person and the cost of **gas** that year. Click on the `Array` symbol below to inspect the data:
+The source data is tabular: one row for each data point. The **side** column indicates where we want the year label to be displayed next to the point in the scatterplot (these values have been hand-picked to limit occlusion). The other columns are the **year**, the average **miles** per person and the cost of **gas** that year. Here we load the data as a static [CSV file attachment](https://observablehq.com/framework/lib/csv). Click on the `Array` symbol below to inspect:
 
 ```js
 driving
@@ -25,11 +25,7 @@ driving
 const driving = FileAttachment("/data/driving.csv").csv({typed: true});
 ```
 
-<div style="font-size: 0.8em; padding-left: 1em; border-left: solid 2px var(--theme-foreground-fainter);">
-
-👆 This code snippet loads a static Observable Framework CSV [`FileAttachment`](https://observablehq.com/framework/files), parsing typed values such as numbers. For your own chart you’ll want to create a similar data structure—maybe by reading from an API with [`d3.csv`](https://d3js.org/d3-dsv), or by running a [`sql`](https://observablehq.com/framework/sql) query on a database.
-
-</div>
+The `ConnectedScatterplot` function return the chart as a SVG node:
 
 ```js echo
 function ConnectedScatterplot(driving) {

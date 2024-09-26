@@ -7,83 +7,98 @@ This form is also known as a *joy plot* for its notable use on [the cover](/@mbo
 Data: [Christopher Möller](https://gist.github.com/chrtze/c74efb46cadb6a908bbbf5227934bfea).
 
 ```js echo
-// Prepare the series:
-const dates = Array.from(d3.group(traffic, d => +d.date).keys()).sort(d3.ascending);
-const series = d3.groups(traffic, d => d.location).map(([name, values]) => {
-  const value = new Map(values.map(d => [+d.date, d.vehicles]));
-  return {name, values: dates.map(d => value.get(d))};
-});
+RidgelinePlot(traffic)
+```
 
-// Specify the chart’s dimensions.
-const overlap = 8;
-const width = 928;
-const height = series.length * 17;
-const marginTop = 40;
-const marginRight = 20;
-const marginBottom = 30;
-const marginLeft = 120;
+The data for this chart is in tidy format, with one row for each observation with the number of **vehicles** in each given **location** at any given **date**. We load it here as a static [CSV file attachment](https://observablehq.com/framework/lib/csv). Click on the `Array` symbol below to inspect:
 
-// Create the scales.
-const x = d3.scaleTime()
-    .domain(d3.extent(dates))
-    .range([marginLeft, width - marginRight]);
-
-const y = d3.scalePoint()
-    .domain(series.map(d => d.name))
-    .range([marginTop, height - marginBottom]);
-
-const z = d3.scaleLinear()
-    .domain([0, d3.max(series, d => d3.max(d.values))]).nice()
-    .range([0, -overlap * y.step()]);
-
-// Create the area generator and its top-line generator.
-const area = d3.area()
-    .curve(d3.curveBasis)
-    .defined(d => !isNaN(d))
-    .x((d, i) => x(dates[i]))
-    .y0(0)
-    .y1(d => z(d));
-
-const line = area.lineY1();
-
-// Create the SVG container.
-const svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("viewBox", [0, 0, width, height])
-    .attr("style", "max-width: 100%; height: auto;");
-
-// Append the axes.
-svg.append("g")
-    .attr("transform", `translate(0,${height - marginBottom})`)
-    .call(d3.axisBottom(x)
-        .ticks(width / 80)
-        .tickSizeOuter(0));
-
-svg.append("g")
-    .attr("transform", `translate(${marginLeft},0)`)
-    .call(d3.axisLeft(y).tickSize(0).tickPadding(4))
-    .call(g => g.select(".domain").remove());
-
-// Append a layer for each series.
-const group = svg.append("g")
-  .selectAll("g")
-  .data(series)
-  .join("g")
-    .attr("transform", d => `translate(0,${y(d.name) + 1})`);
-
-group.append("path")
-    .attr("fill", dark ? "#282828" : "#ddd")
-    .attr("d", d => area(d.values));
-
-group.append("path")
-    .attr("fill", "none")
-    .attr("stroke", "currentColor")
-    .attr("d", d => line(d.values));
-
-display(svg.node());
+```js
+traffic
 ```
 
 ```js echo
 const traffic = FileAttachment("/data/traffic.csv").csv({ typed: true });
 ```
+
+The function below returns a SVG node:
+
+```js echo
+function RidgelinePlot(traffic) {
+    // Prepare the series:
+    const dates = Array.from(d3.group(traffic, d => +d.date).keys()).sort(d3.ascending);
+    const series = d3.groups(traffic, d => d.location).map(([name, values]) => {
+    const value = new Map(values.map(d => [+d.date, d.vehicles]));
+    return {name, values: dates.map(d => value.get(d))};
+    });
+
+    // Specify the chart’s dimensions.
+    const overlap = 8;
+    const width = 928;
+    const height = series.length * 17;
+    const marginTop = 40;
+    const marginRight = 20;
+    const marginBottom = 30;
+    const marginLeft = 120;
+
+    // Create the scales.
+    const x = d3.scaleTime()
+        .domain(d3.extent(dates))
+        .range([marginLeft, width - marginRight]);
+
+    const y = d3.scalePoint()
+        .domain(series.map(d => d.name))
+        .range([marginTop, height - marginBottom]);
+
+    const z = d3.scaleLinear()
+        .domain([0, d3.max(series, d => d3.max(d.values))]).nice()
+        .range([0, -overlap * y.step()]);
+
+    // Create the area generator and its top-line generator.
+    const area = d3.area()
+        .curve(d3.curveBasis)
+        .defined(d => !isNaN(d))
+        .x((d, i) => x(dates[i]))
+        .y0(0)
+        .y1(d => z(d));
+
+    const line = area.lineY1();
+
+    // Create the SVG container.
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto;");
+
+    // Append the axes.
+    svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x)
+            .ticks(width / 80)
+            .tickSizeOuter(0));
+
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y).tickSize(0).tickPadding(4))
+        .call(g => g.select(".domain").remove());
+
+    // Append a layer for each series.
+    const group = svg.append("g")
+    .selectAll("g")
+    .data(series)
+    .join("g")
+        .attr("transform", d => `translate(0,${y(d.name) + 1})`);
+
+    group.append("path")
+        .attr("fill", dark ? "#282828" : "#ddd")
+        .attr("d", d => area(d.values));
+
+    group.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "currentColor")
+        .attr("d", d => line(d.values));
+
+    return svg.node();
+}
+```
+

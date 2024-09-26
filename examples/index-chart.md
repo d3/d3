@@ -10,6 +10,24 @@ This chart shows the weekly price of several technology stocks from 2013 to 2018
 const value = view(IndexChart());
 ```
 
+The data for this chart consists of five time series merged together. Here we load them from five static [CSV file attachments](https://observablehq.com/framework/lib/csv). Click on the `Array` symbol below to inspect the data’s structure.
+
+```js
+stocks
+```
+
+```js echo
+const stocks = (
+  await Promise.all([
+    FileAttachment("/data/aapl.csv").csv({typed: true}).then((values) => ["AAPL", values]),
+    FileAttachment("/data/amzn.csv").csv({typed: true}).then((values) => ["AMZN", values]),
+    FileAttachment("/data/goog.csv").csv({typed: true}).then((values) => ["GOOG", values]),
+    FileAttachment("/data/ibm.csv").csv({typed: true}).then((values) => ["IBM", values]),
+    FileAttachment("/data/msft.csv").csv({typed: true}).then((values) => ["MSFT", values])
+  ])
+).flatMap(([Symbol, values]) => values.map((d) => ({Symbol, ...d})));
+```
+
 This chart is created with the `IndexChart` function:
 
 ```js echo
@@ -148,23 +166,3 @@ function IndexChart() {
   return svg.node();
 }
 ```
-
-The cell below loads five CSV [file attachments](https://observablehq.com/framework/files), adding the symbol for each stock as the first column for each row. In your own application you might load these files with [`d3.csv`](https://d3js.org/d3-dsv) or generate them from a database with a [sql](https://observablehq.com/framework/sql) query. Click on the `Array` symbol below to inspect the data’s structure.
-
-```js
-stocks
-```
-
-```js echo
-const stocks = (
-  await Promise.all([
-    FileAttachment("/data/aapl.csv").csv({typed: true}).then((values) => ["AAPL", values]),
-    FileAttachment("/data/amzn.csv").csv({typed: true}).then((values) => ["AMZN", values]),
-    FileAttachment("/data/goog.csv").csv({typed: true}).then((values) => ["GOOG", values]),
-    FileAttachment("/data/ibm.csv").csv({typed: true}).then((values) => ["IBM", values]),
-    FileAttachment("/data/msft.csv").csv({typed: true}).then((values) => ["MSFT", values])
-  ])
-).flatMap(([Symbol, values]) => values.map((d) => ({Symbol, ...d})));
-```
-
-<!-- https://observablehq.com/@observablehq/plot-index-chart -->

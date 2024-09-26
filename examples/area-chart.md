@@ -2,14 +2,24 @@
 
 This time-series chart shows the daily close of Apple stock. Compare to a [line chart](./line-chart). Data: [Yahoo Finance](https://finance.yahoo.com/lookup)
 
-```js
-AreaChart()
+```js echo
+AreaChart(aapl)
 ```
 
-The chart is created by this function:
+The data is an array of objects, which we load here as a static [CSV file](https://observablehq.com/framework/lib/csv). Click on the `Array` symbol below to inspect:
+
+```js
+aapl
+```
 
 ```js echo
-function AreaChart() {
+const aapl = FileAttachment("/data/aapl.csv").csv({typed: true});
+```
+
+The chart is created by the function below:
+
+```js echo
+function AreaChart(aapl) {
   // Declare the chart dimensions and margins.
   const width = 928;
   const height = 500;
@@ -39,7 +49,7 @@ function AreaChart() {
 
   // Append a path for the area (under the axes).
   svg.append("path")
-      .attr("fill", "var(--theme-foreground-focus)")
+      .attr("fill", "steelblue")
       .attr("d", area(aapl));
 
   // Add the x-axis.
@@ -65,14 +75,4 @@ function AreaChart() {
 
   return svg.node();
 }
-```
-
-The data is an array of objects, loaded as a CSV [file attachment](https://observablehq.com/framework/files). For your own chart you might be reading values from an API with [`d3.csv`](https://d3js.org/d3-dsv), or by running a [`sql`](https://observablehq.com/framework/sql) query on a database. Click on `Array` below to inspect:
-
-```js
-aapl
-```
-
-```js echo
-const aapl = FileAttachment("/data/aapl.csv").csv({typed: true});
 ```

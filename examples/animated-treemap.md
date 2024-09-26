@@ -3,24 +3,55 @@
 This [treemap](./treemap) of U.S. population uses [d3.treemapResquarify](https://d3js.org/d3-hierarchy/treemap#treemapResquarify) for a stable layout with changing node values. Data: [U.S. Census Bureau](https://www.census.gov/population/www/censusdata/pop1790-1990.html)
 
 ```js
-const scrubber = Scrubber(d3.range(data.keys.length), {
+const years = d3.sort(population.columns.filter((d) => +d));
+const scrubber = Scrubber(d3.range(years.length), {
   delay: 2500,
   loop: false,
-  format: (i) => data.keys[i]
+  format: (i) => years[i]
 });
 const index = view(scrubber);
 ```
 
 ```js
-const chart = display(AnimatedTreemap());
+const chart = display(AnimatedTreemap(population, regions));
+```
+
+The chart depends on two tabular datasets, which we load here with static [file attachments](https://observablehq.com/framework/files). The first is a wide array describing the **population** (according to the census) of each State over time. Click on the `Array` symbol to inspect its contents.
+
+```js
+population
+```
+
+```js echo
+const population = FileAttachment("/data/population.tsv").tsv();
+```
+
+The second dataset organizes the states into a hierarchy of **regions** and divisions.
+
+```js
+regions
+```
+
+```js echo
+const regions = FileAttachment("/data/census-regions.csv").csv();
 ```
 
 The chart is created by the `AnimatedTreemap` function:
 
 ```js echo
-function AnimatedTreemap() {
+function AnimatedTreemap(population, regions) {
   const width = 928;
   const height = width;
+
+  const years = d3.sort(population.columns.filter((d) => +d));
+  const states = population.slice(1) // remove the first row, which is the aggregate population for the whole U.S.
+      .map((d) => ({
+        name: d[""], // the state name
+        values: years.map((key) => +d[key].replace(/,/g, "")) // parse comma-separated numbers
+      }));
+  const regionByState = new Map(regions.map((d) => [d.State, d.Region]));
+  const divisionByState = new Map(regions.map((d) => [d.State, d.Division]));
+  const group = d3.group(states, (d) => regionByState.get(d.name), (d) => divisionByState.get(d.name));
 
   // This is normally zero, but could be non-zero if this cell is
   // re-evaluated after the animation plays.
@@ -37,12 +68,12 @@ function AnimatedTreemap() {
   // for this dataset that it’s always the last value, but that isn’t
   // true in general.) This allows us to scale the rectangles for
   // each state to be proportional to the max total.
-  const max = d3.max(data.keys, (d, i) => d3.hierarchy(data.group).sum((d) => d.values[i]).value);
+  const max = d3.max(years, (d, i) => d3.hierarchy(group).sum((d) => d.values[i]).value);
 
   // The category10 color scheme per state, but faded so that the
   // text labels are more easily read.
   const color = d3.scaleOrdinal()
-      .domain(data.group.keys())
+      .domain(group.keys())
       .range(d3.schemeCategory10.map((d) => d3.interpolateRgb(d, "white")(0.5)));
 
   // Construct the treemap layout.
@@ -55,7 +86,7 @@ function AnimatedTreemap() {
   // Compute the structure using the average value (since this
   // orientation will be preserved using resquarify across the
   // entire animation).
-  const root = treemap(d3.hierarchy(data.group)
+  const root = treemap(d3.hierarchy(group)
       .sum((d) => (Array.isArray(d.values) ? d3.sum(d.values) : 0))
       .sort((a, b) => b.value - a.value));
 
@@ -70,9 +101,9 @@ function AnimatedTreemap() {
   // lines in between the padded treemap cells).
   const box = svg.append("g")
     .selectAll("g")
-    .data(data.keys.map((key, i) => {
+    .data(years.map((key, i) => {
       const value = root.sum((d) => d.values[i]).value;
-      return { key, value, i, k: Math.sqrt(value / max) };
+      return {key, value, i, k: Math.sqrt(value / max)};
     })
     .reverse())
     .join("g")
@@ -82,15 +113,15 @@ function AnimatedTreemap() {
           .attr("y", -6)
           .attr("fill", "#777")
         .selectAll("tspan")
-        .data(({ key, value }) => [key, ` ${formatNumber(value)}`])
+        .data(({key, value}) => [key, ` ${formatNumber(value)}`])
         .join("tspan")
           .attr("font-weight", (d, i) => (i === 0 ? "bold" : null))
           .text((d) => d))
       .call((g) => g.append("rect")
           .attr("fill", "none")
           .attr("stroke", "#ccc")
-          .attr("width", ({ k }) => k * width)
-          .attr("height", ({ k }) => k * height));
+          .attr("width", ({k}) => k * width)
+          .attr("height", ({k}) => k * height));
 
   // Render the leaf nodes of the treemap.
   const leaf = svg.append("g")
@@ -144,7 +175,7 @@ function AnimatedTreemap() {
     update(index, duration) {
       box.transition()
           .duration(duration)
-          .attr("opacity", ({ i }) => (i >= index ? 1 : 0));
+          .attr("opacity", ({i}) => (i >= index ? 1 : 0));
 
       leaf.data(layout(index))
           .transition()
@@ -164,47 +195,15 @@ function AnimatedTreemap() {
 }
 ```
 
-This triggers the animation from the scrubber:
-
-```js echo
-const update = chart.update(index, 2500);
-```
-
-The `AnimatedTreemap` function consumes a specific `data` structure, that lists the **years** as keys and a hierarchy of **regions** and **states** with an array describing the **population** (according to the census) of each State for every key:
-
-```js
-display(data);
-```
-
-The data is loaded from two [file attachments](https://observablehq.com/framework/files)—one in CSV format and the other in TSV format. For your own chart you’ll want to create a similar data structure—maybe by reading from an API with [`d3.csv`](https://d3js.org/d3-dsv), or by running a [`sql`](https://observablehq.com/framework/sql) query on a database.
-
-```js echo
-const keys = d3.range(1790, 2000, 10);
-const [regions, states] = await Promise.all([
-  FileAttachment("/data/census-regions.csv").csv(), // for grouping states hierarchically
-  FileAttachment("/data/population.tsv").tsv(), // a wide dataset of state populations over time
-]).then(([regions, states]) => [
-  regions,
-  states.slice(1).map((d) => ({
-    name: d[""], // the state name
-    values: keys.map((key) => +d[key].replace(/,/g, "")) // parse comma-separated numbers
-  }))
-]);
-const regionByState = new Map(regions.map((d) => [d.State, d.Region]));
-const divisionByState = new Map(regions.map((d) => [d.State, d.Division]));
-const data = {
-  keys,
-  group: d3.group(
-    states,
-    (d) => regionByState.get(d.name),
-    (d) => divisionByState.get(d.name)
-  )
-};
-```
-
-These utilities help create the scrubber, and unique ids.
+These utilities help create the scrubber input at the top of the page, and unique ids for the clip paths.
 
 ```js echo
 import {Scrubber} from "/components/scrubber.js";
 import {uid} from "/components/DOM.js";
+```
+
+This triggers the animation from the scrubber:
+
+```js echo
+chart.update(index, 2500);
 ```
