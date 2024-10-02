@@ -282,7 +282,7 @@ Most D3 modules (including [d3-scale](./d3-scale.md), [d3-array](./d3-array.md),
 import * as d3 from "d3";
 
 export default function LinePlot({
-  data,
+  data = Array.from({ length: 10 }, d3.randomInt(101)),  // example dataset
   width = 640,
   height = 400,
   marginTop = 20,
@@ -315,7 +315,7 @@ import * as d3 from "d3";
 import {useRef, useEffect} from "react";
 
 export default function LinePlot({
-  data,
+  data = Array.from({ length: 10 }, d3.randomInt(101)),  // example dataset
   width = 640,
   height = 400,
   marginTop = 20,
@@ -357,7 +357,7 @@ As [with React](#d3-in-react), you can use Svelte exclusively for rendering if y
 <script>
   import * as d3 from 'd3';
 
-  export let data;
+  export let data = Array.from({ length: 10 }, d3.randomInt(101));  // example dataset
   export let width = 640;
   export let height = 400;
   export let marginTop = 20;
@@ -389,7 +389,7 @@ Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-sele
 <script>
   import * as d3 from 'd3';
 
-  export let data;
+  export let data = Array.from({ length: 10 }, d3.randomInt(101));  // example dataset
   export let width = 640;
   export let height = 400;
   export let marginTop = 20;
