@@ -154,7 +154,7 @@ d3.randomPareto(6)
 d3.randomBernoulli(0.5)
 ```
 
-[Examples](https://observablehq.com/@d3/d3-random#bernoulli) · [Source](https://github.com/d3/d3-random/blob/main/src/bernoulli.js) · Returns a function for generating either 1 or 0 according to a [Bernoulli distribution](https://en.wikipedia.org/wiki/Binomial_distribution) with 1 being returned with success probability *p* and 0 with failure probability *q* = 1 - *p*. The value *p* is in the range [0, 1].
+[Examples](https://observablehq.com/@d3/d3-random#bernoulli) · [Source](https://github.com/d3/d3-random/blob/main/src/bernoulli.js) · Returns a function for generating either 1 or 0 according to a [Bernoulli distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution) with 1 being returned with success probability *p* and 0 with failure probability *q* = 1 - *p*. The value *p* is in the range [0, 1].
 
 ## randomGeometric(*p*) {#randomGeometric}
 
