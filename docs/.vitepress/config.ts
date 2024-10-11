@@ -6,13 +6,15 @@ import {defineConfig} from "vitepress";
 export default defineConfig({
   title: "D3 by Observable",
   description: "The JavaScript library for bespoke data visualization",
+  appearance: "force-auto",
   cleanUrls: true,
   sitemap: {
     hostname: "https://d3js.org"
   },
   head: [
     ["link", {rel: "apple-touch-icon", href: "/logo.png"}],
-    ["link", {rel: "icon", type: "image/png", href: "/logo.png"}]
+    ["link", {rel: "icon", type: "image/png", href: "/logo.png"}],
+    ["script", {async: "", defer: "", src: "https://static.observablehq.com/assets/components/observable-made-by.js"}],
   ],
   markdown: {
     externalLinks: {
@@ -25,18 +27,22 @@ export default defineConfig({
         {find: "d3", replacement: path.resolve("./dist/d3.mjs")},
         {find: /^.*\/VPFooter\.vue$/, replacement: fileURLToPath(new URL("./theme/CustomFooter.vue", import.meta.url))}
       ]
+    },
+    define: {
+      __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
+    },
+  },
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: (tag) => tag.startsWith("observable-")
+      }
     }
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/logo.svg",
-    siteTitle: "",
-    nav: [
-      {text: "Home", link: "/"},
-      {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable", rel: "external"},
-      {text: "Community", link: "/community"},
-      {text: "Plot", link: "https://observablehq.com/plot?utm_source=d3js-org&utm_medium=nav&utm_campaign=try-observable", rel: "external"}
-    ],
+    siteTitle: "D3",
     sidebar: [
       {
         text: "Introduction",
@@ -265,14 +271,6 @@ export default defineConfig({
     search: {
       provider: "local"
     },
-    socialLinks: [
-      {icon: "github", link: "https://github.com/d3"},
-      {icon: "twitter", link: "https://twitter.com/observablehq"},
-      {icon: "mastodon", link: "https://vis.social/@observablehq"},
-      {icon: "slack", link: "https://observablehq.com/slack/join"},
-      {icon: "linkedin", link: "https://www.linkedin.com/company/observable"},
-      {icon: "youtube", link: "https://www.youtube.com/c/Observablehq"}
-    ],
     footer: {
       message: "Library released under <a style='text-decoration:underline;' href='https://github.com/d3/d3/blob/main/LICENSE'>ISC License</a>.",
       copyright: `Copyright 2010–${new Date().getUTCFullYear()} Mike Bostock`
