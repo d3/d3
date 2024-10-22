@@ -50,7 +50,7 @@ export default defineConfig({
           {text: "What is D3?", link: "/what-is-d3"},
           {text: "Getting started", link: "/getting-started"},
           {text: "API index", link: "/api"},
-          {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=hero&utm_campaign=try-observable"}
+          {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=page-nav&utm_campaign=try-observable"}
         ]
       },
       {
