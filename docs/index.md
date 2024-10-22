@@ -31,6 +31,7 @@ hero:
     - theme: alt
       text: Examples
       link: https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=hero&utm_campaign=try-observable
+      rel: external
 
 features:
   - title: Selections and transitions
