@@ -49,6 +49,8 @@ export default defineConfig({
         items: [
           {text: "What is D3?", link: "/what-is-d3"},
           {text: "Getting started", link: "/getting-started"},
+          {text: "API index", link: "/api"},
+          {text: "Examples", link: "https://observablehq.com/@d3/gallery?utm_source=d3js-org&utm_medium=hero&utm_campaign=try-observable"}
         ]
       },
       {
@@ -265,8 +267,7 @@ export default defineConfig({
           {text: "d3-time", link: "/d3-time"},
           {text: "d3-time-format", link: "/d3-time-format"},
         ]
-      },
-      {text: "API index", link: "/api"}
+      }
     ],
     search: {
       provider: "local"
