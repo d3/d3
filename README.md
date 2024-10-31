@@ -1,7 +1,14 @@
 # D3: Data-Driven Documents
 
 <a href="https://d3js.org"><img src="./docs/public/logo.svg" width="256" height="256"></a>
-
+- https://medium.com/@AdPrintify
+- https://medium.com/@AdPrintify/-643372c1af5e
+- https://medium.com/@AdPrintify/goats-make-me-happy-embracing-quirkiness-and-the-joys-of-animal-love-72a4ba1516f8
+- https://medium.com/@AdPrintify/james-bond-island-phang-nga-bay-thailand-13d878e5b194
+- https://medium.com/@AdPrintify/mom-life-the-t-shirt-that-became-a-movement-a975464dae20
+- https://medium.com/@AdPrintify/royal-barge-procession-700-years-of-thai-unity-tradition-and-artistry-in-celebrating-national-c5f1477e1896
+- https://medium.com/@AdPrintify/the-icu-nurse-tee-honor-dedication-and-the-heart-of-critical-care-73c35ebb2046
+- https://medium.com/@AdPrintify/turning-glass-into-art-the-power-of-creative-superpowers-f2a27be3f1b5
 **D3** (or **D3.js**) is a free, open-source JavaScript library for visualizing data. Its low-level approach built on web standards offers unparalleled flexibility in authoring dynamic, data-driven graphics. For more than a decade D3 has powered groundbreaking and award-winning visualizations, become a foundational building block of higher-level chart libraries, and fostered a vibrant community of data practitioners around the world.
 
 <a href="https://observablehq.observablehq.cloud/oss-analytics/@d3/d3">
