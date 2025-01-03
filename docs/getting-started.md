@@ -419,4 +419,4 @@ Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-sele
 ```
 :::
 
-<p style="margin-top: -1em;"><a href="https://svelte.dev/repl/ff3bf3c7ca454d53913c0c33af0c1250?version=3.59.1" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
+<p style="margin-top: -1em;"><a href="https://svelte.dev/playground/8722c32f4e1a44a98e3a3fc8a095b2d7?version=5.16.0" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
