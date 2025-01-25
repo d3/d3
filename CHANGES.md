@@ -202,7 +202,7 @@ For an overview of changes, see https://observablehq.com/@d3/d3-selection-2-0.
 
 * Add [*transition*.easeVarying](https://github.com/d3/d3-transition/blob/master/README.md#transition_easeVarying).
 * Add *transition*[Symbol.iterator]; transitions are now iterable.
-* Fix [*selection*.transition](https://github.com/d3/d3-transition/blob/master/README.md#selection_transition) to error if the named transition to inherit is not found.k
+* Fix [*selection*.transition](https://github.com/d3/d3-transition/blob/master/README.md#selection_transition) to error if the named transition to inherit is not found.
 * Fix [*transition*.end](https://github.com/d3/d3-transition/blob/master/README.md#transition_end) to resolve immediately if the selection is empty.
 
 ### d3-zoom
