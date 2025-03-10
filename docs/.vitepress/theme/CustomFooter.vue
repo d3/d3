@@ -15,6 +15,7 @@
           <ul>
             <li class="mb2"><a target="_blank" href="https://talk.observablehq.com">Forum</a></li>
             <li class="mb2"><a target="_blank" href="https://observablehq.com/slack/join">Slack</a></li>
+            <li class="mb2"><a target="_blank" href="https://github.com/d3/d3/discussions">Discussions</a></li>
             <li class="mb2"><a target="_blank" href="https://github.com/d3/d3/releases">Releases</a></li>
           </ul>
         </div>
