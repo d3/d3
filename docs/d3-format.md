@@ -136,9 +136,11 @@ const enUs = d3.formatDefaultLocale({
 const f = d3.format(".2f");
 ```
 
-[Source](https://github.com/d3/d3-format/blob/main/src/locale.js) · Returns a new format function for the given string *specifier*. The returned function takes a number as the only argument, and returns a string representing the formatted number. The general form of a specifier is:
+[Source](https://github.com/d3/d3-format/blob/main/src/locale.js) · Returns a new format function for the given string *specifier*. The returned function takes a number as the only argument, and returns a string representing the formatted number.
 
 ### Formatting Segments
+
+The general form of a specifier is:
 
 ```
 [​[fill]align][sign][symbol][0][width][,][.precision][~][type]
