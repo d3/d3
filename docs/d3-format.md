@@ -136,18 +136,28 @@ const enUs = d3.formatDefaultLocale({
 const f = d3.format(".2f");
 ```
 
-[Source](https://github.com/d3/d3-format/blob/main/src/locale.js) · Returns a new format function for the given string *specifier*. The returned function takes a number as the only argument, and returns a string representing the formatted number. The general form of a specifier is:
+[Source](https://github.com/d3/d3-format/blob/main/src/locale.js) · Returns a new format function for the given string *specifier*. The returned function takes a number as the only argument, and returns a string representing the formatted number.
+
+### Formatting Segments
+
+The general form of a specifier is:
 
 ```
 [​[fill]align][sign][symbol][0][width][,][.precision][~][type]
 ```
 
-The *fill* can be any character. The presence of a fill character is signaled by the *align* character following it, which must be one of the following:
+#### fill & align
+
+The *fill* can be any character.
+
+The presence of a fill character is signaled by the *align* character following it, which must be one of the following:
 
 * `>` - Forces the field to be right-aligned within the available space. (Default behavior).
 * `<` - Forces the field to be left-aligned within the available space.
 * `^` - Forces the field to be centered within the available space.
 * `=` - like `>`, but with any sign and symbol to the left of any padding.
+
+#### sign
 
 The *sign* can be:
 
@@ -156,14 +166,31 @@ The *sign* can be:
 * `(` - nothing for zero or positive and parentheses for negative.
 * ` ` (space) - a space for zero or positive and a minus sign for negative.
 
+#### symbol
+
 The *symbol* can be:
 
 * `$` - apply currency symbols per the locale definition.
 * `#` - for binary, octal, or hexadecimal notation, prefix by `0b`, `0o`, or `0x`, respectively.
 
-The *zero* (`0`) option enables zero-padding; this implicitly sets *fill* to `0` and *align* to `=`. The *width* defines the minimum field width; if not specified, then the width will be determined by the content. The *comma* (`,`) option enables the use of a group separator, such as a comma for thousands.
+#### 0 (zero)
+The *zero* (`0`) option enables zero-padding; this implicitly sets *fill* to `0` and *align* to `=`. 
 
-Depending on the *type*, the *precision* either indicates the number of digits that follow the decimal point (types `f` and `%`), or the number of significant digits (types `​`, `e`, `g`, `r`, `s` and `p`). If the precision is not specified, it defaults to 6 for all types except `​` (none), which defaults to 12. Precision is ignored for integer formats (types `b`, `o`, `d`, `x`, and `X`) and character data (type `c`). See [precisionFixed](#precisionFixed) and [precisionRound](#precisionRound) for help picking an appropriate precision.
+#### width
+
+The *width* defines the minimum field width; if not specified, then the width will be determined by the content. 
+
+#### comma
+
+The *comma* (`,`) option enables the use of a group separator, such as a comma for thousands.
+
+#### precision 
+
+Depending on the *type*, the *precision* either indicates the number of digits that follow the decimal point (types `f` and `%`), or the number of significant digits (types `​`, `e`, `g`, `r`, `s` and `p`). If the precision is not specified, it defaults to 6 for all types except `​` (none), which defaults to 12. Precision is ignored for integer formats (types `b`, `o`, `d`, `x`, and `X`) and character data (type `c`).
+
+See [precisionFixed](#precisionFixed) and [precisionRound](#precisionRound) for help picking an appropriate precision.
+
+#### ~ (tilde)
 
 The `~` option trims insignificant trailing zeros across all format types. This is most commonly used in conjunction with types `r`, `e`, `s` and `%`. For example:
 
@@ -173,6 +200,8 @@ d3.format("s")(1500) // "1.50000k"
 ```js
 d3.format("~s")(1500) // "1.5k"
 ```
+
+#### type 
 
 The available *type* values are:
 
