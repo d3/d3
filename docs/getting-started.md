@@ -354,26 +354,41 @@ As [with React](#d3-in-react), you can use Svelte exclusively for rendering if y
 
 :::code-group
 ```svelte [LinePlot.svelte]
-<script>
+<script lang="ts">
   import * as d3 from 'd3';
 
-  export let data;
-  export let width = 640;
-  export let height = 400;
-  export let marginTop = 20;
-  export let marginRight = 20;
-  export let marginBottom = 20;
-  export let marginLeft = 20;
+  // Define props using $props()
+  const {
+    data,
+    width = 640,
+    height = 400,
+    marginTop = 20,
+    marginRight = 20,
+    marginBottom = 20,
+    marginLeft = 20,
+  } = $props();
 
-  $: x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
-  $: y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
-  $: line = d3.line((d, i) => x(i), y);
+  // Replace reactive declarations ($:) with $derived()
+  const x = $derived(
+    d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight])
+  );
+
+  const y = $derived(
+    d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop])
+  );
+
+  const line = $derived(
+    d3.line((d: number, i: number) => x(i), y)
+  );
 </script>
+
 <svg width={width} height={height}>
   <path fill="none" stroke="currentColor" stroke-width="1.5" d={line(data)} />
   <g fill="white" stroke="currentColor" stroke-width="1.5">
     {#each data as d, i}
-      <circle key={i} cx={x(i)} cy={y(d)} r="2.5" />
+      {#key i}
+        <circle cx={x(i)} cy={y(d)} r="2.5" />
+      {/key}
     {/each}
   </g>
 </svg>
@@ -382,34 +397,67 @@ As [with React](#d3-in-react), you can use Svelte exclusively for rendering if y
 
 <p style="margin-top: -1em;"><a href="https://svelte.dev/repl/ece91c0d8b204d5ea970dbbc0d6783aa?version=3.59.1" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
 
-Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-selection/joining.md) for efficient updates. Below, we use them to render dynamic axes as the data changes.
+Svelte’s reactive statements (`derived()`) pair nicely with D3 [data joins](./d3-selection/joining.md) for efficient updates. Below, we use them to render dynamic axes as the data changes.
 
 :::code-group
 ```svelte [LinePlot.svelte]
 <script>
   import * as d3 from 'd3';
+  // Import the necessary runes from 'svelte/legacy'
+  import { $props, $derived, $effect, $state } from 'svelte/legacy';
 
-  export let data;
-  export let width = 640;
-  export let height = 400;
-  export let marginTop = 20;
-  export let marginRight = 20;
-  export let marginBottom = 30;
-  export let marginLeft = 40;
+  // 1. Define Props using $props()
+  const {
+    data,
+    width = 640,
+    height = 400,
+    marginTop = 20,
+    marginRight = 20,
+    marginBottom = 30,
+    marginLeft = 40,
+  } = $props();
 
-  let gx;
-  let gy;
+  // 2. Define Element References using $state() and let
+  // The element references (gx, gy) must be defined with let
+  // so that bind:this can update them. They should be initialised with $state(undefined).
+  let gx = $state(undefined);
+  let gy = $state(undefined);
 
-  $: x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
-  $: y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
-  $: line = d3.line((d, i) => x(i), y);
-  $: d3.select(gy).call(d3.axisLeft(y));
-  $: d3.select(gx).call(d3.axisBottom(x));
+  // 3. Replace Reactive Declarations ($:) with $derived()
+  const x = $derived(
+    d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight])
+  );
+
+  const y = $derived(
+    d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop])
+  );
+
+  const line = $derived(
+    d3.line((d, i) => x(i), y)
+  );
+
+  // 4. Replace Reactive Side Effects ($:) with $effect()
+  // $effect() runs the D3 code whenever the dependent values (gx, gy, x, or y) change.
+  $effect(() => {
+    // Check if the element references are defined before calling D3
+    if (gy) {
+      d3.select(gy).call(d3.axisLeft(y));
+    }
+  });
+
+  $effect(() => {
+    if (gx) {
+      d3.select(gx).call(d3.axisBottom(x));
+    }
+  });
 </script>
+
 <svg width={width} height={height}>
   <g bind:this={gx} transform="translate(0,{height - marginBottom})" />
   <g bind:this={gy} transform="translate({marginLeft},0)" />
+
   <path fill="none" stroke="currentColor" stroke-width="1.5" d={line(data)} />
+
   <g fill="white" stroke="currentColor" stroke-width="1.5">
     {#each data as d, i}
       <circle key={i} cx={x(i)} cy={y(d)} r="2.5" />
