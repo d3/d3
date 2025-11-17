@@ -50,8 +50,9 @@ export default [
     plugins: [
       ...config.plugins,
       terser({
-        output: {
-          preamble: config.output.banner
+        format: {
+          preamble: config.output.banner,
+          ascii_only: true
         },
         mangle: {
           reserved: [
