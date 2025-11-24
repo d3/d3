@@ -87,6 +87,6 @@
     "docs:preview": "vitepress preview docs"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=18.20"
   }
 }
