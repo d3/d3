@@ -1,5 +1,5 @@
 import assert from "assert";
-import {readdir, readFile, stat} from "fs/promises";
+import { readdir, readFile, stat } from "fs/promises";
 
 it("documentation links point to existing internal anchors", async () => {
   const root = "docs";
@@ -10,14 +10,14 @@ it("documentation links point to existing internal anchors", async () => {
   for await (const file of readMarkdownFiles(root)) {
     const text = await readMarkdownSource(root + file);
     anchors.set(file, getAnchors(text));
-    for (const {pathname, hash} of getLinks(file, text)) {
-      links.push({source: file, target: pathname, hash});
+    for (const { pathname, hash } of getLinks(file, text)) {
+      links.push({ source: file, target: pathname, hash });
     }
   }
 
   // Check for broken links.
   let errors = [];
-  for (let {source, target, hash} of links) {
+  for (let { source, target, hash } of links) {
     if (!target.endsWith(".md")) {
       errors.push(`- ${source} points to ${target} instead of ${target}.md.`);
       target += ".md";
@@ -49,11 +49,11 @@ function getAnchors(text) {
 // Internal links.
 function getLinks(file, text) {
   const links = [];
-  for (const match of text.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)) {
-    const [, link] = match;
+  for (const match of text.matchAll(/\[[^\]]+\]\(((?:[^()]|\([^()]*\))*)\)/g)) {
+    const link = match[1].split(/[ \t]/)[0];
     if (/^\w+:/.test(link)) continue; // absolute link with protocol
-    const {pathname, hash} = new URL(link, new URL(file, "https://example.com/"));
-    links.push({pathname, hash});
+    const { pathname, hash } = new URL(link, new URL(file, "https://example.com/"));
+    links.push({ pathname, hash });
   }
   return links;
 }
