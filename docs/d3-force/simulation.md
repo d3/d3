@@ -108,9 +108,7 @@ simulation.force("charge", null);
 
 ## *simulation*.randomSource(*source*) {#simulation_randomSource}
 
-[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js "Source"))
-
-If *source* is specified, sets the function used to generate random numbers; this should be a function that returns a number between 0 (inclusive) and 1 (exclusive). If *source* is not specified, returns this simulation’s current random source which defaults to a fixed-seed [linear congruential generator](https://en.wikipedia.org/wiki/Linear_congruential_generator). See also [*random*.source](../d3-random.md#random_source).
+[Source](https://github.com/d3/d3-force/blob/main/src/simulation.js) · If *source* is specified, sets the function used to generate random numbers; this should be a function that returns a number between 0 (inclusive) and 1 (exclusive). If *source* is not specified, returns this simulation’s current random source which defaults to a fixed-seed [linear congruential generator](https://en.wikipedia.org/wiki/Linear_congruential_generator). See also [*random*.source](../d3-random.md#random_source).
 
 ## *simulation*.on(*typenames*, *listener*) {#simulation_on}
 
