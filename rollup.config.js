@@ -2,7 +2,10 @@ import {readFileSync} from "fs";
 import json from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
-import meta from "./package.json" assert {type: "json"};
+
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const meta = require("./package.json");
 
 // Extract copyrights from the LICENSE.
 const copyright = readFileSync("./LICENSE", "utf-8")
@@ -50,8 +53,9 @@ export default [
     plugins: [
       ...config.plugins,
       terser({
-        output: {
-          preamble: config.output.banner
+        format: {
+          preamble: config.output.banner,
+          ascii_only: true      
         },
         mangle: {
           reserved: [
@@ -60,6 +64,7 @@ export default [
           ]
         }
       })
+      
     ]
   }
 ];
