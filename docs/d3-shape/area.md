@@ -3,7 +3,7 @@
 <!-- https://observablehq.com/@d3/stacked-area-chart -->
 <!-- https://observablehq.com/@d3/difference-chart -->
 
-[Examples](https://observablehq.com/@d3/area-chart/2) · The area generator produces an area defined by a *topline* and a *baseline* as in an area chart. Typically, the two lines share the same [*x*-values](#area_x) ([x0](#area_x0) = [x1](#area_x1)), differing only in *y*-value ([y0](#area_y0) and [y1](#area_y1)); most commonly, y0 is defined as a constant representing zero (the y scale’s output for zero). The *topline* is defined by x1 and y1 and is rendered first; the *baseline* is defined by x0 and y0 and is rendered second with the points in reverse order. With a [curveLinear](./curve.md#curveLinear) [curve](#area_curve), this produces a clockwise polygon. See also [radial areas](./radial-area.md).
+[Examples](https://observablehq.com/@d3/area-chart/2) · The area generator produces an area defined by a *topline* and a *baseline* as in an area chart. Typically, the two lines share the same [*x*-values](#area_x) ([x0](#area_x0) = [x1](#area_x1)), differing only in *y*-value ([y0](#area_y0) and [y1](#area_y1)); most commonly, y0 is defined as a constant representing zero (the y scale’s output for zero). The *topline* is defined by x1 and y1 and is rendered first; the *baseline* is defined by x0 and y0 and is rendered second with the points in reverse order. With a [curvilinear](./curve.md#curvilinear) [curve](#area_curve), this produces a clockwise polygon. See also [radial areas](./radial-area.md).
 
 ## area(*x*, *y0*, *y1*) {#area}
 
@@ -205,7 +205,7 @@ Note that if an area segment consists of only a single point, it may appear invi
 const area = d3.area().curve(d3.curveStep);
 ```
 
-If *curve* is not specified, returns the current curve factory, which defaults to [curveLinear](./curve.md#curveLinear).
+If *curve* is not specified, returns the current curve factory, which defaults to [curvilinear](./curve.md#curvilinear).
 
 ```js
 area.curve() // d3.curveStep

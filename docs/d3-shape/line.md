@@ -120,7 +120,7 @@ Note that if a line segment consists of only a single point, it may appear invis
 const line = d3.line().curve(d3.curveStep);
 ```
 
-If *curve* is not specified, returns the current curve factory, which defaults to [curveLinear](./curve.md#curveLinear).
+If *curve* is not specified, returns the current curve factory, which defaults to [curvilinear](./curve.md#curvilinear).
 
 ```js
 line.curve() // d3.curveStep

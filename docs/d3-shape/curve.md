@@ -109,7 +109,7 @@ const line = d3.line().curve(d3.curveBundle.beta(0.5));
 
 <ExampleCurve :curves='[{curve: "cardinal", tension}]' />
 
-[Source](https://github.com/d3/d3-shape/blob/main/src/curve/cardinalOpen.js) · Returns a cardinal curve with the specified *tension* in the range [0, 1]. The *tension* determines the length of the tangents: a *tension* of one yields all zero tangents, equivalent to [curveLinear](#curveLinear); a *tension* of zero produces a uniform [Catmull–Rom](#curveCatmullRom) spline. For example:
+[Source](https://github.com/d3/d3-shape/blob/main/src/curve/cardinalOpen.js) · Returns a cardinal curve with the specified *tension* in the range [0, 1]. The *tension* determines the length of the tangents: a *tension* of one yields all zero tangents, equivalent to [curvilinear](#curvilinear); a *tension* of zero produces a uniform [Catmull–Rom](#curveCatmullRom) spline. For example:
 
 ```js
 const line = d3.line().curve(d3.curveCardinal.tension(0.5));
@@ -151,7 +151,7 @@ const line = d3.line().curve(d3.curveCardinal.tension(0.5));
 const line = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
 ```
 
-## *curveLinear*(*context*) {#curveLinear}
+## *curvilinear*(*context*) {#curvilinear}
 
 <ExampleCurve :curves='[{curve: "linear"}]' />
 
@@ -201,7 +201,7 @@ const line = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
 
 ## Custom curves
 
-Curves are typically not used directly, instead being passed to [*line*.curve](./line.md#line_curve) and [*area*.curve](./area.md#area_curve). However, you can define your own curve implementation should none of the built-in curves satisfy your needs using the following interface; see the [curveLinear source](https://github.com/d3/d3-shape/blob/main/src/curve/linear.js) for an example implementation. You can also use this low-level interface with a built-in curve type as an alternative to the line and area generators.
+Curves are typically not used directly, instead being passed to [*line*.curve](./line.md#line_curve) and [*area*.curve](./area.md#area_curve). However, you can define your own curve implementation should none of the built-in curves satisfy your needs using the following interface; see the [curvilinear source](https://github.com/d3/d3-shape/blob/main/src/curve/linear.js) for an example implementation. You can also use this low-level interface with a built-in curve type as an alternative to the line and area generators.
 
 ### *curve*.areaStart() {#curve_areaStart}
 

@@ -1215,7 +1215,7 @@ Interpolate between points to produce a continuous shape.
 * [d3.curveCatmullRomClosed](./d3-shape/curve.md#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
 * [d3.curveCatmullRomOpen](./d3-shape/curve.md#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
 * [*catmullRom*.alpha](./d3-shape/curve.md#curveCatmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
-* [d3.curveLinear](./d3-shape/curve.md#curveLinear) - a polyline.
+* [d3.curvilinear](./d3-shape/curve.md#curvilinear) - a polyline.
 * [d3.curveLinearClosed](./d3-shape/curve.md#curveLinearClosed) - a closed polyline.
 * [d3.curveMonotoneX](./d3-shape/curve.md#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
 * [d3.curveMonotoneY](./d3-shape/curve.md#curveMonotoneY) - a cubic spline that, given monotonicity in *y*, preserves it in *x*.
