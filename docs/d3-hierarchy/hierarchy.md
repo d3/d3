@@ -171,11 +171,11 @@ for (const descendant of node) {
 
 ## *node*.eachAfter(*function*, *that*) {#node_eachAfter}
 
-[Examples](https://observablehq.com/@d3/visiting-a-d3-hierarchy) · [Source](https://github.com/d3/d3-hierarchy/blob/main/src/hierarchy/eachAfter.js) · Invokes the specified *function* for *node* and each descendant in [post-order traversal](https://en.wikipedia.org/wiki/Tree_traversal#Post-order), such that a given *node* is only visited after all of its descendants have already been visited. The specified function is passed the current *descendant*, the zero-based traversal *index*, and this *node*. If *that* is specified, it is the this context of the callback.
+[Examples](https://observablehq.com/@d3/visiting-a-d3-hierarchy) · [Source](https://github.com/d3/d3-hierarchy/blob/main/src/hierarchy/eachAfter.js) · Invokes the specified *function* for *node* and each descendant in [post-order traversal](https://en.wikipedia.org/wiki/Tree_traversal#Post-order), such that a given *node* is only visited afterAll of its descendants have already been visited. The specified function is passed the current *descendant*, the zero-based traversal *index*, and this *node*. If *that* is specified, it is the this context of the callback.
 
 ## *node*.eachBefore(*function*, *that*) {#node_eachBefore}
 
-[Examples](https://observablehq.com/@d3/visiting-a-d3-hierarchy) · [Source](https://github.com/d3/d3-hierarchy/blob/main/src/hierarchy/eachBefore.js) · Invokes the specified *function* for *node* and each descendant in [pre-order traversal](https://en.wikipedia.org/wiki/Tree_traversal#Pre-order), such that a given *node* is only visited after all of its ancestors have already been visited. The specified function is passed the current *descendant*, the zero-based traversal *index*, and this *node*. If *that* is specified, it is the this context of the callback.
+[Examples](https://observablehq.com/@d3/visiting-a-d3-hierarchy) · [Source](https://github.com/d3/d3-hierarchy/blob/main/src/hierarchy/eachBefore.js) · Invokes the specified *function* for *node* and each descendant in [pre-order traversal](https://en.wikipedia.org/wiki/Tree_traversal#Pre-order), such that a given *node* is only visited afterAll of its ancestors have already been visited. The specified function is passed the current *descendant*, the zero-based traversal *index*, and this *node*. If *that* is specified, it is the this context of the callback.
 
 ## *node*.copy() {#node_copy}
 
