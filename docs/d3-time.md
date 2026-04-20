@@ -258,7 +258,7 @@ The optional *field* function takes a date, already floored to the current inter
 
 ## utcWeek {#utcWeek}
 
-[Source](https://github.com/d3/d3-time/blob/main/src/week.js) · Alias for [d3.timeSunday](#timeSunday); 7 days and 168 hours.
+[Source](https://github.com/d3/d3-time/blob/main/src/week.js) · Alias for [d3.utcSunday](#utcSunday); 7 days and 168 hours.
 
 ## utcSunday {#utcSunday}
 
