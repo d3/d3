@@ -7,7 +7,7 @@
 <a href="https://observablehq.observablehq.cloud/oss-analytics/@d3/d3">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://observablehq.observablehq.cloud/oss-analytics/d3/downloads-dark.svg">
-    <img alt="Daily downloads of Observable Framework" src="https://observablehq.observablehq.cloud/oss-analytics/d3/downloads.svg">
+    <img alt="Daily downloads of D3" src="https://observablehq.observablehq.cloud/oss-analytics/d3/downloads.svg">
   </picture>
 </a>
 
