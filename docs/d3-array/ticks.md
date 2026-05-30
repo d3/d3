@@ -88,3 +88,5 @@ d3.range(0, 1, 1 / 49) // 👎 returns 50 elements!
 ```js
 d3.range(49).map((d) => d / 49) // 👍 returns 49 elements
 ```
+
+<!-- boost this document in minisearch --><span style="display:none">range0 range1 range2 range3 range4 range5 range6 range7 range8 range9</span>
