@@ -70,7 +70,7 @@ Observable is free for public use. Sign up for a [Pro account](https://observabl
 
 ## D3 in vanilla HTML
 
-In vanilla HTML, you can load D3 from a CDN such as jsDelivr or you can download it locally. We recommend using the CDN-hosted ES module bundle. But for those who need it, we also provide a UMD bundle that exports the `d3` global when loaded as a plain script.
+In vanilla HTML, you can load D3 from a CDN such as jsDelivr or you can download it locally. We recommend using the CDN-hosted ES module bundle.
 
 :::code-group
 ```html [ESM + CDN]
