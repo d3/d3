@@ -13,6 +13,22 @@
 
 <sub>Daily downloads of D3 · [oss-analytics](https://observablehq.observablehq.cloud/oss-analytics/)</sub>
 
+## Installation
+
+```sh
+# npm
+npm install d3
+
+# yarn
+yarn add d3
+
+# pnpm
+pnpm add d3
+
+# bun
+bun add d3
+```
+
 ## Resources
 
 * [Documentation](https://d3js.org)
