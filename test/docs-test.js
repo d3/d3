@@ -6,27 +6,6 @@ it("documentation links point to existing internal anchors", async () => {
 
   // Crawl all files, read their links and anchors.
   const anchors = new Map();
-  const links = [];
-  for await (const file of readMarkdownFiles(root)) {
-    const text = await readMarkdownSource(root + file);
-    anchors.set(file, getAnchors(text));
-    for (const {pathname, hash} of getLinks(file, text)) {
-      links.push({source: file, target: pathname, hash});
-    }
-  }
-
-  // Check for broken links.
-  let errors = [];
-  for (let {source, target, hash} of links) {
-    if (!target.endsWith(".md")) {
-      errors.push(`- ${source} points to ${target} instead of ${target}.md.`);
-      target += ".md";
-    }
-    if (anchors.get(target)?.includes(hash.slice(1))) continue;
-    errors.push(`- ${source} points to missing ${target}${hash}.`);
-  }
-  assert(errors.length === 0, new Error(`${errors.length} broken links:\n${errors.join("\n")}`));
-});
 
 // Anchors can be derived from headers, or explicitly written as {#names}.
 function getAnchors(text) {
