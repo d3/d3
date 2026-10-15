@@ -350,7 +350,7 @@ For more guidance using D3 in React, see [Amelia Wattenberger’s post](https://
 
 ## D3 in Svelte
 
-As [with React](#d3-in-react), you can use Svelte exclusively for rendering if you like, and only use D3 modules that don’t manipulate the DOM. Here is a line plot of an array of numbers that uses [d3-shape](./d3-shape.md) and [d3-scale](./d3-scale-chromatic.md).
+As [with React](#d3-in-react), you can use Svelte exclusively for rendering if you like, and only use D3 modules that don’t manipulate the DOM. Here is a line plot of an array of numbers that uses [d3-shape](./d3-shape.md) and [d3-scale](./d3-scale.md).
 
 :::code-group
 ```svelte [LinePlot.svelte]
