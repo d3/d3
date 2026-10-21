@@ -81,7 +81,7 @@ Several built-in tiling methods are provided for use with [*treemap*.tile](#tree
 
 ### treemapSquarify(*node*, *x0*, *y0*, *x1*, *y1*) {#treemapSquarify}
 
-[Source](https://github.com/d3/d3-hierarchy/blob/main/src/treemap/squarify.js) · Implements the [squarified treemap](https://www.win.tue.nl/~vanwijk/stm.pdf) algorithm by Bruls *et al.*, which seeks to produce rectangles of a given [aspect ratio](#squarify_ratio).
+[Source](https://github.com/d3/d3-hierarchy/blob/main/src/treemap/squarify.js) · Implements the [squarified treemap](https://vanwijk.win.tue.nl/stm.pdf) algorithm by Bruls *et al.*, which seeks to produce rectangles of a given [aspect ratio](#squarify_ratio).
 
 ### treemapResquarify(*node*, *x0*, *y0*, *x1*, *y1*) {#treemapResquarify}
 
