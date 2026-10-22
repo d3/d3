@@ -260,7 +260,7 @@ tree.size() // 2
   ]
 }' />
 
-[Source](https://github.com/d3/d3-quadtree/blob/main/src/find.js) · Returns the datum closest to the position ⟨*x*,*y*⟩ with the given search *radius*. If *radius* is not specified, it defaults to infinity.
+[Source](https://github.com/d3/d3-quadtree/blob/main/src/find.js) · Returns the datum closest to the position ⟨*x*,*y*⟩ at a distance strictly less than the given search *radius*. If *radius* is not specified, it defaults to infinity.
 
 ```js-vue
 tree.find({{findState.x.toFixed(3)}}, {{findState.y.toFixed(3)}}) // {{points[findState.i] && `[${points[findState.i].map((p) => p.toFixed(3)).join(", ")}]`}}
@@ -270,6 +270,15 @@ If there is no datum within the search area, returns undefined.
 
 ```js
 tree.find(10, 10, 1) // undefined
+```
+
+Points exactly on the search radius are excluded. A radius of zero therefore returns undefined, even if a datum is at the search position.
+
+```js
+const q = d3.quadtree([[0, 0]]);
+q.find(0, 0, 0) // undefined
+q.find(3, 4, 5) // undefined
+q.find(3, 4, 6) // [0, 0]
 ```
 
 ## *quadtree*.visit(*callback*) {#quadtree_visit}
