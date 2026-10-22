@@ -36,6 +36,8 @@ An optional *parameters* object may be specified to set additional properties of
 
 If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). It must return the parameters for the current element.
 
+Note: While you can bind an event listener to a `type.name` event type using `on()`, you cannot target a particular listener using `dispatch("type.name")`.  You must dispatch with just `type`.
+
 ## pointer(*event*, *target*) {#pointer}
 
 [Source](https://github.com/d3/d3-selection/blob/main/src/pointer.js) · Returns a two-element array of numbers [*x*, *y*] representing the coordinates of the specified *event* relative to the specified *target*.
