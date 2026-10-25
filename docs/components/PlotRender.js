@@ -164,9 +164,6 @@ export default {
             {rootMargin: "100px"}
           );
           this._observer.observe(el);
-          if (typeof requestIdleCallback === "function") {
-            this._idling = requestIdleCallback(observed);
-          }
         }
       };
       const unmounted = (el) => {
@@ -177,10 +174,6 @@ export default {
         if (this._observer !== undefined) {
           this._observer.disconnect();
           this._observer = undefined;
-        }
-        if (this._idling !== undefined) {
-          cancelIdleCallback(this._idling);
-          this._idling = undefined;
         }
       };
       const {height = 400} = this.options;
