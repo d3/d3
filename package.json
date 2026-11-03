@@ -85,8 +85,8 @@
     "test": "vitest",
     "lint": "eslint",
     "prepublishOnly": "rm -rf dist && rollup -c",
-    "docs:dev": "node --experimental-network-imports node_modules/vitepress/dist/node/cli.js dev docs",
-    "docs:build": "./prebuild.sh && node --experimental-network-imports node_modules/vitepress/dist/node/cli.js build docs",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "./prebuild.sh && vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
   "engines": {
