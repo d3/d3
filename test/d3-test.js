@@ -1,8 +1,9 @@
-import assert from "assert";
-import {readFileSync} from "fs";
-import {resolve, dirname} from "path";
-import {fileURLToPath} from "url";
-import * as d3 from "../src/index.js";
+import assert from "node:assert";
+import {readFileSync} from "node:fs";
+import {resolve, dirname} from "node:path";
+import {fileURLToPath} from "node:url";
+import * as d3 from "d3";
+import {it} from "vitest";
 
 const packagePath = resolve(dirname(fileURLToPath(import.meta.url)), "../package.json");
 const packageData = JSON.parse(readFileSync(packagePath));

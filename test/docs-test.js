@@ -1,5 +1,6 @@
-import assert from "assert";
-import {readdir, readFile, stat} from "fs/promises";
+import assert from "node:assert";
+import {readdir, readFile, stat} from "node:fs/promises";
+import {it} from "vitest";
 
 it("documentation links point to existing internal anchors", async () => {
   const root = "docs";
