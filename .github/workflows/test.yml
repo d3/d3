@@ -7,18 +7,17 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          node-version: 20
-          cache: 'yarn'
-      - run: yarn --frozen-lockfile
-      - run: |
-          echo ::add-matcher::.github/eslint.json
-          yarn run eslint src test --format=compact
-      - run: yarn test
-      - run: yarn prepublishOnly
-      - run: yarn docs:build
+          version: 10
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm run test
+      - run: pnpm run lint
