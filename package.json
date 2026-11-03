@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "7.9.1",
+  "version": "7.9.2",
   "description": "Data-Driven Documents",
   "homepage": "https://d3js.org",
   "repository": {
@@ -41,7 +41,7 @@
     "d3-chord": "^3.0.2",
     "d3-color": "^3.1.1",
     "d3-contour": "^4.0.3",
-    "d3-delaunay": "^6.0.5",
+    "d3-delaunay": "^6.0.6",
     "d3-dispatch": "^3.0.2",
     "d3-drag": "^3.0.1",
     "d3-dsv": "^3.0.2",
