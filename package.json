@@ -36,9 +36,9 @@
   "sideEffects": false,
   "dependencies": {
     "d3-array": "^3.2.5",
-    "d3-axis": "^3.0.0",
+    "d3-axis": "^3.0.1",
     "d3-brush": "^3.0.1",
-    "d3-chord": "^3.0.1",
+    "d3-chord": "^3.0.2",
     "d3-color": "^3.1.1",
     "d3-contour": "^4.0.3",
     "d3-delaunay": "^6.0.5",
