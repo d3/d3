@@ -122,21 +122,21 @@ The returned filtered interval does not support [*interval*.count](#interval_cou
 ## *interval*.every(*step*) {#interval_every}
 
 ```js
-d3.unixDay.every(3)
+d3.utcDay.every(3)
 ```
 
-[Source](https://github.com/d3/d3-time/blob/main/src/interval.js) · Returns a [filtered](#interval_filter) view of this interval representing every *step*th date. The meaning of *step* is dependent on this interval’s parent interval as defined by the field function. For example, [d3.timeMinute](#timeMinute).every(15) returns an interval representing every fifteen minutes, starting on the hour: :00, :15, :30, :45, <i>etc.</i> Note that for some intervals, the resulting dates may not be uniformly-spaced; [d3.timeDay](#timeDay)’s parent interval is [d3.timeMonth](#timeMonth), and thus the interval number resets at the start of each month. If *step* is not valid, returns null. If *step* is one, returns this interval.
+[Source](https://github.com/d3/d3-time/blob/main/src/interval.js) · Returns a [filtered](#interval_filter) view of this interval representing every *step*th date since the interval’s *epoch*. For example, [d3.timeMinute](#timeMinute).every(15) returns an interval representing every fifteen minutes, starting on the hour: :00, :15, :30, :45, <i>etc.</i> If *step* is not valid, returns null. If *step* is one, returns this interval.
 
 This method can be used in conjunction with [*interval*.range](#interval_range) to ensure that two overlapping ranges are consistent. For example, this range contains odd days:
 
 ```js
-d3.timeDay.every(2).range(new Date(2015, 0, 1), new Date(2015, 0, 7)) // [2015-01-01T00:00, 2015-01-03T00:00, 2015-01-05T00:00]
+d3.utcDay.every(2).range(new Date(2015, 0, 1), new Date(2015, 0, 7)) // [2015-01-01T00:00, 2015-01-03T00:00, 2015-01-05T00:00]
 ```
 
 As does this one:
 
 ```js
-d3.timeDay.every(2).range(new Date(2015, 0, 2), new Date(2015, 0, 8)) // [2015-01-03T00:00, 2015-01-05T00:00, 2015-01-07T00:00]
+d3.utcDay.every(2).range(new Date(2015, 0, 2), new Date(2015, 0, 8)) // [2015-01-03T00:00, 2015-01-05T00:00, 2015-01-07T00:00]
 ```
 
 The returned filtered interval does not support [*interval*.count](#interval_count). See also [*interval*.filter](#interval_filter).
@@ -155,7 +155,7 @@ Likewise, to compute the current zero-based week-of-year number for weeks that s
 d3.timeSunday.count(d3.timeYear(now), now) // 25
 ```
 
-## timeInterval(*floor*, *offset*, *count*, *field*) {#timeInterval}
+## timeInterval(*floor*, *offset*, *count*, *epoch*) {#timeInterval}
 
 ```js
 const utcDay = d3.timeInterval(
@@ -174,7 +174,7 @@ The *offset* function takes a date and an integer step as arguments and advances
 
 The optional *count* function takes a start date and an end date, already floored to the current interval, and returns the number of boundaries between the start (exclusive) and end (inclusive). If a *count* function is not specified, the returned interval does not expose [*interval*.count](#interval_count) or [*interval*.every](#interval_every) methods. Note: due to an internal optimization, the specified *count* function must not invoke *interval*.count on other time intervals.
 
-The optional *field* function takes a date, already floored to the current interval, and returns the field value of the specified date, corresponding to the number of boundaries between this date (exclusive) and the latest previous parent boundary. For example, for the [d3.timeDay](#timeDay) interval, this returns the number of days since the start of the month. If a *field* function is not specified, it defaults to counting the number of interval boundaries since the UNIX epoch of January 1, 1970 UTC. The *field* function defines the behavior of [*interval*.every](#interval_every).
+The optional *epoch* date reflects the reference epoch, which defaults to the UNIX epoch of January 1, 1970 UTC.
 
 ## timeMillisecond {#timeMillisecond}
 
@@ -295,10 +295,6 @@ The optional *field* function takes a date, already floored to the current inter
 ## utcYear {#utcYear}
 
 [Source](https://github.com/d3/d3-time/blob/main/src/year.js) · Years in UTC time (e.g., January 1, 2012 at 12:00 AM); ranges from 365 to 366 days.
-
-## unixDay {#unixDay}
-
-Like [d3.utcDay](#utcDay), except it counts days since the UNIX epoch (January 1, 1970) such that [*interval*.every](#interval_every) returns uniformly-spaced dates rather than varying based on day-of-month.
 
 ## timeMilliseconds(*start*, *stop*, *step*) {#timeMilliseconds}
 
