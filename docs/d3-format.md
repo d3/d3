@@ -107,10 +107,10 @@ const enUs = d3.formatLocale({
 
 [Source](https://github.com/d3/d3-format/blob/main/src/locale.js) · Returns a *locale* object for the specified *definition* with [*locale*.format](#locale_format) and [*locale*.formatPrefix](#locale_formatPrefix) methods. The *definition* must include the following properties:
 
-* `decimal` - the decimal point (e.g., `"."`).
 * `thousands` - the group separator (e.g., `","`).
 * `grouping` - the array of group sizes (e.g., `[3]`), cycled as needed.
 * `currency` - the currency prefix and suffix (e.g., `["$", ""]`).
+* `decimal` - optional; the decimal point (e.g., `"."`).
 * `numerals` - optional; an array of ten strings to replace the numerals 0-9.
 * `percent` - optional; the percent sign (defaults to `"%"`).
 * `minus` - optional; the minus sign (defaults to `"−"`).
