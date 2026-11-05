@@ -233,6 +233,8 @@ If the iterable contains no comparable values, returns [undefined, undefined].
 d3.extent(alphabet, (d) => d.doesnotexist) // [undefined, undefined]
 ```
 
+<!-- boost this document in minisearch --><span style="display:none">extent0 extent1 extent2 extent3 extent4 extent5 extent6 extent7 extent8 extent9</span>
+
 ## mode(*iterable*, *accessor*) {#mode}
 
 [Examples](https://observablehq.com/@d3/d3-mode) · [Source](https://github.com/d3/d3-array/blob/main/src/mode.js) · Returns the mode of the given *iterable*, *i.e.* the value which appears the most often. Ignores undefined, null and NaN values.
