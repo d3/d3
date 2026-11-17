@@ -78,6 +78,16 @@ If *range* is not specified, returns the scale’s current range.
 color.range() // ["red", "white", "green"]
 ```
 
+## *threshold*.unknown(*value*) {#threshold_unknown}
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/threshold.js) · If *value* is specified, sets the output for `null`, `undefined`, and `NaN` inputs and returns this scale. If *value* is omitted, returns the current unknown value, which defaults to `undefined`.
+
+```js
+const color = d3.scaleThreshold([10], ["red", "blue"]).unknown("#ccc");
+color(null); // "#ccc"
+color.unknown(); // "#ccc"
+```
+
 ## *threshold*.copy() {#threshold_copy}
 
 [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/threshold.js) · Returns an exact copy of this scale.
