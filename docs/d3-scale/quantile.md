@@ -78,6 +78,16 @@ color.quantiles() // [3475, 3800, 4300, 4950]
 
 If the [range](#quantile_range) contains *n* discrete values, the returned array will contain *n* - 1 thresholds. Values less than the first threshold are considered in the first quantile; values greater than or equal to the first threshold but less than the second threshold are in the second quantile, and so on. Internally, the thresholds array is used with [bisect](../d3-array/bisect.md) to find the output quantile associated with the given input value.
 
+## *quantile*.unknown(*value*) {#quantile_unknown}
+
+[Source](https://github.com/d3/d3-scale/blob/main/src/quantile.js) · If *value* is specified, sets the output for `null`, `undefined`, and `NaN` inputs and returns this scale. This also applies to inputs that convert to `NaN`. If *value* is omitted, returns the current unknown value, which defaults to `undefined`.
+
+```js
+const color = d3.scaleQuantile([0, 10, 20], ["red", "blue"]).unknown("#ccc");
+color("N/A"); // "#ccc"
+color.unknown(); // "#ccc"
+```
+
 ## *quantile*.copy() {#quantile_copy}
 
 [Examples](https://observablehq.com/@d3/quantile-quantize-and-threshold-scales) · [Source](https://github.com/d3/d3-scale/blob/main/src/quantile.js) · Returns an exact copy of this scale.
