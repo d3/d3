@@ -47,3 +47,15 @@ export default {
 <template>
   <div></div>
 </template>
+
+<style scoped>
+
+/* The chart is a fixed 640px wide; let it scroll inside its own box when the
+   content column is narrower, instead of widening the whole page. */
+@media (max-width: 767px) {
+  div {
+    overflow-x: auto;
+  }
+}
+
+</style>
