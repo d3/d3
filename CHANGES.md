@@ -210,7 +210,7 @@ For an overview of changes, see https://observablehq.com/@d3/d3-selection-2-0.
 * Add [*zoom*.tapDistance](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_tapDistance).
 * Change [*zoom*.on](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_on) to pass the *event* directly to listeners.
 * Change the default [*zoom*.filter](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_filter) to observe *wheel* events if the control key is pressed.
-* Change the default [*zoom*.wheelDelta](ttps://github.com/d3/d3-zoom/blob/master/README.md#zoom_wheelDelta) to go faster if the control key is pressed.
+* Change the default [*zoom*.wheelDelta](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_wheelDelta) to go faster if the control key is pressed.
 * Don‘t set touch-action: none.
 * Upgrade to [d3-selection 2](https://observablehq.com/@d3/d3-selection-2-0).
 
