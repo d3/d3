@@ -380,7 +380,7 @@ As [with React](#d3-in-react), you can use Svelte exclusively for rendering if y
 ```
 :::
 
-<p style="margin-top: -1em;"><a href="https://svelte.dev/repl/ece91c0d8b204d5ea970dbbc0d6783aa?version=3.59.1" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
+<p style="margin-top: -1em;"><a href="https://svelte.dev/playground/ece91c0d8b204d5ea970dbbc0d6783aa?version=3.59.1" style="font-size: smaller;" target="_blank">Playground ↗︎</a></p>
 
 Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-selection/joining.md) for efficient updates. Below, we use them to render dynamic axes as the data changes.
 
