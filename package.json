@@ -33,7 +33,6 @@
     "umd": "./dist/d3.min.js",
     "default": "./dist/d3.mjs"
   },
-  "sideEffects": false,
   "dependencies": {
     "d3-array": "^3.2.5",
     "d3-axis": "^3.0.1",
