@@ -40,7 +40,16 @@ Like [bisectLeft](#bisectLeft), but using this bisector’s accessor. The code a
 d3.bisector((d) => d.Date).center(aapl, new Date("2013-12-31")) // 161
 ```
 
-Returns the index of the closest value to *x* in the given sorted *array*. This expects that the bisector’s accessor returns a quantitative value, or that the bisector’s comparator returns a signed distance; otherwise, this method is equivalent to [*bisector*.left](#bisector_left). The arguments *lo* (inclusive) and *hi* (exclusive) may be used to specify a subset of the array which should be considered; by default the entire array is used.
+Returns the index of the closest value to *x* in the given sorted *array*. To determine which value is closest, provide an accessor that returns a quantitative value or a comparator that returns a signed distance. The arguments *lo* (inclusive) and *hi* (exclusive) specify the part of the array to search and default to the entire array.
+
+A comparator such as [ascending](./sort.md#ascending) gives the order of two values. The resulting index can differ from [*bisector*.left](#bisector_left). For example, above the end of a nonempty search range, *center* returns the last index in the range and *left* returns the insertion index after it.
+
+```js
+const values = [10, 20, 30];
+const bisector = d3.bisector(d3.ascending);
+bisector.center(values, 40); // 2
+bisector.left(values, 40); // 3
+```
 
 ## bisect(*array*, *x*, *lo*, *hi*) {#bisect}
 
