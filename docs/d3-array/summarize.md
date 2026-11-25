@@ -221,7 +221,7 @@ This function is similar to [maxIndex](#maxIndex), except it allows the use of a
 d3.extent([3, 2, 1, 1, 6, 2, 4]) // [1, 6]
 ```
 
-An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the extent.
+An optional *accessor* function receives the element, its zero-based index, and the original iterable, and returns the value to use.
 
 ```js
 d3.extent(alphabet, (d) => d.frequency) // [0.00074, 0.12702]
@@ -241,7 +241,7 @@ d3.extent(alphabet, (d) => d.doesnotexist) // [undefined, undefined]
 d3.mode([1, 2, 2, 2, 3, 3]) // 2
 ```
 
-An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the mode.
+An optional *accessor* function receives the element, its zero-based index, and the original iterable, and returns the value to use.
 
 ```js
 d3.mode(penguins, (d) => d.island) // "Biscoe"
@@ -257,7 +257,7 @@ In case of equality, returns the first of the relevant values. If the iterable c
 d3.sum([1, 2, 2, 2, NaN, 3, null]) // 10
 ```
 
-An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the sum.
+An optional *accessor* function receives the element, its zero-based index, and the original iterable, and returns the value to use.
 
 ```js
 d3.sum(penguins, (d) => d.body_mass_g) // 1437000
@@ -273,7 +273,7 @@ If the iterable contains no numbers, returns 0. See also [fsum](./add.md#fsum).
 d3.mean([1, 2, 2, 2, NaN, 3, null]) // 2
 ```
 
-An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the mean.
+An optional *accessor* function receives the element, its zero-based index, and the original iterable, and returns the value to use.
 
 ```js
 d3.mean(penguins, (d) => d.body_mass_g) // 4201.754385964912
@@ -289,7 +289,7 @@ If the iterable contains no numbers, returns undefined.
 d3.median([1, 2, 2, 2, NaN, 3, null]) // 2
 ```
 
-An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the median.
+An optional *accessor* function receives the element, its zero-based index, and the original iterable, and returns the value to use.
 
 ```js
 d3.median(penguins, (d) => d.body_mass_g) // 4050
@@ -313,7 +313,7 @@ d3.medianIndex([1, 2, 2, 2, NaN, 3, null]) // 2
 d3.cumsum([1, 1, 2, 3, 5]) // [1, 2, 4, 7, 12]
 ```
 
-An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the cumulative sum.
+An optional *accessor* function receives the element, its zero-based index, and the original iterable, and returns the value to use.
 
 ```js
 d3.cumsum(penguins, (d) => d.body_mass_g) // [3750, 7550, 10800, 10800, …]
@@ -357,11 +357,11 @@ d3.rank([1, 2, 3], d3.descending); // [2, 1, 0]
 
 ## variance(*iterable*, *accessor*) {#variance}
 
-[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/variance.js) · Returns an [unbiased estimator of the population variance](http://mathworld.wolfram.com/SampleVariance.html) of the given *iterable* of numbers using [Welford’s algorithm](https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm). If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the variance. This method ignores undefined and NaN values; this is useful for ignoring missing data.
+[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/variance.js) · Returns an [unbiased estimator of the population variance](http://mathworld.wolfram.com/SampleVariance.html) of the given *iterable* of numbers using [Welford’s algorithm](https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm). If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function receives the element, its zero-based index, and the original iterable, and returns the value to use. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ## deviation(*iterable*, *accessor*) {#deviation}
 
-[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/deviation.js) · Returns the standard deviation, defined as the square root of the [bias-corrected variance](#variance), of the given *iterable* of numbers. If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function may be specified, which is equivalent to calling Array.from before computing the standard deviation. This method ignores undefined and NaN values; this is useful for ignoring missing data.
+[Examples](https://observablehq.com/@d3/d3-mean-d3-median-and-friends) · [Source](https://github.com/d3/d3-array/blob/main/src/deviation.js) · Returns the standard deviation, defined as the square root of the [bias-corrected variance](#variance), of the given *iterable* of numbers. If the iterable has fewer than two numbers, returns undefined. An optional *accessor* function receives the element, its zero-based index, and the original iterable, and returns the value to use. This method ignores undefined and NaN values; this is useful for ignoring missing data.
 
 ## every(*iterable*, *test*) {#every}
 
