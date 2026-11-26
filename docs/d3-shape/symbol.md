@@ -144,6 +144,7 @@ const symbolType = d3.scaleOrdinal(d3.symbolsFill);
 }' />
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js) · An array containing a set of symbol types designed for stroking: [circle](#symbolCircle), [plus](#symbolPlus), [times](#symbolTimes), [triangle2](#symbolTriangle2), [asterisk](#symbolAsterisk), [square2](#symbolSquare2), and [diamond2](#symbolDiamond2). Useful for a categorical shape encoding with an [ordinal scale](../d3-scale/ordinal.md).
+** Be aware that by default SVG paths stroke attribute is set to none. By not specifying the stroke the symbols will be invisible. **
 
 ```js
 const symbolType = d3.scaleOrdinal(d3.symbolsStroke);
