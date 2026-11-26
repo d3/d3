@@ -26,7 +26,7 @@ const gods = [
   ]
 }' />
 
-[Examples](https://observablehq.com/@d3/cluster-dendrogram) · The cluster layout produces [dendrograms](http://en.wikipedia.org/wiki/Dendrogram): node-link diagrams that place leaf nodes of the tree at the same depth. Dendrograms are typically less compact than [tidy trees](./tree.md), but are useful when all the leaves should be at the same level, such as for hierarchical clustering or [phylogenetic tree diagrams](https://observablehq.com/@d3/tree-of-life).
+[Examples](https://observablehq.com/@d3/cluster/2) · The cluster layout produces [dendrograms](http://en.wikipedia.org/wiki/Dendrogram): node-link diagrams that place leaf nodes of the tree at the same depth. Dendrograms are typically less compact than [tidy trees](./tree.md), but are useful when all the leaves should be at the same level, such as for hierarchical clustering or [phylogenetic tree diagrams](https://observablehq.com/@d3/tree-of-life).
 
 ## cluster() {#cluster}
 
