@@ -357,54 +357,57 @@ As [with React](#d3-in-react), you can use Svelte exclusively for rendering if y
 <script>
   import * as d3 from 'd3';
 
-  export let data;
-  export let width = 640;
-  export let height = 400;
-  export let marginTop = 20;
-  export let marginRight = 20;
-  export let marginBottom = 20;
-  export let marginLeft = 20;
+	let { data,
+				width = 640, 
+				height = 400, 
+				marginTop = 20,
+				marginBottom = 20,
+				marginRight = 20,
+				marginLeft = 20,
+			} = $props()
 
-  $: x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
-  $: y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
-  $: line = d3.line((d, i) => x(i), y);
+  let x = $derived(d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]));
+  let y = $derived(d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]));
+	let line = $derived(d3.line((d, i) => x(i), y))
 </script>
 <svg width={width} height={height}>
   <path fill="none" stroke="currentColor" stroke-width="1.5" d={line(data)} />
   <g fill="white" stroke="currentColor" stroke-width="1.5">
-    {#each data as d, i}
-      <circle key={i} cx={x(i)} cy={y(d)} r="2.5" />
-    {/each}
-  </g>
+		{#each data as d, i}
+			<circle key={i} cx={x(i)} cy={y(d)} r="2.5" />
+		{/each}
+	</g>
 </svg>
 ```
 :::
 
-<p style="margin-top: -1em;"><a href="https://svelte.dev/repl/ece91c0d8b204d5ea970dbbc0d6783aa?version=3.59.1" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
+<p style="margin-top: -1em;"><a href="https://svelte.dev/playground/44ba500e0f8c4ef59f768247d926aec6?version=5.39.3" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
 
-Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-selection/joining.md) for efficient updates. Below, we use them to render dynamic axes as the data changes.
+Svelte’s runes ([`$derived`, `$state`, `$effect`](https://svelte.dev/docs/svelte/what-are-runes)) pair nicely with D3 [data joins](./d3-selection/joining.md) for efficient updates. Below, we use them to render dynamic axes as the data changes.
 
 :::code-group
-```svelte [LinePlot.svelte]
+```svelte [Updates.svelte]
 <script>
   import * as d3 from 'd3';
 
-  export let data;
-  export let width = 640;
-  export let height = 400;
-  export let marginTop = 20;
-  export let marginRight = 20;
-  export let marginBottom = 30;
-  export let marginLeft = 40;
+	let {
+		data,
+		width = 640,
+		height = 400,
+		marginTop = 20,
+		marginBottom = 30,
+		marginRight = 20,
+		marginLeft = 40,
+	}	= $props()
 
-  let gx;
-  let gy;
+  let gx = $state(10);
+  let gy = $state(10);
 
-  $: x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
-  $: y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
-  $: line = d3.line((d, i) => x(i), y);
-  $: d3.select(gy).call(d3.axisLeft(y));
-  $: d3.select(gx).call(d3.axisBottom(x));
+  let x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight]);
+  let y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop]);
+  let line = d3.line((d, i) => x(i), y);
+  $effect(()=> d3.select(gy).call(d3.axisLeft(y)))
+	$effect(()=> d3.select(gx).call(d3.axisBottom(x)))
 </script>
 <svg width={width} height={height}>
   <g bind:this={gx} transform="translate(0,{height - marginBottom})" />
@@ -419,4 +422,4 @@ Svelte’s reactive statements (`$:`) pair nicely with D3 [data joins](./d3-sele
 ```
 :::
 
-<p style="margin-top: -1em;"><a href="https://svelte.dev/playground/8722c32f4e1a44a98e3a3fc8a095b2d7?version=5.16.0" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
+<p style="margin-top: -1em;"><a href="https://svelte.dev/playground/14523b6d31a54775b3796bf16a3a8e5b?version=5.39.1" style="font-size: smaller;" target="_blank">REPL ↗︎</a></p>
